@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="DisposalSludgeSystem:war">
+    <output-path>$PROJECT_DIR$/target</output-path>
+    <root id="archive" name="DisposalSludgeSystem.war">
+      <element id="artifact" artifact-name="DisposalSludgeSystem:war exploded" />
+    </root>
+  </artifact>
+</component>

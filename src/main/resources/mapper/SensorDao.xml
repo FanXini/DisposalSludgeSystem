@@ -1,0 +1,292 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="factory.dao.SensorDao">
+	<resultMap type="factory.entity.Sensor" id="sensorMap">
+		<id property="id" column="id" />
+		<result property="typeId" column="type_id" />
+		<result property="carId" column="car_id" />
+		<result property="siteId" column="site_id" />
+		<result property="status" column="status" />
+		<result property="serialNumber" column="serial_number" />
+		<association property="sensorType" javaType="factory.entity.SensorType">
+			<id property="id" column="id" />
+			<result property="type" column="type" />
+			<result property="description" column="description" />
+		</association>
+		<association property="car" javaType="factory.entity.Car">
+			<id property="id" column="id" />
+			<result property="driverId" column="driver_id" />
+			<result property="license" column="license" />
+			<result property="longitude" column="longitude" />
+			<result property="latitude" column="latitude" />
+			<result property="brand" column="brand" />
+			<result property="sensorIdSet" column="sensor_id_set" />
+			<result property="status" column="status" />
+		</association>
+
+		<association property="site" javaType="factory.entity.Site">
+			<id property="id" column="id"></id>
+			<result property="siteName" column="site_name" />
+			<result property="serialName" column="serial_name" />
+			<result property="address" column="address"></result>
+			<result property="longitude" column="longitude" />
+			<result property="latitude" column="latitude" />
+			<result property="telephone" column="telephone" />
+			<result property="depth" column="depth" />
+			<result property="sensorIdSet" column="sensor_id_set" />
+		</association>
+	</resultMap>
+
+	<resultMap type="factory.entity.Sensor" id="SensorMapOfCarOfSite">
+		<id property="id" column="id" />
+		<result property="typeId" column="type_id" />
+		<result property="carId" column="car_id" />
+		<result property="siteId" column="site_id" />
+		<result property="status" column="status" />
+		<result property="serialNumber" column="serial_number" />
+		<association property="sensorType" javaType="factory.entity.SensorType">
+			<id property="id" column="id" />
+			<result property="type" column="type" />
+			<result property="description" column="description" />
+		</association>
+		<association property="sensorValue" javaType="factory.entity.SensorValue">
+			<id property="id" column="id"/>
+			<result property="sensorId" column="sensor_id" />
+			<result property="value" column="value"/>
+		</association>
+	</resultMap>
+
+	<!-- <resultMap type="factory.entity.Sensor" id="siteSensor"> <id property="id" 
+		column="id" /> <result property="typeId" column="type_id" /> <result property="locationId" 
+		column="site_id" /> <result property="serialNumber" column="serial_number" 
+		/> <result property="place" column="place" /> <association property="sensorType" 
+		javaType="factory.entity.SensorType"> <id property="id" column="id" /> <result 
+		property="type" column="type" /> <result property="description" column="description" 
+		/> </association> <association property="site" javaType="factory.entity.Site"> 
+		<id property="id" column="id"></id> <result property="siteName" column="site_name" 
+		/> <result property="serialName" column="serial_name" /> <result property="address" 
+		column="address"></result> <result property="longitude" column="longitude" 
+		/> <result property="latitude" column="latitude" /> <result property="telephone" 
+		column="telephone" /> <result property="depth" column="depth" /> <result 
+		property="sensorIdSet" column="sensor_id_set" /> </association> </resultMap> -->
+
+	<select id="queryAllSensorType" resultType="factory.entity.SensorType">
+		SELECT *
+		FROM
+		sensor_type
+		WHERE del_status=0
+	</select>
+
+	<select id="queryAllSensorOfCar" resultMap="sensorMap">
+		SELECT *
+		FROM
+		sensor,sensor_type,car
+		WHERE sensor.del_status=0 AND
+		sensor.type_id=sensor_type.id AND
+		sensor.car_id=car.id
+		ORDER BY
+		sensor.serial_number
+	</select>
+
+	<select id="queryAllSensorOfSite" resultMap="sensorMap">
+		SELECT *
+		FROM
+		sensor,sensor_type,site
+		WHERE sensor.del_status=0 AND
+		sensor.type_id=sensor_type.id AND
+		sensor.site_id=site.id
+		ORDER BY
+		sensor.serial_number
+	</select>
+
+	<insert id="addSensor" parameterType="factory.entity.Sensor"
+		useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO sensor
+		(type_id,car_id,site_id,serial_number)
+		VALUES(#{typeId},#{carId},#{siteId},#{serialNumber})
+	</insert>
+	
+	<insert id="addSensorValue">
+		INSERT INTO sensor_value_realtime(sensor_id)
+		VALUES(#{sensorId})
+	</insert>
+
+
+	<select id="querySensorTypeByType" resultType="factory.entity.SensorType">
+		SELECT *
+		FROM
+		sensor_type
+		WHERE del_status=0 AND type=#{type}
+	</select>
+	
+
+	<update id="delectSensor">
+		UPDATE sensor
+		SET del_status=1
+		WHERE del_status=0 AND
+		id=#{sensorId}
+	</update>
+
+
+	<select id="querySensorOfCarOrSite" resultMap="sensorMap"
+		parameterType="factory.entity.Sensor">
+
+		SELECT *
+		<choose>
+			<when test="siteId==-1">
+				FROM sensor,car,sensor_type
+				WHERE sensor.del_status=0
+				AND
+				sensor.car_id=#{carId} AND
+				sensor.site_id=#{siteId} AND
+				sensor.car_id=car.id
+			</when>
+			<when test="carId==-1">
+				FROM sensor,site,sensor_type
+				WHERE sensor.del_status=0
+				AND
+				sensor.site_id=#{siteId} AND
+				sensor.car_id=#{carId} AND
+				sensor.site_id=site.id
+			</when>
+		</choose>
+		<if test="typeId != -1">
+			AND sensor.type_id=#{typeId}
+		</if>
+		<if test="status !=-1">
+			AND sensor.status=#{status}
+		</if>
+		AND sensor.type_id=sensor_type.id
+	</select>
+
+	<select id="querySensorByCarsOrSites" parameterType="factory.entity.Sensor"
+		resultMap="sensorMap">
+		SELECT *
+		<choose>
+			<when test='placeSelect=="site"'>
+				FROM sensor,site,sensor_type
+				WHERE sensor.del_status=0
+				AND
+				sensor.car_id=-1 AND
+				sensor.site_id=site.id
+			</when>
+			<when test='placeSelect=="slugeCar"'>
+				FROM sensor,car,sensor_type
+				WHERE sensor.del_status=0
+				AND
+				sensor.site_id=-1 AND
+				sensor.car_id=car.id
+			</when>
+		</choose>
+		<if test="typeId != -1">
+			AND sensor.type_id=#{typeId}
+		</if>
+		<if test="status !=-1">
+			AND sensor.status=#{status}
+		</if>
+		AND sensor.type_id=sensor_type.id
+	</select>
+
+	<select id="querySensorOfCarByTypeOrStatus" parameterType="factory.entity.Sensor"
+		resultMap="sensorMap">
+		SELECT *
+		FROM sensor,car,sensor_type
+		WHERE sensor.del_status=0 AND
+		sensor.car_id=car.id AND
+		sensor.type_id=sensor_type.id
+		<if test="typeId !=-1">
+			AND sensor.type_id=#{typeId}
+		</if>
+		<if test="status !=-1">
+			AND sensor.status=#{status}
+		</if>
+	</select>
+
+	<select id="querySensorOfSiteByTypeOrStatus" parameterType="factory.entity.Sensor"
+		resultMap="sensorMap">
+		SELECT *
+		FROM sensor,site,sensor_type
+		WHERE sensor.del_status=0 AND
+		sensor.site_id=site.id AND
+		sensor.type_id=sensor_type.id
+		<if test="typeId !=-1">
+			AND sensor.type_id=#{typeId}
+		</if>
+		<if test="status !=-1">
+			AND sensor.status=#{status}
+		</if>
+	</select>
+
+	<select id="querySensorBySerialNumber" resultType="factory.entity.Sensor">
+		SELECT *
+		FROM
+		sensor
+		WHERE del_status=0 AND
+		serial_number=#{serialNumber}
+	</select>
+
+	<select id="querySensorOfCarBySerialNumber" resultMap="sensorMap">
+		SELECT *
+		FROM sensor,car,sensor_type
+		WHERE sensor.del_status=0 AND
+		sensor.serial_number=#{serialNumber} AND
+		sensor.type_id=sensor_type.id
+		AND
+		sensor.car_id=car.id
+	</select>
+
+	<select id="querySensorOfSiteBySerialNumber" resultMap="sensorMap">
+		SELECT *
+		FROM sensor,site,sensor_type
+		WHERE sensor.del_status=0 AND
+		sensor.serial_number=#{serialNumber} AND
+		sensor.type_id=sensor_type.id
+		AND
+		sensor.site_id=site.id
+	</select>
+
+
+
+	<select id="querySensorTypeById" resultMap="sensorMap">
+		SELECT *
+		FROM sensor
+		WHERE del_status=0 AND id=#{id}
+	</select>
+
+	<update id="setSiteIdNull">
+		UPDATE sensor
+		SET site_id=-1
+		WHERE id=#{sensorId}
+	</update>
+
+	<select id="querySensorById" resultType="factory.entity.Sensor">
+		SELECT *
+		from sensor
+		where del_status=0 AND
+		id=#{sensorId}
+	</select>
+
+	<select id="querySensorBySensorIdSet"
+		resultMap="SensorMapOfCarOfSite">
+		SELECT *
+		FROM sensor LEFT JOIN sensor_type ON sensor.type_id=sensor_type.id 
+		LEFT JOIN sensor_value_realtime ON sensor.id=sensor_value_realtime.sensor_id
+		WHERE sensor.del_status=0 AND sensor.id IN ${sensorIdSet}
+	</select>
+	
+	<select id="queryHistoryDataOfUltrasonicBySensorId" resultType="java.lang.Float">
+		SELECT value
+		FROM ultrasonic_record
+		Where sensor_id=#{sensorId}
+		ORDER BY time ASC
+		LIMIT 0,10
+	</select>
+	
+	<select id="queryRealTimeValueBySensorId" resultType="java.lang.Float">
+		SELECT value
+		FROM sensor_value_realtime
+		WHERE sensor_id=#{sensorId}
+	</select>
+</mapper>

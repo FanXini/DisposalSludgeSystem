@@ -1,0 +1,43 @@
+<web-app xmlns="http://xmlns.jcp.org/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee
+                      http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
+	version="3.1" metadata-complete="true" id="WebApp_1527740660340">
+	<!-- 如果是用mvn命令生成的xml，需要修改servlet版本为3.1 -->
+	<welcome-file-list>
+	    <welcome-file>login.jsp</welcome-file>
+	</welcome-file-list>
+	
+	<!-- 配置DispatcherServlet -->
+	<servlet>
+		<servlet-name>mvc-dispatcher</servlet-name>
+		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+		<!-- 配置springMVC需要加载的配置文件
+			spring-dao.xml,spring-service.xml,spring-web.xml
+			Mybatis - > spring -> springmvc
+		 -->
+		<init-param>
+			<param-name>contextConfigLocation</param-name>
+			<param-value>classpath:spring/spring-*.xml</param-value>
+		</init-param>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>mvc-dispatcher</servlet-name>
+		<!-- 默认匹配所有的请求 -->
+		<url-pattern>/</url-pattern>
+	</servlet-mapping>
+	
+	 <welcome-file-list><!--指定欢迎页面-->  
+        <welcome-file>login.html</welcome-file>  
+    </welcome-file-list>  
+    <error-page> <!--当系统出现404错误，跳转到页面nopage.html-->  
+        <error-code>404</error-code>  
+        <location>/pages-404.html</location>  
+    </error-page>  
+    <error-page> <!--当系统出现java.lang.NullPointerException，跳转到页面error.html-->  
+        <exception-type>java.lang.NullPointerException</exception-type>  
+        <location>/pages-500.html</location>  
+    </error-page>  
+    <session-config><!--会话超时配置，单位分钟-->  
+        <session-timeout>360</session-timeout>  
+    </session-config>  
+</web-app>

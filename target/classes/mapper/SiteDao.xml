@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="factory.dao.SiteDao">
+	<resultMap id="SiteMap" type="factory.entity.Site">
+		<id property="id" column="id"></id>
+		<result property="serialNumber" column="serial_number"></result>
+		<result property="siteName" column="site_name"></result>
+		<result property="address" column="address"></result>
+		<result property="latitude" column="latitude"></result>
+		<result property="longitude" column="longitude"></result>
+		<result property="telephone" column="telephone"></result>
+		<result property="depth" column="depth" />
+		<result property="manageId" column="manage_id" />
+		<result property="sensorIdSet" column="sensor_id_set" />
+		<result property="status" column="status" />
+		<association property="manage" javaType="factory.entity.User">
+			<id property="id" column="uid" />
+			<result property="username" column="uusername" />
+			<result property="realname" column="urealname" />
+			<result property="telephone" column="utel" />
+			<result property="email" column="uemail" />
+		</association>
+	</resultMap>
+
+	<select id="queryAllSite" resultMap="SiteMap">
+		SELECT site.*,user.id
+		uid,user.username uusername,user.realname urealname,user.telephone
+		utel,user.email uemail
+		FROM site left join user
+		On site.manage_id=user.id
+		WHERE site.del_status=0
+		ORDER BY status DESC
+	</select>
+
+	<select id="queryAllSites" resultMap="SiteMap">
+		SELECT site.*,user.id
+		uid,user.username uusername,user.realname urealname,user.telephone
+		utel,user.email uemail
+		FROM site,user
+		WHERE site.del_status=0;
+	</select>
+
+	<select id="querySiteBySiteName" resultType="factory.entity.Site">
+		SELECT *
+		FROM site
+		WHERE del_status=0 AND site_name=#{siteName}
+	</select>
+
+	<select id="querySiteById" resultType="factory.entity.Site">
+		SELECT *
+		FROM site
+		WHERE
+		del_status=0 AND id=#{id}
+	</select>
+
+	<select id="fuzzyQuerySite" resultMap="SiteMap">
+		SELECT site.*,user.id
+		uid,user.username uusername,user.realname urealname,user.telephone
+		utel,user.email uemail
+		FROM site left join user
+		On site.manage_id=user.id
+		WHERE
+		site.del_status=0
+		and
+		(site.site_name like CONCAT('%',#{queryStr},'%' ) or
+		site.serial_number like CONCAT('%',#{queryStr},'%')
+		or site.address
+		like CONCAT('%',#{queryStr},'%') or site.telephone like
+		CONCAT('%',#{queryStr},'%') or
+		site.sensor_id_set like CONCAT('%',#{queryStr},'%') or user.realname like
+		CONCAT('%',#{queryStr},'%'))
+	</select>
+
+	<delete id="deleteSite">
+		UPDATE site
+		SET del_status=1
+		WHERE del_status=0 AND
+		id=#{siteId}
+	</delete>
+
+	<insert id="addSite" parameterType="factory.entity.Site"
+		useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO site
+		(site_name,address,latitude,longitude,telephone,depth,serial_number,status)
+		VALUES(#{siteName},#{address},#{latitude},#{longitude},#{telephone},#{depth},#{serialNumber},0)
+	</insert>
+
+	<select id="querySiteIDByManageId" resultType="Integer">
+		SELECT id
+		FROM site
+		WHERE del_status=0 AND
+		manage_id=#{manageId}
+	</select>
+
+	<select id="querySiteManagerById" resultMap="SiteMap">
+		SELECT
+		site.*,user.id uid,user.username uusername,user.realname
+		urealname,user.telephone utel,user.email uemail
+		FROM site left join
+		user
+		On site.manage_id=user.id
+		WHERE site.del_status=0 AND site.id=#{id}
+	</select>
+
+	<update id="editSite" parameterType="factory.entity.Site">
+		UPDATE site
+		SET
+		site_name=#{siteName},address=#{address},latitude=#{latitude},longitude=#{longitude},
+		telephone=#{telephone},depth=#{depth},manage_id=#{manageId}
+		WHERE
+		id=#{id}
+	</update>
+
+	<select id="querySiteSerialNumberAndName" resultType="Integer">
+		SELECT
+		count(*)
+		FROM site
+		WHERE del_status=0 AND (serial_number=#{serialNumber}
+		OR site_name=#{siteName})
+	</select>
+
+	<update id="updateSetIdSet">
+		UPDATE site
+		set sensor_id_set=#{sensorIdSet}
+		WHERE
+		del_status=0 AND
+		id=#{siteId}
+	</update>
+
+	<select id="queryUltrasonicValueBySite" resultType="Double">
+		SELECT value
+		FROM ultrasonic_record
+		WHERE sensor_id in (#{sensorIdSet})
+		ORDER BY time
+		DESC limit 1
+	</select>
+
+	<select id="queryRedSiteNum" resultType="Integer">
+		SELECT count(*)
+		FROM site
+		WHERE del_status=0 AND status=2
+	</select>
+	<select id="querySensorIdSetBySiteId" resultType="String">
+		SELECT
+		sensor_id_set
+		FROM site
+		WHERE del_status=0 AND
+		id=#{siteId}
+	</select>
+
+	<select id="queryMapSite" resultType="factory.entity.Site">
+		SELECT *
+		FROM site
+		WHERE
+		site.del_status=0 and
+		(site_name like CONCAT('%',#{queryStr},'%') or
+		serial_number like CONCAT('%',#{queryStr},'%') or telephone like
+		CONCAT('%',#{queryStr},'%'))
+	</select>
+
+	<select id="querySiteServedByOneDriver" resultType="factory.entity.Site">
+		SELECT
+		DISTINCT site.id,site.site_name
+		FROM record LEFT JOIN site ON record.site_id=site.id LEFT JOIN car ON
+		record.car_id=car.id LEFT JOIN `user` ON car.driver_id=`user`.id
+		WHERE record.del_status=0 AND car.driver_id=#{driverId}
+	</select>
+</mapper>
