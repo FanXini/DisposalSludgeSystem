@@ -54,8 +54,4 @@
 		<property name="basePackage" value="factory.dao" />
 	</bean>
 
-
-
-	
-
 </beans> 
