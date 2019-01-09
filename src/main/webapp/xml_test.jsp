@@ -50,9 +50,9 @@
 
 	<div id='showCD'></div>
 	<br />
-	<input type="button" onclick="previous()"
+	<%-- <input type="button" onclick="previous()"
 		value="<<" />
-<input type="button" onclick="next()" value=">>" />
+<input type="button" onclick="next()" value=">>" /> --%>
 
 </body>
 </html>
