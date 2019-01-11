@@ -167,10 +167,10 @@
 		<div class="row border-bottom">
 			<nav class="navbar navbar-static-top" role="navigation"
 				 style="margin-bottom: 0">
-				<div class="navbar-header" style="width:90%">
+				<div class="navbar-header" style="width:90%; " >
 					<a class="navbar-minimalize minimalize-styl-2 btn btn-info"><i
 							class="fa fa-bars"></i> </a>
-					<h1 class="text-info" style="text-align: center;font-family:KaiTi;">基于物联网的车载式污泥干化处理系统</h1>
+					<h1 class="text-info" style="text-align: center;font-family:Microsoft Yahei;">基于物联网的车载式污泥干化处理系统</h1>
 				</div>
 			</nav>
 		</div>
