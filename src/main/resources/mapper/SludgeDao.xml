@@ -11,6 +11,7 @@
 		<result property="destinationAddress" column="destination_address" />
 		<result property="rfidString" column="RFID" />
 		<result property="weight" column="weight" />
+		<result property="transcar_id" column="transcar_id" />
 		<result property="status" column="status" />
 		<association property="record" javaType="factory.entity.Record">
 			<id property="id" column="id" />
