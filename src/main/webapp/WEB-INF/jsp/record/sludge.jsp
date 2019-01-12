@@ -291,7 +291,7 @@
 						table += '<td>' + (sludge.produceTime==null?"": sludge.produceTime)+ '</td>'
 						table += '<td class="project-manager">' + (sludge.arrivalTime ==null?"": sludge.arrivalTime )+ '</td>'
 						if (sludge.transcarId != 0) {
-							table += '<td>' + sludge.transcarId.car.license + '</td>'
+							table += '<td>' + sludge.transcarId + '</td>'
 						} else {
 							table += '<td></td>'
 						}
