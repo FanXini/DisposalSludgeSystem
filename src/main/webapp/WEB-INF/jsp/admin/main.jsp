@@ -92,6 +92,21 @@
 									class="fa fa-gears"></i>设备管理</a></li>
 						</ul></li>
 				</c:if>
+				
+				<!-- 智慧泥仓 -->
+				<c:if test="${fn:contains(sessionScope.authos, '12')}" >
+					<li class="line dk"></li>
+					<li><a href="#"><i class="fa fa-industry"></i> <span
+						class="nav-label">智慧泥仓</span><span class="fa arrow"></span></a>
+					<ul class="nav nav-second-level">
+						<li><a class="J_menuItem" href="mudWareHouse/jumpTomudwarehouse"> <i
+							class="fa fa fa-bar-chart-o"></i> <span class="nav-label">智慧泥仓</span>
+					</a></li>
+						<li><a class="J_menuItem" href="sludge/jumpToSludgeOfOneFactory?siteId=${sessionScope.user.siteId }"><i
+								class="fa fa-recycle"></i>污泥出入记录</a></li>
+					</ul></li>
+					
+				</c:if>
 
 				<!-- 监控 -->
 				<c:if test="${fn:contains(sessionScope.authos, '4')}" >

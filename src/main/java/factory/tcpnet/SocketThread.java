@@ -61,6 +61,7 @@ public class SocketThread implements Runnable {
 						if (sensor != null) { // 如果存在
 							sensorMap.put(info[0], sensor.getId()); // 加入缓存
 						} else { // 如果数据库中都没有，则不处理
+							System.out.println("数据库中不存在");
 							continue;
 						}
 					}
