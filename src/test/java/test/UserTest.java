@@ -29,7 +29,6 @@ public class UserTest extends BaseTest{
 			System.out.println(driver.getUsername());
 		}
 	}
-	
 	/*@Test
 	public void queryUserIdByRealName(){
 		

@@ -1,6 +1,7 @@
 package test;
 
-import java.util.ArrayList;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import org.junit.Test;
@@ -8,11 +9,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import factory.dao.SensorDao;
 import factory.entity.Sensor;
+import factory.entity.SensorValue;
 
 public class SensorTest extends BaseTest {
 
 	@Autowired
 	private SensorDao sensorDao;
+	@Test
+	public void test1(){
+		SimpleDateFormat format=new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+		String time=format.format(new Date());
+		SensorValue sensorValue=new SensorValue(2, time,148,0,'S');
+		sensorDao.addSensorRecord(sensorValue);
+	}
 
 	/*@Test
 	public void queryAllSensorType() {

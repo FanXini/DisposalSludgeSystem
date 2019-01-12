@@ -1,49 +1,22 @@
 package factory.entity;
 
-public class SensorValue {
-
+public class DoubleValueSensorRecord {
 	private int id;
-	private int sensorId;
+	private int sensorId;	
 	private String time;
 	private double value1;
 	private double value2;
-	private char headInfo; //±‡∫≈Õ∑–≈œ¢
-	
-	public char getHeadInfo() {
-		return headInfo;
-	}
-
-	public void setHeadInfo(char headInfo) {
-		this.headInfo = headInfo;
-	}
-
-	public SensorValue(int sensorId,String time,double value1,char headInfo) {
-		this.sensorId=sensorId;
-		this.time=time;
-		this.value1=value1;
-		this.headInfo=headInfo;
-	}
-	
-	public SensorValue(int sensorId,String time,double value1,double value2,char headInfo) {
+	public DoubleValueSensorRecord(int sensorId,String time,double value1,double value2){
 		this.sensorId=sensorId;
 		this.time=time;
 		this.value1=value1;
 		this.value2=value2;
-		this.headInfo=headInfo;
 	}
-	
 	public String getTime() {
 		return time;
 	}
-
 	public void setTime(String time) {
 		this.time = time;
-	}
-
-	public SensorValue(int sensorId,double value1,double value2) {
-		this.sensorId=sensorId;
-		this.value1=value1;
-		this.value2=value2;
 	}
 	public int getId() {
 		return id;
@@ -69,6 +42,5 @@ public class SensorValue {
 	public void setValue2(double value2) {
 		this.value2 = value2;
 	}
-
 
 }

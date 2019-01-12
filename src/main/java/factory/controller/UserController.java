@@ -51,6 +51,10 @@ public class UserController {
 	
 	@Autowired
 	private CarService carService;
+	
+	public UserController() {
+		System.out.println(siteService);
+	}
 
 	@RequestMapping("private/{formName}")
 	public String loginForm(@PathVariable String formName) {
