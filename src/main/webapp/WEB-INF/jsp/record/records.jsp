@@ -321,11 +321,7 @@
 						table += '<td>' + (record.site.siteName ==null?"": record.site.siteName) + '</td>'
 						table += '<td class="project-manage">' + (record.car.driver.realname ==null?"":record.car.driver.realname) + '</td>' 
 						table += '<td>' + (record.allocationTime ==null?"":  record.allocationTime) + '</td>'
-						if (record.sludge.weight == 0) {
-							table += '<td><span class="label label-success">待输入</td>'
-						} else {
-							table += '<td>' + record.sludge.weight + '吨</td>'
-						}
+						table += '<td>' + (record.sludgesWeight ==null?"0":  record.sludgesWeight) + '吨</td>'
 						if (record.status == 0 || record.status == 1 || record.car.status == 1 || record.car.status == 2 || record.car.status == 4) {
 							table += '<td class="project-actions" style="float:left;">' +
 								'<button onclick="javascript:deleteRecord(' + i + ',' + record.id + ');" class="btn btn-white btn-sm" data-toggle="modal" data-target="#myModal1"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span>删除 </button>' +
@@ -399,11 +395,7 @@
 							table += '<td>' + (record.site.siteName ==null?"": record.site.siteName) + '</td>'
 							table += '<td class="project-manage">' + (record.car.driver.realname  ==null?"":record.car.driver.realname )+ '</td>'
 							table += '<td>' + record.allocationTime + '</td>'
-							if (record.sludge.weight == 0) {
-								table += '<td><span class="label label-success">待输入</td>'
-							} else {
-								table += '<td>' + record.sludge.weight + '吨</td>'
-							}
+							table += '<td>' + (record.sludgesWeight ==null?"0":  record.sludgesWeight) + '吨</td>'
 							if (record.status == 0 || record.status == 1 || record.car.status == 1 || record.car.status == 2 || record.car.status == 4) {
 								table += '<td class="project-actions" style="float:left;">' +
 									'<button onclick="javascript:deleteRecord(' + i + ',' + record.id + ');" class="btn btn-white btn-sm" data-toggle="modal" data-target="#myModal1"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span>删除 </button>' +
@@ -458,11 +450,7 @@
 							table += '<td>' + (record.site.siteName ==null?"":record.site.siteName) + '</td>'
 							table += '<td class="project-manage">' + (record.car.driver.realname==null?"":record.car.driver.realname) + '</td>'
 							table += '<td>' +(record.allocationTime==null?"":record.allocationTime) + '</td>'
-							if (record.sludge.weight == 0) {
-								table += '<td><span class="label label-success">待输入</td>'
-							} else {
-								table += '<td>' + record.sludge.weight + '吨</td>'
-							}
+							table += '<td>' + (record.sludgesWeight ==null?"0":  record.sludgesWeight) + '吨</td>'
 							if (record.status == 0 || record.status == 1 || record.car.status == 1 || record.car.status == 2 || record.car.status == 4) {
 								table += '<td class="project-actions" style="float:left;">' +
 									'<button onclick="javascript:deleteRecord(' + i + ',' + record.id + ');" class="btn btn-white btn-sm" data-toggle="modal" data-target="#myModal1"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span>删除 </button>' +
@@ -515,11 +503,7 @@
 							table += '<td>' + (record.site.siteName ==null?"":record.site.siteName) + '</td>'
 							table += '<td class="project-manage">' + (record.car.driver.realname==null?"":record.car.driver.realname) + '</td>'
 							table += '<td>' +(record.allocationTime==null?"":record.allocationTime) + '</td>'
-							if (record.sludge.weight == 0) {
-								table += '<td><span class="label label-success">待输入</td>'
-							} else {
-								table += '<td>' + record.sludge.weight + '吨</td>'
-							}
+							table += '<td>' + (record.sludgesWeight ==null?"0":  record.sludgesWeight) + '吨</td>'
 							if (record.status == 0 || record.status == 1 || record.car.status == 1 || record.car.status == 2 || record.car.status == 4) {
 								table += '<td class="project-actions" style="float:left;">' +
 									'<button onclick="javascript:deleteRecord(' + i + ',' + record.id + ');" class="btn btn-white btn-sm" data-toggle="modal" data-target="#myModal1"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span>删除 </button>' +
@@ -573,11 +557,7 @@
 							table += '<td>' + (record.site.siteName ==null?"":record.site.siteName) + '</td>'
 							table += '<td class="project-manage">' + (record.car.driver.realname==null?"":record.car.driver.realname) + '</td>'
 							table += '<td>' +(record.allocationTime==null?"":record.allocationTime) + '</td>'
-							if (record.sludge.weight == 0) {
-								table += '<td><span class="label label-success">待输入</td>'
-							} else {
-								table += '<td>' + record.sludge.weight + '吨</td>'
-							}
+							table += '<td>' + (record.sludgesWeight ==null?"0":  record.sludgesWeight) + '吨</td>'
 							if (record.status == 0 || record.status == 1 || record.car.status == 1 || record.car.status == 2 || record.car.status == 4) {
 								table += '<td class="project-actions" style="float:left;">' +
 									'<button onclick="javascript:deleteRecord(' + i + ',' + record.id + ');" class="btn btn-white btn-sm" data-toggle="modal" data-target="#myModal1"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span>删除 </button>' +
