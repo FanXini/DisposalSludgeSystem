@@ -8,15 +8,15 @@ public class Record {
 	private int carId;
 	private int siteId;
 	private int status;
+	private double sludgesWeight;
 	private Car car;
 	private Site site;
 	private float charge;
-	private Sludge sludge;
-	public Sludge getSludge() {
-		return sludge;
+	public double getSludgesWeight() {
+		return sludgesWeight;
 	}
-	public void setSludge(Sludge sludge) {
-		this.sludge = sludge;
+	public void setSludgesWeight(double sludgesWeight) {
+		this.sludgesWeight = sludgesWeight;
 	}
 	public int getId() {
 		return id;
@@ -87,7 +87,7 @@ public class Record {
 				+ ", disposalTime=" + disposalTime + ", finishTime="
 				+ finishTime + ", carId=" + carId + ", siteId=" + siteId
 				+ ", status=" + status + ", car=" + car + ", site=" + site
-				+ ", charge=" + charge + ", sludge=" + sludge + "]";
+				+ ", charge=" + charge + ", sludgesWeight=" + sludgesWeight + "]";
 	}
 	
 

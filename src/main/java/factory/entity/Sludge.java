@@ -13,6 +13,7 @@ public class Sludge {
 	private Record record;
 	private SludgeFunction sludgeFunction;
 	private float weight;
+	private int transcarId;
 	public int getId() {
 		return id;
 	}
@@ -80,4 +81,11 @@ public class Sludge {
 	public void setWeight(float weight) {
 		this.weight = weight;
 	}
+	public int getTranscarId() {
+		return transcarId;
+	}
+	public void setTranscarId(int transcarId) {
+		this.transcarId = transcarId;
+	}
+	
 }
