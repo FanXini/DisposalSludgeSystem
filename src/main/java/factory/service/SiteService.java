@@ -21,7 +21,7 @@ public interface SiteService {
 
 	public int addSite(Map<String, String> siteInfo);
 
-	public String queryManagerTel(String manager);
+	public String queryManagerTel(int managerId);
 	
 	public int querySiteIDByManageId(int manageId);
 

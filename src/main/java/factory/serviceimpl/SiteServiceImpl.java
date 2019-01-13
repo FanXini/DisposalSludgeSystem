@@ -76,35 +76,14 @@ public class SiteServiceImpl implements SiteService{
 		site.setLongitude(siteInfo.get("longitude"));
 		site.setLatitude(siteInfo.get("latitude"));
 		site.setDepth(Float.valueOf(siteInfo.get("depth")));
-		
-		String managerName=siteInfo.get("manager");
-		String managerTel=siteInfo.get("managerTel");
 		siteDao.addSite(site);
-		User manager=userDao.queryUserByRealName(managerName);
-		if(manager!=null){
-			site.setManageId(manager.getId());
-			manager.setSiteId(site.getId());
-			userDao.editUserByUserId(manager);
-			
-		}else{
-			User addUser=new User();
-			addUser.setRealname(managerName);
-			addUser.setTelephone(managerTel);
-			addUser.setSiteId(site.getId());
-			userDao.addUserByRealName(addUser);
-			site.setManageId((addUser.getId()));
-		}
-		siteDao.editSite(site);
-		
 		return site.getId();
 	}
 
 	@Override
-	public String queryManagerTel(String manager) {
+	public String queryManagerTel(int managerId) {
 		// TODO Auto-generated method stub
-		User user=new User();
-		user.setRealname(manager);
-		user=userDao.queryManagerByRealName(user);
+		User user=userDao.queryUserByUserId(managerId);
 		if(user==null) 
 			return null;
 		else
@@ -135,20 +114,11 @@ public class SiteServiceImpl implements SiteService{
 		site.setLatitude(siteInfo.get("latitude"));
 		site.setDepth(Float.valueOf(siteInfo.get("depth")));
 		
-		String managerName=siteInfo.get("manager");
-		String managerTel=siteInfo.get("managerTel");
+		int managerId = Integer.valueOf(siteInfo.get("managerId"));
+		if( managerId != 0)
+		site.setManageId(managerId);
 		
-		User manager=userDao.queryUserByRealName(managerName);
-		if(manager!=null) site.setManageId(manager.getId());
-		else{
-			User addUser=new User();
-			addUser.setRealname(managerName);
-			addUser.setTelephone(managerTel);
-			addUser.setSiteId(Integer.valueOf(siteInfo.get("id")));
-			userDao.addUserByRealName(addUser);
-			site.setManageId((addUser.getId()));
-		}
-			siteDao.editSite(site);
+		siteDao.editSite(site);
 	}
 
 	@Override
