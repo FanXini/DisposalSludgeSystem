@@ -39,7 +39,7 @@
 	</resultMap>
 
 
-	<select id="queryAllSludge" resultMap="SludgeMap">
+	<select id="queryAllSludgeByInOutFlagWithWareHouseSerial" resultMap="SludgeMap">
 		<!-- SELECT sludge.*,record.id,record.car_id,record.site_id,car.id,car.license,car.driver_id,user.id,user.realname,user.telephone,site.id,site.site_name,sludge_function.id,sludge_function.`function` 
 			FROM sludge,record,car,user,site,sludge_function WHERE sludge.del_status=0 
 			AND sludge.record_id=record.id AND sludge.function_id=sludge_function.id 
@@ -63,6 +63,9 @@
 				and sludge.status=2 OR sludge.status=3
 			</when>
 		</choose>
+		<if test="wareHouseSerial!='0'">
+			and sludge.status=2 OR sludge.status=3
+		</if>
 		ORDER BY sludge.produce_time DESC
 	</select>
 

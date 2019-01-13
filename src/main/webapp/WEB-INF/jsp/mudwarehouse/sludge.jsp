@@ -105,28 +105,31 @@
 		<div class="row">
 			<div class="col-sm-12">
 				<div class="ibox float-e-margins">
-					<div class="ibox-title">
+					<div class="ibox-title" style="background: red">
 						<h1 class="text-info"
 							style="text-align: center; font-family: KaiTi; margin-top: -1%">污泥块去向记录</h1>
 
-						<!-- <div class="ibox-tools">
-							<a class="collapse-link"> <i class="fa fa-chevron-up"></i>
-							</a> <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-								<i class="fa fa-wrench"></i>
-							</a>
-							<ul class="dropdown-menu dropdown-user">
-								<li><a href="#">选项 01</a></li>
-								<li><a href="#">选项 02</a></li>
-							</ul>
-							<a class="close-link"> <i class="fa fa-times"></i>
-							</a>
-						</div> -->
+
+						<div class="ibox-tools">
+							<button type="button" class="btn btn-primary" data-toggle="modal"
+								data-target="#addCarModal">+ 污泥块出仓登记</button>
+						</div>
 					</div>
 					<div class="ibox-content project-list">
 
 						<div class="col-lg-offset-2">
 
 							<div class="form-inline">
+								<div class=form-group>
+									<select class="form-control" id="wareHouseId">
+										<option value="0">--请选择仓库--</option>
+										<c:forEach items="${requestScope.minorMudWareHouses }"
+											var="minorMudWareHost">
+											<option value="${minorMudWareHost.id}">${minorMudWareHost.serialNumber}号仓</option>
+										</c:forEach>
+									</select>
+
+								</div>
 								<div class=form-group>
 									<select class="form-control" id="inOutSelect">
 										<option value='3'>--请选择--</option>
@@ -228,18 +231,20 @@
 											class="glyphicon glyphicon-calendar"></span></span>
 									</div>
 								</div>
+
+
 								<button class="btn btn-primary" id="submit"
 									style="margin-top: 3px">查询</button>
 
 
 
 							</div>
-							<div class="" style="float: right;margin-top:-8%">
+							<!-- <div class="" style="float: right;margin-top:-8%">
 								<div class="col-xs-1 query-department text-center">
 									<button type="button" class="btn btn-primary"
 										data-toggle="modal" data-target="#addCarModal">+ 污泥块出入登记</button>
 								</div>
-							</div>
+							</div> -->
 
 							<!--<input type="text" class="form-control input-sm m-b-xs" id="filter" placeholder="搜索表格...">-->
 						</div>
@@ -332,7 +337,13 @@
 			})
 			$.ajax({
 				type : "POST",
-				url : "sludge/queryAllSludge?inOutFlag="+parseInt($("#inOutSelect").val()),
+				url : "sludge/queryAllSludge",
+				data:JSON.stringify({
+					inOutFlag:parseInt($("#inOutSelect").val()),
+					houseSerialNum:$("#wareHouseSerial").val()
+				}),
+				dataType : "json",
+				contentType : "application/json",
 				success : function(sludgeList) {
 					$("#tableDiv").empty()
 					var table = table_start
@@ -385,6 +396,8 @@
 	
 			/*----------------------------------- 搜索全部按钮 ------------------------------------------*/
 			$("#all_search").click(function() {
+				var haha=$("#wareHouseSerial").val();
+				alert(haha)
 				$.ajax({
 					type : "POST",
 					url : "sludge/queryAllSludge?inOutFlag="+parseInt($("#inOutSelect").val()),
@@ -425,9 +438,9 @@
 							} else {
 								table += '<td></td>'
 							}
-							table += '<td>' + (sludge.record.car.driver.telephone==null?"":sludge.record.car.driver.telephone) + '</td>'
-							table += '<td>' + ( sludge.record.car.license ==null?"": sludge.record.car.license)+ '</td>'
-							table += '</tr>'
+							table += '<td>' + (sludge.record.car.driver.telephone==null?"":sludge.record.car.driver.telephone) + '</td>';
+							table += '<td>' + ( sludge.record.car.license ==null?"": sludge.record.car.license)+ '</td>';
+							table += '</tr>';
 	
 						})
 						table += table_end

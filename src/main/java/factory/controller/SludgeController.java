@@ -15,10 +15,13 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import factory.entity.Sludge;
+import factory.dao.MudWareHouseDao;
+import factory.entity.MinorMudWareHouse;
 import factory.entity.Site;
 import factory.entity.SludgeFunction;
 import factory.entity.User;
 import factory.enums.Result;
+import factory.service.MudWareHouseService;
 import factory.service.SiteService;
 import factory.service.SludgeService;
 import factory.service.UserService;
@@ -39,6 +42,8 @@ public class SludgeController {
 	
 	@Autowired
 	private UserService userService;
+	
+	@Autowired MudWareHouseService mudWareHouseService;
 	@RequestMapping("jumpToSludge")
 	public ModelAndView querySludgeFunctionsAndJumpToSludge(ModelAndView mv){
 		log.info("调用进入sludge.jsp的方法");
@@ -46,9 +51,12 @@ public class SludgeController {
 		List<Site> sites=new ArrayList<Site>();
 		drivers.addAll(userService.quertAllDriver());
 		sites.addAll(siteService.queryAllSite());
+		List<MinorMudWareHouse> minorMudWareHouses=mudWareHouseService.queryMinorWareHouse();
+		mv.addObject("minorMudWareHouses",minorMudWareHouses);
 		mv.addObject("driverList",drivers);
 		mv.addObject("siteList",sites);
 		mv.setViewName("mudwarehouse/sludge");
+		log.info(minorMudWareHouses.size());
 		return mv;
 	}
 	@RequestMapping("queryAllFunc")
@@ -56,9 +64,11 @@ public class SludgeController {
 	public List<SludgeFunction> queryAllFunc(){
 		return sludgeService.queryAllSludgeFunction();
 	}
-	@RequestMapping("queryAllSludge")
+	@RequestMapping("queryAllSludgeByInOutFlagAndWareHouseSerial")
 	@ResponseBody
-	public List<Sludge> queryAllSludge(@RequestParam("inOutFlag") int inOutFlag){
+	public List<Sludge> queryAllSludgeByInOutFlagAndWareHouseSerial(@RequestBody Map<String, Integer> map){
+		int inOutFlag=map.get("inOutFlag");
+		int minorWareHouseId=map.get("minorWareHouseId");
 		if(inOutFlag==0) {
 			log.info("查询所有入仓污泥块记录");
 		}
@@ -71,8 +81,9 @@ public class SludgeController {
 		else if (inOutFlag==3){
 			log.info("所有种类");
 		}
+		System.out.println(minorWareHouseId+"号");
 		List<Sludge> sludges=new ArrayList<Sludge>();
-		sludges.addAll(sludgeService.queryAllSludge(inOutFlag));
+		sludges.addAll(sludgeService.queryAllSludgeByInOutFlagWithMinorWareHouseId(inOutFlag, minorWareHouseId));
 		return sludges;
 	}
 	
@@ -104,13 +115,14 @@ public class SludgeController {
 	
 	@RequestMapping("querySludgeBySiteIdAndInOutFlag")
 	@ResponseBody
-	public  List<Sludge> querySludgeBySiteIdAndInOutFlag(@RequestBody Map<String, Integer> map){
+	public  List<Sludge> querySludgeBySiteIdAndInOutFlag(@RequestBody Map<String, Object> map){
 		log.info("调用querySludgeBySiteIdAndInOutFlag");
-		int siteId=map.get("siteId");
-		int inOutFlag=map.get("inOutFlag");
+		int siteId=(int) map.get("siteId");
+		int inOutFlag=(int) map.get("inOutFlag");
+		String wareHouseSerial=(String) map.get("wareHouseSerial");
 		log.info("要查询的siteId:"+map.get("siteId"));
 		
-		List<Sludge> sludges=sludgeService.querySludgeBySiteIdAndFlag(siteId,inOutFlag);
+		List<Sludge> sludges=sludgeService.querySludgeBySiteIdAndInOutFlagWithWareHouseSerial(siteId, inOutFlag, wareHouseSerial);
 		return sludges;	
 	}
 	
@@ -126,22 +138,24 @@ public class SludgeController {
 	
 	@RequestMapping("querySludgeByDriverIdAndInOutFlag")
 	@ResponseBody
-	public List<Sludge> querySludgeByDriverIdAndInOutFlag(@RequestBody Map<String, Integer> map){
+	public List<Sludge> querySludgeByDriverIdAndInOutFlag(@RequestBody Map<String, Object> map){
 		log.info("调用querySludgeByDriverIdAndInOutFlag");
-		int driverId=map.get("driverId");
-		int inOutFlag=map.get("inOutFlag");
-		List<Sludge> sludges=sludgeService.querySludgeByDriverIdAndInOutFlag(driverId,inOutFlag);
+		int driverId=(int) map.get("driverId");
+		int inOutFlag=(int) map.get("inOutFlag");
+		String wareHouseSerial=(String) map.get("wareHouseSerial");
+		List<Sludge> sludges=sludgeService.querySludgeByDriverIdAndInOutFlagWithWareHouseSerial(driverId,inOutFlag,wareHouseSerial);
 		return sludges;
 	}
 	
 	@RequestMapping("querySludgeByDateAndInOutFlag")
 	@ResponseBody
-	public List<Sludge> querySludgeByDateAndInOutFlag(@RequestBody Map<String, String> map){
+	public List<Sludge> querySludgeByDateAndInOutFlag(@RequestBody Map<String, Object> map){
 		log.info("调用querySludgeByDateAndInOutFlag");
-		String startDate=map.get("startDate");
-		String endDate=map.get("endDate");
-		int inOutFlag=Integer.valueOf(map.get("inOutFlag"));
-		List<Sludge> sludges=sludgeService.querySludgeByDateAndInOutFlag(startDate, endDate, inOutFlag);
+		String startDate=(String) map.get("startDate");
+		String endDate=(String) map.get("endDate");
+		int inOutFlag=(int) map.get("inOutFlag");
+		String wareHouseSerial=(String) map.get("wareHouseSerial");
+		List<Sludge> sludges=sludgeService.querySludgeByDateAndInOutFlagWithWareHouseSerial(startDate, endDate, inOutFlag,wareHouseSerial);
 		return sludges;
 	}
 	
