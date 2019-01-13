@@ -49,7 +49,7 @@ public class AnalyseController {
 	public List<Sludge> queryAllSludge(){
 		log.info("进入查询所有污泥的方法");
 		List<Sludge> sludges=new ArrayList<Sludge>();
-		sludges.addAll(sludgeService.queryAllSludgeBy(0));
+		sludges.addAll(sludgeService.queryAllSludgeByInOutFlagWithMinorWareHouseId(0,0));
 		return sludges;
 	}
 

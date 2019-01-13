@@ -19,7 +19,7 @@ public class SludgeTest extends BaseTest {
 	 * System.out.println(sludgeFunctions.size()); }
 	 */
 
-	@Test
+	/*@Test
 	public void queryAllSludge() {
 		List<Sludge> sludges = sludgeDao.querySludgeByDriverIdAndInOutFlagWithMinorWareHouseId(driverId, inOutFlag, minorWareHouseId);
 		for (Sludge sludge : sludges) {
@@ -28,7 +28,7 @@ public class SludgeTest extends BaseTest {
 					+ sludge.getRecord().getCar().getDriver().getTelephone() + "  "
 					+ sludge.getRecord().getSite().getSiteName());
 		}
-	}
+	}*/
 	
 	/*@Test
 	public void deleteSludge(){
