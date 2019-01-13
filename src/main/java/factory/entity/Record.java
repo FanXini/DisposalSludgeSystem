@@ -9,6 +9,7 @@ public class Record {
 	private int siteId;
 	private int status;
 	private double sludgesWeight;
+	private double pretreatAmount;
 	private Car car;
 	private Site site;
 	private float charge;
@@ -78,17 +79,21 @@ public class Record {
 	public void setCharge(float charge) {
 		this.charge = charge;
 	}
+	
+	public double getPretreatAmount() {
+		return pretreatAmount;
+	}
+	public void setPretreatAmount(double pretreatAmount) {
+		this.pretreatAmount = pretreatAmount;
+	}
 	/* (non-Javadoc)
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
 	public String toString() {
-		return "Record [id=" + id + ", allocationTime=" + allocationTime
-				+ ", disposalTime=" + disposalTime + ", finishTime="
-				+ finishTime + ", carId=" + carId + ", siteId=" + siteId
-				+ ", status=" + status + ", car=" + car + ", site=" + site
-				+ ", charge=" + charge + ", sludgesWeight=" + sludgesWeight + "]";
+		return "Record [id=" + id + ", allocationTime=" + allocationTime + ", disposalTime=" + disposalTime
+				+ ", finishTime=" + finishTime + ", carId=" + carId + ", siteId=" + siteId + ", status=" + status
+				+ ", sludgesWeight=" + sludgesWeight + ", pretreatAmount=" + pretreatAmount + ", car=" + car + ", site="
+				+ site + ", charge=" + charge + "]";
 	}
-	
-
 }
