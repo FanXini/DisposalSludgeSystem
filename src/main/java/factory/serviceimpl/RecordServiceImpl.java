@@ -167,6 +167,11 @@ public class RecordServiceImpl implements RecordService{
 		recordDao.editRecordCarIdBySiteId(siteId,carId);
 		carDao.editWorkerCarStatusAndSiteId(carId,3,siteId);
 	}
+	@Override
+	public void insertRecordByAlert(Record record) {
+		// TODO Auto-generated method stub
+		recordDao.insertRecordByAlert(record);
+	}
 	
 
 }

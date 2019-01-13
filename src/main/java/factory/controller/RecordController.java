@@ -187,6 +187,27 @@ public class RecordController {
 		return mv;
 	}
 	
+	@RequestMapping("/alert")
+	@ResponseBody
+	public ModelAndView alert(@RequestParam("siteId") int siteId,ModelAndView mv){
+		log.info("调用alert");
+		log.info(siteId);
+		Site site = siteService.querySiteById(siteId);
+		System.out.println(site.getId()+","+site.getSiteName()+","+site.getAddress()+","+site.getTelephone()+","+site.getManage());
+		mv.addObject("site",site);
+		mv.setViewName("factory/alert");
+		return mv;
+	}
+	
+	@RequestMapping("/insertRecordByAlert")
+	@ResponseBody
+	public String insertRecordByAlert(@RequestBody Record record) {
+		log.info("添加一条记录");
+		log.info(record.getSiteId()+","+record.getPretreatAmount());
+		recordService.insertRecordByAlert(record);
+		return "success";
+	}
+	
 	@RequestMapping("queryAllRecordOfOneFactory")
 	@ResponseBody
 	public List<Record> queryAllRecordOfOneFactory(@RequestBody Site site){
