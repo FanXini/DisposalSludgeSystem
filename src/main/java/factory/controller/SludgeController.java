@@ -48,7 +48,7 @@ public class SludgeController {
 		sites.addAll(siteService.queryAllSite());
 		mv.addObject("driverList",drivers);
 		mv.addObject("siteList",sites);
-		mv.setViewName("record/sludge");
+		mv.setViewName("mudwarehouse/sludge");
 		return mv;
 	}
 	@RequestMapping("queryAllFunc")
@@ -58,10 +58,21 @@ public class SludgeController {
 	}
 	@RequestMapping("queryAllSludge")
 	@ResponseBody
-	public List<Sludge> queryAllSludge(){
-		log.info("进入查询所有污泥的方法");
+	public List<Sludge> queryAllSludge(@RequestParam("inOutFlag") int inOutFlag){
+		if(inOutFlag==0) {
+			log.info("查询所有入仓污泥块记录");
+		}
+		else if (inOutFlag==1){
+			log.info("查询所有出仓污泥块记录");
+		}
+		else if (inOutFlag==2){
+			log.info("查询所有未入仓污泥块记录");
+		}
+		else if (inOutFlag==3){
+			log.info("所有种类");
+		}
 		List<Sludge> sludges=new ArrayList<Sludge>();
-		sludges.addAll(sludgeService.queryAllSludge());
+		sludges.addAll(sludgeService.queryAllSludge(inOutFlag));
 		return sludges;
 	}
 	
@@ -91,12 +102,15 @@ public class SludgeController {
 		}
 	}
 	
-	@RequestMapping("querySludgeBySiteId")
+	@RequestMapping("querySludgeBySiteIdAndInOutFlag")
 	@ResponseBody
-	public  List<Sludge> querySludgeBySiteId(@RequestParam("siteId") int siteId){
-		log.info("调用querySludgeBySiteId");
-		log.info("要查询的siteId:"+siteId);
-		List<Sludge> sludges=sludgeService.querySludgeBySiteId(siteId);
+	public  List<Sludge> querySludgeBySiteIdAndInOutFlag(@RequestBody Map<String, Integer> map){
+		log.info("调用querySludgeBySiteIdAndInOutFlag");
+		int siteId=map.get("siteId");
+		int inOutFlag=map.get("inOutFlag");
+		log.info("要查询的siteId:"+map.get("siteId"));
+		
+		List<Sludge> sludges=sludgeService.querySludgeBySiteIdAndFlag(siteId,inOutFlag);
 		return sludges;	
 	}
 	
@@ -110,11 +124,24 @@ public class SludgeController {
 		return sludges;
 	}
 	
-	@RequestMapping("querySludgeByDate")
+	@RequestMapping("querySludgeByDriverIdAndInOutFlag")
 	@ResponseBody
-	public List<Sludge> querySludgeByDate(@RequestParam("startDate") String startDate,@RequestParam("endDate") String endDate){
-		log.info("调用querySludgeByDate");
-		List<Sludge> sludges=sludgeService.querySludgeByDate(startDate, endDate);
+	public List<Sludge> querySludgeByDriverIdAndInOutFlag(@RequestBody Map<String, Integer> map){
+		log.info("调用querySludgeByDriverIdAndInOutFlag");
+		int driverId=map.get("driverId");
+		int inOutFlag=map.get("inOutFlag");
+		List<Sludge> sludges=sludgeService.querySludgeByDriverIdAndInOutFlag(driverId,inOutFlag);
+		return sludges;
+	}
+	
+	@RequestMapping("querySludgeByDateAndInOutFlag")
+	@ResponseBody
+	public List<Sludge> querySludgeByDateAndInOutFlag(@RequestBody Map<String, String> map){
+		log.info("调用querySludgeByDateAndInOutFlag");
+		String startDate=map.get("startDate");
+		String endDate=map.get("endDate");
+		int inOutFlag=Integer.valueOf(map.get("inOutFlag"));
+		List<Sludge> sludges=sludgeService.querySludgeByDateAndInOutFlag(startDate, endDate, inOutFlag);
 		return sludges;
 	}
 	

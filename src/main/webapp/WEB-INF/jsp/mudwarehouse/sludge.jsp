@@ -36,6 +36,64 @@
 	<input id="trIndex" type="hidden" />
 	<!-- Modal -->
 
+	<!-- ***********************************新增车辆模态框************************************* -->
+	<div class="modal inmodal" id="addCarModal" tabindex="-1" role="dialog"
+		aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content animated bounceInRight">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">
+						<span aria-hidden="true">&times;</span><span class="sr-only">关闭</span>
+					</button>
+					<img alt="140x140" src="img/littercar.png" width="10%" height="10%" />
+					<h4 class="modal-title">新增车辆</h4>
+				</div>
+				<div class="modal-body">
+					<div class="container" style="width: 540px">
+						<div class="form-group">
+							<div>
+								<label for="Groupname" class="col-sm-3 control-label">车牌号：</label>
+								<div class="col-sm-9">
+									<input type="text" class="form-control m-b control-label"
+										id="addCarLicense" placeholder="请输入车牌号">
+								</div>
+							</div>
+						</div>
+						<div class="form-group">
+							<div>
+								<label for="Groupname" class="col-sm-3 control-label">品牌：</label>
+								<div class="col-sm-9">
+									<input type="text" class="form-control m-b" id="addCarBrand"
+										placeholder="请输入车子品牌(型号)">
+								</div>
+							</div>
+						</div>
+						<div class="form-group">
+							<div>
+								<label for="Groupname" class="col-sm-3 control-label">司机：</label>
+								<div class="col-sm-9">
+									<select class="form-control m-b" name="account"
+										id="addDriverId">
+										<%-- <option value="0">--请选择--</option>
+										<c:forEach items="${requestScope.NoCarAssignedDriverList }"
+											var="driver">
+											<option name="${driver.telephone }" id="noCar${driver.id}"
+												value="${driver.id }">${driver.realname }</option>
+										</c:forEach> --%>
+									</select>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="reset" class="btn btn-white" data-dismiss="modal">重置</button>
+					<button id="addCarButton" type="button" class="btn btn-primary">保存</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
 
 
 
@@ -43,12 +101,13 @@
 
 	<div class="wrapper wrapper-content animated fadeInRight">
 
+
 		<div class="row">
 			<div class="col-sm-12">
 				<div class="ibox float-e-margins">
 					<div class="ibox-title">
 						<h1 class="text-info"
-							style="text-align: center;font-family:KaiTi; margin-top:-1%">污泥块去向记录</h1>
+							style="text-align: center; font-family: KaiTi; margin-top: -1%">污泥块去向记录</h1>
 
 						<!-- <div class="ibox-tools">
 							<a class="collapse-link"> <i class="fa fa-chevron-up"></i>
@@ -68,6 +127,15 @@
 						<div class="col-lg-offset-2">
 
 							<div class="form-inline">
+								<div class=form-group>
+									<select class="form-control" id="inOutSelect">
+										<option value='3'>--请选择--</option>
+										<option value='0'>入仓记录</option>
+										<option value='1'>出仓记录</option>
+										<option value='2'>未入仓记录</option>
+									</select>
+
+								</div>
 								<div class="form-group">
 									<label class="sr-only" for="search">搜索方式</label>
 									<div class="input-group">
@@ -92,7 +160,7 @@
 								</div>
 
 								<div class="form-group col-lg-offset-1" id="siteList"
-									style="margin-top:4px ;">
+									style="margin-top: 4px;">
 									<label class="sr-only" for="工厂">工厂</label>
 									<div class="input-group">
 										<div class="btn-group">
@@ -161,8 +229,16 @@
 									</div>
 								</div>
 								<button class="btn btn-primary" id="submit"
-									style="margin-top:3px">查询</button>
+									style="margin-top: 3px">查询</button>
 
+
+
+							</div>
+							<div class="" style="float: right;margin-top:-8%">
+								<div class="col-xs-1 query-department text-center">
+									<button type="button" class="btn btn-primary"
+										data-toggle="modal" data-target="#addCarModal">+ 污泥块出入登记</button>
+								</div>
 							</div>
 
 							<!--<input type="text" class="form-control input-sm m-b-xs" id="filter" placeholder="搜索表格...">-->
@@ -254,18 +330,17 @@
 				$(".form_date").show()
 				$("#submit").show()
 			})
-	
 			$.ajax({
 				type : "POST",
-				url : "sludge/queryAllSludge",
+				url : "sludge/queryAllSludge?inOutFlag="+parseInt($("#inOutSelect").val()),
 				success : function(sludgeList) {
 					$("#tableDiv").empty()
 					var table = table_start
 					$.each(sludgeList, function(i, sludge) {
 						table += '<tr id="' + sludge.id + '">'
-						if (sludge.status == 0) {
+						if (sludge.status == 0) { //0：产出地到泥仓路上
 							table += '<td class="project-status"><span class="label label-inverse">未到达</td>'
-						} else if (sludge.status == 1) {
+						} else if (sludge.status == 1) { //1：到达泥仓
 							table += '<td class="project-status"><span class="label label-primary">已到达</td>'
 						} else {
 							table += '<td></td>'
@@ -312,15 +387,15 @@
 			$("#all_search").click(function() {
 				$.ajax({
 					type : "POST",
-					url : "sludge/queryAllSludge",
+					url : "sludge/queryAllSludge?inOutFlag="+parseInt($("#inOutSelect").val()),
 					success : function(sludgeList) {
 						$("#tableDiv").empty()
 						var table = table_start
 						$.each(sludgeList, function(i, sludge) {
 							table += '<tr id="' + sludge.id + '">'
-							if (sludge.status == 0) {
+							if (sludge.status == 0 ||sludge.status==2||sludge==4) {
 								table += '<td class="project-status"><span class="label label-inverse">未到达</td>'
-							} else if (sludge.status == 1) {
+							} else if (sludge.status == 1||sludge.status == 3||sludge.status == 5) {
 								table += '<td class="project-status"><span class="label label-primary">已到达</td>'
 							} else {
 								table += '<td></td>'
@@ -369,7 +444,11 @@
 				var siteId = this.getAttribute("name")
 				$.ajax({
 					type : "POST",
-					url : "sludge/querySludgeBySiteId?siteId=" + parseInt(siteId),
+					url : "sludge/querySludgeBySiteIdAndInOutFlag",
+					data:JSON.stringify({
+						siteId:parseInt(siteId),
+						inOutFlag:parseInt($("#inOutSelect").val())
+					}),
 					dataType : "json",
 					contentType : "application/json",
 					success : function(sludgeList) {
@@ -377,9 +456,9 @@
 						var table = table_start
 						$.each(sludgeList, function(i, sludge) {
 							table += '<tr id="' + sludge.id + '">'
-							if (sludge.status == 0) {
+							if (sludge.status == 0 ||sludge.status==2||sludge==4) {
 								table += '<td class="project-status"><span class="label label-inverse">未到达</td>'
-							} else if (sludge.status == 1) {
+							} else if (sludge.status == 1||sludge.status == 3||sludge.status == 5) {
 								table += '<td class="project-status"><span class="label label-primary">已到达</td>'
 							} else {
 								table += '<td></td>'
@@ -427,15 +506,21 @@
 				var driverId = this.getAttribute("name")
 				$.ajax({
 					type : "POST",
-					url : "sludge/querySludgeByDriverId?driverId=" + parseInt(driverId),
+					url : "sludge/querySludgeByDriverIdAndInOutFlag",
+					data:JSON.stringify({
+						driverId:parseInt(driverId),
+						inOutFlag:parseInt($("#inOutSelect").val())
+					}),
+					dataType : "json",
+					contentType : "application/json",
 					success : function(sludgeList) {
 						$("#tableDiv").empty()
 						var table = table_start
 						$.each(sludgeList, function(i, sludge) {
 							table += '<tr id="' + sludge.id + '">'
-							if (sludge.status == 0) {
+							if (sludge.status == 0 ||sludge.status==2||sludge==4) {
 								table += '<td class="project-status"><span class="label label-inverse">未到达</td>'
-							} else if (sludge.status == 1) {
+							} else if (sludge.status == 1||sludge.status == 3||sludge.status == 5) {
 								table += '<td class="project-status"><span class="label label-primary">已到达</td>'
 							} else {
 								table += '<td></td>'
@@ -484,15 +569,22 @@
 				var endDate = $("#end_date_text").val()
 				$.ajax({
 					type : "POST",
-					url : "sludge/querySludgeByDate?startDate=" + startDate + "&endDate=" + endDate,
+					url : "sludge/querySludgeByDateAndInOutFlag",
+					data:JSON.stringify({
+						startDate:startDate,
+						endDate:endDate,
+						inOutFlag:$("#inOutSelect").val()
+					}),
+					dataType : "json",
+					contentType : "application/json",
 					success : function(sludgeList) {
 						$("#tableDiv").empty()
 						var table = table_start
 						$.each(sludgeList, function(i, sludge) {
 							table += '<tr id="' + sludge.id + '">'
-							if (sludge.status == 0) {
+							if (sludge.status == 0 ||sludge.status==2||sludge==4) {
 								table += '<td class="project-status"><span class="label label-inverse">未到达</td>'
-							} else if (sludge.status == 1) {
+							} else if (sludge.status == 1||sludge.status == 3||sludge.status == 5) {
 								table += '<td class="project-status"><span class="label label-primary">已到达</td>'
 							} else {
 								table += '<td></td>'
