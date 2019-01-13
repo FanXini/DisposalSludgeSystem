@@ -204,6 +204,12 @@ public class UserServiceImpl implements UserService {
 		users.addAll(userDao.queryUserByCheckStutas(checkStatus));
 		return users;
 	}
+	@Override
+	public List<User> queryCarAssignTranSportDriver(){
+		List<User> transportDrivers = new ArrayList<User>();
+		transportDrivers.addAll(userDao.queryCarAssignTranSportDriver());
+		return transportDrivers;
+	}
 
 	@Override
 	public List<User> queryNoCarAssignedDriver() {

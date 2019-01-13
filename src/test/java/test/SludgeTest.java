@@ -21,9 +21,9 @@ public class SludgeTest extends BaseTest {
 
 	@Test
 	public void queryAllSludge() {
-		List<Sludge> sludges = sludgeDao.queryAllSludge(1);
+		List<Sludge> sludges = sludgeDao.querySludgeByDriverIdAndInOutFlagWithMinorWareHouseId(driverId, inOutFlag, minorWareHouseId);
 		for (Sludge sludge : sludges) {
-			System.out.println(sludge.getRfidString() + "  " + sludge.getDestinationAddress() + " "
+			System.out.println(sludge.getId()+" "+sludge.getRfidString() + "  " + sludge.getDestinationAddress() + " "
 					+ sludge.getRecord().getId() + " " + sludge.getRecord().getCar().getLicense() + " "
 					+ sludge.getRecord().getCar().getDriver().getTelephone() + "  "
 					+ sludge.getRecord().getSite().getSiteName());

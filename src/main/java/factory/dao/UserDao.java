@@ -16,6 +16,8 @@ public interface UserDao{
 
 	public List<User> queryAllDriver();
 	
+	public List<User> queryCarAssignTranSportDriver();
+	
 	public List<User> queryUserByCheckStutas(@Param("checkStatus") int checkStatus);
 
 	public List<User> queryNoCarAssignedDriver();

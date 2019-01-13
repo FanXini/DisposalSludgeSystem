@@ -1,8 +1,11 @@
 package factory.service;
 
-import factory.entity.MudWareHouse;
+import java.util.List;
+
+import factory.entity.MainMudWareHouse;
+import factory.entity.MinorMudWareHouse;
 
 public interface MudWareHouseService {
 
-	public MudWareHouse queryWareHouse();
+	public List<MinorMudWareHouse> queryMinorWareHouse();
 }

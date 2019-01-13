@@ -10,9 +10,11 @@ public interface SludgeDao {
 
 	public List<SludgeFunction> queryAllSludgeFunction();
 
-	public List<Sludge> queryAllSludge(@Param("inOutFlag") int inOutFlag);
+	public List<Sludge> queryAllSludgeByInOutFlagWithMinorWareHouseId(@Param("inOutFlag") int inOutFlag,@Param("minorWareHouseId") int minorWareHouseId);
 
 	/*public List<Sludge> queryAllSludgeNotAssignFunc();*/
+	
+	public int addOutMudWareHouseSludgeRecord(Sludge sludge);
 
 	public void deleteSludge(@Param("sludgeId") int sludgeId);
 
@@ -20,17 +22,17 @@ public interface SludgeDao {
 
 	public List<Sludge> querySludgeBySiteId(@Param("siteId") int siteId);
 	
-	public List<Sludge> querySludgeBySiteIdAndFlag(@Param("siteId") int siteId,@Param("inOutFlag") int inOutFlag);
+	public List<Sludge> querySludgeBySiteIdAndInOutFlagWithMinorWareHouseId(@Param("siteId") int siteId,@Param("inOutFlag") int inOutFlag,@Param("minorWareHouseId") int minorWareHouseId);
 	
 	/*public List<Sludge> querySludgeNotAssignFuncBySiteId(@Param("siteId") int siteId);*/
 
 	public List<Sludge> querySludgeByDriverId(@Param("driverId") int driverId);
 
-	public List<Sludge> querySludgeByDriverIdAndInOutFlag(@Param("driverId") int driverId,@Param("inOutFlag") int inOutFlag);
+	public List<Sludge> querySludgeByDriverIdAndInOutFlagWithMinorWareHouseId(@Param("driverId") int driverId,@Param("inOutFlag") int inOutFlag,@Param("minorWareHouseId") int minorWareHouseId);
 
 	/*public List<Sludge> querySludgeNotAssignFuncByDriverId(@Param("driverId") int driverId);*/
 	
-	public List<Sludge> querySludgeByDateAndInOutFlag(@Param("startDate") String startDate,@Param("endDate") String endDate,@Param("inOutFlag") int inOutFlag);
+	public List<Sludge> querySludgeByDateAndInOutFlagWithMinorWareHouseId(@Param("startDate") String startDate,@Param("endDate") String endDate,@Param("inOutFlag") int inOutFlag,@Param("minorWareHouseId") int minorWareHouseId);
 	
 	public List<Sludge> querySludgeByDate(@Param("startDate") String startDate,@Param("endDate") String endDate);
 	

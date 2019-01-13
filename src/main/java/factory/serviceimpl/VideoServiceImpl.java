@@ -29,6 +29,7 @@ public class VideoServiceImpl implements VideoService {
 		Video video=new Video();
 		video.setId(Integer.valueOf(videoInfo.get("id")));
 		video.setCar_id(Integer.valueOf(videoInfo.get("car_id")));
+		video.setLicense(videoInfo.get("license"));
 		video.setSerial_number(videoInfo.get("serial_number"));
 		video.setVideo_RTMPid(videoInfo.get("video_RTMPid"));
 		video.setVideo_HLSid(videoInfo.get("video_HLSid"));

@@ -5,8 +5,10 @@ import factory.entity.Sludge;
 import factory.entity.SludgeFunction;
 import factory.service.SludgeService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.support.StaticApplicationContext;
 import org.springframework.stereotype.Service;
 
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Service
@@ -18,17 +20,42 @@ public class SludgeServiceImpl implements SludgeService {
 	public List<SludgeFunction> queryAllSludgeFunction() {
 		return sludgeDao.queryAllSludgeFunction();
 	}
+	
+	private static SimpleDateFormat format=new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
 
 	@Override
-	public List<Sludge> queryAllSludge(int inOutFlag) {
+	public List<Sludge> queryAllSludgeByInOutFlagWithMinorWareHouseId(int inOutFlag,int minorWareHouseId) {
 		List<Sludge> sludges = new ArrayList<Sludge>();
-		sludges.addAll(sludgeDao.queryAllSludge(inOutFlag));
+		sludges.addAll(sludgeDao.queryAllSludgeByInOutFlagWithMinorWareHouseId(inOutFlag,minorWareHouseId));
 		Collections.sort(sludges, new Comparator<Sludge>() {
 			public int compare(Sludge arg0, Sludge arg1) {
 				return arg1.getProduceTime().compareTo(arg0.getProduceTime());
 			}
 		});
 		return sludges;
+	}
+	@Override
+	public void addOutSludge(Sludge sludge) {
+		String function = sludge.getSludgeFunction().getFunction();
+		SludgeFunction sludgeFunction = sludgeDao.querySludgeFunctionByFunction(function);
+		if (sludgeFunction != null) {
+			sludge.setFunctionId(sludgeFunction.getId());
+		} else {
+			SludgeFunction addSludgeFunction = new SludgeFunction();
+			addSludgeFunction.setFunction(function);
+			addSludgeFunction.setDescription(function);
+			sludgeDao.addSludgeFunction(addSludgeFunction);
+			sludge.setFunctionId(addSludgeFunction.getId());
+		}
+		if (sludge.getRfidString().equals("none")) {
+			sludge.setRfidString(null);
+		}
+		if (sludge.getDestinationAddress().equals("none")) {
+			sludge.setRfidString(null);
+		}
+		sludge.setStatus(4); //4表示从智慧仓到目的地的状态
+		sludge.setProduceTime(format.format(new Date()));
+		sludgeDao.addOutMudWareHouseSludgeRecord(sludge);
 	}
 
 	@Override
@@ -73,9 +100,9 @@ public class SludgeServiceImpl implements SludgeService {
 	}
 
 	@Override
-	public List<Sludge> querySludgeBySiteIdAndFlag(int siteId, int flag) {
+	public List<Sludge> querySludgeBySiteIdAndInOutFlagWithMinorWareHouseId(int siteId, int flag,int minorWareHouseId) {
 		List<Sludge> sludges = new ArrayList<Sludge>();
-		sludges.addAll(sludgeDao.querySludgeBySiteIdAndFlag(siteId,flag));
+		sludges.addAll(sludgeDao.querySludgeBySiteIdAndInOutFlagWithMinorWareHouseId(siteId,flag,minorWareHouseId));
 		Collections.sort(sludges, new Comparator<Sludge>() {
 			public int compare(Sludge arg0, Sludge arg1) {
 				return arg1.getProduceTime().compareTo(arg0.getProduceTime());
@@ -97,9 +124,9 @@ public class SludgeServiceImpl implements SludgeService {
 	}
 	
 	@Override
-	public List<Sludge> querySludgeByDriverIdAndInOutFlag(int driverId,int inOutFlag) {
+	public List<Sludge> querySludgeByDriverIdAndInOutFlagWithMinorWareHouseId(int driverId,int inOutFlag,int minorWareHouseId) {
 		List<Sludge> sludges = new ArrayList<Sludge>();
-		sludges.addAll(sludgeDao.querySludgeByDriverIdAndInOutFlag(driverId,inOutFlag));
+		sludges.addAll(sludgeDao.querySludgeByDriverIdAndInOutFlagWithMinorWareHouseId(driverId,inOutFlag,minorWareHouseId));
 		Collections.sort(sludges, new Comparator<Sludge>() {
 			public int compare(Sludge arg0, Sludge arg1) {
 				return arg1.getProduceTime().compareTo(arg0.getProduceTime());
@@ -109,9 +136,9 @@ public class SludgeServiceImpl implements SludgeService {
 	}
 
 	@Override
-	public List<Sludge> querySludgeByDateAndInOutFlag(String startDate, String endDate,int inOutFlag) {
+	public List<Sludge> querySludgeByDateAndInOutFlagWithMinorWareHouseId(String startDate, String endDate,int inOutFlag,int minorWareHouseId) {
 		List<Sludge> sludges = new ArrayList<Sludge>();
-		sludges.addAll(sludgeDao.querySludgeByDateAndInOutFlag(startDate, endDate, inOutFlag));
+		sludges.addAll(sludgeDao.querySludgeByDateAndInOutFlagWithMinorWareHouseId(startDate, endDate, inOutFlag,minorWareHouseId));
 		//sludges.addAll(sludgeDao.querySludegAssignFuncByDate(startDate, endDate));
 		//sludges.addAll(sludgeDao.querySludegNotAssignFuncByDate(startDate, endDate));
 		Collections.sort(sludges, new Comparator<Sludge>() {

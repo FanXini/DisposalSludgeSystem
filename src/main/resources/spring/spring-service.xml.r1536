@@ -9,18 +9,6 @@
 	http://www.springframework.org/schema/tx
 	http://www.springframework.org/schema/tx/spring-tx.xsd">
 
-	
-	
-	
-	     <!--配置事务管理器 -->
-	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
-	    <property name="dataSource" ref="jdbcDataSource"/>
-	
-	
-	     <!--配置事务管理器 -->
-	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
-	    <property name="dataSource" ref="jdbcDataSource"/>
-
 	<!-- 自动扫描teamLuo.fan.service包中带注解的类 -->
 	<context:component-scan base-package="factory.service" />
 

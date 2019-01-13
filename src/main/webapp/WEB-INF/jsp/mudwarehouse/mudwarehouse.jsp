@@ -37,35 +37,38 @@
 
 		$.ajax({
 			type : "POST",
-			url : "mudWareHouse/queryWareHouse",
+			url : "mudWareHouse/queryMinorWareHouse",
 			/* data:JSON.stringify({
 				userId:userId
 			}), */
 			dataType : "json",
 			contentType : "application/json",
-			success : function(mudWareHouse) {
-				$("#capacity").val(parseInt(mudWareHouse.capcity)+"吨")
-				var ctx = $("#myPieChart").get(0).getContext('2d');
-				var myPieChart = new Chart(ctx, {
-					type : "pie",
-					data : {
-						labels : [ "存储量", "剩余量" ],
-						datasets : [ {
-							data : [
-									mudWareHouse.capcity
-											- mudWareHouse.remainCapcity,
-									mudWareHouse.remainCapcity ],
-							backgroundColor : [ 'rgba(255, 99, 132, 1)', /*前面三项是rgb(red,green,blue)后面一项的透明度*/
-							'rgba(54, 162, 235, 1)'
-							/* 		'rgba(255, 206, 86, 1)',
-									'rgba(75, 192, 192, 1)',
-									'rgba(153, 102, 255,1)',
-									'rgba(255, 159, 64, 1)',
-									'rgba(245,242,34,1)' */
-							]
-						} ]
-					}
+			success : function(minorWareHouseList) {
+				$.each(minorWareHouseList, function(i, minorWareHouse){
+					$("#serialNumber_"+i).html(minorWareHouse.serialNumber+"号仓"+"("+minorWareHouse.moistrueDegree+")");
+					$("#capacity_"+i).val(minorWareHouse.capacity+"吨");
+					var ctx = $("#myPieChart_"+i).get(0).getContext('2d');
+					var myPieChart = new Chart(ctx, {
+						type : "pie",
+						data : {
+							labels : [ "存储量", "剩余量" ],
+							datasets : [ {
+								data : [
+									minorWareHouse.capacity
+												- minorWareHouse.remainCapacity,
+												minorWareHouse.remainCapacity ],
+								backgroundColor : [ 'rgba(255, 99, 132, 1)', /*前面三项是rgb(red,green,blue)后面一项的透明度*/
+								'rgba(54, 162, 235, 1)'
+								/* 		'rgba(255, 206, 86, 1)',
+										'rgba(75, 192, 192, 1)',
+										'rgba(153, 102, 255,1)',
+										'rgba(255, 159, 64, 1)',
+										'rgba(245,242,34,1)' */
+								]
+							} ]
+						}
 
+					})
 				})
 
 			}
@@ -78,35 +81,91 @@ h1, h2 {
 	text-align: center;
 }
 
-#capacityDiv {
+.capacityDiv {
 	position: relative;
-	width: 20%;
-	left:40%
+	width: 45%;
+	left: 25%
 }
-#chartAreat{
-	position:relative;
-	margin-top:5%
+
+
+#chartAreat {
+	position: relative;
+	margin-top: 5%
 }
 </style>
 
 </head>
 
-<body>
-	<div class="container-fluid">
-		<!-- 月消费模块 -->
-		<div id="chartAreat">
+<body class="gray-bg">
+	<!-- <div class="container-fluid">
+		月消费模块
 
-			<h1 class="text-info" id="monthModelInfo">泥仓容量</h1>
-			<div id="capacityDiv" class="input-group">
-				<span class="input-group-addon">总容量</span> <input id="capacity"
-					type="text" class="form-control" readonly />
+		<h1 class="text-info" id="monthModelInfo">泥仓容量</h1>
+		<div id="capacityDiv" class="input-group">
+			<span class="input-group-addon">总容量</span> <input id="capacity"
+				type="text" class="form-control" readonly />
+		</div>
+
+		<div id="canvas">
+			<canvas id="myPieChart"></canvas>
+		</div>
+	</div> -->
+
+	<div class="wrapper wrapper-content animated fadeInRight">
+		<div class="row">
+			<div class="col-sm-4">
+				<h1 class="text-info" id="serialNumber_0"></h1>
+				<div  class="input-group capacityDiv">
+					<span class="input-group-addon">总容量</span> <input id="capacity_0"
+						type="text" class="form-control" readonly />
+				</div>
+				
+
+				<div>
+					<canvas id="myPieChart_0" class="canvas"></canvas>
+				</div>
+			</div>
+			<div class="col-sm-4">
+				<h1 class="text-info" id="serialNumber_1"></h1>
+				<div class="input-group capacityDiv">
+					<span class="input-group-addon">总容量</span> <input id="capacity_1"
+						type="text" class="form-control" readonly />
+				</div>
+
+				<div>
+					<canvas id="myPieChart_1" class="canvas"></canvas>
+				</div>
+			</div>
+			<div class="col-sm-4">
+				<h1 class="text-info" id="serialNumber_2"></h1>
+				<div  class="input-group capacityDiv">
+					<span class="input-group-addon">总容量</span> <input id="capacity_2"
+						type="text" class="form-control" readonly />
+				</div>
+
+				<div>
+					<canvas id="myPieChart_2" class="canvas"></canvas>
+				</div>
 			</div>
 
-			<div id="canvas">
-				<canvas id="myPieChart"></canvas>
-			</div>
+
 		</div>
 	</div>
+
+	<!-- 自定义js -->
+	<script src="js/content.js?v=1.0.0"></script>
+
+
+
+	<script>
+		$(document).ready(function() {
+			$('.contact-box').each(function() {
+				animationHover(this, 'pulse');
+			});
+		});
+	</script>
+
+
 
 
 

@@ -5,6 +5,7 @@ public class Sludge {
 	private int id;
 	private int recordId;
 	private int functionId;
+	private int minorMudWareHouseId;
 	private String produceTime;
 	private String arrivalTime;
 	private String destinationAddress;
@@ -14,8 +15,21 @@ public class Sludge {
 	private SludgeFunction sludgeFunction;
 	private float weight;
 	private int transcarId;
-	private Car car;
-	private User user;
+private Car car;
+	private User user;	private MinorMudWareHouse minorMudWareHouse;
+	
+	public int getMinorMudWareHouseId() {
+		return minorMudWareHouseId;
+	}
+	public void setMinorMudWareHouseId(int minorMudWareHouseId) {
+		this.minorMudWareHouseId = minorMudWareHouseId;
+	}
+	public MinorMudWareHouse getMinorMudWareHouse() {
+		return minorMudWareHouse;
+	}
+	public void setMinorMudWareHouse(MinorMudWareHouse minorMudWareHouse) {
+		this.minorMudWareHouse = minorMudWareHouse;
+	}
 	public int getId() {
 		return id;
 	}
