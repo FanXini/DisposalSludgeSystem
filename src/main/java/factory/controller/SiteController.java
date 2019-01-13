@@ -116,12 +116,12 @@ public class SiteController {
 	
 	@RequestMapping("queryManagerTel")
 	@ResponseBody
-	public Map<String, String> queryManagerTel(@RequestParam("manager") String manager) {
+	public Map<String, String> queryManagerTel(@RequestParam("managerId") int managerId) {
 		log.info("≤È—ØmanagerTel");
 		Map<String, String> result = new HashMap<String, String>();
 		try {
-			log.info(manager);
-			String managerTel = siteService.queryManagerTel(manager);
+			log.info(managerId);
+			String managerTel = siteService.queryManagerTel(managerId);
 			if(managerTel==null) result.put("result", "failure");
 			else{
 				result.put("result", "success");

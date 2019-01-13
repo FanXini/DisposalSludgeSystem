@@ -127,17 +127,17 @@ body {
 						<form class="form-inline" id="addForm">
 						<div class="col-sm-6">
 							<div class="form-group"><label for="addSerialNumber">编号：</label> <input type="text"
-								placeholder="请输入S开头的站点编号" id="addSerialNumber" class="form-control" autocomplete="off"  name="serialNumber">
+								placeholder="请输入F开头的站点编号" id="addSerialNumber" class="form-control" autocomplete="off"  name="serialNumber">
 							</div>
 							<div class="form-group"><label for="addSiteName">站点名：</label> <input type="text"
 								placeholder="请输入站点名" id="addSiteName" class="form-control" autocomplete="off" name="siteName">
 							</div>
 							<div id="distpickerAdd">
 								<div class="form-group"><label for="addProvince">省：</label> <select id="addProvince"
-									class="form-control" data-province="湖南省"></select>
+									class="form-control" data-province="广东省"></select>
 							</div>
 								<div class="form-group"><label for="addCity">市：</label> <select id="addCity"
-									class="form-control" data-city="长沙市"></select>
+									class="form-control" data-city="深圳市"></select>
 							</div>
 								<div class="form-group"><label for="addRegion">区：</label> <select id="addRegion"
 									class="form-control"></select>
@@ -148,14 +148,14 @@ body {
 							</div>
 							</div>
 							<div class="col-sm-6">
-							<div class="form-group"><label for="addManager">负责人：</label> <input type="text"
+<!-- 							<div class="form-group"><label for="addManager">负责人：</label> <input type="text"
 								placeholder="请输入负责人" id="addManager" class="form-control m-b control-label" name="manager" autocomplete="off" list="addManagerList"/>
 								<datalist id="addManagerList">
 								</datalist>
 							</div>
 							<div class="form-group"><label for="addManagerTel">负责人电话：</label> <input type="text"
 								placeholder="请输入负责人电话" id="addManagerTel" class="form-control m-b control-label" autocomplete="off" name="managerTel">
-							</div>
+							</div> -->
 							<div class="form-group"><label for="addTel">电话：</label> <input type="text"
 								placeholder="请输入站点电话" id="addTel" class="form-control m-b control-label" autocomplete="off" name="tel">
 							</div>
@@ -205,16 +205,14 @@ body {
 									class="form-control"></select>
 							</div>
 							</div> -->
-							<div class="form-group"><label for="editAddress">详细地址：</label> <input type="text"
-								placeholder="请输入详细地址" id="editAddress" class="form-control m-b control-label" autocomplete="off" name="address">
+							<div class="form-group"><label for="editAddress">详细地址：</label>
+							<input type="text" placeholder="请输入详细地址" id="editAddress" class="form-control m-b control-label" autocomplete="off" name="address">
 							</div>
-							<div class="form-group"><label for="editManager">负责人：</label> <input type="text"
-								placeholder="请输入负责人" id="editManager" class="form-control m-b control-label" list="editManagerList" autocomplete="off" name="manager"/>
-								<datalist id="editManagerList">
-								</datalist>
+							<div class="form-group"><label for="editManager">负责人：</label>
+							<select class="form-control m-b" id="editManager" name="manager"></select>
 							</div>
-							<div class="form-group"><label for="editManagerTel">负责人电话：</label> <input type="text"
-								placeholder="请输入负责人电话" id="editManagerTel" class="form-control m-b control-label" autocomplete="off" name="managerTel">
+							<div class="form-group"><label for="editManagerTel">负责人电话：</label> <input type="text" 
+							id="editManagerTel" class="form-control" disabled="true">
 							</div>
 							<div class="form-group"><label for="editTel">电话：</label> <input type="text"
 								placeholder="请输入站点电话" id="editTel" class="form-control m-b control-label" autocomplete="off" name="tel">
@@ -351,7 +349,7 @@ body {
 			+ '<th data-field="address">地址</th>'
 			+ '<th data-field="tel">电话</th>'
 			+ '<th data-field="manager">负责人</th>'
-			+ '<th data-field="device">设备</th>'
+/* 			+ '<th data-field="device">设备</th>' */
 			+ '<th data-field="status">状态</th>'
 			+ '<th data-field="sensors">操作</th>'
 			+ '</tr>'
@@ -380,9 +378,9 @@ body {
 						table += '<td style="width:8%;">' + site.manage.realname + '</td>';
 					}
 					else{
-						table += '<td style="width:8%;"></td>';
+						table += '<td style="width:8%;">未设置</td>';
 					}
-					table += '<td>';
+					/* table += '<td>';
 					if (!jQuery.isEmptyObject(site.sensors)) {
 						var sensorNumber = site.sensors.length;
 						$.each(site.sensors,function(i,sensor) {
@@ -393,7 +391,7 @@ body {
 								table += ",";
 							});
 					}
-					table += '</td>';
+					table += '</td>'; */
 					if (site.status == 0) {
 						table += '<td class="project-status"><span class="label label-inverse">正常</td>';
 					} else if (site.status == 1) {
@@ -436,10 +434,10 @@ body {
 					table += '<td>' + site.address + '</td>';
 					table += '<td>' + site.telephone + '</td>';
 					if(!jQuery.isEmptyObject(site.manage)){
-						table += '<td style="width:8%;">' + site.manage.realnamerealname + '</td>';
+						table += '<td style="width:8%;">' + site.manage.realname + '</td>';
 					}
 					else{
-						table += '<td style="width:8%;"></td>';
+						table += '<td style="width:8%;">未设置</td>';
 					}
 					table += '<td>';
 					if (!jQuery.isEmptyObject(site.sensors)) {
@@ -477,68 +475,15 @@ body {
 		});
 	});
 
-	//新增模态框联动
-	 $("#addModal").on('shown.bs.modal', function() {
-	 	$("#addSerialNumber").val("");
+	$("#addModal").on('shown.bs.modal', function(){
+		$("#addSerialNumber").val("");
 		$("#addSiteName").val("");
-		$("#addManager").val("");
-		$("#addManagerTel").val("");
 		$("#addTel").val("");
 		$("#addDepth").val("");
 		$("#addAddress").val("");
-	 	$.ajax({
-			type : "POST",
-			url : "system/queryAllManagerBySite",
-			data : "siteId=",
-			success : function(addManagerList) {
-				$("#addManagerList").empty();
-				if (!jQuery.isEmptyObject(addManagerList)){
-					$.each(addManagerList,function(i,manager) {
-						$("#addManagerList").append('<option value='+manager.realname+'></option>');
-					});
-				}
-			}
-		});
-		$("#addManager").blur(function(){
-			var manager = $("#addManager").val();
-			$.ajax({
-				type : "POST",
-				url : "system/queryManagerTel",
-				data : "manager=" + manager,
-				success : function(result) {
-					if (result.result == "success") {
-						$("#addManagerTel").val(result.managerTel);
-						$("#addManagerTel").attr("disabled","disabled");
-					}
-					else{
-						$("#addManagerTel").removeAttr("disabled");
-					}
-				}
-			});
-		});
-		//表单校验
-		addValidate=validateAddForm();
-		
-		/* var config = {
-			'.chosen-select' : {},
-			'.chosen-select-deselect' : {
-				allow_single_deselect : true
-			},
-			'.chosen-select-no-single' : {
-				disable_search_threshold : 10
-			},
-			'.chosen-select-no-results' : {
-				no_results_text : 'Oops, nothing found!'
-			},
-			'.chosen-select-width' : {
-				width : "90%"
-			}
-		}
-		for ( var selector in config) {
-			$(selector).chosen(config[selector]);
-		} */
-	}); 
-	
+	});
+	//表单校验
+	addValidate=validateAddForm();
 	/***************************** 新增站点提交************************************* */
 	$("#addSite").click(function(){
 		var addSerialNum=$("#addSerialNumber").val();
@@ -554,8 +499,6 @@ body {
     					else {
 							var serialNumber=$("#addSerialNumber").val();
 							var siteName=$("#addSiteName").val();
-							var manager=$("#addManager").val();
-							var managerTel=$("#addManagerTel").val();
 							var telephone=$("#addTel").val();
 							var depth=$("#addDepth").val();
 							var address=$("#addProvince").val()+$("#addCity").val()+$("#addRegion").val()+$("#addAddress").val();
@@ -572,8 +515,6 @@ body {
 											serialNumber : serialNumber,
 											siteName : siteName,
 											address : address,
-											manager : manager,
-											managerTel : managerTel,
 											telephone : telephone,
 											depth : depth,
 											longitude : point.lng,
@@ -596,14 +537,32 @@ body {
 								else{
 									alert("找不到该地址");
 								}
-							},"长沙市");
+							},"深圳市");
 						}
 					}
     			});
     		}
 	});
 	/***************************** 编辑按钮************************************* */
+	var currentOption;
 	function editSite(siteId) {
+		$("#editManager").empty();
+		$.ajax({
+			type : "POST",
+			url : "system/queryAllManagerBySite",
+			data : "siteId="+siteId,
+			success : function(editManagerList) {
+				$("#editManagerList").empty();
+				if (!jQuery.isEmptyObject(editManagerList)){
+					$.each(editManagerList,function(i,manager) {
+						$("#editManager").append('<option value="'+manager.id+'">'+manager.realname+'</option>');
+					});
+				}else{
+					$("#editManager").append('<option value="0">--暂无成员可设置--</option>');
+					$("#editManager").val(0);
+				}
+			}
+		});
 		$("#editId").val(siteId);
 		$.ajax({
 			type : "POST",
@@ -615,51 +574,41 @@ body {
 				$("#editSiteName").val(site.siteName);
 				$("#editAddress").val(site.address);
 				if(!jQuery.isEmptyObject(site.manage)){
-				$("#editManager").val(site.manage.realname);
-				$("#editManagerTel").val(site.manage.telephone);
-				$("#editManagerTel").attr("disabled","disabled");
+					$("#editManager").val(site.manage.id);
+					$("#editManagerTel").val(site.manage.telephone);
+				}
+				else{
+					if($("#editManager").val()!=0)
+					$("#select_id").prepend("<option value='0'>--请选择--</option>");
+					$("#editManagerTel").val('');
 				}
 				$("#editTel").val(site.telephone);
 				$("#editDepth").val(site.depth);
 			}
 		});
+		//表单校验
+		editValidate=validateEditForm();
 	}
 	
 	//编辑模态框联动
-	$("#editModal").on('shown.bs.modal',function(){
-		var siteId=$("#editId").val();
-	 	$.ajax({
-			type : "POST",
-			url : "system/queryAllManagerBySite",
-			data : "siteId="+siteId,
-			success : function(editManagerList) {
-				$("#editManagerList").empty();
-				if (!jQuery.isEmptyObject(editManagerList)){
-					$.each(editManagerList,function(i,manager) {
-						$("#editManagerList").append('<option value='+manager.realname+'></option>');
-					});
-				}
-			}
-		});
-		$("#editManager").blur(function(){
-			var manager = $("#editManager").val();
+	$("#editManager").change(function(){
+		var managerId = $("#editManager").val();
+		if(managerId != 0){
 			$.ajax({
-			type : "POST",
-			url : "system/queryManagerTel",
-			data : "manager=" + manager,
-			success : function(result) {
-				if (result.result == "success") {
-					$("#editManagerTel").val(result.managerTel);
-					$("#editManagerTel").attr("disabled","disabled");
+				type : "POST",
+				url : "system/queryManagerTel",
+				data : "manager=" + manager,
+				success : function(result) {
+					if (result.result == "success") {
+						$("#editManagerTel").val(result.managerTel);
+					}else{
+						$("#editManagerTel").val('');
+					}
 				}
-				else{
-					$("#editManagerTel").removeAttr("disabled");
-				}
-			}
-		});
-		});
-		//表单校验
-		editValidate=validateEditForm();
+			});
+		}else{
+			$("#editManagerTel").val('');
+		}
 	});
 	
 	/***************************** 编辑站点提交************************************* */
@@ -669,7 +618,6 @@ body {
 		var serialNumber=$("#editSerialNumber").val();
 		var siteName=$("#editSiteName").val();
 		var manager=$("#editManager").val();
-		var managerTel=$("#editManagerTel").val();
 		var telephone=$("#editTel").val();
 		var depth=$("#editDepth").val();
 		var address=$("#editAddress").val();
@@ -687,8 +635,7 @@ body {
 						serialNumber : serialNumber,
 						siteName : siteName,
 						address : address,
-						manager : manager,
-						managerTel : managerTel,
+						managerId : managerId,
 						telephone : telephone,
 						depth : depth,
 						longitude : point.lng,
