@@ -46,4 +46,11 @@
 		and video.del_status=0 
 		and id=#{id}
 	</update>
+	
+	<select id="queryVideoByDriverId" resultMap="VideoDaoMap">
+		select *
+		from video,car,user
+		where video.car_id = car.id and car.driver_id=user.id and user.id=#{driverId}
+		and video.del_status=0 
+	</select>
 </mapper>

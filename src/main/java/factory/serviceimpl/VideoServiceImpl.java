@@ -42,4 +42,8 @@ public class VideoServiceImpl implements VideoService {
 		// TODO Auto-generated method stub
 		videodao.addVideo(videoInfo);
 	}
+	@Override
+	public Video queryVideoByDriverId(int driverId) {
+		return videodao.queryVideoByDriverId(driverId);
+	}
 }

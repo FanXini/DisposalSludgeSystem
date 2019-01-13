@@ -17,6 +17,11 @@ public class VideoTest extends BaseTest {
 	private VideoDao videoDao;
 	@Autowired
 	private CarDao carDao;
+	
+	@Test
+	public void test2(){
+		System.out.println(videoDao.queryVideoByDriverId(3).getVideo_HLSid());
+	}
 /*	@Test
 	public void queryAllvideo(){
 		List<Video> videos=videoDao.queryAllVideo();
@@ -55,4 +60,5 @@ public class VideoTest extends BaseTest {
 		videoDao.addVideo(video);
 		System.out.println(video.getId());
 	}*/
+	
 }

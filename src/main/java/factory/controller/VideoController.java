@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.junit.runners.Parameterized.Parameter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -75,5 +76,15 @@ public class VideoController {
 		log.info("µ÷ÓÃquerycarWithoutVideo");
 		List<Car> querycarWithoutVideo=carService.querycarWithoutVideo();
 		return querycarWithoutVideo;
-	}	
+	}
+	
+	@RequestMapping("queryVideoByDriverId")
+	public ModelAndView queryVideoByDriverId(@RequestParam ("driverId") int driverId,ModelAndView mv) {
+		log.info("queryVideoByDriverId");
+		System.out.println(driverId);
+		Video video=videoService.queryVideoByDriverId(driverId);
+		mv.addObject("video",video);
+		mv.setViewName("monitor/monitorOfOneCar");
+		return mv;
+	}
 }
