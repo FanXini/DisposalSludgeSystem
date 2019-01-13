@@ -14,6 +14,7 @@ public class Car {
 	private int status;
 	private User driver;
 	private Site site;
+	private Video video;
 	private int siteId;
 	public int getId() {
 		return id;
@@ -93,5 +94,12 @@ public class Car {
 	public void setSite(Site site) {
 		this.site = site;
 	}
+	public Video getVideo() {
+		return video;
+	}
+	public void setVideo(Video video) {
+		this.video = video;
+	}
+	
 	
 }

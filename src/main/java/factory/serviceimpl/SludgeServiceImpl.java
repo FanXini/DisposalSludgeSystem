@@ -5,8 +5,10 @@ import factory.entity.Sludge;
 import factory.entity.SludgeFunction;
 import factory.service.SludgeService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.support.StaticApplicationContext;
 import org.springframework.stereotype.Service;
 
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Service
@@ -18,6 +20,8 @@ public class SludgeServiceImpl implements SludgeService {
 	public List<SludgeFunction> queryAllSludgeFunction() {
 		return sludgeDao.queryAllSludgeFunction();
 	}
+	
+	private static SimpleDateFormat format=new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
 
 	@Override
 	public List<Sludge> queryAllSludgeByInOutFlagWithMinorWareHouseId(int inOutFlag,int minorWareHouseId) {
@@ -29,6 +33,29 @@ public class SludgeServiceImpl implements SludgeService {
 			}
 		});
 		return sludges;
+	}
+	@Override
+	public void addOutSludge(Sludge sludge) {
+		String function = sludge.getSludgeFunction().getFunction();
+		SludgeFunction sludgeFunction = sludgeDao.querySludgeFunctionByFunction(function);
+		if (sludgeFunction != null) {
+			sludge.setFunctionId(sludgeFunction.getId());
+		} else {
+			SludgeFunction addSludgeFunction = new SludgeFunction();
+			addSludgeFunction.setFunction(function);
+			addSludgeFunction.setDescription(function);
+			sludgeDao.addSludgeFunction(addSludgeFunction);
+			sludge.setFunctionId(addSludgeFunction.getId());
+		}
+		if (sludge.getRfidString().equals("none")) {
+			sludge.setRfidString(null);
+		}
+		if (sludge.getDestinationAddress().equals("none")) {
+			sludge.setRfidString(null);
+		}
+		sludge.setStatus(4); //4表示从智慧仓到目的地的状态
+		sludge.setProduceTime(format.format(new Date()));
+		sludgeDao.addOutMudWareHouseSludgeRecord(sludge);
 	}
 
 	@Override

@@ -55,7 +55,7 @@ public interface CarDao {
 	
 	public List<Car> queryCarUnassign();
 	
-	
+	public List<Car> querycarWithoutVideo();
 
 }
 

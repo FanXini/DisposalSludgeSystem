@@ -338,7 +338,7 @@
 						table += '<td>' + (record.site.address ==null?"": record.site.address) + '</td>'
 						table += '<td>' + (record.site.telephone ==null?"": record.site.telephone) + '</td>'
 						table += '<td>' + (record.car.driver.telephone ==null?"":record.car.driver.telephone) + '</td>'
-						table += '<td>' + ( record.car.license==null?"": record.car.license)+ '</td>'
+						table += '<td>' + (record.car.license==null?"": record.car.license) + '</td>'
 						table += '</tr>'
 	
 					})

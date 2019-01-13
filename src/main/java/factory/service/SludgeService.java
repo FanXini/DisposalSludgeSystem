@@ -12,6 +12,8 @@ public interface SludgeService {
 	
 	public List<Sludge> queryAllSludgeByInOutFlagWithMinorWareHouseId(int inOutflag,int minorWareHouseId);
 	
+	public void addOutSludge(Sludge sludge);
+	
 	public void deleteSludge(int sludgeId);
 	
 	public void editSludge(Sludge sludge);

@@ -39,7 +39,8 @@
 	</resultMap>
 
 
-	<select id="queryAllSludgeByInOutFlagWithWareHouseSerial" resultMap="SludgeMap">
+	<select id="queryAllSludgeByInOutFlagWithMinorWareHouseId"
+		resultMap="SludgeMap">
 		<!-- SELECT sludge.*,record.id,record.car_id,record.site_id,car.id,car.license,car.driver_id,user.id,user.realname,user.telephone,site.id,site.site_name,sludge_function.id,sludge_function.`function` 
 			FROM sludge,record,car,user,site,sludge_function WHERE sludge.del_status=0 
 			AND sludge.record_id=record.id AND sludge.function_id=sludge_function.id 
@@ -52,20 +53,20 @@
 		LEFT JOIN `user` ON car.driver_id=`user`.id LEFT JOIN sludge_function
 		ON sludge.function_id=sludge_function.id
 		WHERE sludge.del_status=0
+		<if test="minorWareHouseId!=0">
+			and sludge.minor_mud_warehouse_id=#{minorWareHouseId}
+		</if>
 		<choose>
 			<when test="inOutFlag==0">  <!-- 查询入仓污泥块记录 -->
-				and sludge.status=0 OR sludge.status=1
+				and sludge.status in (0,1)
 			</when>
 			<when test="inOutFlag==1">  <!-- 查询出仓污泥块记录 -->
-				and sludge.status=4 OR sludge.status=5
+				and sludge.status in (4,5)
 			</when>
 			<when test="inOutFlag==2">  <!-- 查询直接从产地运往目的地污泥块记录 -->
-				and sludge.status=2 OR sludge.status=3
+				and sludge.status in (2,3)
 			</when>
 		</choose>
-		<if test="wareHouseSerial!='0'">
-			and sludge.status=2 OR sludge.status=3
-		</if>
 		ORDER BY sludge.produce_time DESC
 	</select>
 
@@ -85,7 +86,8 @@
 		ORDER BY sludge.produce_time DESC
 	</select>
 	<!-- *********************************通过工厂id和出入工厂类型查询污泥块************************************ -->
-	<select id="querySludgeBySiteIdAndFlag" resultMap="SludgeMap">
+	<select id="querySludgeBySiteIdAndInOutFlagWithMinorWareHouseId"
+		resultMap="SludgeMap">
 		SELECT
 		sludge.*,record.id,record.car_id,record.site_id,car.id,car.license,car.driver_id,user.id,user.realname,user.telephone,site.id,site.site_name,sludge_function.id,sludge_function.`function`
 		FROM
@@ -95,12 +97,15 @@
 		ON sludge.function_id=sludge_function.id
 		WHERE sludge.del_status=0 AND
 		site.id=#{siteId}
+		<if test="minorWareHouseId!=0">
+			and sludge.minor_mud_warehouse_id=#{minorWareHouseId}
+		</if>
 		<choose>
-			<when test="inOutFlag==0">
-				and sludge.status=0 or sludge.status=1
-			</when>
+			<when test="inOutFlag==0"> <!-- 查询入仓污泥块记录 -->
+				and sludge.status in (0,1)
+			</when>                     <!-- 没有办法知道出仓污泥块的来源 -->
 			<when test="inOutFlag==2">  <!-- 查询直接从产地运往目的地污泥块记录 -->
-				and sludge.status=2 OR sludge.status=3
+				and sludge.status in (2,3)
 			</when>
 		</choose>
 		ORDER BY sludge.produce_time DESC
@@ -123,11 +128,12 @@
 		user.id=#{driverId}
 		ORDER BY sludge.produce_time DESC
 	</select>
-	
+
 	<!-- *********************************通过司机id和出入flag查询污泥块************************************ -->
 
 
-	<select id="querySludgeByDriverIdAndInOutFlag" resultMap="SludgeMap">
+	<select id="querySludgeByDriverIdAndInOutFlagWithMinorWareHouseId"
+		resultMap="SludgeMap">
 		SELECT
 		sludge.*,record.id,record.car_id,record.site_id,car.id,car.license,car.driver_id,user.id,user.realname,user.telephone,site.id,site.site_name,sludge_function.id,sludge_function.`function`
 		FROM
@@ -137,22 +143,26 @@
 		ON sludge.function_id=sludge_function.id
 		WHERE sludge.del_status=0 AND
 		user.id=#{driverId}
+		<if test="minorWareHouseId!=0">
+			and sludge.minor_mud_warehouse_id=#{minorWareHouseId}
+		</if>
 		<choose>
 			<when test="inOutFlag==0">  <!-- 查询入仓污泥块记录 -->
-				and sludge.status=0 OR sludge.status=1
+				and sludge.status in (0,1)
 			</when>
 			<when test="inOutFlag==1">  <!-- 查询出仓污泥块记录 -->
-				and sludge.status=4 OR sludge.status=5
+				and sludge.status in (4,5)
 			</when>
 			<when test="inOutFlag==2">  <!-- 查询直接从产地运往目的地污泥块记录 -->
-				and sludge.status=2 OR sludge.status=3
+				and sludge.status in (2,3)
 			</when>
 		</choose>
 		ORDER BY sludge.produce_time DESC
 	</select>
-	
+
 	<!-- *********************************通过日期查询污泥块************************************ -->
-	<select id="querySludgeByDateAndInOutFlag" resultMap="SludgeMap">
+	<select id="querySludgeByDateAndInOutFlagWithMinorWareHouseId"
+		resultMap="SludgeMap">
 		SELECT
 		sludge.*,record.id,record.car_id,record.site_id,car.id,car.license,car.driver_id,user.id,user.realname,user.telephone,site.id,site.site_name,sludge_function.id,sludge_function.`function`
 		FROM
@@ -162,15 +172,18 @@
 		ON sludge.function_id=sludge_function.id
 		WHERE sludge.del_status=0 AND
 		sludge.produce_time BETWEEN #{startDate} AND #{endDate}
+		<if test="minorWareHouseId!=0">
+			and sludge.minor_mud_warehouse_id=#{minorWareHouseId}
+		</if>
 		<choose>
 			<when test="inOutFlag==0">  <!-- 查询入仓污泥块记录 -->
-				and sludge.status=0 OR sludge.status=1
+				and sludge.status in (0,1)
 			</when>
 			<when test="inOutFlag==1">  <!-- 查询出仓污泥块记录 -->
-				and sludge.status=4 OR sludge.status=5
+				and sludge.status in (4,5)
 			</when>
 			<when test="inOutFlag==2">  <!-- 查询直接从产地运往目的地污泥块记录 -->
-				and sludge.status=2 OR sludge.status=3
+				and sludge.status in (2,3)
 			</when>
 		</choose>
 		ORDER BY
@@ -197,22 +210,12 @@
 	</select>
 
 
-	<!-- <select id="querySludegNotAssignFuncByDate" resultMap="SludgeMap">
-		SELECT
-		sludge.*,record.id,record.car_id,record.site_id,car.id,car.license,car.driver_id,user.id,user.realname,user.telephone,site.id,site.site_name
-		FROM
-		sludge,record,car,user,site
-		WHERE
-		sludge.del_status=0 AND
-		sludge.record_id=record.id AND
-		sludge.function_id IS null AND
-		record.car_id=car.id AND
-		car.driver_id=user.id AND
-		record.site_id=site.id AND
-		sludge.produce_time BETWEEN #{startDate} AND
-		#{endDate}
-		ORDER BY sludge.produce_time DESC
-	</select> -->
+	<!-- <select id="querySludegNotAssignFuncByDate" resultMap="SludgeMap"> 
+		SELECT sludge.*,record.id,record.car_id,record.site_id,car.id,car.license,car.driver_id,user.id,user.realname,user.telephone,site.id,site.site_name 
+		FROM sludge,record,car,user,site WHERE sludge.del_status=0 AND sludge.record_id=record.id 
+		AND sludge.function_id IS null AND record.car_id=car.id AND car.driver_id=user.id 
+		AND record.site_id=site.id AND sludge.produce_time BETWEEN #{startDate} AND 
+		#{endDate} ORDER BY sludge.produce_time DESC </select> -->
 
 	<!-- *********************************************************************************** -->
 
@@ -236,6 +239,11 @@
 		keyProperty="id">
 		INSERT sludge_function(function,description)
 		VALUES(#{function},#{description})
+	</insert>
+	
+	<insert id="addOutMudWareHouseSludgeRecord" useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO sludge (produce_time,RFID,minor_mud_warehouse_id,destination_address,status,weight,function_id,transcar_id)
+		VALUES(#{produceTime},#{rfidString},#{minorMudWareHouseId},#{destinationAddress},#{status},#{weight},#{functionId},#{transcarId})
 	</insert>
 
 	<update id="deleteSludge">

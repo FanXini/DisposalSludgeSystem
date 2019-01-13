@@ -12,7 +12,9 @@
 	<!-- <mvc:annotation-driven/>会自动注册RequestMappingHandlerMapping和RequestMappingHandlerAdapter两个bean 
 		,这是SpringMVC为@Controllers分发请求所必须的，并提供了数据绑定支持、@NumberFormatannotation支持、@DateTimeFormat支持、 
 		@valid支持、读写XML的支持(JAXB)和JSON的支持(默认jackson)等功能。 -->
-	<mvc:annotation-driven />
+	<mvc:annotation-driven>
+	
+	</mvc:annotation-driven>
 
 
 	<!-- 2.静态资源默认servlet配置 (1)加入对静态资源的处理：js,gif,png (2)允许使用"/"做整体映射 -->

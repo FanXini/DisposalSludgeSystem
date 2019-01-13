@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:context="http://www.springframework.org/schema/context"
 	xmlns:tx="http://www.springframework.org/schema/tx"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans
 	http://www.springframework.org/schema/beans/spring-beans.xsd
@@ -8,33 +9,18 @@
 	http://www.springframework.org/schema/context/spring-context.xsd
 	http://www.springframework.org/schema/tx
 	http://www.springframework.org/schema/tx/spring-tx.xsd">
-<<<<<<< .mine
-	
+    
+            <!--      自动扫描teamLuo.fan.service包中带注解的类 -->
+	<context:component-scan base-package="factory.service"/>
+
 	
 	
 	     <!--配置事务管理器 -->
 	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
 	    <property name="dataSource" ref="jdbcDataSource"/>
-||||||| .r1469
-	
-	
-	     <!--配置事务管理器 -->
-	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
-	    <property name="dataSource" ref="jdbcDataSource"/>
-=======
-	<!-- 自动扫描teamLuo.fan.service包中带注解的类 -->
-	<context:component-scan base-package="factory.service" />
-
-
-
-	<!--配置事务管理器 -->
-	<bean id="transactionManager"
-		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
-		<property name="dataSource" ref="jdbcDataSource" />
->>>>>>> .r1536
 	</bean>
-
-	<!-- 配置基于注解的声明式事务 -->
+	
+		<!-- 配置基于注解的声明式事务 -->
 	<tx:annotation-driven transaction-manager="transactionManager" />
 
 </beans> 

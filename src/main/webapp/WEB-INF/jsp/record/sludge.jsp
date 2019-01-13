@@ -11,7 +11,7 @@
 <head>
 <base href="<%=basePath%>">
 
-<title>污泥块记录</title>
+<title>污泥块去向记录</title>
 
 <meta http-equiv="pragma" content="no-cache">
 <meta http-equiv="cache-control" content="no-cache">
@@ -36,104 +36,6 @@
 	<input id="trIndex" type="hidden" />
 	<!-- Modal -->
 
-	<!-- ***********************************新增出仓污泥块模态框************************************* -->
-	<div class="modal inmodal" id="addOutSludgeRecord" tabindex="-1"
-		role="dialog" aria-hidden="true">
-		<div class="modal-dialog">
-			<div class="modal-content animated bounceInRight">
-				<div class="modal-header">
-					<button type="button" class="close" data-dismiss="modal">
-						<span aria-hidden="true">&times;</span><span class="sr-only">关闭</span>
-					</button>
-					<img alt="140x140" src="img/littercar.png" width="10%" height="10%" />
-					<h4 class="modal-title">污泥块信息</h4>
-				</div>
-				<div class="modal-body">
-					<div class="container" style="width: 540px">
-						<div class="form-group">
-							<div>
-								<label for="Groupname" class="col-sm-3 control-label">泥仓号：</label>
-
-								<div class="col-sm-9">
-									<select class="form-control m-b control-label" id="addOutSludgeMinorWareHouseId">
-										<c:forEach items="${requestScope.minorMudWareHouses }"
-											var="minorMudWareHost">
-											<option value="${minorMudWareHost.id}">${minorMudWareHost.serialNumber}号仓</option>
-										</c:forEach>
-									</select>
-								</div>
-							</div>
-						</div>
-						<div class="form-group">
-							<div>
-								<label for="Groupname" class="col-sm-3 control-label">运输司机：</label>
-
-								<div class="col-sm-9">
-									<select class="form-control m-b control-label" id="selectTransCarId">
-										<c:forEach items="${requestScope.assignCarTransportDriver }"
-											var="transportDriver">
-											<option value="${transportDriver.car.id}">${transportDriver.realname}</option>
-										</c:forEach>
-									</select>
-								</div>
-							</div>
-						</div>
-						<div class="form-group">
-							<div>
-								<label for="Groupname" class="col-sm-3 control-label">RFID：</label>
-								<input type="hidden" id="editCarId">
-								<div class="col-sm-9">
-									<input type="text" class="form-control m-b control-label"
-										id="addOutSludgeRFID" placeholder="请输入RFID">
-								</div>
-							</div>
-						</div>
-						<div class="form-group">
-							<div>
-								<label for="Groupname" class="col-sm-3 control-label">重量：</label>
-								<div class="col-sm-9">
-									<input type="text" class="form-control m-b"
-										id="addOutSludgeWeight" placeholder="以吨计数">
-								</div>
-							</div>
-						</div>
-						<div class="form-group">
-							<div>
-								<label for="Groupname" class="col-sm-3 control-label">目的地：</label>
-								<div class="col-sm-9">
-									<input type="text" class="form-control m-b"
-										id="addOutSludgeDesAddr" placeholder="请输入目的地">
-								</div>
-							</div>
-						</div>
-						<div class="form-group">
-							<div>
-								<label for="Groupname" class="col-sm-3 control-label">用途：</label>
-								<div class="col-sm-9">
-									<input type="text" placeholder="请输入污泥块功能" id="sludgeFunc"
-										class="form-control m-b control-label" name="sludgeFunc"
-										autocomplete="off" list="addOutSludgeFuncList" />
-									<datalist id="addOutSludgeFuncList"> </datalist>
-								</div>
-							</div>
-						</div>
-						<!-- <div class="form-group">
-							<label for="addManager">负责人：</label> <input type="text"
-								placeholder="请输入负责人" id="addManager"
-								class="form-control m-b control-label" name="manager"
-								autocomplete="off" list="addOutSludgeFuncList" />
-							<datalist id="addOutSludgeFuncList"> </datalist>
-						</div> -->
-					</div>
-				</div>
-				<div class="modal-footer">
-					<button type="button" class="btn btn-white" data-dismiss="modal">取消</button>
-					<button id="addOutSludgeRecordButton" type="button" class="btn btn-primary">保存</button>
-				</div>
-			</div>
-		</div>
-	</div>
-
 
 
 
@@ -141,44 +43,31 @@
 
 	<div class="wrapper wrapper-content animated fadeInRight">
 
-
 		<div class="row">
 			<div class="col-sm-12">
 				<div class="ibox float-e-margins">
 					<div class="ibox-title">
 						<h1 class="text-info"
-							style="text-align: center; font-family: KaiTi; margin-top: -1%">污泥块记录</h1>
+							style="text-align: center;font-family:KaiTi; margin-top:-1%">污泥块去向记录</h1>
 
-
-						<div class="ibox-tools">
-							<button type="button" class="btn btn-primary" data-toggle="modal"
-								data-target="#addOutSludgeRecord">+ 污泥块出仓登记</button>
-						</div>
+						<!-- <div class="ibox-tools">
+							<a class="collapse-link"> <i class="fa fa-chevron-up"></i>
+							</a> <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+								<i class="fa fa-wrench"></i>
+							</a>
+							<ul class="dropdown-menu dropdown-user">
+								<li><a href="#">选项 01</a></li>
+								<li><a href="#">选项 02</a></li>
+							</ul>
+							<a class="close-link"> <i class="fa fa-times"></i>
+							</a>
+						</div> -->
 					</div>
 					<div class="ibox-content project-list">
 
 						<div class="col-lg-offset-2">
 
 							<div class="form-inline">
-								<div class=form-group>
-									<select class="form-control" id="minorWareHouseId">
-										<option value="0">--请选择仓库--</option>
-										<c:forEach items="${requestScope.minorMudWareHouses }"
-											var="minorMudWareHost">
-											<option value="${minorMudWareHost.id}">${minorMudWareHost.serialNumber}号仓</option>
-										</c:forEach>
-									</select>
-
-								</div>
-								<div class=form-group>
-									<select class="form-control" id="inOutSelect">
-										<option value='3'>--请选择--</option>
-										<option value='0'>入仓记录</option>
-										<option value='1'>出仓记录</option>
-										<option value='2'>未入仓记录</option>
-									</select>
-
-								</div>
 								<div class="form-group">
 									<label class="sr-only" for="search">搜索方式</label>
 									<div class="input-group">
@@ -203,7 +92,7 @@
 								</div>
 
 								<div class="form-group col-lg-offset-1" id="siteList"
-									style="margin-top: 4px;">
+									style="margin-top:4px ;">
 									<label class="sr-only" for="工厂">工厂</label>
 									<div class="input-group">
 										<div class="btn-group">
@@ -271,20 +160,10 @@
 											class="glyphicon glyphicon-calendar"></span></span>
 									</div>
 								</div>
-
-
 								<button class="btn btn-primary" id="submit"
-									style="margin-top: 3px">查询</button>
-
-
+									style="margin-top:3px">查询</button>
 
 							</div>
-							<!-- <div class="" style="float: right;margin-top:-8%">
-								<div class="col-xs-1 query-department text-center">
-									<button type="button" class="btn btn-primary"
-										data-toggle="modal" data-target="#addCarModal">+ 污泥块出入登记</button>
-								</div>
-							</div> -->
 
 							<!--<input type="text" class="form-control input-sm m-b-xs" id="filter" placeholder="搜索表格...">-->
 						</div>
@@ -311,18 +190,6 @@
 	<script src="js/content.js?v=1.0.0"></script>
 	<script>
 		$(document).ready(function() {
-			$("#addOutSludgeRecord").on('shown.bs.modal',function(){
-				$.ajax({
-					type : "POST",
-					url : "sludge/queryAllFunc",
-					success : function(funcList) {
-						$("#addOutSludgeFuncList").empty();
-						$.each(funcList,function(i,func) {
-							$("#addOutSludgeFuncList").append('<option>'+func.function+'</option>');
-						});
-					}
-				});
-			});
 			var table_start = '<table id="table" class="footable table-hover table table-stripped toggle-arrow-tiny" data-page-size="7">' +
 				'<thead>' +
 				'<tr>' +
@@ -332,10 +199,9 @@
 				'<th>目的地</th>' +
 				'<th>处理人</th>' +
 				'<th>污泥块重量</th>' +
-				'<th>污泥功能</th>' +
 				'<th data-hide="all">污泥产出时间</th>' +
 				'<th data-hide="all">污泥到达时间</th>' +
-				'<th data-hide="all">污泥运输车</th>' +
+				'<th data-hide="all">污泥功能</th>' +
 				'<th data-hide="all">处理人号码</th>' +
 				'<th data-hide="all">处理污泥车车牌号</th>' +
 				'</tr>' +
@@ -387,23 +253,18 @@
 				$(".form_date").show()
 				$("#submit").show()
 			})
+	
 			$.ajax({
 				type : "POST",
-				url : "sludge/queryAllSludgeByInOutFlagAndWareHouseSerial",
-				data:JSON.stringify({
-					inOutFlag:parseInt($("#inOutSelect").val()),
-					minorWareHouseId:parseInt($("#minorWareHouseId").val())
-				}),
-				dataType : "json",
-				contentType : "application/json",
+				url : "sludge/queryAllSludge",
 				success : function(sludgeList) {
 					$("#tableDiv").empty()
 					var table = table_start
 					$.each(sludgeList, function(i, sludge) {
 						table += '<tr id="' + sludge.id + '">'
-						if (sludge.status == 0 ||sludge.status==2||sludge.status==4) {
+						if (sludge.status == 0) {
 							table += '<td class="project-status"><span class="label label-inverse">未到达</td>'
-						} else if (sludge.status == 1||sludge.status == 3||sludge.status == 5) {
+						} else if (sludge.status == 1) {
 							table += '<td class="project-status"><span class="label label-primary">已到达</td>'
 						} else {
 							table += '<td></td>'
@@ -421,15 +282,10 @@
 						} else {
 							table += '<td>' + sludge.weight + '吨</td>'
 						}
-						if (sludge.functionId != 0) {
-							table += '<td>' + sludge.sludgeFunction.function + '</td>'
-						} else {
-							table += '<td></td>'
-						}
 						table += '<td>' + (sludge.produceTime==null?"": sludge.produceTime)+ '</td>'
 						table += '<td class="project-manager">' + (sludge.arrivalTime ==null?"": sludge.arrivalTime )+ '</td>'
-						if (sludge.transcarId != 0) {
-							table += '<td>' + sludge.transcarId + '</td>'
+						if (sludge.functionId != 0) {
+							table += '<td>' + sludge.sludgeFunction.function + '</td>'
 						} else {
 							table += '<td></td>'
 						}
@@ -450,21 +306,15 @@
 			$("#all_search").click(function() {
 				$.ajax({
 					type : "POST",
-					url : "sludge/queryAllSludgeByInOutFlagAndWareHouseSerial",
-					data:JSON.stringify({
-						inOutFlag:parseInt($("#inOutSelect").val()),
-						minorWareHouseId:parseInt($("#minorWareHouseId").val())
-					}),
-					dataType : "json",
-					contentType : "application/json",
+					url : "sludge/queryAllSludge",
 					success : function(sludgeList) {
 						$("#tableDiv").empty()
 						var table = table_start
 						$.each(sludgeList, function(i, sludge) {
 							table += '<tr id="' + sludge.id + '">'
-							if (sludge.status == 0 ||sludge.status==2||sludge.status==4) {
+							if (sludge.status == 0) {
 								table += '<td class="project-status"><span class="label label-inverse">未到达</td>'
-							} else if (sludge.status == 1||sludge.status == 3||sludge.status == 5) {
+							} else if (sludge.status == 1) {
 								table += '<td class="project-status"><span class="label label-primary">已到达</td>'
 							} else {
 								table += '<td></td>'
@@ -482,21 +332,16 @@
 							} else {
 								table += '<td>' + sludge.weight + '吨</td>'
 							}
-							if (sludge.functionId != 0) {
-							table += '<td>' + sludge.sludgeFunction.function + '</td>'
-						} else {
-							table += '<td></td>'
-						}
 							table += '<td>' + (sludge.produceTime ==null?"": sludge.produceTime )+ '</td>'
-							table += '<td class="project-manager">' + (sludge.arrivalTime ==null?"": sludge.arrivalTime ) + '</td>'
-							if (sludge.transcarId != 0) {
-								table += '<td>' + sludge.transcarId + '</td>'
+							table += '<td class="project-manager">' + sludge.arrivalTime + '</td>'
+							if (sludge.functionId != 0) {
+								table += '<td>' + sludge.sludgeFunction.function + '</td>'
 							} else {
 								table += '<td></td>'
 							}
-							table += '<td>' + (sludge.record.car.driver.telephone==null?"":sludge.record.car.driver.telephone) + '</td>';
-							table += '<td>' + ( sludge.record.car.license ==null?"": sludge.record.car.license)+ '</td>';
-							table += '</tr>';
+							table += '<td>' + (sludge.record.car.driver.telephone==null?"":sludge.record.car.driver.telephone) + '</td>'
+							table += '<td>' + ( sludge.record.car.license ==null?"": sludge.record.car.license)+ '</td>'
+							table += '</tr>'
 	
 						})
 						table += table_end
@@ -513,12 +358,7 @@
 				var siteId = this.getAttribute("name")
 				$.ajax({
 					type : "POST",
-					url : "sludge/querySludgeBySiteIdAndInOutFlag",
-					data:JSON.stringify({
-						siteId:parseInt(siteId),
-						inOutFlag:parseInt($("#inOutSelect").val()),
-						minorWareHouseId:parseInt($("#minorWareHouseId").val())
-					}),
+					url : "sludge/querySludgeBySiteId?siteId=" + parseInt(siteId),
 					dataType : "json",
 					contentType : "application/json",
 					success : function(sludgeList) {
@@ -526,9 +366,9 @@
 						var table = table_start
 						$.each(sludgeList, function(i, sludge) {
 							table += '<tr id="' + sludge.id + '">'
-							if (sludge.status == 0 ||sludge.status==2||sludge==4) {
+							if (sludge.status == 0) {
 								table += '<td class="project-status"><span class="label label-inverse">未到达</td>'
-							} else if (sludge.status == 1||sludge.status == 3||sludge.status == 5) {
+							} else if (sludge.status == 1) {
 								table += '<td class="project-status"><span class="label label-primary">已到达</td>'
 							} else {
 								table += '<td></td>'
@@ -546,15 +386,10 @@
 							} else {
 								table += '<td>' + sludge.weight + '吨</td>'
 							}
-							if (sludge.functionId != 0) {
-							table += '<td>' + sludge.sludgeFunction.function + '</td>'
-						} else {
-							table += '<td></td>'
-						}
 							table += '<td>' + (sludge.produceTime ==null?"": sludge.produceTime ) + '</td>'
 							table += '<td class="project-manager">' + (sludge.arrivalTime ==null?"":sludge.arrivalTime )+ '</td>'
-							if (sludge.transcarId != 0) {
-								table += '<td>' + sludge.transcarId + '</td>'
+							if (sludge.functionId != 0) {
+								table += '<td>' + sludge.sludgeFunction.function + '</td>'
 							} else {
 								table += '<td></td>'
 							}
@@ -576,22 +411,15 @@
 				var driverId = this.getAttribute("name")
 				$.ajax({
 					type : "POST",
-					url : "sludge/querySludgeByDriverIdAndInOutFlag",
-					data:JSON.stringify({
-						driverId:parseInt(driverId),
-						inOutFlag:parseInt($("#inOutSelect").val()),
-						minorWareHouseId:parseInt($("#minorWareHouseId").val())
-					}),
-					dataType : "json",
-					contentType : "application/json",
+					url : "sludge/querySludgeByDriverId?driverId=" + parseInt(driverId),
 					success : function(sludgeList) {
 						$("#tableDiv").empty()
 						var table = table_start
 						$.each(sludgeList, function(i, sludge) {
 							table += '<tr id="' + sludge.id + '">'
-							if (sludge.status == 0 ||sludge.status==2||sludge==4) {
+							if (sludge.status == 0) {
 								table += '<td class="project-status"><span class="label label-inverse">未到达</td>'
-							} else if (sludge.status == 1||sludge.status == 3||sludge.status == 5) {
+							} else if (sludge.status == 1) {
 								table += '<td class="project-status"><span class="label label-primary">已到达</td>'
 							} else {
 								table += '<td></td>'
@@ -609,15 +437,10 @@
 							} else {
 								table += '<td>' + sludge.weight + '吨</td>'
 							}
-							if (sludge.functionId != 0) {
-							table += '<td>' + sludge.sludgeFunction.function + '</td>'
-						} else {
-							table += '<td></td>'
-						}
 							table += '<td>' + (sludge.produceTime ==null?"": sludge.produceTime ) + '</td>'
 							table += '<td class="project-manager">' + (sludge.arrivalTime ==null?"":sludge.arrivalTime )+ '</td>'
-							if (sludge.transcarId != 0) {
-								table += '<td>' + sludge.transcarId + '</td>'
+							if (sludge.functionId != 0) {
+								table += '<td>' + sludge.sludgeFunction.function + '</td>'
 							} else {
 								table += '<td></td>'
 							}
@@ -640,23 +463,15 @@
 				var endDate = $("#end_date_text").val()
 				$.ajax({
 					type : "POST",
-					url : "sludge/querySludgeByDateAndInOutFlag",
-					data:JSON.stringify({
-						startDate:startDate,
-						endDate:endDate,
-						inOutFlag:$("#inOutSelect").val(),
-						minorWareHouseId:$("#minorWareHouseId").val()
-					}),
-					dataType : "json",
-					contentType : "application/json",
+					url : "sludge/querySludgeByDate?startDate=" + startDate + "&endDate=" + endDate,
 					success : function(sludgeList) {
 						$("#tableDiv").empty()
 						var table = table_start
 						$.each(sludgeList, function(i, sludge) {
 							table += '<tr id="' + sludge.id + '">'
-							if (sludge.status == 0 ||sludge.status==2||sludge==4) {
+							if (sludge.status == 0) {
 								table += '<td class="project-status"><span class="label label-inverse">未到达</td>'
-							} else if (sludge.status == 1||sludge.status == 3||sludge.status == 5) {
+							} else if (sludge.status == 1) {
 								table += '<td class="project-status"><span class="label label-primary">已到达</td>'
 							} else {
 								table += '<td></td>'
@@ -674,15 +489,10 @@
 							} else {
 								table += '<td>' + sludge.weight + '吨</td>'
 							}
+							table += '<td>' + sludge.produceTime + '</td>'
+							table += '<td class="project-manager">' + sludge.arrivalTime + '</td>'
 							if (sludge.functionId != 0) {
-							table += '<td>' + sludge.sludgeFunction.function + '</td>'
-						} else {
-							table += '<td></td>'
-						}
-							table += '<td>' + (sludge.produceTime ==null?"": sludge.produceTime ) + '</td>'
-							table += '<td class="project-manager">' + (sludge.arrivalTime ==null?"":sludge.arrivalTime )+ '</td>'
-							if (sludge.transcarId != 0) {
-								table += '<td>' + sludge.transcarId + '</td>'
+								table += '<td>' + sludge.sludgeFunction.function + '</td>'
 							} else {
 								table += '<td></td>'
 							}
@@ -696,52 +506,6 @@
 						$('.footable').footable();
 	
 	
-					}
-				})
-			})
-			
-			$("#addOutSludgeRecordButton").click(function() {
-				var RFID = $("#addOutSludgeRFID").val()
-				var oriRfid = RFID
-				var desAddr = $("#addOutSludgeDesAddr").val()
-				var oriDes = desAddr
-				var weight=parseFloat($("#addOutSludgeWeight").val())
-				var func=$("#sludgeFunc").val();
-				alert(func)
-				var mudWareHouseId=parseInt($("#addOutSludgeMinorWareHouseId").val());
-				var transCarId=parseInt($("#selectTransCarId").val());
-				if (RFID == '' || RFID == null) {
-					RFID = 'none'
-				}
-				if (desAddr == '' || desAddr == null) {
-					desAddr = 'none'
-				}
-				var sludgeFunction={
-					function:func
-				}
-				$.ajax({
-					type : "POST",
-					url : "sludge/addOutSludge",
-					data : JSON.stringify({
-						transCarId:transCarId,
-						minorMudWareHouseId:mudWareHouseId,
-						rfidString : RFID,
-						destinationAddress : desAddr,
-						sludgeFunction : sludgeFunction,
-						weight:weight
-					}),
-					dataType : "json",
-					contentType : "application/json",
-					success : function(result) {
-						if(result=="SUCCESS"){
-						
-						alert("添加成功")
-						$("#addOutSludgeRecord").modal('hide')	
-						}
-					
-					},
-					error : function(data) {
-						alert("修改失败")
 					}
 				})
 			})

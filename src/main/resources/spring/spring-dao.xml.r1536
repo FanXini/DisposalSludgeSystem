@@ -18,15 +18,7 @@
 		<property name="jdbcUrl" value="${jdbc.url}" />
 		<property name="user" value="${jdbc.username}" />
 		<property name="password" value="${jdbc.password}" />
-<<<<<<< .mine
-		
-||||||| .r1469
-		
-		
 
-=======
-
->>>>>>> .r1536
 
 
 		<!-- 配置连接池属性 -->
@@ -61,6 +53,9 @@
 		<!-- 给出需要扫描Dao接口包 -->
 		<property name="basePackage" value="factory.dao" />
 	</bean>
+
+
+
 
 
 </beans> 

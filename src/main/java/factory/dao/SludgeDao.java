@@ -13,6 +13,8 @@ public interface SludgeDao {
 	public List<Sludge> queryAllSludgeByInOutFlagWithMinorWareHouseId(@Param("inOutFlag") int inOutFlag,@Param("minorWareHouseId") int minorWareHouseId);
 
 	/*public List<Sludge> queryAllSludgeNotAssignFunc();*/
+	
+	public int addOutMudWareHouseSludgeRecord(Sludge sludge);
 
 	public void deleteSludge(@Param("sludgeId") int sludgeId);
 

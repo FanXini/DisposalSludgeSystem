@@ -160,5 +160,15 @@ public class CarServiceImpl implements CarService{
 		}
 		return cars;
 	}
-
+	
+	@Override
+	public List<Car> querycarWithoutVideo() {
+		// TODO Auto-generated method stub
+		List<Car> carWithoutVideo=new ArrayList<Car>();
+		carWithoutVideo.addAll(carDao.querycarWithoutVideo());
+		for(Car car:carWithoutVideo){
+			System.out.println(car.getId()+car.getLicense());
+		}
+		return carWithoutVideo;
+	}
 }

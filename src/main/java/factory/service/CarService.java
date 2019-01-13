@@ -38,5 +38,7 @@ public interface CarService {
 	public List<Car> queryCarWhichNotAssignDriver();
 
 	public List<Car> queryCarUnassign();
-
+	
+	public List<Car> querycarWithoutVideo();
+ 
 }
