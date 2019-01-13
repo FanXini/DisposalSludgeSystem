@@ -10,7 +10,7 @@ public interface SludgeDao {
 
 	public List<SludgeFunction> queryAllSludgeFunction();
 
-	public List<Sludge> queryAllSludge();
+	public List<Sludge> queryAllSludge(@Param("inOutFlag") int inOutFlag);
 
 	/*public List<Sludge> queryAllSludgeNotAssignFunc();*/
 
@@ -19,16 +19,22 @@ public interface SludgeDao {
 	public void editSludge(Sludge sludge);
 
 	public List<Sludge> querySludgeBySiteId(@Param("siteId") int siteId);
-
+	
+	public List<Sludge> querySludgeBySiteIdAndFlag(@Param("siteId") int siteId,@Param("inOutFlag") int inOutFlag);
+	
 	/*public List<Sludge> querySludgeNotAssignFuncBySiteId(@Param("siteId") int siteId);*/
 
 	public List<Sludge> querySludgeByDriverId(@Param("driverId") int driverId);
 
+	public List<Sludge> querySludgeByDriverIdAndInOutFlag(@Param("driverId") int driverId,@Param("inOutFlag") int inOutFlag);
+
 	/*public List<Sludge> querySludgeNotAssignFuncByDriverId(@Param("driverId") int driverId);*/
 	
-	public List<Sludge> querySludegAssignFuncByDate(@Param("startDate") String startDate,@Param("endDate") String endDate);
+	public List<Sludge> querySludgeByDateAndInOutFlag(@Param("startDate") String startDate,@Param("endDate") String endDate,@Param("inOutFlag") int inOutFlag);
 	
-	public List<Sludge> querySludegNotAssignFuncByDate(@Param("startDate") String startDate,@Param("endDate") String endDate);
+	public List<Sludge> querySludgeByDate(@Param("startDate") String startDate,@Param("endDate") String endDate);
+	
+	//public List<Sludge> querySludegNotAssignFuncByDate(@Param("startDate") String startDate,@Param("endDate") String endDate);
 	
 	public List<Sludge> queryAllSludgeOfOneFactory(@Param("siteId") int siteId);
 	

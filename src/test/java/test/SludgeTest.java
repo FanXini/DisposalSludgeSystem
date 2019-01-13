@@ -19,20 +19,19 @@ public class SludgeTest extends BaseTest {
 	 * System.out.println(sludgeFunctions.size()); }
 	 */
 
-/*	@Test
+	@Test
 	public void queryAllSludge() {
-		List<Sludge> sludges = sludgeDao.queryAllSludge();
+		List<Sludge> sludges = sludgeDao.queryAllSludge(1);
 		for (Sludge sludge : sludges) {
 			System.out.println(sludge.getRfidString() + "  " + sludge.getDestinationAddress() + " "
 					+ sludge.getRecord().getId() + " " + sludge.getRecord().getCar().getLicense() + " "
 					+ sludge.getRecord().getCar().getDriver().getTelephone() + "  "
 					+ sludge.getRecord().getSite().getSiteName());
 		}
-	}*/
+	}
 	
-	@Test
+	/*@Test
 	public void deleteSludge(){
 		sludgeDao.deleteSludge(1);
-	}
-
+	}*/
 }
