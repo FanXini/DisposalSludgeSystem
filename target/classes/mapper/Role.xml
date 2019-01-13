@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<!-- Role表数据的存取 -->
+<mapper namespace="factory.dao.RoleDao">
+	<resultMap type="factory.entity.Role" id="RoleDaoMap">
+		<id property="id" column="id"></id>
+		<result property="role_name" column="role_name"></result>
+		<result property="description" column="description"></result>
+		<result property="del_status" column="del_status"></result>
+	</resultMap>
+
+	<select id="queryAllRole" resultMap="RoleDaoMap">
+		select *
+		from role
+		where del_status=0 and id=#{id}
+	</select>
+</mapper>

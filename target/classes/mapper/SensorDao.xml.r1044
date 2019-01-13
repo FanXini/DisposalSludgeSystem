@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="factory.dao.SensorDao">
+	<resultMap type="factory.entity.Sensor" id="carSensor">
+		<id property="id" column="id" />
+		<result property="typeId" column="type_id" />
+		<result property="locationId" column="car_id" />
+		<result property="status" column="status" />
+		<result property="serialNumber" column="serial_number" />
+		<association property="sensorType" javaType="factory.entity.SensorType">
+			<id property="id" column="id" />
+			<result property="type" column="type" />
+			<result property="description" column="description" />
+		</association>
+		<association property="car" javaType="factory.entity.Car">
+			<id property="id" column="id" />
+			<result property="driverId" column="driver_id" />
+			<result property="license" column="license" />
+			<result property="longitude" column="longitude" />
+			<result property="latitude" column="latitude" />
+			<result property="brand" column="brand" />
+			<result property="sensorIdSet" column="sensor_id_set" />
+			<result property="status" column="status" />
+		</association>
+	</resultMap>
+
+	<resultMap type="factory.entity.Sensor" id="siteSensor">
+		<id property="id" column="id" />
+		<result property="typeId" column="type_id" />
+		<result property="locationId" column="site_id" />
+		<result property="serialNumber" column="serial_number" />
+		<association property="sensorType" javaType="factory.entity.SensorType">
+			<id property="id" column="id" />
+			<result property="type" column="type" />
+			<result property="description" column="description" />
+		</association>
+
+		<association property="site" javaType="factory.entity.Site">
+			<id property="id" column="id"></id>
+			<result property="siteName" column="site_name" />
+			<result property="serialName" column="serial_name" />
+			<result property="address" column="address"></result>
+			<result property="longitude" column="longitude" />
+			<result property="latitude" column="latitude" />
+			<result property="telephone" column="telephone" />
+			<result property="depth" column="depth" />
+			<result property="sensorIdSet" column="sensor_id_set" />
+		</association>
+	</resultMap>
+
+	<select id="queryAllSensorType" resultType="factory.entity.SensorType">
+		SELECT *
+		FROM
+		sensor_type
+		WHERE del_status=0
+	</select>
+	
+	<select id="queryAllSensorOfCar" resultMap="carSensor">
+		SELECT *
+		FROM car_sensor,sensor_type,car
+		WHERE car_sensor.del_status=0 AND
+		car_sensor.type_id=sensor_type.id AND
+		car_sensor.car_id=car.id
+	</select>
+	
+	<select id="queryAllSensorOfSite" resultMap="siteSensor">
+		SELECT *
+		FROM site_sensor,sensor_type,site
+		WHERE site_sensor.del_status=0 AND
+		site_sensor.type_id=sensor_type.id AND
+		site_sensor.site_id=site.id
+	</select>
+	
+	<insert id="addCarSensor" parameterType="factory.entity.Sensor">
+		INSERT INTO car_sensor (type_id,car_id,serial_number)
+		VALUES(#{typeId},#{locationId},#{serialNumber})
+	</insert>
+	
+	<insert id="addSiteSensor" parameterType="factory.entity.Sensor">
+		INSERT INTO site_sensor (type_id,site_id,serial_number)
+		VALUES(#{typeId},#{locationId},#{serialNumber})
+	</insert>
+	
+	<select id="querySensorTypeByType" resultType="factory.entity.SensorType">
+		SELECT *
+		FROM sensor_type
+		WHERE del_status=0 AND type=#{type}
+	</select>
+	
+	<update id="delectSensor">
+		UPDATE
+		FROM sensor
+	</update>
+</mapper>

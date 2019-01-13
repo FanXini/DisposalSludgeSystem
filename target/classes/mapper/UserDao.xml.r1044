@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+
+
+<mapper namespace="factory.dao.UserDao">
+	<resultMap id="UserMap" type="factory.entity.User">
+		<id property="id" column="id"></id>
+		<result property="roleId" column="role_id"/>
+		<result property="username" column="username"></result>
+		<result property="password" column="password"></result>
+	</resultMap>
+		<select id="queryUserByUsername" parameterType="String" resultMap="UserMap">
+			select *
+			from user
+			where del_status=0 and username=#{username} del_status=0
+		</select>
+		
+		<select id="queryUserByRealName" parameterType="String" resultType="factory.entity.User">
+			select *
+			from user
+			where del_status=0 AND realname=#{realname}
+		</select>
+		<insert id="registerUser" parameterType="factory.entity.User">
+		    insert into user(role_id,username,password)
+		    values(#{roleId},#{username},#{password})
+		</insert>
+		
+		<select id="queryAllDriver" resultType="factory.entity.User">
+			SELECT *
+			FROM user
+			WHERE del_status=0 AND role_id=3
+		</select>
+</mapper>

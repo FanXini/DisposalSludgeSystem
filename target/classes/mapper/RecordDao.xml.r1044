@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="factory.dao.RecordDao">
+	<resultMap id="RecordMap" type="factory.entity.Record">
+		<id property="id" column="id"></id>
+		<result property="allocationTime" column="allocation_time"></result>
+		<result property="disposalTime" column="disposal_time"></result>
+		<result property="finishTime" column="finish_time"></result>
+		<result property="carId" column="car_id"></result>
+		<result property="siteId" column="site_id"></result>
+		<result property="charge" column="charge"/>
+		<association property="car" javaType="factory.entity.Car">
+			<id property="id" column="id"></id>
+			<result property="driverId" column="driver_id"></result>
+			<result property="license" column="license"/>
+			<result property="longitude" column="longitude"/>
+			<result property="latitude" column="latitude"/>
+			<result property="brand" column="brand"></result>
+			<result property="sensorIdSet" column="sensor_id_set"/>
+			<result property="status" column="status"/>
+			<association property="driver" javaType="factory.entity.User">
+				<id property="id" column="id"/>
+				<result property="username" column="username"/>
+				<result property="realname" column="realname"/>
+				<result property="telephone" column="telephone"/>
+				<result property="email" column="email"/>
+			</association>
+		</association>
+		<association property="site" javaType="factory.entity.Site">
+			<id property="id" column="id"></id>
+			<result property="siteName" column="site_name"/>
+			<result property="serialName" column="serial_name"/>
+			<result property="address" column="address"></result>
+			<result property="longitude" column="longitude"/>
+			<result property="latitude" column="latitude"/>
+			<result property="telephone" column="telephone"/>
+			<result property="depth" column="depth"/>
+			<result property="sensorIdSet" column="sensor_id_set"/>
+		</association>
+	</resultMap>
+	
+	<select id="queryAllRecord" resultMap="RecordMap">
+		SELECT *
+		FROM record,car,site,user
+		WHERE record.del_status=0 AND
+		record.car_id=car.id AND 
+		record.site_id=site.id AND
+		car.driver_id=user.id
+		ORDER BY record.allocation_time DESC
+	</select>
+	
+	<select id="queryRecordBySiteName" resultMap="RecordMap">
+		SELECT *
+		FROM record,car,site,user
+		WHERE record.del_status=0 AND
+		record.car_id=car.id AND 
+		record.site_id=site.id AND
+		car.driver_id=user.id AND
+		site.site_name=#{siteName}
+		ORDER BY record.allocation_time DESC
+	</select>
+	
+	<select id="queryRecordByDriverName" resultMap="RecordMap">
+		SELECT *
+		FROM record,car,site,user
+		WHERE record.del_status=0 AND
+		record.car_id=car.id AND 
+		record.site_id=site.id AND
+		car.driver_id=user.id AND
+		user.realName=#{driverName}
+		ORDER BY record.allocation_time DESC
+	</select>
+	
+	<select id="queryRecordByDate" resultMap="RecordMap">
+		SELECT *
+		FROM record,car,site,user
+		WHERE record.del_status=0 AND
+		record.car_id=car.id AND 
+		record.site_id=site.id AND
+		car.driver_id=user.id AND
+		record.allocation_time BETWEEN #{startDate} AND #{endDate} 
+		ORDER BY record.allocation_time DESC
+	</select>
+	
+	<update id="updateCarId">
+		UPDATE record
+		SET car_id=#{carId}
+		Where record.del_status=0 AND id=#{recordId}
+	</update>
+	
+	<update id="deleteRecord">
+		UPDATE record
+		SET del_status=1
+		Where id=#{recordId}
+	</update>
+</mapper>

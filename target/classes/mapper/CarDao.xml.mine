@@ -1,0 +1,266 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="factory.dao.CarDao">
+
+	<resultMap type="factory.entity.Car" id="carMap">
+		<id property="id" column="id" />
+		<result property="driverId" column="driver_id" />
+		<result property="license" column="license" />
+		<result property="longitude" column="longitude" />
+		<result property="latitude" column="latitude" />
+		<result property="brand" column="brand" />
+		<result property="sensorIdSet" column="sensor_id_set" />
+		<result property="status" column="status" />
+		<result property="siteId" column="site_id" />
+		<association property="driver" javaType="factory.entity.User">
+			<id property="id" column="id" />
+			<result property="username" column="username" />
+			<result property="realname" column="realname" />
+			<result property="telephone" column="telephone" />
+			<result property="email" column="email" />
+		</association>
+	</resultMap>
+
+	<resultMap type="factory.entity.Car" id="carDriverSiteMap">
+		<id property="id" column="id" />
+		<result property="license" column="license" />
+		<result property="longitude" column="longitude" />
+		<result property="latitude" column="latitude" />
+		<result property="status" column="status" />
+		<result property="siteId" column="site_id" />
+		<association property="driver" javaType="factory.entity.User">
+			<id property="id" column="uid" />
+			<result property="realname" column="realname" />
+			<result property="telephone" column="telephone" />
+		</association>
+		<association property="site" javaType="factory.entity.Site">
+			<id property="id" column="sid" />
+			<result property="siteName" column="site_name" />
+			<result property="latitude" column="slatitude" />
+			<result property="longitude" column="slongitude" />
+		</association>
+	</resultMap>
+
+	<select id="queryAllCar" resultMap="carMap">
+		SELECT
+		car.id,car.license,car.brand,car.status,user.id,user.realname,user.telephone
+		FROM car LEFT JOIN
+		`user` ON car.driver_id=`user`.id WHERE
+		car.del_status=0
+	</select>
+
+
+
+	<select id="queryCarByDriverId" resultType="factory.entity.Car">
+		SELECT *
+		FROM car
+		WHERE del_status=0 AND driver_id=#{driverId}
+	</select>
+
+	<select id="queryCarById" resultType="factory.entity.Car">
+		SELECT *
+		FROM car
+		WHERE
+		del_status=0 AND id=#{carId}
+	</select>
+
+	<select id="queryCarByLicense" resultType="factory.entity.Car">
+		SELECT *
+		FROM car
+		WHERE
+		license=#{license}
+	</select>
+
+	<select id="queryCarByStatus" resultType="factory.entity.Car">
+		SELECT *
+		FROM car
+		WHERE
+		status=#{status}
+	</select>
+
+	<select id="queryCarByRecordId" resultType="factory.entity.Car">
+		SELECT
+		car.id,car.driver_id,car.`status`,car.license
+		FROM record LEFT JOIN car
+		ON record.car_id=car.id
+		WHERE record.del_status=0 AND
+		record.id=#{recordId}
+	</select>
+
+	<update id="deleteCar">
+		UPDATE car
+		SET del_status=1
+		WHERE del_status=0 AND
+		id=#{carId}
+	</update>
+
+	<insert id="addCar" parameterType="factory.entity.Car"
+		useGeneratedKeys="true" keyProperty="id">
+		INSERT
+		INTO car
+		(license,brand,driver_id)
+		<choose>
+			<when test="driverId==0">
+				VALUES(#{license},#{brand},NULL)
+			</when>
+			<otherwise>
+				VALUES(#{license},#{brand},#{driverId})
+			</otherwise>
+		</choose>
+
+	</insert>
+
+	<update id="editCar" parameterType="factory.entity.Car">
+		UPDATE car
+		set
+		<choose>
+			<when test="driverId==0">
+				license=#{license},brand=#{brand},driver_id=null
+			</when>
+			<otherwise>
+				license=#{license},brand=#{brand},driver_id=#{driverId}
+			</otherwise>
+		</choose>
+		WHERE del_status=0 AND
+		id=#{id}
+	</update>
+
+	<select id="queryCarWhichNotAssignDriver" resultType="factory.entity.Car">
+		SELECT
+		car.id,car.license
+		FROM car
+		WHERE del_status=0 AND driver_id IS NULL
+	</select>
+
+	<select id="fuzzyQueryCar" resultMap="carMap">
+		<!-- SELECT * FROM car,`user` where car.del_status=0 and car.driver_id=`user`.id 
+			and car.driver_id in ( SELECT DISTINCT id FROM car WHERE car.driver_id in 
+			( select DISTINCT id from `user` where `user`.realname LIKE CONCAT('%',#{condition},'%') 
+			OR `user`.telephone LIKE CONCAT('%',#{condition},'%') ) OR car.license LIKE 
+			CONCAT('%',#{condition},'%') OR car.brand LIKE CONCAT('%',#{condition},'%') 
+			) -->
+		SELECT
+		car.id,car.license,car.brand,car.status,car.driver_id,car.sensor_id_set,user.id,user.realname,user.telephone
+		FROM
+		car LEFT JOIN `user` ON car.driver_id=`user`.id
+		WHERE
+		car.del_status=0 AND
+		(`user`.realname LIKE CONCAT('%',#{condition},'%')
+		OR `user`.telephone
+		LIKE CONCAT('%',#{condition},'%') OR car.license
+		LIKE
+		CONCAT('%',#{condition},'%') or car. brand LIKE
+		CONCAT('%',#{condition},'%'))
+	</select>
+
+	<!-- <select id="fuzzyQueryCarWithNoDriver" resultType="factory.entity.Car"> 
+		SELECT * FROM car where car.id IN ( select id FROM car where car.del_status=0 
+		AND car.brand LIKE CONCAT('%',#{condition},'%') OR car.license LIKE CONCAT('%',#{condition},'%') 
+		) and driver_id IS NULL </select> -->
+
+	<update id="updateSenserIdSet">
+		UPDATE car
+		SET sensor_id_set=#{sensorIdSet}
+		where
+		del_status=0 AND
+		id=#{carId}
+	</update>
+
+	<update id="updateDriverId">
+		UPDATE car
+
+		SET driver_id=#{driverId}
+
+		WHERE del_status=0 AND id=#{carId}
+	</update>
+	
+	<update id="setDriverIdToNUll">
+		UPDATE car
+		SET driver_id=NULL
+		WHERE del_status=0 AND driver_id=#{driverId}
+	</update>
+
+	<select id="queryNullCarNum" resultType="Integer">
+		SELECT count(*)
+		FROM car
+		WHERE del_status=0 AND (status=0 OR status=4) AND car.driver_id IS NOT NULL
+	</select>
+
+	<select id="queryAllCarOrderByStatus" resultMap="carDriverSiteMap">
+		SELECT
+		car.*,site.site_name,site.latitude slatitude,site.longitude slongitude
+		FROM (
+		SELECT tmp.*,user.realname,user.telephone
+		FROM car tmp LEFT JOIN
+		user
+		ON tmp.driver_id=user.id
+		where tmp.del_status=0 and tmp.driver_id IS NOT NULL
+		)
+		car LEFT JOIN site
+		ON car.site_id=site.id
+		ORDER BY car.status
+	</select>
+	<select id="querySensorIdSetByCarId" resultType="String">
+		SELECT
+		sensor_id_set
+		FROM car
+		WHERE del_status=0 AND
+		id=#{carId}
+	</select>
+
+	<select id="queryMapCar" resultMap="carDriverSiteMap">
+		SELECT
+		car.*,site.site_name,site.latitude slatitude,site.longitude
+		slongitude,user.realname,user.telephone
+		FROM car LEFT JOIN user ON
+		car.driver_id=user.id
+		LEFT JOIN site ON car.site_id=site.id
+		WHERE
+		car.del_status=0 AND(car.license like CONCAT('%',#{queryStr},'%') or
+		site.site_name like CONCAT('%',#{queryStr},'%')
+		or user.realname like
+		CONCAT('%',#{queryStr},'%') or user.telephone like
+		CONCAT('%',#{queryStr},'%'))
+	</select>
+
+	<select id="queryWorkerMapCar" resultMap="carDriverSiteMap">
+		SELECT car.*,site.id
+		sid
+		FROM car LEFT JOIN user ON car.driver_id=user.id
+		LEFT JOIN site ON
+		car.site_id=site.id
+		WHERE car.del_status=0 AND car.driver_id=#{userId}
+		AND (car.status=1 OR car.status=3)
+	</select>
+
+	<update id="editWorkerCarStatus">
+		UPDATE car
+		SET status=#{status}
+		where del_status=0 AND
+		driver_id=#{userId}
+	</update>
+
+	<update id="editWorkerCarStatusAndSiteId">
+		UPDATE car
+		<choose>
+			<when test="siteId==0">
+				SET status=#{status},site_id=NULL
+			</when>
+			<otherwise>
+				SET status=#{status},site_id=#{siteId}
+			</otherwise>
+		</choose>
+		where del_status=0 AND
+		id=#{carId}
+	</update>
+	
+	<select id="queryCarUnassign" resultMap="carMap">
+		SELECT car.*,user.id,user.realname,user.telephone 
+		FROM car LEFT JOIN user 
+		ON car.driver_id=user.id 
+		WHERE car.del_status=0 AND car.status=0 AND car.driver_id IS NOT NULL
+	</select>
+	
+</mapper>
