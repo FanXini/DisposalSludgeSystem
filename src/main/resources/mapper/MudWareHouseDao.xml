@@ -3,8 +3,8 @@
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 
 <mapper namespace="factory.dao.MudWareHouseDao">
- <select id="queryWareHouse" resultType="factory.entity.MudWareHouse">
+ <select id="queryMinorWareHouse" resultType="factory.entity.MinorMudWareHouse">
 		SELECT *
-		FROM wisdom_mud_warehouse
+		FROM minor_mud_warehouse
 	</select>
 </mapper>

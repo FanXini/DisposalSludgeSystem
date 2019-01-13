@@ -149,32 +149,41 @@
 							</div>
 
 							<div class="form-group">
-								<label for="video_HLSid">HLS&nbsp;&nbsp;地&nbsp;&nbsp;址</label> <input
-									type="text" placeholder="请输入视频HLS播放地址" id="video_HLSid"
-									class="form-control">
-							</div>
-
-							<div class="form-group">
-								<label for="del_status">工&nbsp;&nbsp;作&nbsp;&nbsp;状&nbsp;&nbsp;态</label> <input
-									type="text" placeholder="请输入摄像头工作状态" id="del_status"
-									class="form-control m-b control-label">
-							</div>
-
-						</div>
-						<div class="col-sm-6">
-							<div class="form-group">
 								<label for="addCarId">车&nbsp;&nbsp;辆&nbsp;&nbsp;编&nbsp;&nbsp;号</label> <input
 									type="text" placeholder="请输入车辆编号" id="car_id"
 									class="form-control m-b control-label">
 							</div>
+							
 							<div class="form-group">
 								<label for="video_RTMPid">RTMP&nbsp;&nbsp;地&nbsp;&nbsp;址</label> <input
 									type="text" placeholder="请输入视频RTMP播放地址" id="video_RTMPid"
 									class="form-control m-b control-label">
 							</div>
+							
+
 						</div>
+						<div class="col-sm-6">
+							
+							<div class="form-group">
+								<label for="del_status">工&nbsp;&nbsp;作&nbsp;&nbsp;状&nbsp;&nbsp;态</label> <input
+									type="text" placeholder="请输入摄像头工作状态" id="del_status"
+									class="form-control m-b control-label">
+							</div>
+							
+							<div class="form-group">
+								<label for="license">车&nbsp;&nbsp;牌&nbsp;&nbsp;号</label> <input
+									type="text" placeholder="请输入车牌号" id="license"
+									class="form-control m-b control-label">
+							</div>
+							
+							<div class="form-group">
+								<label for="video_HLSid">HLS&nbsp;&nbsp;地&nbsp;&nbsp;址</label> <input
+									type="text" placeholder="请输入视频HLS播放地址" id="video_HLSid"
+									class="form-control">
+							</div>
 
-
+							
+						</div>
 
 					</div>
 				</div>
@@ -257,17 +266,19 @@
 		/***************************** 新增站点提交************************************* */
 			$("#addVideo").click(function() {
 				var car_id=$("#car_id").val();
+				var license=$("#license").val();
 				var addSerialNumber = $("#addSerialNumber").val();
 				var video_RTMPid = $("#video_RTMPid").val();
 				var video_HLSid = $("#video_HLSid").val();
-				var del_status = $("#del_status").val();
-				
+				var del_status = $("#del_status").val()
+				alert(license)
 				alert(addSerialNumber)
 				$.ajax({
 					type : "POST",
 						url :　"monitor/addVideo",
 						data : JSON.stringify({
 						car_id:car_id,
+						license:license,
 						serial_number:addSerialNumber,
 						video_RTMPid:video_RTMPid,
 						video_HLSid:video_HLSid,

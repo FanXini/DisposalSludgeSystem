@@ -44,5 +44,7 @@ public interface CarService {
 	public Car assignCarrier(int siteId,double siteLongitude,double siteLatitude);
 	
 	public List<Car> queryCarBySiteId(int siteId);
-
+	
+	public List<Car> querycarWithoutVideo();
+ 
 }

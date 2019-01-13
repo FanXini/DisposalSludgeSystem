@@ -7,4 +7,5 @@ public interface VideoService {
 	public int queryVideoCount ();
 	public void editVideo(Map<String, String> videoInfo);
 	public void addVideo(Video videoInfo);
+	public Video queryVideoByDriverId(int driverId);
 }

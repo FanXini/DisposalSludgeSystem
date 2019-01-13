@@ -1,8 +1,10 @@
 package factory.dao;
 
-import factory.entity.MudWareHouse;
+import java.util.List;
+
+import factory.entity.MinorMudWareHouse;
 
 public interface MudWareHouseDao {
 
-	public MudWareHouse queryWareHouse();
+	public List<MinorMudWareHouse> queryMinorWareHouse();
 }

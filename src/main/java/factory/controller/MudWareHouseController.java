@@ -1,6 +1,8 @@
 package factory.controller;
 
 
+import java.util.List;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,7 +10,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import factory.entity.MudWareHouse;
+import factory.entity.MainMudWareHouse;
+import factory.entity.MinorMudWareHouse;
 import factory.service.MudWareHouseService;
 
 @Controller
@@ -24,10 +27,10 @@ public class MudWareHouseController {
 		return "mudwarehouse/mudwarehouse";
 	}
 	@ResponseBody
-	@RequestMapping("queryWareHouse")
-	public MudWareHouse queryWareHouse(){
-		log.info("调用查询智慧工厂的方法");
-		return mudWareHouseService.queryWareHouse();
+	@RequestMapping("queryMinorWareHouse")
+	public List<MinorMudWareHouse> queryMinorWareHouse(){
+		log.info("调用查询智慧工厂泥仓的方法");
+		return mudWareHouseService.queryMinorWareHouse();
 	}
 	
 }

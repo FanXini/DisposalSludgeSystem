@@ -2,6 +2,7 @@ package factory.entity;
 public class Video {
 	private int id;
 	private int car_id;
+	private String license;
 	private String serial_number;
 	private String video_RTMPid;
 	private String video_HLSid;
@@ -18,6 +19,12 @@ public class Video {
 	}
 	public void setCar_id(int car_id) {
 		this.car_id = car_id;
+	}
+	public String getLicense() {
+		return license;
+	}
+	public void setLicense(String license) {
+		this.license = license;
 	}
 	public String getSerial_number() {
 		return serial_number;

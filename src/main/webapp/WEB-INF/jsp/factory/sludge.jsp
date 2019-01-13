@@ -138,7 +138,7 @@
 				<div class="ibox float-e-margins">
 					<div class="ibox-title">
 						<h1 class="text-info"
-							style="text-align: center;font-family:KaiTi; margin-top:-1%">污泥块去向记录</h1>
+							style="text-align: center; font-family: KaiTi; margin-top: -1%">污泥块去向记录</h1>
 
 						<!-- <div class="ibox-tools">
 							<a class="collapse-link"> <i class="fa fa-chevron-up"></i>
@@ -225,7 +225,7 @@
 									</div>
 								</div>
 								<button class="btn btn-primary" id="submit"
-									style="margin-top:3px">查询</button>
+									style="margin-top: 3px">查询</button>
 
 							</div>
 
@@ -265,7 +265,7 @@
 					});
 				}
 			});
-			});
+		});
 			var table_start = '<table id="table" class="footable table-hover table table-stripped toggle-arrow-tiny" data-page-size="7">' +
 				'<thead>' +
 				'<tr>' +

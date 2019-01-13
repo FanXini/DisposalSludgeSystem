@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="factory.dao.CarDao">
+
+    <resultMap type="factory.entity.Car" id="carMap">
+    		<id property="id" column="id"/>
+			<result property="driverId" column="driver_id"/>
+			<result property="license" column="license"/>
+			<result property="longitude" column="longitude"/>
+			<result property="latitude" column="latitude"/>
+			<result property="brand" column="brand"/>
+			<result property="sensorIdSet" column="sensor_id_set"/>
+			<result property="status" column="status"/>
+			<association property="driver" javaType="factory.entity.User">
+				<id property="id" column="id"/>
+				<result property="username" column="username"/>
+				<result property="realname" column="realname"/>
+				<result property="telephone" column="telephone"/>
+				<result property="email" column="email"/>
+			</association>
+    </resultMap>
+
+	<select id="queryAllCar" resultMap="carMap">
+		SELECT *
+		FROM car,user
+		WHERE car.driver_id=user.id
+	</select>
+
+    <select id="queryCarByDriverId" resultType="factory.entity.Car">
+		SELECT *
+		FROM car
+		WHERE driver_id=#{driverId}
+	</select>
+	
+	<select id="queryCarByLicense" resultType="factory.entity.Car">
+		SELECT *
+		FROM car
+		WHERE del_status=0 AND license=#{license}
+	</select>
+
+</mapper>

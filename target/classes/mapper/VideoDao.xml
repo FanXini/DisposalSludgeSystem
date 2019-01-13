@@ -6,6 +6,7 @@
 	<resultMap type="factory.entity.Video" id="VideoDaoMap">
 		<id property="id" column="id"></id>
 		<result property="car_id" column="car_id"></result>
+		<result property="license" column="license"></result>
 		<result property="serial_number" column="serial_number"></result>
 		<result property="video_RTMPid" column="video_RTMPid"></result>
 		<result property="video_HLSid" column="video_HLSid"></result>
@@ -34,13 +35,13 @@
 	<insert id="addVideo" parameterType="factory.entity.Video"
 		useGeneratedKeys="true" keyProperty="id">
 		INSERT INTO video
-		(car_id,serial_number,video_RTMPid,video_HLSid,del_status)
-		VALUES(#{car_id},#{serial_number},#{video_RTMPid},#{video_HLSid},#{del_status})
+		(car_id,license,serial_number,video_RTMPid,video_HLSid,del_status)
+		VALUES(#{car_id},#{license},#{serial_number},#{video_RTMPid},#{video_HLSid},#{del_status})
 	</insert>
 	<update id="editVideo" parameterType="factory.entity.Video">
 		UPDATE Video
 		SET
-		car_id=#{car_id},serial_number=#{serial_number},video_RTMPid=#{video_RTMPid},video_HLSid=#{video_HLSid},del_status=#{del_status},
+		car_id=#{car_id},license=#{license},serial_number=#{serial_number},video_RTMPid=#{video_RTMPid},video_HLSid=#{video_HLSid},del_status=#{del_status},
 		WHERE  video.car_id = car.id
 		and video.del_status=0 
 		and id=#{id}
