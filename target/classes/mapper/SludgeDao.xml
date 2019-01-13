@@ -121,6 +121,23 @@
 		ORDER BY sludge.produce_time DESC
 	</select>
 	
+		<!-- *********************************通过运输车司机id查询污泥块************************************ -->
+
+
+	<select id="transportsludgeofonedriver" resultMap="SludgeMap">
+		SELECT
+		sludge.*,record.id,record.site_id,car.id,car.license,car.driver_id,user.id,user.realname,user.telephone,site.id,site.site_name,sludge_function.id,sludge_function.`function`
+		FROM
+		sludge LEFT JOIN record ON sludge.record_id=record.id LEFT JOIN
+		car ON sludge.transcar_id=car.id LEFT JOIN site ON record.site_id=site.id
+		LEFT JOIN `user` ON car.driver_id=`user`.id LEFT JOIN sludge_function
+		ON sludge.function_id=sludge_function.id
+		WHERE sludge.del_status=0 AND
+		user.id=#{driverId}
+		ORDER BY sludge.produce_time DESC
+	</select>
+	
+	
 	<!-- *********************************通过司机id和出入flag查询污泥块************************************ -->
 
 

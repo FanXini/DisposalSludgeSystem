@@ -6,6 +6,8 @@ import factory.entity.SludgeFunction;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.ibatis.annotations.Param;
+
 public interface SludgeService {
 	
 	public List<SludgeFunction> queryAllSludgeFunction();
@@ -35,4 +37,6 @@ public interface SludgeService {
 	public List<Sludge> querySludgeByDates(String startDate,String endDate, int siteId);
 	
 	public List<Sludge> querySludgeBySiteName(String siteName);
+	 
+	public List<Sludge> transportsludgeofonedriver(int driverId);
 }

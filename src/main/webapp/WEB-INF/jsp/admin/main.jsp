@@ -59,7 +59,7 @@
 				<c:if test="${fn:contains(sessionScope.authos, '10')}" >
 					<li class="line dk"></li>
 					<li><a class="J_menuItem" href="main/map/workerMap"> <i
-							class="fa fa-home"></i> <span class="nav-label">主页(司机)</span>
+							class="fa fa-home"></i> <span class="nav-label">主页</span>
 					</a></li>
 				</c:if>
 
@@ -120,9 +120,18 @@
 				<c:if test="${fn:contains(sessionScope.authos, '5')}" >
 					<li class="line dk"></li>
 					<li><a class="J_menuItem" href="record/recordOfOneDriver"> <i
-							class="fa fa-book"></i> <span class="nav-label">工作记录(司机)</span>
+							class="fa fa-book"></i> <span class="nav-label">工作记录(污泥处理司机)</span>
 					</a></li>
 				</c:if>
+				
+				<!-- 工作记录(污泥运输司机) -->
+				<c:if test="${fn:contains(sessionScope.authos, '11')}" >
+					<li class="line dk"></li>
+					<li><a class="J_menuItem" href="sludge/transportsludgeofonedriver?driverId=${sessionScope.user.id}"> <i
+							class="fa fa-book"></i> <span class="nav-label">工作记录(污泥运输司机)</span>
+					</a></li>
+				</c:if>
+				
 				<!-- 一键报警(工厂) -->
 				<c:if test="${fn:contains(sessionScope.authos, '6')}" >
 				<li class="line dk"></li>

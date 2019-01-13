@@ -175,4 +175,11 @@ public class SludgeServiceImpl implements SludgeService {
 		return sludges;
 	}
 
+	@Override
+	public List<Sludge> transportsludgeofonedriver(int driverId) {
+		// TODO Auto-generated method stub
+		List<Sludge> sludges = new ArrayList<Sludge>();
+		sludges.addAll(sludgeDao.transportsludgeofonedriver(driverId));
+		return sludges;
+	}
 }

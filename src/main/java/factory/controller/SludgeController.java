@@ -1,5 +1,7 @@
 package factory.controller;
 
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.forwardedUrl;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -39,6 +41,21 @@ public class SludgeController {
 	
 	@Autowired
 	private UserService userService;
+	
+	@RequestMapping("/transportsludgeofonedriver")
+	@ResponseBody
+	public ModelAndView transportsludgeofonedriver(@RequestParam("driverId") int driverId, ModelAndView mv){
+		log.info("调用transportsludgeofonedriver");
+		List<Sludge> sludges=sludgeService.transportsludgeofonedriver(driverId);
+		log.info(sludges.size());
+		for(Sludge item:sludges){
+			System.out.println(item.getTranscarId()+item.getCar().getLicense());
+		};
+		mv.addObject("sludgeList",sludges);
+		mv.setViewName("worker/transportsludge");
+		return mv;
+	}
+	
 	@RequestMapping("jumpToSludge")
 	public ModelAndView querySludgeFunctionsAndJumpToSludge(ModelAndView mv){
 		log.info("调用进入sludge.jsp的方法");
