@@ -34,5 +34,7 @@ public interface RecordService {
 	public List<Record> queryRecordOfCarNull();
 
 	public void editRecordCarIdBySiteId(int siteId, int carId);
+	
+	public void insertRecordByAlert(Record record);
 
 }

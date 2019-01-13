@@ -344,7 +344,7 @@
 							table += '<td></td>'
 						}
 							table += '<td>' + (sludge.produceTime ==null?"": sludge.produceTime )+ '</td>'
-							table += '<td class="project-manager">' + sludge.arrivalTime + '</td>'
+							table += '<td class="project-manager">' + (sludge.arrivalTime ==null?"": sludge.arrivalTime ) + '</td>'
 							if (sludge.transcarId != 0) {
 								table += '<td>' + sludge.transcarId + '</td>'
 							} else {
@@ -515,8 +515,8 @@
 						} else {
 							table += '<td></td>'
 						}
-							table += '<td>' + sludge.produceTime + '</td>'
-							table += '<td class="project-manager">' + sludge.arrivalTime + '</td>'
+							table += '<td>' + (sludge.produceTime ==null?"": sludge.produceTime ) + '</td>'
+							table += '<td class="project-manager">' + (sludge.arrivalTime ==null?"":sludge.arrivalTime )+ '</td>'
 							if (sludge.transcarId != 0) {
 								table += '<td>' + sludge.transcarId + '</td>'
 							} else {

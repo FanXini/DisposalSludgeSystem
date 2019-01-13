@@ -123,10 +123,16 @@
 							class="fa fa-book"></i> <span class="nav-label">工作记录(司机)</span>
 					</a></li>
 				</c:if>
-
-				<!-- 污泥处理记录(工厂) -->
+				<!-- 一键报警(工厂) -->
 				<c:if test="${fn:contains(sessionScope.authos, '6')}" >
 				<li class="line dk"></li>
+					<li><a class="J_menuItem" href="record/alert?siteId=${sessionScope.user.siteId }"> <i
+							class="fa fa-book"></i> <span class="nav-label">污泥处理申请</span>
+					</a></li>
+				<li class="line dk"></li>
+				</c:if>
+				<!-- 污泥处理记录(工厂) -->
+				<c:if test="${fn:contains(sessionScope.authos, '6')}" >				
 				<li><a href="#"><i class="fa fa-industry"></i> <span
 						class="nav-label">污泥处理记录(工厂)</span><span class="fa arrow"></span></a>
 					<ul class="nav nav-second-level">
