@@ -27,11 +27,11 @@ public class SludgeServiceImpl implements SludgeService {
 	public List<Sludge> queryAllSludgeByInOutFlagWithMinorWareHouseId(int inOutFlag,int minorWareHouseId) {
 		List<Sludge> sludges = new ArrayList<Sludge>();
 		sludges.addAll(sludgeDao.queryAllSludgeByInOutFlagWithMinorWareHouseId(inOutFlag,minorWareHouseId));
-		Collections.sort(sludges, new Comparator<Sludge>() {
+		/*Collections.sort(sludges, new Comparator<Sludge>() {
 			public int compare(Sludge arg0, Sludge arg1) {
 				return arg1.getProduceTime().compareTo(arg0.getProduceTime());
 			}
-		});
+		});*/
 		return sludges;
 	}
 	@Override

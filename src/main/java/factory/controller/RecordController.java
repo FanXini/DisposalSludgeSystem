@@ -271,4 +271,16 @@ public class RecordController {
 		}
 		return result;
 	}
+	
+	/**
+	 * 根据站点Id计算当前处理进度
+	 * @param siteId
+	 * @return 返回处理量，-1代表数据异常
+	 */
+	@RequestMapping("queryRateOfProcessBySiteId")
+	@ResponseBody
+	public double queryRateOfProcessBySiteId(@RequestParam("siteId") int siteId){
+		log.info("调用queryRateOfProcessBySiteId");
+		return recordService.queryRateOfProcessBySiteId(siteId);
+	}
 }

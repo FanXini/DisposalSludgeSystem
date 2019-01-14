@@ -215,5 +215,12 @@
 	insert into
 	record(site_id,status,pretreat_amount)
 	values(#{siteId},2,#{pretreatAmount})
-	</insert>		
+	</insert>
+	
+	<select id="queryCurrentRecordBySiteId" resultType="factory.entity.Record">
+		SELECT record.*
+		FROM record
+		WHERE record.del_status=0 AND record.status!=0 AND record.site_id=#{siteId} 
+		ORDER BY record.allocation_time DESC
+	</select>		
 </mapper>

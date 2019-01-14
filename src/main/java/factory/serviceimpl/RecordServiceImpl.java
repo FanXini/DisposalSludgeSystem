@@ -172,6 +172,17 @@ public class RecordServiceImpl implements RecordService{
 		// TODO Auto-generated method stub
 		recordDao.insertRecordByAlert(record);
 	}
+	@Override
+	public double queryRateOfProcessBySiteId(int siteId) {
+		// TODO Auto-generated method stub
+		Record record = recordDao.queryCurrentRecordBySiteId(siteId);
+		if(record.getPretreatAmount() != 0){
+			return record.getSludgesWeight()/record.getPretreatAmount();
+			
+		}else{
+			return -1;
+		}
+	}
 	
 
 }
