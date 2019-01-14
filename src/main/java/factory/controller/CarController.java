@@ -201,19 +201,6 @@ public class CarController {
 		return result;
 	}
 	
-	@RequestMapping("queryCarUnassign")
-	@ResponseBody
-	public List<Car> queryCarUnassign() {
-		log.info("查询空闲车辆");
-		try{
-			return carService.queryTreatmentCarUnassign();
-		}catch (Exception e) {
-			// TODO: handle exception
-			log.info(e);
-			return null;
-		}
-	}
-	
 	@RequestMapping("queryDriverUnassign")
 	@ResponseBody
 	public List<User> queryDriverUnassign() {
@@ -233,11 +220,31 @@ public class CarController {
 	@RequestMapping("assignCarrier")
 	@ResponseBody
 	public Car assignCarrier(@RequestParam("id") int siteId,@RequestParam("longitude") String siteLongitude,@RequestParam("latitude") String siteLatitude) {
-		log.info("为site"+siteId+"分配车辆");
+		log.info("为site"+siteId+"分配运输车辆");
 		double longitude = Double.valueOf(siteLongitude);
 		double latitude = Double.valueOf(siteLatitude);
 		try{
-			return carService.assignCarrier(siteId,longitude,latitude);
+			//1代表运输车辆
+			return carService.assignCar(siteId,longitude,latitude,1);
+		}catch (Exception e) {
+			// TODO: handle exception
+			log.info(e);
+			return null;
+		}
+	}
+	
+	/**
+	 * @description:为站点分配处理车辆（根据最短直线距离）
+	 */
+	@RequestMapping("assignTreatmentCar")
+	@ResponseBody
+	public Car assignTreatmentCar(@RequestParam("id") int siteId,@RequestParam("longitude") String siteLongitude,@RequestParam("latitude") String siteLatitude) {
+		log.info("为site"+siteId+"分配处理车辆");
+		double longitude = Double.valueOf(siteLongitude);
+		double latitude = Double.valueOf(siteLatitude);
+		try{
+			//0代表处理车辆
+			return carService.assignCar(siteId,longitude,latitude,0);
 		}catch (Exception e) {
 			// TODO: handle exception
 			log.info(e);
@@ -248,12 +255,12 @@ public class CarController {
 	/**
 	 * @description:查找为站点分配的车辆
 	 */
-	@RequestMapping("queryCarBySiteId")
+	@RequestMapping("queryMapCarBySiteId")
 	@ResponseBody
-	public List<Car> queryCarBySiteId(@RequestParam("id") int siteId) {
+	public List<Car> queryMapCarBySiteId(@RequestParam("siteId") int siteId) {
 		log.info("查找为site"+siteId+"分配的车辆列表");
 		try{
-			return carService.queryCarBySiteId(siteId);
+			return carService.queryMapCarBySiteId(siteId);
 		}catch (Exception e) {
 			// TODO: handle exception
 			log.info(e);

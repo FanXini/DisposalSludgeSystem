@@ -1,5 +1,5 @@
-/target/
-.classpath 
-.idea/
-target/
-.project
+/*
+/*.classpath
+/*.project
+/*.xml
+/target

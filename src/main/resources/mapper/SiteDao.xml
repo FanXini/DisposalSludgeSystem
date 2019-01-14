@@ -168,12 +168,9 @@
 		WHERE record.del_status=0 AND car.driver_id=#{driverId}
 	</select>
 	
-	<select id="querySiteMapBySiteId" resultMap="SiteMap">
-		SELECT site.*,user.id
-		uid,user.username uusername,user.realname urealname,user.telephone
-		utel,user.email uemail
-		FROM site left join user
-		On site.manage_id=user.id
-		WHERE site.del_status=0 where site.id=#{siteId}
+	<select id="querySiteMapBySiteId" resultType="factory.entity.Site">
+		SELECT *
+		FROM site 
+		WHERE site.del_status=0 AND site.id=#{siteId}
 	</select>
 </mapper>

@@ -129,13 +129,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	function show(){
 		$.ajax({
   			type : "POST",
-  			url : "site/querySiteMapBySiteId",
+  			url : "system/querySiteMapBySiteId",
   			data : "siteId="+siteId,
   			success : function(site) {
-  				if(jQuery.isEmptyObject(site)){
-  					showMap(0);
-  				}
-  				else{
+  				if(!jQuery.isEmptyObject(site)){
   					showMap(site);
   				}
   			}
@@ -147,54 +144,59 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	/***************************** 显示标注************************************* */
 	function showMap(site) {
 		map.clearOverlays(); //清除地图上所有覆盖物
-		sitePoint=[];
-		siteMarker=[];
-		siteInfoWindow=[];
 		carPoint=[];
 		carMarker=[];
 		carInfoWindow=[];
 		
+		if (site.status== "0") {
+			myIcon = new BMap.Icon("img/factory(green).png", new BMap.Size(100, 70), {
+			imageSize : new BMap.Size(100, 70)});
+		}else if (site.status== "1") {
+			myIcon = new BMap.Icon("img/factory(yellow).png", new BMap.Size(100, 70), {
+			imageSize : new BMap.Size(100, 70)});
+		} else if (site.status== "2") {
+			myIcon = new BMap.Icon("img/factory(red).png", new BMap.Size(100, 70), {
+			imageSize : new BMap.Size(100, 70)});
+		}
+		sitePoint = new BMap.Point(site.longitude,site.latitude);
+		siteMarker = new BMap.Marker(sitePoint,{icon:myIcon});
+		
+		map.addOverlay(siteMarker);
+		siteMarker.addEventListener("mouseover",function(){
+			siteInfo(site);
+		});
 		$.ajax({
 				type : "POST",
-				url : "system/queryAllSite",
-				dataType : "json",
-				contentType : "application/json",
-				async: false,
-				success : function(siteList) {
-
-					var myIcon;
-					$.each(siteList,function(i, site) {
-						if (site.status== "0") {
-							myIcon = new BMap.Icon("img/factory(purple).png", new BMap.Size(40, 26), {
-							imageSize : new BMap.Size(40, 26)});
+				url : "car/queryMapCarBySiteId",
+				data : "siteId="+site.id,
+				success : function(carList) {
+					$.each(carList,function(i, car) {
+						if(car.carType == 0){
+							var carIcon = new BMap.Icon("img/car.png", new BMap.Size(35, 24), {
+									imageSize : new BMap.Size(35, 24)});
+						}else{
+							var carIcon = new BMap.Icon("img/transportCar.png", new BMap.Size(35, 35), {
+									imageSize : new BMap.Size(35, 35)});
 						}
-						else if (site.status== "1") {
-							myIcon = new BMap.Icon("img/factory(yellow).png", new BMap.Size(40, 26), {
-							imageSize : new BMap.Size(40, 26)});
-						} 
-						else if (site.status== "2") {
-							myIcon = new BMap.Icon("img/factory(red).png", new BMap.Size(40, 26), {
-							imageSize : new BMap.Size(40, 26)});
-						} 
-						sitePoint[site.id] = new BMap.Point(site.longitude,site.latitude);
-						siteMarker[site.id] = new BMap.Marker(sitePoint[site.id],{icon:myIcon});
+						if(car.status==1){
 						
-						map.addOverlay(siteMarker[site.id]);
-						if(site.id==id){
-							siteMarker[site.id].setAnimation(BMAP_ANIMATION_BOUNCE);
-							map.centerAndZoom(sitePoint[site.id], 13);
-							siteInfo(site,id);
-						} 
-						siteMarker[site.id].addEventListener("mouseover",function(){
-						siteInfo(site,id)
-						});
+							carPoint[car.id] = new BMap.Point(car.longitude,car.latitude);
+							carMarker[car.id] = new BMap.Marker(carPoint[car.id],{icon:carIcon});
+						
+							map.addOverlay(carMarker[car.id]);
+						
+							//鼠标悬停动作
+							carMarker[car.id].addEventListener("mouseover",function(){
+								carInfo(car);
+							});
+						}
 					});
 				}
 			});
 	}
 	
 	/***************************** 站点信息框显示************************************* */
-	function siteInfo(site,id){
+	function siteInfo(site){
 			var value=-1;
 			var opts = {width : 230, }// 信息窗口宽度
 			$.ajax({
@@ -209,14 +211,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						status="处理中";
 					else if (site.status== "2")
 						status="待处理";
-					if(site.id==id){
-						if(carStatus==3)
-							var lid = '<div><h5><a onclick="go(\''+site.siteName+'\');">'+site.siteName+'(点击出发)</a></h5><table style="font-size:12px;">';
-						if(carStatus==1)
-							var lid = '<div><h5><a onclick="arrive(\''+site.siteName+'\');">'+site.siteName+'(点击到达)</a></h5><table style="font-size:12px;">';
-					}
-					else
-						var lid = '<div><h5>'+site.siteName+'</h5><table style="font-size:12px;">';
+					var lid = '<div><h5>'+site.siteName+'</h5><table style="font-size:12px;">';
 					if(!jQuery.isEmptyObject(sensors)){
 						{
 							$.each(sensors,function(i, sensor) {
@@ -237,43 +232,44 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						+ '</tr><tr style="color:#FF4500;">'
 						+ '<td style="width:40%;text-align: left;">状态:</td><td style="text-align: left;">'+status+'</td>'
 						+ '</tr>' + '</table>' + '</div>';
-					siteInfoWindow[site.id] = new BMap.InfoWindow(lid,opts); // 创建信息窗口对象 
-					map.openInfoWindow(siteInfoWindow[site.id], sitePoint[site.id]);
+					siteInfoWindow = new BMap.InfoWindow(lid,opts); // 创建信息窗口对象 
+					map.openInfoWindow(siteInfoWindow, sitePoint);
 					}
 				}); 
 		}
-	function go(siteName){
-		$("#destination").text("目的地："+siteName);
-		$("#editContext").text("确定出发?");
-		$("#myModal").modal('show');
-	}
+	/***************************** 车辆信息框显示************************************* */
+	function carInfo(car){
+			var opts = {width : 230,} // 信息窗口宽度
+			if(car.status==4)
+				var lid = '<div><h5>'+car.license+'(返程中)</h5><table style="font-size:12px;">';
+			else
+				var lid = '<div><h5>'+car.license+'</h5><table style="font-size:12px;">';
+									
+			lid	+= '<tr><td style="width:40%;text-align: left;">司机：</td><td style="text-align: left;">'+car.driver.realname+'</td>'
+				+ '</tr>'
+				+ '<tr>'
+				+ '<td style="width:40%;text-align: left;">Tel:</td><td style="text-align: left;">'+car.driver.telephone+'</td>'
+				+ '</tr>';
+			if(car.status==1){
+				var pointSite = new BMap.Point(car.site.longitude,car.site.latitude);
+				var driving = new BMap.DrivingRoute(map,
+					{onSearchComplete:function(results){
+						var plan=results.getPlan(0);
+						lid += '<tr style="color:#FF4500;"><td style="width:40%;text-align: left;">目的地:</td><td style="text-align: left;">'+car.site.siteName+'</td></tr>';
+						lid += '<tr><td style="width:40%;text-align: left;">预计到达:</td><td style="text-align: left;">'+plan.getDuration(true)+'</td></tr>';
+						lid += '</table>' + '</div>';
+						carInfoWindow[car.id] = new BMap.InfoWindow(lid,opts); // 创建信息窗口对象 
+						map.openInfoWindow(carInfoWindow[car.id], carPoint[car.id]);
+					}});		
+				driving.search(carPoint[car.id],pointSite);
+				//alert("目的地:"+car.site.longitude+","+car.site.latitude);
+			}
+			else{
+				lid += '</table>' + '</div>';
+				carInfoWindow[car.id] = new BMap.InfoWindow(lid,opts); // 创建信息窗口对象 
+				map.openInfoWindow(carInfoWindow[car.id], carPoint[car.id]);
+			}
+		}
 	
-	function arrive(siteName){
-		$("#destination").text("目的地："+siteName);
-		$("#editContext").text("确定到达?");
-		$("#myModal").modal('show');
-	}
-	
-	$("#submitBtn").click(function(){
-		var editStatus=-1;
-		if(carStatus==1) editStatus=2;
-		if(carStatus==3) editStatus=1;
-		$.ajax({
-  			type : "POST",
-  			url : "car/editWorkerCarStatus",
-  			data : "userId="+userId+"&status="+editStatus,
-  			success : function(result) {
-  				if(result.result=="success"){
-  					if(carStatus==1) alert("已到达");
-  					if(carStatus==3) alert("已出发");
-  					$("#myModal").modal('hide');
-  					show();
-  				}
-  				else{
-  					alert("状态更改失败");
-  				}
-  			}
-  		});
-	});
 </script>
 

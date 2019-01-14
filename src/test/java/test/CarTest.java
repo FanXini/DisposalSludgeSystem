@@ -9,10 +9,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import factory.dao.CarDao;
 import factory.entity.Car;
 import factory.entity.Record;
+import factory.service.CarService;
 
 public class CarTest extends BaseTest{
 	@Autowired
 	private  CarDao carDao;
+	@Autowired
+	private  CarService carService;
 	private List<Car> carList;
 	/*@Test
 	public void test(){
@@ -74,6 +77,12 @@ public class CarTest extends BaseTest{
 		{
 			System.out.println(car.getBrand());
 		}
+	}
+	
+	@Test
+	public void assignCarrier(){
+		Car car=carService.assignCarrier(53,113.91604,22.544044);
+		System.out.println(car.getId());
 	}
 
 }
