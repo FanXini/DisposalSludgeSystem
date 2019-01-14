@@ -237,24 +237,24 @@
 						else{
 							table+='<td></td>'
 						}
-						table += '<td class="project-manage">' + (record.car.driver.realname ==null?"待分配":record.car.driver.realname) + '</td>'
+						table += '<td class="project-manage">' + (record.car.driver.realname ==null?"":record.car.driver.realname) + '</td>'
 						/* table += '<td class="project-completion">' +
 							'<small>污泥处理量：'+per+' %</small>' +
 							'<div class="progress progress-mini">' +
 							'<div style="width: '+per+'%;" class="progress-bar"></div>' +
 							'</div>' +
 							'</td>' */
-						table += '<td>' + (record.allocationTime ==null?"待分配":  record.allocationTime) + '</td>'
-						if(record.sludgesWeight==0){
+						table += '<td>' + (record.allocationTime ==null?"":  record.allocationTime) + '</td>'
+						if(record.sludge.weight==0){
 							table += '<td><span class="label label-success">待输入</td>'
 						}
 						else{
-							table += '<td>'+(record.sludgesWeight ==null?"":  record.sludgesWeight)+'吨</td>'
+							table += '<td>'+record.sludge.weight+'吨</td>'
 						}
-						table += '<td>' + (record.disposalTime ==null?"待分配":  record.disposalTime) + '</td>'
-						table += '<td><span class="pie">' + (record.finishTime ==null?"待分配": record.finishTime) + '</span></td>'
-						table += '<td>' + (record.car.driver.telephone ==null?"待分配":record.car.driver.telephone) + '</td>'
-						table += '<td>' + ( record.car.license==null?"待分配": record.car.license) + '</td>'
+						table += '<td>' + (record.disposalTime ==null?"":  record.disposalTime) + '</td>'
+						table += '<td><span class="pie">' + (record.finishTime ==null?"": record.finishTime) + '</span></td>'
+						table += '<td>' + (record.car.driver.telephone ==null?"":record.car.driver.telephone) + '</td>'
+						table += '<td>' + (record.car.license==null?"": record.car.license) + '</td>'
 						table += '</tr>'
 	
 					})
@@ -292,18 +292,18 @@
 						else{
 							table+='<td></td>'
 						}
-						table += '<td class="project-manage">' + (record.car.driver.realname ==null?"待分配":record.car.driver.realname) + '</td>'
-						table += '<td>' + (record.allocationTime ==null?"待分配":  record.allocationTime) + '</td>'
-						if(record.sludgesWeight==0){
+						table += '<td class="project-manage">' + (record.car.driver.realname ==null?"":record.car.driver.realname) + '</td>'
+						table += '<td>' + (record.allocationTime ==null?"":  record.allocationTime) + '</td>'
+						if(record.sludge.weight==0){
 							table += '<td><span class="label label-success">待输入</td>'
 						}
 						else{
-							table += '<td>'+(record.sludgesWeight ==null?"":  record.sludgesWeight)+'吨</td>'
+							table += '<td>'+record.sludge.weight+'吨</td>'
 						}
-						table += '<td>' + (record.disposalTime ==null?"待分配":  record.disposalTime) + '</td>'
-						table += '<td><span class="pie">' + (record.finishTime ==null?"待分配": record.finishTime) + '</span></td>'
-						table += '<td>' + (record.car.driver.telephone ==null?"待分配":record.car.driver.telephone) + '</td>'
-						table += '<td>' + ( record.car.license==null?"待分配": record.car.license) + '</td>'
+						table += '<td>' + (record.disposalTime ==null?"":  record.disposalTime) + '</td>'
+						table += '<td><span class="pie">' + (record.finishTime ==null?"": record.finishTime) + '</span></td>'
+						table += '<td>' + (record.car.driver.telephone ==null?"":record.car.driver.telephone) + '</td>'
+						table += '<td>' + (record.car.license==null?"": record.car.license) + '</td>'
 						table += '</tr>'
 	
 					})
@@ -347,16 +347,16 @@
 						}
 						table += '<td class="project-manage">' + (record.car.driver.realname ==null?"":record.car.driver.realname) + '</td>'
 						table += '<td>' + (record.allocationTime ==null?"":  record.allocationTime) + '</td>'
-						if(record.sludgesWeight==0){
+						if(record.sludge.weight==0){
 							table += '<td><span class="label label-success">待输入</td>'
 						}
 						else{
-							table += '<td>'+(record.sludgesWeight ==null?"":  record.sludgesWeight)+'吨</td>'
+							table += '<td>'+record.sludge.weight+'吨</td>'
 						}
-						table += '<td>' + (record.disposalTime ==null?"":  record.disposalTime) + '</td>'
+						table += '<td>' + record.disposalTime + '</td>'
 						table += '<td><span class="pie">' + (record.finishTime ==null?"": record.finishTime) + '</span></td>'
 						table += '<td>' + (record.car.driver.telephone ==null?"":record.car.driver.telephone) + '</td>'
-						table += '<td>' + ( record.car.license==null?"": record.car.license) + '</td>'
+						table += '<td>' + (record.car.license==null?"": record.car.license) + '</td>'
 						table += '</tr>'
 	
 					})
@@ -398,18 +398,18 @@
 						else{
 							table+='<td></td>'
 						}
-						table += '<td class="project-manage">' + (record.car.driver.realname ==null?"待分配":record.car.driver.realname) + '</td>'
-						table += '<td>' + (record.allocationTime ==null?"待分配":  record.allocationTime) + '</td>'
-						if(record.sludgesWeight==0){
+						table += '<td class="project-manage">' + (record.car.driver.realname ==null?"":record.car.driver.realname) + '</td>'
+						table += '<td>' + (record.allocationTime ==null?"":  record.allocationTime) + '</td>'
+						if(record.sludge.weight==0){
 							table += '<td><span class="label label-success">待输入</td>'
 						}
 						else{
-							table += '<td>'+(record.sludgesWeight ==null?"":  record.sludgesWeight)+'吨</td>'
+							table += '<td>'+record.sludge.weight+'吨</td>'
 						}
-						table += '<td>' + (record.disposalTime ==null?"待分配":  record.disposalTime) + '</td>'
-						table += '<td><span class="pie">' + (record.finishTime ==null?"待分配": record.finishTime) + '</span></td>'
-						table += '<td>' + (record.car.driver.telephone ==null?"待分配":record.car.driver.telephone) + '</td>'
-						table += '<td>' + ( record.car.license==null?"待分配": record.car.license) + '</td>'
+						table += '<td>' + (record.disposalTime ==null?"":  record.disposalTime) + '</td>'
+						table += '<td><span class="pie">' + (record.finishTime ==null?"": record.finishTime) + '</span></td>'
+						table += '<td>' + (record.car.driver.telephone ==null?"":record.car.driver.telephone) + '</td>'
+						table += '<td>' + (record.car.license==null?"": record.car.license) + '</td>'
 						table += '</tr>'
 	
 					})

@@ -31,7 +31,7 @@ public class CarServiceImpl implements CarService{
 		return cars;
 	}
 	/**
-	 * Í¨¹ıdriverId²éÑ¯CarµÄĞÅÏ¢
+	 * é–«æ°³ç¹ƒdriverIdéŒãƒ¨î‡—Caré¨å‹ªä¿Šé­ï¿½
 	 */
 	@Override
 	public Car queryCarByDriverId(int driverId) {
@@ -39,7 +39,7 @@ public class CarServiceImpl implements CarService{
 	}
 	
 	/**
-	 * Í¨¹ı³µÅÆºÅ²éÑ¯CarµÄĞÅÏ¢
+	 * é–«æ°³ç¹ƒæï¸¾å¢é™é”‹ç…¡ç’‡î”©aré¨å‹ªä¿Šé­ï¿½
 	 */
 	@Override
 	public Car queryCarByLicense(String license) {
@@ -47,7 +47,7 @@ public class CarServiceImpl implements CarService{
 	}
 	
 	/**
-	 * Í¨¹ı³µÁ¾×´Ì¬²éÑ¯CarµÄĞÅÏ¢
+	 * é–«æ°³ç¹ƒæï¹ç· é˜èˆµï¿½ä½¹ç…¡ç’‡î”©aré¨å‹ªä¿Šé­ï¿½
 	 */
 	@Override
 	public List<Car> queryCarByStatus(int status) {
@@ -57,7 +57,7 @@ public class CarServiceImpl implements CarService{
 	}
 	
 	/**
-	 * É¾³ı¼ÇÂ¼
+	 * é’çŠ»æ«ç’æ¿ç¶
 	 */
 	public void deleteCar(int carId) {
 		// TODO Auto-generated method stub
@@ -83,7 +83,7 @@ public class CarServiceImpl implements CarService{
 	public int addCar(Car car) {
 		// TODO Auto-generated method stub
 		if (car.getLicense().equals("") || car.getLicense() == null) {
-			throw new DataNoneException("³µÅÆºÅ±íµ¥Êı¾İÎª¿Õ£¡");
+			throw new DataNoneException("æï¸¾å¢é™ç–¯ã€ƒé—æ›ŸæšŸé¹î†»è´Ÿç»ŒçŒ´ç´’");
 		}
 		else if(car.getBrand().equals("none")){
 			car.setBrand(null);
@@ -95,7 +95,7 @@ public class CarServiceImpl implements CarService{
 	public void editCar(Car car) {
 		// TODO Auto-generated method stub
 		if (car.getLicense().equals("") || car.getLicense() == null) {
-			throw new DataNoneException("³µÅÆºÅ±íµ¥Êı¾İÎª¿Õ£¡");
+			throw new DataNoneException("æï¸¾å¢é™ç–¯ã€ƒé—æ›ŸæšŸé¹î†»è´Ÿç»ŒçŒ´ç´’");
 		}
 		if(car.getBrand().equals("none")){
 			car.setBrand(null);
@@ -172,7 +172,7 @@ public class CarServiceImpl implements CarService{
 		Car car = new Car();
 		for(int i = 0; i < cars.size();i++){
 			double dis = GpsUtil.getDistance(siteLongitude,siteLatitude,cars.get(i).getLongitude(),cars.get(i).getLatitude());
-			System.out.println("id: "+ cars.get(i).getId() + "¾àÀë: "+ dis);
+			System.out.println("id: "+ cars.get(i).getId() + "ç’ºæ¿ˆî‡: "+ dis);
 			if(dis < minDistance){
 				minDistance = dis;
 				car = cars.get(i);
@@ -188,6 +188,23 @@ public class CarServiceImpl implements CarService{
 		for(Car car:cars){
 			System.out.println(car.getLicense());
 		}
+		return cars;
+	}
+	
+	@Override
+	public List<Car> querycarWithoutVideo() {
+		// TODO Auto-generated method stub
+		List<Car> carWithoutVideo=new ArrayList<Car>();
+		carWithoutVideo.addAll(carDao.querycarWithoutVideo());
+		for(Car car:carWithoutVideo){
+			System.out.println(car.getId()+car.getLicense());
+		}
+		return carWithoutVideo;
+	}
+	@Override
+	public List<Car> queryCarByCarType(int carType) {
+		List<Car> cars=new ArrayList<>();
+		cars.addAll(carDao.queryCarByCarType(carType));
 		return cars;
 	}
 }

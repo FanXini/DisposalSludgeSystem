@@ -10,7 +10,9 @@ public interface SludgeService {
 	
 	public List<SludgeFunction> queryAllSludgeFunction();
 	
-	public List<Sludge> queryAllSludge(int inOutflag);
+	public List<Sludge> queryAllSludgeByInOutFlagWithMinorWareHouseId(int inOutflag,int minorWareHouseId);
+	
+	public void addOutSludge(Sludge sludge);
 	
 	public void deleteSludge(int sludgeId);
 	
@@ -18,13 +20,13 @@ public interface SludgeService {
 	
 	public List<Sludge> querySludgeBySiteId(int siteId);
 	
-	public List<Sludge> querySludgeBySiteIdAndFlag(int siteId,int inOuTflag);
+	public List<Sludge> querySludgeBySiteIdAndInOutFlagWithMinorWareHouseId(int siteId,int inOuTflag,int minorWareHouseId);
 
 	public List<Sludge> querySludgeByDriverId(int driverId);
 	
-	public List<Sludge> querySludgeByDriverIdAndInOutFlag(int driverId,int inOutFlag);
+	public List<Sludge> querySludgeByDriverIdAndInOutFlagWithMinorWareHouseId(int driverId,int inOutFlag,int minorWareHouseId);
 	
-	public List<Sludge> querySludgeByDateAndInOutFlag(String startDate,String endDate,int inOutFlag);
+	public List<Sludge> querySludgeByDateAndInOutFlagWithMinorWareHouseId(String startDate,String endDate,int inOutFlag,int minorWareHouseId);
 	
 	public List<Sludge> queryAllSludgeOfOneFactory(int siteId);
 	

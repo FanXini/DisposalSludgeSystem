@@ -25,7 +25,7 @@
 			<result property="siteName" column="site_name" />
 		</association>
 		<association property="car" javaType="factory.entity.Car">
-			<id property="id" column="id" />
+			<id property="id" column="car_id" />
 			<result property="license" column="license" />
 		</association>
 	</resultMap>
@@ -109,6 +109,12 @@
 		WHERE
 		del_status=0 AND role_id=3 AND check_status=1
 	</select>
+	
+	<select id="queryCarAssignTranSportDriver" resultMap="UserMap">
+		SELECT user.id,user.realname,car.id as car_id
+		FROM user LEFT JOIN car on user.id=car.driver_id
+		AND car.car_type=1 and car.del_status=0;
+	</select>
 
 	<select id="queryNoCarAssignedDriver" resultType="factory.entity.User">
 
@@ -181,7 +187,7 @@
 		select *
 		from user
 		where del_status=0 AND
-		realname=#{realname} AND role_id=2 limit 1
+		realname=#{realname} AND role_id=2 AND check_status=1 limit 1
 	</select>
 
 	<select id="fuzzyQueryUser" resultMap="UserMap">
@@ -192,11 +198,11 @@
 		WHERE
 		user.del_status=0
 		<if test="queryStr!=null and queryStr!='' ">
-			and user.username like CONCAT('%',#{queryStr},'%' ) or
+			and (user.username like CONCAT('%',#{queryStr},'%' ) or
 			user.realname
 			like CONCAT('%',#{queryStr},'%') or user.telephone like
 			CONCAT('%',#{queryStr},'%' ) or user.id_card like
-			CONCAT('%',#{queryStr},'%' ) or user.email like CONCAT('%',#{queryStr},'%' )
+			CONCAT('%',#{queryStr},'%' ) or user.email like CONCAT('%',#{queryStr},'%' ))
 		</if>
 	</select>
 

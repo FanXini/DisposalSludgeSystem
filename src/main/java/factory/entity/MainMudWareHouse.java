@@ -1,13 +1,11 @@
 package factory.entity;
 
-public class MudWareHouse {
+public class MainMudWareHouse {
 	
 	private int id;
 	private String wareHouseName;
 	private double longitude;
 	private double latitude;
-	private double capcity;
-	private double remainCapcity;
 	public int getId() {
 		return id;
 	}
@@ -31,18 +29,6 @@ public class MudWareHouse {
 	}
 	public void setLatitude(double latitude) {
 		this.latitude = latitude;
-	}
-	public double getCapcity() {
-		return capcity;
-	}
-	public void setCapcity(double capcity) {
-		this.capcity = capcity;
-	}
-	public double getRemainCapcity() {
-		return remainCapcity;
-	}
-	public void setRemainCapcity(double remainCapcity) {
-		this.remainCapcity = remainCapcity;
 	}
 
 }

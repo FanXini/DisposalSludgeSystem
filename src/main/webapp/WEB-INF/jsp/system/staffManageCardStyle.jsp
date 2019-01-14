@@ -171,7 +171,7 @@ body {
 									class="form-control">
 									<option value="1" selected="selected">管理员</option>
 									<option value="2">工作人员</option> <option value="3">司机</option>
-									<option value="4">其他</option></select>
+									<option value="4">运输车司机</option></select>
 								</span>
 							</div>
 
@@ -324,7 +324,9 @@ body {
 				<li><a class="btn btn-primary roleOption" href="javascript:void(0)"
 					name='2'>工厂人员</a></li>
 				<li><a class="btn btn-primary roleOption" href="javascript:void(0)"
-					name='3'>司机</a></li>
+					name='3'>运输车司机</a></li>
+				<li><a class="btn btn-primary roleOption" href="javascript:void(0)"
+					name='4'>运输车司机</a></li>
 			</ul>
 		</div>
 
@@ -356,7 +358,7 @@ body {
 								<img alt="image" class="img-circle m-t-xs img-responsive"
 								id="img_id" src="img/worker.png"> 
 							</c:if>
-							<c:if test="${user.roleId==3 }">
+							<c:if test="${user.roleId==3|| user.roleId==4}">
 								<img alt="image" class="img-circle m-t-xs img-responsive"
 								id="img_id" src="img/driver.png"> 
 							</c:if>
@@ -373,7 +375,7 @@ body {
 									<span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>编辑
 								</button>
 							</c:if>
-							<c:if test="${user.roleId==3 }">
+							<c:if test="${user.roleId==3 || user.roleId==4}">
 								<button
 									onclick="editUser(${user.id},${user.roleId },${user.car.id })"
 									class="btn btn-white btn-sm" data-toggle="modal"
@@ -400,7 +402,7 @@ body {
 							<c:if test="${user.roleId==2 }">
 								工厂:${user.site.siteName }
 								</c:if>
-							<c:if test="${user.roleId==3 }">
+							<c:if test="${user.roleId==3 || user.roleId==4}">
 								车牌号:${user.car.license }
 								</c:if>
 						</address>
@@ -469,6 +471,8 @@ body {
 								content += '<img alt="image" class="img-circle m-t-xs img-responsive" src="img/worker.png">'
 							} else if (user.roleId == 3) { //司机
 								content += '<img alt="image" class="img-circle m-t-xs img-responsive" src="img/driver.png">'
+							}else if(user.roleId == 4){//增加运输车司机图片展示-刘见宇
+								content += '<img alt="image" class="img-circle m-t-xs img-responsive" src="img/driver.png">'
 							}
 						content += '<div class="m-t-xs font-bold">' + user.realname + '</div>'
 						content += '</div>'
@@ -488,8 +492,11 @@ body {
 								content += '<button onclick="editUser(' + user.id + ',' + user.roleId + ',' + user.car.id + ');" class="btn btn-white btn-sm" data-toggle="modal" data-target="#editModal">'
 								content += '<span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>编辑'
 								content += '</button>'
+							}else if(user.roleId == 4){//增加运输车辆的内容-刘见宇
+								content += '<button onclick="editUser(' + user.id + ',' + user.roleId + ',' + user.car.id + ');" class="btn btn-white btn-sm" data-toggle="modal" data-target="#editModal">'
+								content += '<span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>编辑'
+								content += '</button>'
 							}
-	
 						}
 						content += '<button onclick="deleteUser(' + user.id + ',\'' + user.realname + '\');" class="btn btn-white btn-sm" data-toggle="modal" data-target="#delModal">'
 						content += '<span class="glyphicon glyphicon-trash" aria-hidden="true"></span>删除'
@@ -506,6 +513,9 @@ body {
 							content += '工厂:' + (user.site.siteName==null?"":user.site.siteName )+ ''
 						}
 						if (user.roleId == 3) {
+							content += '车牌号:' + ( user.car.license==null?"": user.car.license ) + ''
+						}
+						if (user.roleId == 4) {//增加运输车辆信息-刘见宇
 							content += '车牌号:' + ( user.car.license==null?"": user.car.license ) + ''
 						}
 						content += '</address>'
@@ -553,7 +563,9 @@ body {
 								content += '<img alt="image" class="img-circle m-t-xs img-responsive" src="img/worker.png">'
 							} else if (user.roleId == 3) { //司机
 								content += '<img alt="image" class="img-circle m-t-xs img-responsive" src="img/driver.png">'
-							}
+							} else if (user.roleId == 4) { //增加运输车司机信息-刘见宇
+								content += '<img alt="image" class="img-circle m-t-xs img-responsive" src="img/driver.png">'
+							} 
 						content += '<div class="m-t-xs font-bold">' + user.realname + '</div>'
 						content += '</div>'
 						content += '</div>'
@@ -569,6 +581,11 @@ body {
 								content += '<span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>编辑'
 								content += '</button>'
 							} else if (user.roleId == 3) { //司机
+								content += '<button onclick="editUser(' + user.id + ',' + user.roleId + ',' + user.car.id + ');" class="btn btn-white btn-sm" data-toggle="modal" data-target="#editModal">'
+								content += '<span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>编辑'
+								content += '</button>'
+							}
+							else if (user.roleId == 4) { //运输车司机-刘见宇
 								content += '<button onclick="editUser(' + user.id + ',' + user.roleId + ',' + user.car.id + ');" class="btn btn-white btn-sm" data-toggle="modal" data-target="#editModal">'
 								content += '<span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>编辑'
 								content += '</button>'
@@ -590,6 +607,9 @@ body {
 							content += '工厂:' + (user.site.siteName ==null?"":user.site.siteName )+ ''
 						}
 						if (user.roleId == 3) {
+							content += '车牌号:' + (user.car.license ==null?"":user.car.license  ) + ''
+						}
+						if (user.roleId == 4) {//运输车信息-刘见宇
 							content += '车牌号:' + (user.car.license ==null?"":user.car.license  ) + ''
 						}
 						content += '</address>'
@@ -639,6 +659,8 @@ body {
 								content += '<img alt="image" class="img-circle m-t-xs img-responsive" src="img/worker.png">'
 							} else if (user.roleId == 3) { //司机
 								content += '<img alt="image" class="img-circle m-t-xs img-responsive" src="img/driver.png">'
+							}else if (user.roleId == 4) { //运输车司机-刘见宇
+								content += '<img alt="image" class="img-circle m-t-xs img-responsive" src="img/driver.png">'
 							}
 						content += '<div class="m-t-xs font-bold">' + (user.realname==null?"":user.realname) + '</div>'
 						content += '</div>'
@@ -655,6 +677,10 @@ body {
 								content += '<span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>编辑'
 								content += '</button>'
 							} else if (user.roleId == 3) { //司机
+								content += '<button onclick="editUser(' + user.id + ',' + user.roleId + ',' + user.car.id + ');" class="btn btn-white btn-sm" data-toggle="modal" data-target="#editModal">'
+								content += '<span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>编辑'
+								content += '</button>'
+							}else if (user.roleId == 4) { //运输车司机信息修改-刘见宇
 								content += '<button onclick="editUser(' + user.id + ',' + user.roleId + ',' + user.car.id + ');" class="btn btn-white btn-sm" data-toggle="modal" data-target="#editModal">'
 								content += '<span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>编辑'
 								content += '</button>'
@@ -676,6 +702,8 @@ body {
 							content += '工厂:' + user.site.siteName + ''
 						}
 						if (user.roleId == 3) {
+							content += '车牌号:' + (user.car.license ==null?"":user.car.license )+ ''
+						}if (user.roleId == 4) {
 							content += '车牌号:' + (user.car.license ==null?"":user.car.license )+ ''
 						}
 						content += '</address>'

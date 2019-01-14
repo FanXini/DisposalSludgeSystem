@@ -71,7 +71,11 @@ public class StaffController {
 	@ResponseBody
 	public List<User> queryUserByRoleId(@RequestParam("roleId") int roleId) {
 		log.info("µ÷ÓÃ queryUserByRoleId:" + roleId);
-		return userService.queryUserByRoleId(roleId);
+		List<User> users=userService.queryUserByRoleId(roleId);
+		for(User user:users) {
+			System.out.println(user.getUsername()+" "+user.getRoleId());
+		}
+		return users;
 	}
 
 	@RequestMapping("queryUserByUserName")

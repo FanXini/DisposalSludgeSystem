@@ -26,7 +26,7 @@ public class CarTest extends BaseTest{
 		}
 	}*/
 	
-	/*@Test
+	@Test
 	public void addCar (){
 		Car car=new Car();
 		car.setLicense("haha");
@@ -34,7 +34,7 @@ public class CarTest extends BaseTest{
 		car.setDriverId(-1);
 		carDao.addCar(car);
 		System.out.println(car.getId());
-	}*/
+	}
 	
 	/*@Test
 	public  void fuzzyQueryCar(){

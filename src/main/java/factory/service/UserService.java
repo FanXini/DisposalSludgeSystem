@@ -46,6 +46,8 @@ public interface UserService {
 
 	public int addUser(Map<String,String> userInfo);
 	
+	public List<User> queryCarAssignTranSportDriver();
+	
 	public List<User> queryNoCarAssignedDriver();
 	
 	public List<User> queryCarAssignedDriver();

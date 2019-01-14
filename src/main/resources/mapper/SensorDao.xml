@@ -54,7 +54,8 @@
 		<association property="sensorValue" javaType="factory.entity.SensorValue">
 			<id property="id" column="id" />
 			<result property="sensorId" column="sensor_id" />
-			<result property="value" column="value" />
+			<result property="value1" column="value1" />
+			<result property="value2" column="value2" />
 		</association>
 	</resultMap>
 
@@ -298,7 +299,7 @@
 
 	<select id="queryRealTimeValueBySensorId" resultType="java.lang.Float">
 		SELECT
-		value
+		value1
 		FROM sensor_value_realtime
 		WHERE sensor_id=#{sensorId}
 	</select>

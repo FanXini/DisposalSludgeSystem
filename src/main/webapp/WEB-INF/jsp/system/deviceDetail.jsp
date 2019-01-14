@@ -106,7 +106,7 @@ initial-scale=1.0">
 													<label class="label">类型</label>
 													<div class="h5 text-info inline">${sensor.sensorType.type}</div>
 												</div>
-												<c:if test="${sensor.sensorType.type=='超声波传感器' }">
+												<c:if test="${sensor.sensorType.type!='GPS传感器' }">
 													<button class="btn btn-sm btn-info"
 														onclick="javascript:showRealTimeData(${sensor.id },'${sensor.sensorType.type}')">实时数据</button>
 
@@ -218,7 +218,7 @@ initial-scale=1.0">
 				// Update the random dataset at 25FPS for a smoothly-animating chart
 		
 				interval=setInterval(function updateRandom() {
-					series[0].data = queryRealTimeValue(sensorId);
+					series[0].data = queryRealTimeValue(sensorId); //只更新最前的数据
 					plot.setData(series);
 					plot.draw();
 				}, 500);

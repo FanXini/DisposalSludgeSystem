@@ -58,5 +58,10 @@ public interface CarDao {
 	public List<Car> queryCarrierUnassign();
 	
 	public List<Car> queryCarBySiteId(@Param("siteId") int siteId);
+  
+	public List<Car> querycarWithoutVideo();
+	
+	public List<Car> queryCarByCarType(@Param("carType") int carType);
+
 }
 

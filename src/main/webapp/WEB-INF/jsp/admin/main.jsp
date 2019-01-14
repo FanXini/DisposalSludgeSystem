@@ -3,30 +3,31 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 <%
 	String path = request.getContextPath();
-	String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
+	String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort()
+			+ path + "/";
 %>
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
 <head>
-	<base href="<%=basePath%>">
+<base href="<%=basePath%>">
 
-	<title>污泥车处理系统</title>
+<title>污泥车处理系统</title>
 
-	<meta http-equiv="pragma" content="no-cache">
-	<meta http-equiv="cache-control" content="no-cache">
-	<meta http-equiv="expires" content="0">
-	<meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
-	<meta http-equiv="description" content="This is my page">
-	<link rel="shortcut icon" href="favicon.ico">
-	<link href="css/bootstrap.min.css?v=3.3.6" rel="stylesheet">
-	<link href="css/font-awesome.min.css?v=4.4.0" rel="stylesheet">
-	<link href="css/animate.css" rel="stylesheet">
-	<link href="css/style.css?v=4.1.0" rel="stylesheet">
+<meta http-equiv="pragma" content="no-cache">
+<meta http-equiv="cache-control" content="no-cache">
+<meta http-equiv="expires" content="0">
+<meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
+<meta http-equiv="description" content="This is my page">
+<link rel="shortcut icon" href="favicon.ico">
+<link href="css/bootstrap.min.css?v=3.3.6" rel="stylesheet">
+<link href="css/font-awesome.min.css?v=4.4.0" rel="stylesheet">
+<link href="css/animate.css" rel="stylesheet">
+<link href="css/style.css?v=4.1.0" rel="stylesheet">
 </head>
 
 <body class="fixed-sidebar full-height-layout gray-bg"
-	style="overflow:hidden">
+	style="overflow: hidden">
 	<div id="wrapper">
 		<!--左侧导航开始-->
 		<nav class="navbar-default navbar-static-side" role="navigation">
@@ -38,8 +39,8 @@
 				<li class="nav-header">
 					<div class="dropdown profile-element">
 						<a data-toggle="dropdown"> <span class="clear"> <span
-								class="block m-t-xs" style="font-size:20px;"> <i
-								class="fa fa-area-chart"></i> <strong class="font-bold">DSSys</strong>
+								class="block m-t-xs" style="font-size: 20px;"> <i
+									class="fa fa-area-chart"></i> <strong class="font-bold">DSSys</strong>
 							</span>
 						</span>
 						</a>
@@ -56,7 +57,7 @@
 				</c:if>
 
 				<!-- 司机主页 -->
-				<c:if test="${fn:contains(sessionScope.authos, '10')}" >
+				<c:if test="${fn:contains(sessionScope.authos, '10')}">
 					<li class="line dk"></li>
 					<li><a class="J_menuItem" href="main/map/workerMap"> <i
 							class="fa fa-home"></i> <span class="nav-label">主页(司机)</span>
@@ -72,7 +73,7 @@
 				</c:if>
 
 				<!-- 个人信息 -->
-				<c:if test="${fn:contains(sessionScope.authos, '2')}" >
+				<c:if test="${fn:contains(sessionScope.authos, '2')}">
 					<li class="line dk"></li>
 					<li><a href="#"><i class="fa fa-industry"></i> <span
 							class="nav-label">个人信息</span><span class="fa arrow"></span></a>
@@ -85,10 +86,10 @@
 				</c:if>
 
 				<!-- 系统管理-->
-				<c:if test="${fn:contains(sessionScope.authos, '3')}" >
+				<c:if test="${fn:contains(sessionScope.authos, '3')}">
 					<li class="line dk"></li>
 					<li><a href="mailbox.html"><i class="fa fa-spin fa-cog"></i>
-						<span class="nav-label">系统管理 </span><span class="fa arrow"></span></a>
+							<span class="nav-label">系统管理 </span><span class="fa arrow"></span></a>
 						<ul class="nav nav-second-level">
 							<li><a class="J_menuItem" href="system/jumpToStaff"><i
 									class="fa fa-user"></i>人员信息</a></li>
@@ -100,59 +101,74 @@
 									class="fa fa-gears"></i>设备管理</a></li>
 						</ul></li>
 				</c:if>
-				
+
 				<!-- 智慧泥仓 -->
-				<c:if test="${fn:contains(sessionScope.authos, '12')}" >
+				<c:if test="${fn:contains(sessionScope.authos, '12')}">
 					<li class="line dk"></li>
 					<li><a href="#"><i class="fa fa-industry"></i> <span
-						class="nav-label">智慧泥仓</span><span class="fa arrow"></span></a>
-					<ul class="nav nav-second-level">
-						<li><a class="J_menuItem" href="mudWareHouse/jumpTomudwarehouse"> <i
-							class="fa fa fa-bar-chart-o"></i> <span class="nav-label">智慧泥仓</span>
-					</a></li>
-						<li><a class="J_menuItem" href="sludge/jumpToSludge"><i
-								class="fa fa-recycle"></i>污泥出入记录</a></li>
-					</ul></li>
-					
+							class="nav-label">智慧泥仓</span><span class="fa arrow"></span></a>
+						<ul class="nav nav-second-level">
+
+							<li><a class="J_menuItem"
+								href="mudWareHouse/jumpTomudwarehouse"> <i
+									class="fa fa fa-bar-chart-o"></i> <span class="nav-label">智慧泥仓</span>
+							</a></li>
+							<li><a class="J_menuItem" href="sludge/jumpToSludge"><i
+									class="fa fa-recycle"></i>污泥出入记录</a></li>
+							<li><a class="J_menuItem" href="record/jumpToRecord"><i
+									class="fa fa-truck"></i>处理记录</a></li>
+						</ul></li>
+
 				</c:if>
 
 				<!-- 监控 -->
-				<c:if test="${fn:contains(sessionScope.authos, '4')}" >
+				<c:if test="${fn:contains(sessionScope.authos, '4')}">
 					<li class="line dk"></li>
 					<li><a class="J_menuItem" href="monitor/jumpToVideo"> <i
 							class="fa fa fa-bar-chart-o"></i> <span class="nav-label">监控</span>
 					</a></li>
 				</c:if>
+				
+				<!-- 监控 -->
+				<c:if test="${fn:contains(sessionScope.authos, '13')}">
+					<li class="line dk"></li>
+					<li><a class="J_menuItem" href="monitor/queryVideoByDriverId?driverId=${sessionScope.user.id }"> <i
+							class="fa fa fa-bar-chart-o"></i> <span class="nav-label">监控</span>
+					</a></li>
+				</c:if>
 
 				<!-- 工作记录(司机) -->
-				<c:if test="${fn:contains(sessionScope.authos, '5')}" >
+				<c:if test="${fn:contains(sessionScope.authos, '5')}">
 					<li class="line dk"></li>
-					<li><a class="J_menuItem" href="record/recordOfOneDriver"> <i
-							class="fa fa-book"></i> <span class="nav-label">工作记录(司机)</span>
+					<li><a class="J_menuItem" href="record/recordOfOneDriver">
+							<i class="fa fa-book"></i> <span class="nav-label">工作记录(司机)</span>
 					</a></li>
 				</c:if>
 				<!-- 一键报警(工厂) -->
-				<c:if test="${fn:contains(sessionScope.authos, '6')}" >
-				<li class="line dk"></li>
-					<li><a class="J_menuItem" href="record/alert?siteId=${sessionScope.user.siteId }"> <i
+				<c:if test="${fn:contains(sessionScope.authos, '6')}">
+					<li class="line dk"></li>
+					<li><a class="J_menuItem"
+						href="record/alert?siteId=${sessionScope.user.siteId }"> <i
 							class="fa fa-book"></i> <span class="nav-label">污泥处理申请</span>
 					</a></li>
-				<li class="line dk"></li>
+					<li class="line dk"></li>
 				</c:if>
 				<!-- 污泥处理记录(工厂) -->
-				<c:if test="${fn:contains(sessionScope.authos, '6')}" >				
-				<li><a href="#"><i class="fa fa-industry"></i> <span
-						class="nav-label">污泥处理记录(工厂)</span><span class="fa arrow"></span></a>
-					<ul class="nav nav-second-level">
-						<li><a class="J_menuItem" href="record/recordOfOneFactory?siteId=${sessionScope.user.siteId }"><i
-								class="fa fa-truck"></i>处理记录</a></li>
-						<li><a class="J_menuItem" href="sludge/jumpToSludgeOfOneFactory?siteId=${sessionScope.user.siteId }"><i
-								class="fa fa-recycle"></i>污泥记录</a></li>
-					</ul></li>
+				<c:if test="${fn:contains(sessionScope.authos, '6')}">
+					<li><a href="#"><i class="fa fa-industry"></i> <span
+							class="nav-label">污泥处理记录(工厂)</span><span class="fa arrow"></span></a>
+						<ul class="nav nav-second-level">
+							<li><a class="J_menuItem"
+								href="record/recordOfOneFactory?siteId=${sessionScope.user.siteId }"><i
+									class="fa fa-truck"></i>处理记录</a></li>
+							<li><a class="J_menuItem"
+								href="sludge/jumpToSludgeOfOneFactory?siteId=${sessionScope.user.siteId }"><i
+									class="fa fa-recycle"></i>污泥记录</a></li>
+						</ul></li>
 				</c:if>
 
 				<!-- 记录(所有的处理记录) -->
-				<c:if test="${fn:contains(sessionScope.authos, '7')}" >
+				<%-- <c:if test="${fn:contains(sessionScope.authos, '7')}">
 					<li class="line dk"></li>
 					<li><a href="#"><i class="fa fa-edit"></i> <span
 							class="nav-label">记录</span><span class="fa arrow"></span></a>
@@ -162,18 +178,17 @@
 							<li><a class="J_menuItem" href="sludge/jumpToSludge"><i
 									class="fa fa-recycle"></i>污泥记录</a></li>
 						</ul></li>
-				</c:if>
+				</c:if> --%>
 
 				<!-- 数据分析 -->
-				<c:if test="${fn:contains(sessionScope.authos, '8')}" >
+				<c:if test="${fn:contains(sessionScope.authos, '8')}">
 					<li class="line dk"></li>
 					<li><a class="J_menuItem" href="analyse/jumpToAnalyse"><i
-							class="fa fa-database"></i> <span class="nav-label">数据分析</span></a>
-					</li>
+							class="fa fa-database"></i> <span class="nav-label">数据分析</span></a></li>
 				</c:if>
 
 				<!-- 收费系统 -->
-				<c:if test="${fn:contains(sessionScope.authos, '9')}" >
+				<c:if test="${fn:contains(sessionScope.authos, '9')}">
 					<li class="line dk"></li>
 					<li><a class="J_menuItem" href="charge/jumpToCharge"> <i
 							class="fa fa-book"></i> <span class="nav-label">费用清单</span>
@@ -189,17 +204,18 @@
 
 			</ul>
 		</div>
-	</nav>
-	<!--左侧导航结束-->
-	<!--右侧部分开始-->
-	<div id="page-wrapper" class="gray-bg dashbard-1">
-		<div class="row border-bottom">
-			<nav class="navbar navbar-static-top" role="navigation"
-				 style="margin-bottom: 0">
-				<div class="navbar-header" style="width:90%; " >
+		</nav>
+		<!--左侧导航结束-->
+		<!--右侧部分开始-->
+		<div id="page-wrapper" class="gray-bg dashbard-1">
+			<div class="row border-bottom">
+				<nav class="navbar navbar-static-top" role="navigation"
+					style="margin-bottom: 0">
+				<div class="navbar-header" style="width: 90%;">
 					<a class="navbar-minimalize minimalize-styl-2 btn btn-info"><i
-							class="fa fa-bars"></i> </a>
-					<h1 class="text-info" style="text-align: center;font-family:Microsoft Yahei;">基于物联网的车载式污泥干化处理系统</h1>
+						class="fa fa-bars"></i> </a>
+					<h1 class="text-info"
+						style="text-align: center; font-family: Microsoft Yahei;">基于物联网的车载式污泥干化处理系统</h1>
 				</div>
 			</nav>
 		</div>
@@ -218,23 +234,22 @@
 					frameborder="0" data-id="index_v1.html" seamless></iframe>
 		</c:if>
 		</div>
+		<!--右侧部分结束-->
 	</div>
-	<!--右侧部分结束-->
-</div>
 
-<!-- 全局js -->
-<script src="js/jquery.min.js?v=2.1.4"></script>
-<script src="js/bootstrap.min.js?v=3.3.6"></script>
-<script src="js/plugins/metisMenu/jquery.metisMenu.js"></script>
-<script src="js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
-<script src="js/plugins/layer/layer.min.js"></script>
+	<!-- 全局js -->
+	<script src="js/jquery.min.js?v=2.1.4"></script>
+	<script src="js/bootstrap.min.js?v=3.3.6"></script>
+	<script src="js/plugins/metisMenu/jquery.metisMenu.js"></script>
+	<script src="js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+	<script src="js/plugins/layer/layer.min.js"></script>
 
-<!-- 自定义js -->
-<script src="js/hAdmin.js?v=4.1.0"></script>
-<script type="text/javascript" src="js/index.js"></script>
+	<!-- 自定义js -->
+	<script src="js/hAdmin.js?v=4.1.0"></script>
+	<script type="text/javascript" src="js/index.js"></script>
 
-<!-- 第三方插件 -->
-<script src="js/plugins/pace/pace.min.js"></script>
+	<!-- 第三方插件 -->
+	<script src="js/plugins/pace/pace.min.js"></script>
 
 </body>
 

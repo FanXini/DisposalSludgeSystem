@@ -260,4 +260,10 @@ public class CarController {
 			return null;
 		}
 	}
+	
+	@RequestMapping("queryCarByCarType")
+	@ResponseBody List<Car> queryCarByCarType(@RequestParam("carType") int carType){
+		log.info("queryCarByCarType type:"+carType);
+		return carService.queryCarByCarType(carType);
+	}
 }
