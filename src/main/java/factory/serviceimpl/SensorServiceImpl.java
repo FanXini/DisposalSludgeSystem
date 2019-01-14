@@ -208,7 +208,7 @@ public class SensorServiceImpl implements SensorService {
 	@Override
 	public List<Sensor> querySensorDetail(int id, int locationId) {
 		List<Sensor> sensors = new ArrayList<Sensor>();
-		if (locationId == 0) {
+		if (locationId == 0) { //如果是0,则查询的是车上的传感器
 			// 查询到传感器集合
 			String sensorIdSet = carDao.querySensorIdSetByCarId(id);
 			if (sensorIdSet == null||sensorIdSet=="") {
@@ -218,7 +218,7 @@ public class SensorServiceImpl implements SensorService {
 			log.info(sensorIdSet);
 			sensors.addAll(sensorDao.querySensorBySensorIdSet(sensorIdSet));
 
-		} else if (locationId == 1) {
+		} else if (locationId == 1) { //如果是1则查询的是工厂中的传感器
 			String sensorIdSet = siteDao.querySensorIdSetBySiteId(id);
 			log.info(sensorIdSet);
 			if (sensorIdSet == null||sensorIdSet=="") {

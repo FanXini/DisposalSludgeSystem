@@ -31,7 +31,7 @@ public class CarServiceImpl implements CarService{
 		return cars;
 	}
 	/**
-	 * 通过driverId查询Car的信息
+	 * 閫氳繃driverId鏌ヨCar鐨勪俊鎭�
 	 */
 	@Override
 	public Car queryCarByDriverId(int driverId) {
@@ -39,7 +39,7 @@ public class CarServiceImpl implements CarService{
 	}
 	
 	/**
-	 * 通过车牌号查询Car的信息
+	 * 閫氳繃杞︾墝鍙锋煡璇ar鐨勪俊鎭�
 	 */
 	@Override
 	public Car queryCarByLicense(String license) {
@@ -47,7 +47,7 @@ public class CarServiceImpl implements CarService{
 	}
 	
 	/**
-	 * 通过车辆状态查询Car的信息
+	 * 閫氳繃杞﹁締鐘舵�佹煡璇ar鐨勪俊鎭�
 	 */
 	@Override
 	public List<Car> queryCarByStatus(int status) {
@@ -57,7 +57,7 @@ public class CarServiceImpl implements CarService{
 	}
 	
 	/**
-	 * 删除记录
+	 * 鍒犻櫎璁板綍
 	 */
 	public void deleteCar(int carId) {
 		// TODO Auto-generated method stub
@@ -83,7 +83,7 @@ public class CarServiceImpl implements CarService{
 	public int addCar(Car car) {
 		// TODO Auto-generated method stub
 		if (car.getLicense().equals("") || car.getLicense() == null) {
-			throw new DataNoneException("车牌号表单数据为空！");
+			throw new DataNoneException("杞︾墝鍙疯〃鍗曟暟鎹负绌猴紒");
 		}
 		else if(car.getBrand().equals("none")){
 			car.setBrand(null);
@@ -95,7 +95,7 @@ public class CarServiceImpl implements CarService{
 	public void editCar(Car car) {
 		// TODO Auto-generated method stub
 		if (car.getLicense().equals("") || car.getLicense() == null) {
-			throw new DataNoneException("车牌号表单数据为空！");
+			throw new DataNoneException("杞︾墝鍙疯〃鍗曟暟鎹负绌猴紒");
 		}
 		if(car.getBrand().equals("none")){
 			car.setBrand(null);
@@ -172,7 +172,7 @@ public class CarServiceImpl implements CarService{
 		Car car = new Car();
 		for(int i = 0; i < cars.size();i++){
 			double dis = GpsUtil.getDistance(siteLongitude,siteLatitude,cars.get(i).getLongitude(),cars.get(i).getLatitude());
-			System.out.println("id: "+ cars.get(i).getId() + "距离: "+ dis);
+			System.out.println("id: "+ cars.get(i).getId() + "璺濈: "+ dis);
 			if(dis < minDistance){
 				minDistance = dis;
 				car = cars.get(i);
@@ -200,5 +200,11 @@ public class CarServiceImpl implements CarService{
 			System.out.println(car.getId()+car.getLicense());
 		}
 		return carWithoutVideo;
+	}
+	@Override
+	public List<Car> queryCarByCarType(int carType) {
+		List<Car> cars=new ArrayList<>();
+		cars.addAll(carDao.queryCarByCarType(carType));
+		return cars;
 	}
 }

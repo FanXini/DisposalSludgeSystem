@@ -46,5 +46,7 @@ public interface CarService {
 	public List<Car> queryCarBySiteId(int siteId);
 	
 	public List<Car> querycarWithoutVideo();
+	
+	public List<Car> queryCarByCarType(int carType);
  
 }

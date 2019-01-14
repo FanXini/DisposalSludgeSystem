@@ -98,7 +98,7 @@ public class SensorTest extends BaseTest {
 	
 	@Test
 	public void test(){
-		String haha="154,155";
+		String haha="(1,2)";
 		List<Sensor> sensors=sensorDao.querySensorBySensorIdSet(haha);
 		System.out.println(sensors.size());
 	}

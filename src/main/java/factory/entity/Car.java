@@ -14,8 +14,8 @@ public class Car {
 	private int status;
 	private User driver;
 	private Site site;
-	private Video video;
 	private int siteId;
+	//添加车辆污泥处理类型-刘见宇
 	private int carType;
 	public int getId() {
 		return id;
@@ -65,6 +65,13 @@ public class Car {
 	public void setStatus(int status) {
 		this.status = status;
 	}
+	
+	public int getCarType() {
+		return carType;
+	}
+	public void setCarType(int carType) {
+		this.carType = carType;
+	}
 	public User getDriver() {
 		return driver;
 	}
@@ -94,18 +101,6 @@ public class Car {
 	 */
 	public void setSite(Site site) {
 		this.site = site;
-	}
-	public int getCarType() {
-		return carType;
-	}
-	public void setCarType(int carType) {
-		this.carType = carType;
-	}
-	public Video getVideo() {
-		return video;
-	}
-	public void setVideo(Video video) {
-		this.video = video;
 	}
 	
 }
