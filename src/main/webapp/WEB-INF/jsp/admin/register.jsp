@@ -88,7 +88,12 @@
 				<div class="row form-group">
 					<div class="col-sm-3">
 						<label> <input type="radio" name="optionsRadios"
-							class="radios" id="driverRadios" value="3" checked>司机
+							class="radios" id="driverRadios" value="3" checked>污泥处理司机
+						</label>
+					</div>
+					<div class="col-sm-3">
+						<label> <input type="radio" name="optionsRadios"
+							class="radios" id="transportRadios" value="4" checked>污泥运输司机
 						</label>
 					</div>
 					<div class="col-sm-4">

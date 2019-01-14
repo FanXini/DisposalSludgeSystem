@@ -106,7 +106,7 @@ initial-scale=1.0">
 													<label class="label">类型</label>
 													<div class="h5 text-info inline">${sensor.sensorType.type}</div>
 												</div>
-												<c:if test="${sensor.sensorType.type!='GPS传感器' }">
+												<c:if test="${sensor.sensorType.type=='氨气传感器'||sensor.sensorType.type=='硫化氢传感器' }">
 													<button class="btn btn-sm btn-info"
 														onclick="javascript:showRealTimeData(${sensor.id },'${sensor.sensorType.type}')">实时数据</button>
 

@@ -49,7 +49,7 @@
 				</li>
 
 				<!-- 主页 -->
-				<c:if test="${fn:contains(sessionScope.authos, '1') && !fn:contains(sessionScope.authos, '10') && !fn:contains(sessionScope.authos, '14')}">
+				<c:if test="${fn:contains(sessionScope.authos, 'au1th') && !fn:contains(sessionScope.authos, 'au10th') && !fn:contains(sessionScope.authos, 'au14th')}">
 					<li class="line dk"></li>
 					<li><a class="J_menuItem" href="main/map/map"> <i
 							class="fa fa-home"></i> <span class="nav-label">主页</span>
@@ -57,7 +57,7 @@
 				</c:if>
 
 				<!-- 司机主页 -->
-				<c:if test="${fn:contains(sessionScope.authos, '10')}">
+				<c:if test="${fn:contains(sessionScope.authos, 'au10th')}">
 					<li class="line dk"></li>
 					<li><a class="J_menuItem" href="main/map/workerMap"> <i
 							class="fa fa-home"></i> <span class="nav-label">主页(司机)</span>
@@ -65,7 +65,7 @@
 				</c:if>
 				
 								<!-- 司机主页 -->
-				<c:if test="${fn:contains(sessionScope.authos, '14')}" >
+				<c:if test="${fn:contains(sessionScope.authos, 'au14th')}" >
 					<li class="line dk"></li>
 					<li><a class="J_menuItem" href="main/map/siteManagerMap"> <i
 							class="fa fa-home"></i> <span class="nav-label">主页(工厂人员)</span>
@@ -73,7 +73,7 @@
 				</c:if>
 
 				<!-- 个人信息 -->
-				<c:if test="${fn:contains(sessionScope.authos, '2')}">
+				<c:if test="${fn:contains(sessionScope.authos, 'au2th')}">
 					<li class="line dk"></li>
 					<li><a href="#"><i class="fa fa-industry"></i> <span
 							class="nav-label">个人信息</span><span class="fa arrow"></span></a>
@@ -86,7 +86,7 @@
 				</c:if>
 
 				<!-- 系统管理-->
-				<c:if test="${fn:contains(sessionScope.authos, '3')}">
+				<c:if test="${fn:contains(sessionScope.authos, 'au3th')}">
 					<li class="line dk"></li>
 					<li><a href="mailbox.html"><i class="fa fa-spin fa-cog"></i>
 							<span class="nav-label">系统管理 </span><span class="fa arrow"></span></a>
@@ -103,7 +103,7 @@
 				</c:if>
 
 				<!-- 智慧泥仓 -->
-				<c:if test="${fn:contains(sessionScope.authos, '12')}">
+				<c:if test="${fn:contains(sessionScope.authos, 'au12th')}">
 					<li class="line dk"></li>
 					<li><a href="#"><i class="fa fa-industry"></i> <span
 							class="nav-label">智慧泥仓</span><span class="fa arrow"></span></a>
@@ -122,15 +122,15 @@
 				</c:if>
 
 				<!-- 监控 -->
-				<c:if test="${fn:contains(sessionScope.authos, '4')}">
+				<c:if test="${fn:contains(sessionScope.authos, 'au4th')}">
 					<li class="line dk"></li>
 					<li><a class="J_menuItem" href="monitor/jumpToVideo"> <i
 							class="fa fa fa-bar-chart-o"></i> <span class="nav-label">监控</span>
 					</a></li>
 				</c:if>
 				
-				<!-- 监控 -->
-				<c:if test="${fn:contains(sessionScope.authos, '13')}">
+				<!-- 运输车监控 -->
+				<c:if test="${fn:contains(sessionScope.authos, 'au13th')}">
 					<li class="line dk"></li>
 					<li><a class="J_menuItem" href="monitor/queryVideoByDriverId?driverId=${sessionScope.user.id }"> <i
 							class="fa fa fa-bar-chart-o"></i> <span class="nav-label">监控</span>
@@ -138,14 +138,14 @@
 				</c:if>
 
 				<!-- 工作记录(司机) -->
-				<c:if test="${fn:contains(sessionScope.authos, '5')}">
+				<c:if test="${fn:contains(sessionScope.authos, 'au5th')}">
 					<li class="line dk"></li>
 					<li><a class="J_menuItem" href="record/recordOfOneDriver">
 							<i class="fa fa-book"></i> <span class="nav-label">工作记录(司机)</span>
 					</a></li>
 				</c:if>
 				<!-- 一键报警(工厂) -->
-				<c:if test="${fn:contains(sessionScope.authos, '6')}">
+				<c:if test="${fn:contains(sessionScope.authos, 'au6th')}">
 					<li class="line dk"></li>
 					<li><a class="J_menuItem"
 						href="record/alert?siteId=${sessionScope.user.siteId }"> <i
@@ -154,7 +154,7 @@
 					<li class="line dk"></li>
 				</c:if>
 				<!-- 污泥处理记录(工厂) -->
-				<c:if test="${fn:contains(sessionScope.authos, '6')}">
+				<c:if test="${fn:contains(sessionScope.authos, 'au6th')}">
 					<li><a href="#"><i class="fa fa-industry"></i> <span
 							class="nav-label">污泥处理记录(工厂)</span><span class="fa arrow"></span></a>
 						<ul class="nav nav-second-level">
@@ -181,14 +181,14 @@
 				</c:if> --%>
 
 				<!-- 数据分析 -->
-				<c:if test="${fn:contains(sessionScope.authos, '8')}">
+				<c:if test="${fn:contains(sessionScope.authos, 'au8th')}">
 					<li class="line dk"></li>
 					<li><a class="J_menuItem" href="analyse/jumpToAnalyse"><i
 							class="fa fa-database"></i> <span class="nav-label">数据分析</span></a></li>
 				</c:if>
 
 				<!-- 收费系统 -->
-				<c:if test="${fn:contains(sessionScope.authos, '9')}">
+				<c:if test="${fn:contains(sessionScope.authos, 'au9th')}">
 					<li class="line dk"></li>
 					<li><a class="J_menuItem" href="charge/jumpToCharge"> <i
 							class="fa fa-book"></i> <span class="nav-label">费用清单</span>
@@ -221,15 +221,15 @@
 		</div>
 		<div class="row J_mainContent" id="content-main">
 		
-		<c:if test="${fn:contains(sessionScope.authos, '1') && !fn:contains(sessionScope.authos, '10') && !fn:contains(sessionScope.authos, '14')}" >
+		<c:if test="${fn:contains(sessionScope.authos, 'au1th') && !fn:contains(sessionScope.authos, 'au10th') && !fn:contains(sessionScope.authos, 'au14th')}" >
 			<iframe id="J_iframe" width="100%" height="100%" src="main/map/map"
 					frameborder="0" data-id="index_v1.html" seamless></iframe>
 		</c:if>
-		<c:if test="${fn:contains(sessionScope.authos, '10')}">
+		<c:if test="${fn:contains(sessionScope.authos, 'au10th')}">
 			<iframe id="J_iframe" width="100%" height="100%" src="main/map/workerMap"
 					frameborder="0" data-id="index_v1.html" seamless></iframe>
 		</c:if>
-		<c:if test="${fn:contains(sessionScope.authos, '14')}">
+		<c:if test="${fn:contains(sessionScope.authos, 'au14th')}">
 			<iframe id="J_iframe" width="100%" height="100%" src="main/map/siteManagerMap"
 					frameborder="0" data-id="index_v1.html" seamless></iframe>
 		</c:if>

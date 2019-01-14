@@ -213,6 +213,9 @@ public class RecordController {
 	public List<Record> queryAllRecordOfOneFactory(@RequestBody Site site){
 		log.info("µ÷ÓÃqueryAllRecordOfOneFactory");
 		List<Record> records=recordService.queryAllRecordOfOneFactory(site.getId());
+		for(Record record:records) {
+			System.out.println(record);
+		}
 		return records;
 	}
 	

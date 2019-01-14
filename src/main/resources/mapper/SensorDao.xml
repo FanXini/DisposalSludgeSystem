@@ -288,6 +288,22 @@
 		sensor.id IN ${sensorIdSet}
 	</select>
 
+	<select id="queryHistoryDataOfSingleValueBySensorId" resultType="java.lang.Float">
+		SELECT value
+		<choose>
+			<when test="headInfo=='A'">
+				FROM ammnia_gas_record
+			</when>
+			<when test="headInfo=='S'">
+				FROM shydrothion_record
+			</when>
+		</choose>
+		Where sensor_id=#{sensorId}
+		ORDER BY
+		time ASC
+		LIMIT 0,10
+	</select>
+	
 	<select id="queryHistoryDataOfUltrasonicBySensorId" resultType="java.lang.Float">
 		SELECT value
 		FROM ultrasonic_record

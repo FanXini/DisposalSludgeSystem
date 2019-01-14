@@ -52,6 +52,8 @@ public interface SensorDao {
 	
 	public List<Float> queryHistoryDataOfUltrasonicBySensorId(@Param("sensorId") int sensorId);
 	
+	public List<Float> queryHistoryDataOfSingleValueBySensorId(@Param("sensorId") int sensorId,@Param("headInfo") char headInfo);
+	
 	public Float queryRealTimeValueBySensorId(@Param("sensorId") int sensorId);
 	
 	//´æ°±ÆøÊý¾Ý

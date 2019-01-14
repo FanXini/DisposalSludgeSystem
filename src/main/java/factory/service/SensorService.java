@@ -30,6 +30,10 @@ public interface SensorService {
 	
 	public List<Float> queryHistoryDataOfUltrasonicBySensorId(Map<String, Object> map);
 	
+	public List<Float> queryHistoryDataOfSingleValueBySensorId(Map<String, Object> map);
+	
 	public Float queryRealTimeValueBySensorId(int sensorId);
+	
+	
 
 }

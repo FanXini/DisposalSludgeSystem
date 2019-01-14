@@ -102,5 +102,13 @@ public class SensorTest extends BaseTest {
 		List<Sensor> sensors=sensorDao.querySensorBySensorIdSet(haha);
 		System.out.println(sensors.size());
 	}
+	
+	@Test
+	public void test3() {
+		List<Float> list=sensorDao.queryHistoryDataOfSingleValueBySensorId(20, 'A');
+		for(Float float1:list) {
+			System.out.println(float1);
+		}
+	}
 
 }

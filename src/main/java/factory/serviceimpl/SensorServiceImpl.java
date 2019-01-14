@@ -240,6 +240,21 @@ public class SensorServiceImpl implements SensorService {
 		}
 		return historyDatas;		
 	}
+	
+	@Override
+	public List<Float> queryHistoryDataOfSingleValueBySensorId(Map<String, Object> map) {
+		int sensorId=(int) map.get("sensorId");
+		List<Float> historyDatas=new ArrayList<Float>();
+		char headInfo = 0;
+		String sensorType=(String) map.get("sensorType");
+		if(sensorType.equals("氨气传感器")){
+			headInfo='A';
+		}else if(sensorType.equals("硫化氢传感器")) {
+			headInfo='S';
+		}
+		historyDatas.addAll(sensorDao.queryHistoryDataOfSingleValueBySensorId(sensorId, headInfo));
+		return historyDatas;		
+	}
 
 	@Override
 	public Float queryRealTimeValueBySensorId(int sensorId) {

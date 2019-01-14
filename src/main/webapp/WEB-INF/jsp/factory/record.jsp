@@ -43,7 +43,7 @@
 				<div class="ibox float-e-margins">
 					<div class="ibox-title">
 						<h1 class="text-info"
-							style="text-align: center;font-family:KaiTi; margin-top:-1%">污泥处理记录</h1>
+							style="text-align: center; font-family: KaiTi; margin-top: -1%">污泥处理记录</h1>
 
 						<!-- <div class="ibox-tools">
 							<a class="collapse-link"> <i class="fa fa-chevron-up"></i>
@@ -130,14 +130,14 @@
 									</div>
 								</div>
 								<button class="btn btn-primary" id="submit"
-									style="margin-top:3px">查询</button>
+									style="margin-top: 3px">查询</button>
 
 							</div>
 
 							<!--<input type="text" class="form-control input-sm m-b-xs" id="filter" placeholder="搜索表格...">-->
 						</div>
 
-						<div id="tableDiv" style="red"></div>
+						<div id="tableDiv" style=""></div>
 
 
 
@@ -237,24 +237,19 @@
 						else{
 							table+='<td></td>'
 						}
-						table += '<td class="project-manage">' + (record.car.driver.realname ==null?"":record.car.driver.realname) + '</td>'
+						table += '<td class="project-manage">' + record.car.driver.realname + '</td>'
 						/* table += '<td class="project-completion">' +
 							'<small>污泥处理量：'+per+' %</small>' +
 							'<div class="progress progress-mini">' +
 							'<div style="width: '+per+'%;" class="progress-bar"></div>' +
 							'</div>' +
 							'</td>' */
-						table += '<td>' + (record.allocationTime ==null?"":  record.allocationTime) + '</td>'
-						if(record.sludge.weight==0){
-							table += '<td><span class="label label-success">待输入</td>'
-						}
-						else{
-							table += '<td>'+record.sludge.weight+'吨</td>'
-						}
-						table += '<td>' + (record.disposalTime ==null?"":  record.disposalTime) + '</td>'
-						table += '<td><span class="pie">' + (record.finishTime ==null?"": record.finishTime) + '</span></td>'
-						table += '<td>' + (record.car.driver.telephone ==null?"":record.car.driver.telephone) + '</td>'
-						table += '<td>' + (record.car.license==null?"": record.car.license) + '</td>'
+						table += '<td>' + record.allocationTime + '</td>'
+						table += '<td>'+record.sludgesWeight+'吨</td>'
+						table += '<td>' + record.disposalTime + '</td>'
+						table += '<td><span class="pie">' + record.finishTime + '</span></td>'
+						table += '<td>' + record.car.driver.telephone + '</td>'
+						table += '<td>' + record.car.license + '</td>'
 						table += '</tr>'
 	
 					})
@@ -292,18 +287,19 @@
 						else{
 							table+='<td></td>'
 						}
-						table += '<td class="project-manage">' + (record.car.driver.realname ==null?"":record.car.driver.realname) + '</td>'
-						table += '<td>' + (record.allocationTime ==null?"":  record.allocationTime) + '</td>'
-						if(record.sludge.weight==0){
-							table += '<td><span class="label label-success">待输入</td>'
-						}
-						else{
-							table += '<td>'+record.sludge.weight+'吨</td>'
-						}
-						table += '<td>' + (record.disposalTime ==null?"":  record.disposalTime) + '</td>'
-						table += '<td><span class="pie">' + (record.finishTime ==null?"": record.finishTime) + '</span></td>'
-						table += '<td>' + (record.car.driver.telephone ==null?"":record.car.driver.telephone) + '</td>'
-						table += '<td>' + (record.car.license==null?"": record.car.license) + '</td>'
+						table += '<td class="project-manage">' + record.car.driver.realname + '</td>'
+						/* table += '<td class="project-completion">' +
+							'<small>污泥处理量：'+per+' %</small>' +
+							'<div class="progress progress-mini">' +
+							'<div style="width: '+per+'%;" class="progress-bar"></div>' +
+							'</div>' +
+							'</td>' */
+						table += '<td>' + record.allocationTime + '</td>'
+						table += '<td>'+record.sludgesWeight+'吨</td>'
+						table += '<td>' + record.disposalTime + '</td>'
+						table += '<td><span class="pie">' + record.finishTime + '</span></td>'
+						table += '<td>' + record.car.driver.telephone + '</td>'
+						table += '<td>' + record.car.license + '</td>'
 						table += '</tr>'
 	
 					})
@@ -330,39 +326,40 @@
 					contentType : "application/json",
 					success : function(recordList) {
 						$("#tableDiv").empty()
-					var table = table_start
-					$.each(recordList, function(i, record) {
-						table+='<tr>'
-						if(record.status==0){
-							table += '<td class="project-status"><span class="label label-inverse">已完成</td>'
-						}
-						else if(record.status==1){
-							table += '<td class="project-status"><span class="label label-danger">处理中</td>'
-						}
-						else if(record.status==2){
-							table += '<td class="project-status"><span class="label label-primary">待处理</td>'
-						}
-						else{
-							table+='<td></td>'
-						}
-						table += '<td class="project-manage">' + (record.car.driver.realname ==null?"":record.car.driver.realname) + '</td>'
-						table += '<td>' + (record.allocationTime ==null?"":  record.allocationTime) + '</td>'
-						if(record.sludge.weight==0){
-							table += '<td><span class="label label-success">待输入</td>'
-						}
-						else{
-							table += '<td>'+record.sludge.weight+'吨</td>'
-						}
-						table += '<td>' + record.disposalTime + '</td>'
-						table += '<td><span class="pie">' + (record.finishTime ==null?"": record.finishTime) + '</span></td>'
-						table += '<td>' + (record.car.driver.telephone ==null?"":record.car.driver.telephone) + '</td>'
-						table += '<td>' + (record.car.license==null?"": record.car.license) + '</td>'
-						table += '</tr>'
-	
-					})
-					table += table_end
-					$('#tableDiv').append(table)
-					$('.footable').footable();
+						var table = table_start
+						$.each(recordList, function(i, record) {
+							table+='<tr>'
+							if(record.status==0){
+								table += '<td class="project-status"><span class="label label-inverse">已完成</td>'
+							}
+							else if(record.status==1){
+								table += '<td class="project-status"><span class="label label-danger">处理中</td>'
+							}
+							else if(record.status==2){
+								table += '<td class="project-status"><span class="label label-primary">待处理</td>'
+							}
+							else{
+								table+='<td></td>'
+							}
+							table += '<td class="project-manage">' + record.car.driver.realname + '</td>'
+							/* table += '<td class="project-completion">' +
+								'<small>污泥处理量：'+per+' %</small>' +
+								'<div class="progress progress-mini">' +
+								'<div style="width: '+per+'%;" class="progress-bar"></div>' +
+								'</div>' +
+								'</td>' */
+							table += '<td>' + record.allocationTime + '</td>'
+							table += '<td>'+record.sludgesWeight+'吨</td>'
+							table += '<td>' + record.disposalTime + '</td>'
+							table += '<td><span class="pie">' + record.finishTime + '</span></td>'
+							table += '<td>' + record.car.driver.telephone + '</td>'
+							table += '<td>' + record.car.license + '</td>'
+							table += '</tr>'
+		
+						})
+						table += table_end
+						$('#tableDiv').append(table)
+						$('.footable').footable();
 	
 					}
 				})
@@ -383,39 +380,40 @@
 					contentType : "application/json",
 					success : function(recordList) {
 						$("#tableDiv").empty()
-					var table = table_start
-					$.each(recordList, function(i, record) {
-						table+='<tr>'
-						if(record.status==0){
-							table += '<td class="project-status"><span class="label label-inverse">已完成</td>'
-						}
-						else if(record.status==1){
-							table += '<td class="project-status"><span class="label label-danger">处理中</td>'
-						}
-						else if(record.status==2){
-							table += '<td class="project-status"><span class="label label-primary">待处理</td>'
-						}
-						else{
-							table+='<td></td>'
-						}
-						table += '<td class="project-manage">' + (record.car.driver.realname ==null?"":record.car.driver.realname) + '</td>'
-						table += '<td>' + (record.allocationTime ==null?"":  record.allocationTime) + '</td>'
-						if(record.sludge.weight==0){
-							table += '<td><span class="label label-success">待输入</td>'
-						}
-						else{
-							table += '<td>'+record.sludge.weight+'吨</td>'
-						}
-						table += '<td>' + (record.disposalTime ==null?"":  record.disposalTime) + '</td>'
-						table += '<td><span class="pie">' + (record.finishTime ==null?"": record.finishTime) + '</span></td>'
-						table += '<td>' + (record.car.driver.telephone ==null?"":record.car.driver.telephone) + '</td>'
-						table += '<td>' + (record.car.license==null?"": record.car.license) + '</td>'
-						table += '</tr>'
-	
-					})
-					table += table_end
-					$('#tableDiv').append(table)
-					$('.footable').footable();
+						var table = table_start
+						$.each(recordList, function(i, record) {
+							table+='<tr>'
+							if(record.status==0){
+								table += '<td class="project-status"><span class="label label-inverse">已完成</td>'
+							}
+							else if(record.status==1){
+								table += '<td class="project-status"><span class="label label-danger">处理中</td>'
+							}
+							else if(record.status==2){
+								table += '<td class="project-status"><span class="label label-primary">待处理</td>'
+							}
+							else{
+								table+='<td></td>'
+							}
+							table += '<td class="project-manage">' + record.car.driver.realname + '</td>'
+							/* table += '<td class="project-completion">' +
+								'<small>污泥处理量：'+per+' %</small>' +
+								'<div class="progress progress-mini">' +
+								'<div style="width: '+per+'%;" class="progress-bar"></div>' +
+								'</div>' +
+								'</td>' */
+							table += '<td>' + record.allocationTime + '</td>'
+							table += '<td>'+record.sludgesWeight+'吨</td>'
+							table += '<td>' + record.disposalTime + '</td>'
+							table += '<td><span class="pie">' + record.finishTime + '</span></td>'
+							table += '<td>' + record.car.driver.telephone + '</td>'
+							table += '<td>' + record.car.license + '</td>'
+							table += '</tr>'
+		
+						})
+						table += table_end
+						$('#tableDiv').append(table)
+						$('.footable').footable();
 	
 					}
 				})

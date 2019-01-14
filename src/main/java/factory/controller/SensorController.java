@@ -144,7 +144,7 @@ public class SensorController {
 	@ResponseBody
 	public List<Float> queryHistoryData(@RequestBody Map<String, Object> map){
 		log.info("queryHistoryData");
-		return sensorService.queryHistoryDataOfUltrasonicBySensorId(map);
+		return sensorService.queryHistoryDataOfSingleValueBySensorId(map);
 	}
 	
 	@RequestMapping("queryRealTimeValue")

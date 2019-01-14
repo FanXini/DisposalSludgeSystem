@@ -107,7 +107,12 @@ public class UserController {
 			User loginUser=service.loginValidation(user);
 			model.addAttribute("user",loginUser);
 			List<Integer> roleAutho = role_authorityService.queryAllRole_authority(loginUser.getRoleId());
-			session.setAttribute("authos", roleAutho);
+			String authString="";
+			for(Integer auth:roleAutho) {
+				authString+="au"+auth.toString()+"th#";
+			}
+			System.out.println(authString);
+			session.setAttribute("authos", authString);
 			return Result.SUCCESS;
 		} catch (RefuseLoginException e) {
 			// TODO: handle exception

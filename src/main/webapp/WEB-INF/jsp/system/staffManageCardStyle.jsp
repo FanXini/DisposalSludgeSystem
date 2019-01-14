@@ -324,7 +324,7 @@ body {
 				<li><a class="btn btn-primary roleOption" href="javascript:void(0)"
 					name='2'>工厂人员</a></li>
 				<li><a class="btn btn-primary roleOption" href="javascript:void(0)"
-					name='3'>运输车司机</a></li>
+					name='3'>处理车司机</a></li>
 				<li><a class="btn btn-primary roleOption" href="javascript:void(0)"
 					name='4'>运输车司机</a></li>
 			</ul>
@@ -358,7 +358,7 @@ body {
 								<img alt="image" class="img-circle m-t-xs img-responsive"
 								id="img_id" src="img/worker.png"> 
 							</c:if>
-							<c:if test="${user.roleId==3|| user.roleId==4}">
+							<c:if test="${user.roleId==3 || user.roleId==4}">
 								<img alt="image" class="img-circle m-t-xs img-responsive"
 								id="img_id" src="img/driver.png"> 
 							</c:if>
@@ -469,9 +469,7 @@ body {
 							content += '<img alt="image" class="img-circle m-t-xs img-responsive" src="img/manager.png">'
 						}else if (user.roleId == 2) { //工厂人员
 								content += '<img alt="image" class="img-circle m-t-xs img-responsive" src="img/worker.png">'
-							} else if (user.roleId == 3) { //司机
-								content += '<img alt="image" class="img-circle m-t-xs img-responsive" src="img/driver.png">'
-							}else if(user.roleId == 4){//增加运输车司机图片展示-刘见宇
+							} else if (user.roleId == 3 || user.roleId==4) { //司机
 								content += '<img alt="image" class="img-circle m-t-xs img-responsive" src="img/driver.png">'
 							}
 						content += '<div class="m-t-xs font-bold">' + user.realname + '</div>'
@@ -483,21 +481,18 @@ body {
 							content += '<button onclick="checkUser(' + user.id + ');" class="btn btn-white btn-sm" data-toggle="modal" data-target="#checkModal">'
 							content += '<span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>审核'
 							content += '</button>'
-						} else {
+						} 
+						if(user.checkStatus == 0) {
 							if (user.roleId == 2) { //工厂人员
 								content += '<button onclick="editUser(' + user.id + ',' + user.roleId + ',' + user.siteId + ');" class="btn btn-white btn-sm" data-toggle="modal" data-target="#editModal">'
 								content += '<span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>编辑'
 								content += '</button>'
-							} else if (user.roleId == 3) { //司机
-								content += '<button onclick="editUser(' + user.id + ',' + user.roleId + ',' + user.car.id + ');" class="btn btn-white btn-sm" data-toggle="modal" data-target="#editModal">'
-								content += '<span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>编辑'
-								content += '</button>'
-							}else if(user.roleId == 4){//增加运输车辆的内容-刘见宇
+							} else if (user.roleId == 3 || user.roleId==4) { //司机
 								content += '<button onclick="editUser(' + user.id + ',' + user.roleId + ',' + user.car.id + ');" class="btn btn-white btn-sm" data-toggle="modal" data-target="#editModal">'
 								content += '<span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>编辑'
 								content += '</button>'
 							}
-						}
+						} 
 						content += '<button onclick="deleteUser(' + user.id + ',\'' + user.realname + '\');" class="btn btn-white btn-sm" data-toggle="modal" data-target="#delModal">'
 						content += '<span class="glyphicon glyphicon-trash" aria-hidden="true"></span>删除'
 						content += '</button>'
@@ -505,18 +500,26 @@ body {
 						/* content += '<h3><strong>姓名:' + user.realname + '</strong></h3>' */
 						content += '<address>'
 						content += '<strong>角色:' + (user.role.role_name==null?"":user.role.role_name ) + '</strong><br>'
-						if (user.roleId == 1) {
-							content += '性别:' + (user.sex==null?"":user.sex ) + '<br>'
-						}
 						content += 'E-mail:' + (user.email==null?"":user.email ) + '<br> 身份证:' + (user.idCard==null?"":user.idCard ) + '<br> <abbr title="Phone">Tel:</abbr>' + user.telephone + '<br>'
+						/* if (user.roleId == 1) {
+							content += '性别:' + (user.sex==null?"":user.sex ) + '<br>'
+						} */
 						if (user.roleId == 2) {
-							content += '工厂:' + (user.site.siteName==null?"":user.site.siteName )+ ''
+							if(user.site==null){
+								content += '工厂:'
+							}
+							else {
+								content += '工厂:'+user.site.siteName;
+							}
 						}
-						if (user.roleId == 3) {
-							content += '车牌号:' + ( user.car.license==null?"": user.car.license ) + ''
-						}
-						if (user.roleId == 4) {//增加运输车辆信息-刘见宇
-							content += '车牌号:' + ( user.car.license==null?"": user.car.license ) + ''
+						else if (user.roleId == 3 || user.roleId==4) {
+							if(user.car==null){
+								content += '车牌:'
+							}
+							else {
+								content += '车牌:'+user.car.license
+							}
+							
 						}
 						content += '</address>'
 						if (user.checkStatus == 0) {
@@ -558,59 +561,60 @@ body {
 						content += '<div class="col-sm-4">'
 						content += '<div class="text-center">'
 						if (user.roleId == 1) {//管理员
-								content += '<img alt="image" class="img-circle m-t-xs img-responsive" src="img/manager.png">'
-							}else if (user.roleId == 2) { //工厂人员
+							content += '<img alt="image" class="img-circle m-t-xs img-responsive" src="img/manager.png">'
+						}else if (user.roleId == 2) { //工厂人员
 								content += '<img alt="image" class="img-circle m-t-xs img-responsive" src="img/worker.png">'
-							} else if (user.roleId == 3) { //司机
+							} else if (user.roleId == 3 || user.roleId==4) { //司机
 								content += '<img alt="image" class="img-circle m-t-xs img-responsive" src="img/driver.png">'
-							} else if (user.roleId == 4) { //增加运输车司机信息-刘见宇
-								content += '<img alt="image" class="img-circle m-t-xs img-responsive" src="img/driver.png">'
-							} 
+							}
 						content += '<div class="m-t-xs font-bold">' + user.realname + '</div>'
 						content += '</div>'
 						content += '</div>'
 						content += '<div class="col-sm-8">'
 						content += '<div class="pull-right">'
-						if (user.checkStatus != 1) {
+						if (user.checkStatus != 1) {//管理员
 							content += '<button onclick="checkUser(' + user.id + ');" class="btn btn-white btn-sm" data-toggle="modal" data-target="#checkModal">'
 							content += '<span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>审核'
 							content += '</button>'
-						} else {
+						} 
+						if(user.checkStatus == 0) {
 							if (user.roleId == 2) { //工厂人员
 								content += '<button onclick="editUser(' + user.id + ',' + user.roleId + ',' + user.siteId + ');" class="btn btn-white btn-sm" data-toggle="modal" data-target="#editModal">'
 								content += '<span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>编辑'
 								content += '</button>'
-							} else if (user.roleId == 3) { //司机
+							} else if (user.roleId == 3 || user.roleId==4) { //司机
 								content += '<button onclick="editUser(' + user.id + ',' + user.roleId + ',' + user.car.id + ');" class="btn btn-white btn-sm" data-toggle="modal" data-target="#editModal">'
 								content += '<span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>编辑'
 								content += '</button>'
 							}
-							else if (user.roleId == 4) { //运输车司机-刘见宇
-								content += '<button onclick="editUser(' + user.id + ',' + user.roleId + ',' + user.car.id + ');" class="btn btn-white btn-sm" data-toggle="modal" data-target="#editModal">'
-								content += '<span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>编辑'
-								content += '</button>'
-							}
-	
-						}
+						} 
 						content += '<button onclick="deleteUser(' + user.id + ',\'' + user.realname + '\');" class="btn btn-white btn-sm" data-toggle="modal" data-target="#delModal">'
 						content += '<span class="glyphicon glyphicon-trash" aria-hidden="true"></span>删除'
 						content += '</button>'
 						content += '</div>'
 						/* content += '<h3><strong>姓名:' + user.realname + '</strong></h3>' */
 						content += '<address>'
-						content += '<strong>角色:' + user.role.role_name + '</strong><br>'
-						if (user.roleId == 1) {
-							content += '性别:' + (user.sex==null?"":user.sex) + '<br>'
-						}
-						content += 'E-mail:' + (user.email ==null?"":user.email )+ '<br> 身份证:' + (user.telephone ==null?"":user.telephone ) + '<br> <abbr title="Phone">Tel:</abbr>' + (user.idCard ==null?"":user.idCard ) + '<br>'
+						content += '<strong>角色:' + (user.role.role_name==null?"":user.role.role_name ) + '</strong><br>'
+						content += 'E-mail:' + (user.email==null?"":user.email ) + '<br> 身份证:' + (user.idCard==null?"":user.idCard ) + '<br> <abbr title="Phone">Tel:</abbr>' + user.telephone + '<br>'
+						/* if (user.roleId == 1) {
+							content += '性别:' + (user.sex==null?"":user.sex ) + '<br>'
+						} */
 						if (user.roleId == 2) {
-							content += '工厂:' + (user.site.siteName ==null?"":user.site.siteName )+ ''
+							if(user.site==null){
+								content += '工厂:'
+							}
+							else {
+								content += '工厂:'+user.site.siteName;
+							}
 						}
-						if (user.roleId == 3) {
-							content += '车牌号:' + (user.car.license ==null?"":user.car.license  ) + ''
-						}
-						if (user.roleId == 4) {//运输车信息-刘见宇
-							content += '车牌号:' + (user.car.license ==null?"":user.car.license  ) + ''
+						else if (user.roleId == 3 || user.roleId==4) {
+							if(user.car==null){
+								content += '车牌:'
+							}
+							else {
+								content += '车牌:'+user.car.license
+							}
+							
 						}
 						content += '</address>'
 						if (user.checkStatus == 0) {
@@ -654,57 +658,60 @@ body {
 						content += '<div class="col-sm-4">'
 						content += '<div class="text-center">'
 						if (user.roleId == 1) {//管理员
-								content += '<img alt="image" class="img-circle m-t-xs img-responsive" src="img/manager.png">'
-							}else if (user.roleId == 2) { //工厂人员
+							content += '<img alt="image" class="img-circle m-t-xs img-responsive" src="img/manager.png">'
+						}else if (user.roleId == 2) { //工厂人员
 								content += '<img alt="image" class="img-circle m-t-xs img-responsive" src="img/worker.png">'
-							} else if (user.roleId == 3) { //司机
-								content += '<img alt="image" class="img-circle m-t-xs img-responsive" src="img/driver.png">'
-							}else if (user.roleId == 4) { //运输车司机-刘见宇
+							} else if (user.roleId == 3 || user.roleId==4) { //司机
 								content += '<img alt="image" class="img-circle m-t-xs img-responsive" src="img/driver.png">'
 							}
-						content += '<div class="m-t-xs font-bold">' + (user.realname==null?"":user.realname) + '</div>'
+						content += '<div class="m-t-xs font-bold">' + user.realname + '</div>'
 						content += '</div>'
 						content += '</div>'
 						content += '<div class="col-sm-8">'
 						content += '<div class="pull-right">'
-						if (user.checkStatus != 1) {
+						if (user.checkStatus != 1) {//管理员
 							content += '<button onclick="checkUser(' + user.id + ');" class="btn btn-white btn-sm" data-toggle="modal" data-target="#checkModal">'
 							content += '<span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>审核'
 							content += '</button>'
-						} else {
+						} 
+						if(user.checkStatus == 0) {
 							if (user.roleId == 2) { //工厂人员
 								content += '<button onclick="editUser(' + user.id + ',' + user.roleId + ',' + user.siteId + ');" class="btn btn-white btn-sm" data-toggle="modal" data-target="#editModal">'
 								content += '<span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>编辑'
 								content += '</button>'
-							} else if (user.roleId == 3) { //司机
-								content += '<button onclick="editUser(' + user.id + ',' + user.roleId + ',' + user.car.id + ');" class="btn btn-white btn-sm" data-toggle="modal" data-target="#editModal">'
-								content += '<span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>编辑'
-								content += '</button>'
-							}else if (user.roleId == 4) { //运输车司机信息修改-刘见宇
+							} else if (user.roleId == 3 || user.roleId==4) { //司机
 								content += '<button onclick="editUser(' + user.id + ',' + user.roleId + ',' + user.car.id + ');" class="btn btn-white btn-sm" data-toggle="modal" data-target="#editModal">'
 								content += '<span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>编辑'
 								content += '</button>'
 							}
-	
-						}
+						} 
 						content += '<button onclick="deleteUser(' + user.id + ',\'' + user.realname + '\');" class="btn btn-white btn-sm" data-toggle="modal" data-target="#delModal">'
 						content += '<span class="glyphicon glyphicon-trash" aria-hidden="true"></span>删除'
 						content += '</button>'
 						content += '</div>'
 						/* content += '<h3><strong>姓名:' + user.realname + '</strong></h3>' */
 						content += '<address>'
-						content += '<strong>角色:' + user.role.role_name + '</strong><br>'
-						if (user.roleId == 1) {
-							content += '性别:' + (user.sex ==null?"":user.sex) + '<br>'
-						}
-						content += 'E-mail:' + (user.email ==null?"":user.email) + '<br> 身份证:' + (user.idCard ==null?"":user.idCard) + '<br> <abbr title="Phone">Tel:</abbr>' + (user.telephone ==null?"":user.telephone)  + '<br>'
+						content += '<strong>角色:' + (user.role.role_name==null?"":user.role.role_name ) + '</strong><br>'
+						content += 'E-mail:' + (user.email==null?"":user.email ) + '<br> 身份证:' + (user.idCard==null?"":user.idCard ) + '<br> <abbr title="Phone">Tel:</abbr>' + user.telephone + '<br>'
+						/* if (user.roleId == 1) {
+							content += '性别:' + (user.sex==null?"":user.sex ) + '<br>'
+						} */
 						if (user.roleId == 2) {
-							content += '工厂:' + user.site.siteName + ''
+							if(user.site==null){
+								content += '工厂:'
+							}
+							else {
+								content += '工厂:'+user.site.siteName;
+							}
 						}
-						if (user.roleId == 3) {
-							content += '车牌号:' + (user.car.license ==null?"":user.car.license )+ ''
-						}if (user.roleId == 4) {
-							content += '车牌号:' + (user.car.license ==null?"":user.car.license )+ ''
+						else if (user.roleId == 3 || user.roleId==4) {
+							if(user.car==null){
+								content += '车牌:'
+							}
+							else {
+								content += '车牌:'+user.car.license
+							}
+							
 						}
 						content += '</address>'
 						if (user.checkStatus == 0) {
