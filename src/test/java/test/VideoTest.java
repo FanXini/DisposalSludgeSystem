@@ -1,64 +1,67 @@
 package test;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 
+import java.util.List;
+
+import org.apache.ibatis.annotations.Param;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import factory.dao.CarDao;
 import factory.dao.VideoDao;
 import factory.entity.Car;
 import factory.entity.Video;
 
 public class VideoTest extends BaseTest {
 	@Autowired
-	private VideoDao videoDao;
-	@Autowired
-	private CarDao carDao;
-	
-	@Test
-	public void test2(){
-		System.out.println(videoDao.queryVideoByDriverId(3).getVideo_HLSid());
-	}
+	private  VideoDao videoDao;
+	private List<Video> videoList;
+	private List<Car> carList;
+	/**删除监控**/
 /*	@Test
-	public void queryAllvideo(){
-		List<Video> videos=videoDao.queryAllVideo();
-		for(int i=0;i<videos.size();i++)
-		{
-			System.out.println("*车牌号："+videos.get(i).getCar().getLicense()+"  *车辆编号："+videos.get(i).getCar_id()+"  *摄像头编号："+videos.get(i).getSerial_number()+"  *高清播放地址："+videos.get(i).getVideo_HLSid()
-					+"  *标清播放地址："+videos.get(i).getVideo_RTMPid());
-		}
-	}*/
-	@Test
-	public void carWithoutVideo(){
-		
-		List<Car> carWithoutVideo=carDao.querycarWithoutVideo();
-		for(int i=0;i<carWithoutVideo.size();i++)
-		{
-			System.out.println("*车辆编号："+carWithoutVideo.get(i).getId()+"车牌号："+carWithoutVideo.get(i).getLicense());
-		}
-	}
-	/*@Test
-	public void queryVideoCount(){
-		int n;
-		n=videoDao.queryVideoCount();
-		System.out.println("共有"+n+"条记录");
-	
-	}*/
-	/*@Test
-	
-	public void addVideo (){
+	public void addVideo(){
 		Video video=new Video();
-		video.setCar_id(25);
-		video.setLicense("湘L45142");
-		video.setSerial_number("c0002");
-		video.setVideo_HLSid("http://hls.open.ys7.com/openlive/f01018a141094b7fa138b9d0b856507b.m3u8");
-		video.setVideo_RTMPid("rtmp://rtmp.open.ys7.com/openlive/f01018a141094b7fa138b9d0b856507b");
-		video.setDel_status(0);
+		video.setId(31);
+		video.setCarId(26);
+		video.setLicense("豫66666");
+		video.setSerialNumber("C0018");
+		video.setVideoRTMPid("rtmp://rtmp.open.ys7.com/openlive/c5fca4a038634347a5b856ad89ebc35b.hd");
+		video.setVideoHLSid("http://hls.open.ys7.com/openlive/c5fca4a038634347a5b856ad89ebc35b.hd.m3u8");
+		video.setDelStatus(0);
 		videoDao.addVideo(video);
-		System.out.println(video.getId());
+		System.out.println("新增成功");
+	}*/
+	/*@Test
+	public void deleteVideo( ){		
+		videoDao.deleteVideo(15);
+		System.out.println("删除成功");
+	}
+	*/
+	/*@Test
+	public void editVideo(){
+		Video video=new Video();
+		video.setId(23);
+		video.setSerialNumber("C0012");
+		video.setLicense("湘462342");
+		videoDao.editVideo(video);		
 	}*/
 	
+	/*@Test
+	public void queryVideoByserial_number(){
+		Video video=videoDao.queryVideoByserial_number("C0012");
+		System.out.println(video.getSerialNumber()+" "+video.getCarId()+" "+video.getLicense());
+	}*/
+	
+	/*@Test
+	public void test(){
+		carList=videoDao.queryCarWhichNotVideo();
+		System.out.println(carList.size());
+		for(Car car:carList){
+			System.out.println(car.getLicense());
+		}
+	}*/
+	/*@Test
+	public void queryVideoByCarLicense(){
+		Video video=videoDao.queryVideoByCarLicense("C0012");
+		System.out.println(video.getSerialNumber()+" "+video.getCarId()+" "+video.getLicense());
+	}*/
 }

@@ -1,12 +1,12 @@
 package factory.entity;
 public class Video {
 	private int id;
-	private int car_id;
+	private int carId;
 	private String license;
-	private String serial_number;
-	private String video_RTMPid;
-	private String video_HLSid;
-	private int del_status;
+	private String serialNumber;
+	private String videoRTMPid;
+	private String videoHLSid;
+	private int delStatus;
 	private Car car;
 	public int getId() {
 		return id;
@@ -14,11 +14,11 @@ public class Video {
 	public void setId(int id) {
 		this.id = id;
 	}
-	public int getCar_id() {
-		return car_id;
+	public int getCarId() {
+		return carId;
 	}
-	public void setCar_id(int car_id) {
-		this.car_id = car_id;
+	public void setCarId(int carId) {
+		this.carId = carId;
 	}
 	public String getLicense() {
 		return license;
@@ -26,34 +26,35 @@ public class Video {
 	public void setLicense(String license) {
 		this.license = license;
 	}
-	public String getSerial_number() {
-		return serial_number;
+	public String getSerialNumber() {
+		return serialNumber;
 	}
-	public void setSerial_number(String serial_number) {
-		this.serial_number = serial_number;
+	public void setSerialNumber(String serialNumber) {
+		this.serialNumber = serialNumber;
 	}
-	public String getVideo_RTMPid() {
-		return video_RTMPid;
+	public String getVideoRTMPid() {
+		return videoRTMPid;
 	}
-	public void setVideo_RTMPid(String video_RTMPid) {
-		this.video_RTMPid = video_RTMPid;
+	public void setVideoRTMPid(String videoRTMPid) {
+		this.videoRTMPid = videoRTMPid;
 	}
-	public String getVideo_HLSid() {
-		return video_HLSid;
+	public String getVideoHLSid() {
+		return videoHLSid;
 	}
-	public void setVideo_HLSid(String video_HLSid) {
-		this.video_HLSid = video_HLSid;
+	public void setVideoHLSid(String videoHLSid) {
+		this.videoHLSid = videoHLSid;
 	}
-	public int getDel_status() {
-		return del_status;
+	public int getDelStatus() {
+		return delStatus;
 	}
-	public void setDel_status(int del_status) {
-		this.del_status = del_status;
+	public void setDelStatus(int delStatus) {
+		this.delStatus = delStatus;
 	}
 	public Car getCar() {
 		return car;
 	}
 	public void setCar(Car car) {
 		this.car = car;
-	}	
+	}
+	
 }

@@ -6,9 +6,10 @@ import java.util.List;
 import java.util.Map;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.junit.runners.Parameterized.Parameter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,63 +21,111 @@ import factory.entity.Car;
 import factory.entity.Site;
 import factory.entity.User;
 import factory.entity.Video;
-import factory.service.CarService;
+import factory.enums.Result;
+import factory.exception.DataNoneException;
 import factory.service.VideoService;
+import net.sf.json.JSONArray;
 @Controller
 @RequestMapping("monitor")
 public class VideoController {
 	@Autowired
 	private VideoService videoService;
-	@Autowired
-	private CarService carService;
+	
 	private static Log log=LogFactory.getLog(VideoController.class);	
 	@RequestMapping("/jumpToVideo")
 	public ModelAndView queryAllVideo(ModelAndView mv) {
 		log.info("调用查询视频的方法");
 		List<Video> videos = videoService.queryAllVideo();
+		List<Car> cars = videoService.queryCarWhichNotVideo();
+		List<Video> videosWithoutCar=videoService.queryVideoWhichNotCar();
 		mv.addObject("videoList", videos);// 设置需要返回的值
+		mv.addObject("carList", cars);
+		mv.addObject("videoWithoutCarList", videos);
+		JSONArray carJson = JSONArray.fromObject(cars);
 		mv.setViewName("monitor/monitorCard"); // 跳转到指定的页面
 		return mv; // 返回到staffManage.jsp页面
 	}
+	
 	@RequestMapping("queryAllVideo")
 	@ResponseBody
 	public List<Video> queryAllVideo() {
 		log.info("调用queryAllVideo");
 		List<Video> video=videoService.queryAllVideo();
 		return video;
-	}	
+	}
+	
 	@RequestMapping("addVideo")
 	@ResponseBody
 	public Video addVideo(@RequestBody Video videoInfo) {
+		/*log.info("增加监控");
+			log.info("车牌号："+videoInfo.getCarId()+" 摄像头编号："+videoInfo.getSerialNumber()+" 高清地址："+videoInfo.getVideoHLSid()+" 标清地址："+videoInfo.getVideoRTMPid());*/
 		log.info("增加监控");
-			log.info("车辆编号："+videoInfo.getCar_id()+"车牌号："+videoInfo.getLicense()+" 摄像头编号："+videoInfo.getSerial_number()+" 高清地址："+videoInfo.getVideo_HLSid()+" 标清地址："+videoInfo.getVideo_RTMPid());
-			videoService.addVideo(videoInfo);
+		log.info("车牌号："+videoInfo.getLicense()+" 摄像头编号："+videoInfo.getSerialNumber()+" 高清地址："+videoInfo.getVideoHLSid()+" 标清地址："+videoInfo.getVideoRTMPid());	
+		videoService.addVideo(videoInfo);
 		return videoInfo;  
-	}	
-	@RequestMapping("editVideo")
-	@ResponseBody
-	public Map<String, String> editVideo(@RequestBody Map<String, String> videoInfo) {
-		log.info("编辑监控");
-		Map<String, String> result = new HashMap<String, String>();
-		try {
-			log.info(videoInfo.toString());
-			videoService.editVideo(videoInfo);
-			result.put("result", "success");
-		} catch (Exception e) {
-			// TODO: handle exception
-			e.printStackTrace();
-			result.put("result", "failure");
-		}
-		return result;
 	}
 	
-	@RequestMapping("querycarWithoutVideo")
+	@RequestMapping("deletevideo")
 	@ResponseBody
-	public List<Car> querycarWithoutVideo() {
-		log.info("调用querycarWithoutVideo");
-		List<Car> querycarWithoutVideo=carService.querycarWithoutVideo();
-		return querycarWithoutVideo;
+	public Result deleteVideo(@RequestParam("videoId") int videoId) {
+		log.info("调用删除video");
+		/*Map<String, Result> result = new HashMap<String, Result>();*/
+		try {
+			videoService.deleteVideo(videoId);
+			return Result.SUCCESS;
+		} catch (Exception e) {
+			// TODO: handle exception
+			return Result.ERROR;
+		}
 	}
+	
+	@RequestMapping("editVideo")
+	@ResponseBody
+	public Result editVideo(@RequestBody Video video) {
+		log.info("调用修改监控信息的方法");
+		log.info(video.getId() + " " + video.getLicense() + " " + video.getSerialNumber());
+		try {
+			videoService.editVideo(video);
+			return Result.SUCCESS;
+		} catch (DuplicateKeyException e) {
+			// TODO: handle exception
+			return Result.DUPLICATE;
+		} catch (DataNoneException e) {
+			return Result.INPUT;
+		} catch (Exception e) {
+			// TODO: handle exception
+			return Result.ERROR;
+		}
+	}
+	
+	@RequestMapping("queryVideoByserial_number")
+	@ResponseBody
+	public Video queryVideoByserial_number(@RequestParam("serialNumber") String serialNumber, Model model) {
+		log.info("调用queryVideoByserial_number");
+		Video video = videoService.queryVideoByserial_number(serialNumber);
+		return video;
+	}
+	
+	@RequestMapping("queryCarWhichNotVideo")
+	@ResponseBody
+	public List<Car> queryCarWhichNotVideo(){
+		log.info("queryCarWhichNotvideo");
+		return videoService.queryCarWhichNotVideo();
+	}
+	
+	@RequestMapping("queryVideoWhichNotCar")
+	@ResponseBody
+	public List<Video> queryVideoWhichNotCar(){
+		log.info("queryVideoWhichNotCar");
+		return videoService.queryVideoWhichNotCar();
+	}
+	
+	/*@RequestMapping("queryVideoWhichNotCar")
+	@ResponseBody
+	public List<Video> queryVideoByCarLicense(){
+		log.info("queryVideoByCarLicense");
+		return videoService.queryVideoByCarLicense();
+	}*/
 	
 	@RequestMapping("queryVideoByDriverId")
 	public ModelAndView queryVideoByDriverId(@RequestParam ("driverId") int driverId,ModelAndView mv) {
@@ -87,4 +136,5 @@ public class VideoController {
 		mv.setViewName("monitor/monitorOfOneCar");
 		return mv;
 	}
+	
 }

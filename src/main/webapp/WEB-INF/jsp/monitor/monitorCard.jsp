@@ -144,44 +144,39 @@
 						<div class="col-sm-6">
 							<div class="form-group">
 								<label for="addSerialNumber">监&nbsp;&nbsp;控&nbsp;&nbsp;编&nbsp;&nbsp;号</label> <input type="text"
-									placeholder="请输入C开头的摄像头编号" id="addSerialNumber"
+									placeholder="请输入C开头的摄像头编号" id="serialNumber"
 									class="form-control m-b control-label">
 							</div>
-
-							<div class="form-group">
-								<label for="addCarId">车&nbsp;&nbsp;辆&nbsp;&nbsp;编&nbsp;&nbsp;号</label> <input
-									type="text" placeholder="请输入车辆编号" id="car_id"
-									class="form-control m-b control-label">
-							</div>
-							
+						
 							<div class="form-group">
 								<label for="video_RTMPid">RTMP&nbsp;&nbsp;地&nbsp;&nbsp;址</label> <input
-									type="text" placeholder="请输入视频RTMP播放地址" id="video_RTMPid"
+									type="text" placeholder="请输入视频RTMP播放地址" id="videoRTMPid"
 									class="form-control m-b control-label">
 							</div>
-							
-
-						</div>
-						<div class="col-sm-6">
-							
-							<div class="form-group">
-								<label for="del_status">工&nbsp;&nbsp;作&nbsp;&nbsp;状&nbsp;&nbsp;态</label> <input
-									type="text" placeholder="请输入摄像头工作状态" id="del_status"
-									class="form-control m-b control-label">
-							</div>
-							
-							<div class="form-group">
-								<label for="license">车&nbsp;&nbsp;牌&nbsp;&nbsp;号</label> <input
-									type="text" placeholder="请输入车牌号" id="license"
-									class="form-control m-b control-label">
-							</div>
-							
 							<div class="form-group">
 								<label for="video_HLSid">HLS&nbsp;&nbsp;地&nbsp;&nbsp;址</label> <input
-									type="text" placeholder="请输入视频HLS播放地址" id="video_HLSid"
-									class="form-control">
+									type="text" placeholder="请输入视频RTMP播放地址" id="videoHLSid"
+									class="form-control m-b control-label">
 							</div>
-
+						</div>
+						<div class="col-sm-6">
+							<div class="form-group">
+								<label for="del_status">工&nbsp;&nbsp;作&nbsp;&nbsp;状&nbsp;&nbsp;态</label> 
+								<input type="text" placeholder="请输入摄像头工作状态" id="delStatus"
+									class="form-control m-b control-label">
+							</div>
+							
+							<div class="form-group">
+								<label for="license">车&nbsp;&nbsp;牌&nbsp;&nbsp;号</label>
+								<select class="form-control m-b" name="account" id="license">										
+										<option value="0">--请选择车牌号--</option>
+										<c:forEach items="${requestScope.carList }" var="car">
+											<option>${car.license}</option>
+										</c:forEach>
+									</select>
+								<!-- <input type="text" placeholder="请输入车牌号" id="license" class="form-control m-b control-label"> --> 					
+							</div>
+							
 							
 						</div>
 
@@ -189,12 +184,70 @@
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-white" data-dismiss="modal">取消</button>
-					<button type="button" class="btn btn-primary" id="addVideo">保存</button>
+					<button type="button" class="btn btn-primary" data-dismiss="modal" id="addVideo">保存</button>
 			</div>
 			</div>
 		</div>
-	</div>
-	
+	</div>	
+	<!-- 编辑监控 -->
+	<!-- 修改监控信息模态框 -->
+	<div class="modal fade" id="editVideoModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content animated bounceInRight">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">
+						<span aria-hidden="true">&times;</span><span class="sr-only">关闭</span>
+					</button> <img alt="140x140" src="img/littercar.png" width="10%" height="10%" />
+					<h4 class="modal-title" id="myModalLabel">
+						修改监控<input id="editId" type="hidden" />
+					</h4>
+			</div>			
+				<div class="modal-body">
+				<div class="form-group">
+								<label for="editSerialNumber">监&nbsp;&nbsp;控&nbsp;&nbsp;编&nbsp;&nbsp;号</label> <input type="text"
+									placeholder="请输入C开头的摄像头编号" id="editSerialNumber"
+									class="form-control m-b control-label">
+					</div>
+					<div class="form-group">
+								<label for="editCarLicense">车&nbsp;&nbsp;牌&nbsp;&nbsp;号</label> <input
+									type="text" placeholder="请输入车牌号" id="editCarLicense"
+									class="form-control m-b control-label">
+					</div>	
+					<div class="form-group" id="editModalContent">
+								
+					</div>								
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+					<button type="button" class="btn btn-primary" data-dismiss="modal" id="editSubmit">保存</button>	
+			</div>
+			</div>
+		</div>
+	</div>	
+		
+	<!-- 删除监控 -->
+	<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content animated bounceInRight">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">
+						<span aria-hidden="true">&times;</span><span class="sr-only">关闭</span>
+					</button> <img alt="140x140" src="img/littercar.png" width="10%" height="10%" />
+					
+					<h4 class="modal-title" id="myModalLabel">
+						删除监控<input id="delId" type="hidden" />
+					</h4>
+			</div>
+				<div class="modal-body" id="delModalContent">
+					<!-- <p style='text-align:center;font-size:28px;color:red'>确定删除监控？</p> -->					
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">否</button>
+					<button type="button" class="btn btn-primary" data-dismiss="modal" id="delSubmit">是</button>
+			</div>
+			</div>
+		</div>
+	</div>	
 	
 	<!-- 新增栏 -->
 	
@@ -202,6 +255,8 @@
 			<button type="button" class="btn btn-primary" data-toggle="modal"
 				data-target="#addModal">+ 新增监控</button>
 		</div>
+	
+		
 	
     <!-- 摄像头列表 -->
 	<!-- Example Pagination -->
@@ -212,18 +267,27 @@
 				<div class="" id="${video.id}">
 					<div>
 						<video class="box5" id='myPlayer${video.id}' name="play" poster="" controls playsInline webkit-playsinline autoplay>
-					    <source src="${video.video_RTMPid}" type="" />
-						<source src="${video.video_HLSid}" type="application/x-mpegURL" />
+					    <source src="${video.videoRTMPid}" type=" " />
+						<source src="${video.videoHLSid}" type="application/x-mpegURL" />
 						</video>
 					</div>
 					<div class="divlicense">
 						<img class="box5" alt="140x140" src="img/littercar.png" width="10%" height="10%" />
 						<p class="box6" style="text-align:center;">${video.car.license}</p>
+						<button onclick="editVideo(${video.id},'${video.car.license }','${video.serialNumber }')"
+									class="btn btn-white btn-sm" data-toggle="modal"
+									data-target="#editVideoModal">
+									<span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>编辑
+						</button>
+						<button onclick="deleteVideo(${video.id},'${video.car.license }');"
+								class="btn btn-white btn-sm" data-toggle="modal"
+								data-target="#deleteModal">
+								<span class="glyphicon glyphicon-trash" aria-hidden="true"></span>删除
+						</button>
 					</div>
 				</div>
 			</div>
 		</c:forEach>
-	</div>
 	</div>
 	<!-- End Example Pagination -->
 	<!-- 全局js --> 
@@ -263,38 +327,103 @@
    </c:forEach> 
 </script>
 <script>
-		/***************************** 新增站点提交************************************* */
+		/***************************** 新增摄像头提交************************************* */
 			$("#addVideo").click(function() {
-				var car_id=$("#car_id").val();
+				/* var carId=$("#carId").val(); */
 				var license=$("#license").val();
-				var addSerialNumber = $("#addSerialNumber").val();
-				var video_RTMPid = $("#video_RTMPid").val();
-				var video_HLSid = $("#video_HLSid").val();
-				var del_status = $("#del_status").val()
+				var serialNumber = $("#serialNumber").val();
+				var videoRTMPid = $("#videoRTMPid").val();
+				var videoHLSid = $("#videoHLSid").val();
+				var delStatus = $("#delStatus").val();
 				alert(license)
-				alert(addSerialNumber)
+				alert(serialNumber)
 				$.ajax({
 					type : "POST",
 						url :　"monitor/addVideo",
 						data : JSON.stringify({
-						car_id:car_id,
+						/* carId:carId, */
 						license:license,
-						serial_number:addSerialNumber,
-						video_RTMPid:video_RTMPid,
-						video_HLSid:video_HLSid,
-						del_status:del_status
+						serialNumber:serialNumber,
+						videoRTMPid:videoRTMPid,
+						videoHLSid:videoHLSid,
+						delstatus:delStatus,
 						}),
 						cache:false,
 						dataType : "json",
 						contentType : "application/json",
 						success : function(data){
-								alert("新增成功")			
+								alert("新增成功")
+								//刷新当前			
 						},
 						error:function(data){
 							alert("新增失败")
 						}
 				})
-			})		
+			})
+					
+	</script>		
+	<!-- 删除摄像头 -->
+	<script>	
+		/***************************** 删除用户按钮************************************* */
+		function deleteVideo(videoId,license) {
+			var delContent = "确定删除"+license+"车上的监控";
+			$("#delModalContent").html(delContent);
+			$("#delId").val(videoId);
+		}
+		/***************************** 删除监控************************************* */
+		$("#delSubmit").click(function() {
+			var videoId = $("#delId").val();
+			alert(videoId)
+			$.ajax({
+				type : "POST",
+				url : "monitor/deletevideo",
+				data: "videoId=" + videoId,
+				success : function() {
+					alert("删除成功")
+					$('#deleteModal').modal('hide');
+					$("#" + videoId.toString()).remove()
+				}
+			});
+		});
+		
+	/***************************** 修改监控按钮************************************* */
+		function editVideo(videoId,license,SerialNumber) {
+			var editContent = "确定修改"+license+"车上的监控"+SerialNumber;
+			$("#editModalContent").html(editContent);
+			$("#editId").val(videoId);
+		}	
+		
+	/*----------------------------------- 确认修改 ------------------------------------------*/			
+			$("#editSubmit").click(function() {
+			var videoId = parseInt($("#editId").val());
+			var SerialNumber = $("#editSerialNumber").val()
+			var license = $("#editCarLicense").val()
+			alert(videoId)
+			alert(SerialNumber)
+			alert(license)
+			$.ajax({
+				type : "POST",
+				url : "monitor/editVideo",
+				/* data: "videoId=" + videoId, */
+				data:JSON.stringify({
+					id:videoId,
+					serialNumber:SerialNumber,
+					license:license
+				}),
+				cache:false,
+				dataType : "json",
+				contentType : "application/json",
+				success : function(data) {
+					alert("修改成功")
+					$('#editVideoModal').modal('hide');
+				},
+				error:function(data){
+					alert("修改失败")
+				}
+			});
+		});	
+					
+	
 	</script>		
 </body>
 </html>
