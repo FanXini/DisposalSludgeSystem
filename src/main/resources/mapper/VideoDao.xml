@@ -5,16 +5,49 @@
 <mapper namespace="factory.dao.VideoDao">
 	<resultMap type="factory.entity.Video" id="VideoDaoMap">
 		<id property="id" column="id"></id>
-		<result property="car_id" column="car_id"></result>
-		<result property="serial_number" column="serial_number"></result>
-		<result property="video_RTMPid" column="video_RTMPid"></result>
-		<result property="video_HLSid" column="video_HLSid"></result>
-		<result property="del_status" column="del_status"></result>
+		<result property="carId" column="car_id"></result>
+		<result property="serialNumber" column="serial_number"></result>
+		<result property="videoRTMPid" column="video_RTMPid"></result>
+		<result property="videoHLSid" column="video_HLSid"></result>
+		<result property="delStatus" column="del_status"></result>
 		<association property="car" javaType="factory.entity.Car">
 			<id property="id" column="id" />
 			<result property="license" column="license" />
 		</association>
 	</resultMap>
+	
+	<!-- <insert id="addVideo" parameterType="factory.entity.Video"
+		useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO video
+		(car_id,license,serial_number,video_RTMPid,video_HLSid,del_status)
+		VALUES(#{carId},#{license},#{serialNumber},#{videoRTMPid},#{videoHLSid},#{delStatus})
+	</insert> -->
+	<insert id="addVideo" parameterType="factory.entity.Video"
+		useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO video
+		(license,serial_number,video_RTMPid,video_HLSid,del_status)
+		VALUES(#{license},#{serialNumber},#{videoRTMPid},#{videoHLSid},#{delStatus})
+	</insert> 
+	<update id="deleteVideo">
+		UPDATE video
+		SET del_status=1
+		WHERE del_status=0 AND
+		id=#{videoId}
+	</update>
+	
+	<update id="editVideo" parameterType="factory.entity.Video">
+		UPDATE video
+		SET
+		license=#{license},serial_number=#{serialNumber}
+		WHERE del_status=0 and id=#{id}
+	</update>
+	
+	<select id="queryVideoByserial_number" resultType="factory.entity.Video">
+		SELECT *
+		FROM video
+		WHERE del_status=0 and serial_number=#{serialNumber}
+	</select>
+	
 	<select id="queryVideoByid" resultMap="VideoDaoMap">
 		select *
 		from video
@@ -23,26 +56,29 @@
 	<select id="queryAllVideo" resultMap="VideoDaoMap">
 		select *
 		from video,car
-		where video.car_id = car.id
+		where video.license = car.license
 		and video.del_status=0 
 	</select>
- 	<!-- <select id="queryVideoCount" resultMap="java.lang.Integer">
-		select count (*)
-		from video
-		where del_status=0
-	</select>  -->
-	<insert id="addVideo" parameterType="factory.entity.Video"
-		useGeneratedKeys="true" keyProperty="id">
-		INSERT INTO video
-		(car_id,serial_number,video_RTMPid,video_HLSid,del_status)
-		VALUES(#{car_id},#{serial_number},#{video_RTMPid},#{video_HLSid},#{del_status})
-	</insert>
-	<update id="editVideo" parameterType="factory.entity.Video">
-		UPDATE Video
-		SET
-		car_id=#{car_id},serial_number=#{serial_number},video_RTMPid=#{video_RTMPid},video_HLSid=#{video_HLSid},del_status=#{del_status},
-		WHERE  video.car_id = car.id
-		and video.del_status=0 
-		and id=#{id}
-	</update>
+	
+	<select id="queryCarWhichNotVideo" resultType="factory.entity.Car">
+		select * from car
+		where license not in(
+			select license
+			from video
+			) and car_type=0
+	</select>
+ 	
+ 	<select id="queryVideoWhichNotCar" resultType="factory.entity.Video">
+		select * 
+			from video
+			where del_status=0 and license=Null
+	</select>
+	<select id="queryVideoByCarLicense" resultType="factory.entity.Video">
+		select * 
+		from video where del_status=0 and license =#{license}
+	</select>
+	
+	
+	
+	
 </mapper>
