@@ -56,7 +56,7 @@
                 rules: {
                 	serialNumber:{
                         required: true,
-                        minlength: 6,
+                        minlength: 4,
                         isSerialNumber: true  //自定义规则
                     },
                     siteName: "required",
@@ -78,7 +78,7 @@
                 messages: {
                 	serialNumber: {
                         required: icon + "请输入站点编号",
-                        minlength: icon + "站点编号必须6个字符以上",
+                        minlength: icon + "站点编号必须4个字符以上",
                         isSerialNumber: icon + "站点编号第一位为字母，其它为数字"
                     },
                     siteName: icon + "请输入站点名",
@@ -103,24 +103,6 @@
 
         function validateEditForm(){
             // validate signup form on keyup and submit
-        	$.validator.addMethod("isSerialNumber",function(value,element){
-            	str=value.split('');
-            	if(!((str[0]>='A'&&str[0]<='Z') || (str[0]>='a'&&str[0]<='z')))
-            		return false;
-            	for(var i=1;i<str.length;i++){
-            		if(!(str[i]>=0 && str[i]<=9))
-            			return false;
-            	}
-            	return true;
-            },"站点编号第一位为字母，其它为数字");
-        	
-            $.validator.addMethod("isPhone",function(value,element){
-            	if($("#addManagerTel").attr("readonly")==true) return true;
-            	var length=value.length;
-            	var mobile = /^(((13[0-9]{1})|(15[0-9]{1})|(18[0-9]{1})|(17[0-9]{1}))+\d{8})$/;
-            	return this.optional(element) || (length == 11 && mobile.test(value));
-            },"请填写正确的手机号码");
-            
             $.validator.addMethod("isTel",function(value,element){
             	var length=value.length;
             	var mobile = /^(((13[0-9]{1})|(15[0-9]{1})|(18[0-9]{1})|(17[0-9]{1}))+\d{8})$/;
@@ -134,11 +116,6 @@
                 rules: {
                 	siteName: "required",
                     address: "required",
-                    manager: "required",
-                    managerTel: {
-                        required: true,
-                        isPhone: true
-                    },
                     tel: {
                         required: true,
                         isTel: true
@@ -151,11 +128,7 @@
                 messages: {
                 	siteName: icon + "请输入站点名",
                     address:  icon + "请输入详细地址",
-                    manager:  icon + "请输入负责人",
-                    managerTel: {
-                        required: icon + "请输入负责人电话",
-                        isPhone: icon + "请填写正确的手机号码"
-                    },
+                   
                     tel: {
                         required: icon + "请输入站点电话",
                         isPhone: icon + "请填写正确的手机号或固定电话"

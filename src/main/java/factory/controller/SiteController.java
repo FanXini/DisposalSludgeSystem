@@ -116,12 +116,12 @@ public class SiteController {
 	
 	@RequestMapping("queryManagerTel")
 	@ResponseBody
-	public Map<String, String> queryManagerTel(@RequestParam("manager") String manager) {
+	public Map<String, String> queryManagerTel(@RequestParam("managerId") int managerId) {
 		log.info("查询managerTel");
 		Map<String, String> result = new HashMap<String, String>();
 		try {
-			log.info(manager);
-			String managerTel = siteService.queryManagerTel(manager);
+			log.info(managerId);
+			String managerTel = siteService.queryManagerTel(managerId);
 			if(managerTel==null) result.put("result", "failure");
 			else{
 				result.put("result", "success");
@@ -249,5 +249,19 @@ public class SiteController {
 			log.info(e);
 			return 0;
 		}
+	}
+	/**
+	 * @description:根据站点编号查找站点地图信息
+	 */
+	@RequestMapping("querySiteMapBySiteId")
+	@ResponseBody
+	public Site querySiteMapBySiteId(@RequestParam("siteId") int siteId) {
+		log.info("查询站点"+siteId);
+		Site site=siteService.querySiteMapBySiteId(siteId);
+		if(site.getSensorIdSet()!=null&&site.getSensorIdSet()!="")
+			site.setSensors(sensorService.querySensorTypeByIdSet(site.getSensorIdSet()));
+		log.info(site.toString());
+		return site;
+
 	}
 }

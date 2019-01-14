@@ -37,7 +37,13 @@ public interface CarService {
 	
 	public List<Car> queryCarWhichNotAssignDriver();
 
-	public List<Car> queryCarUnassign();
+	public List<Car> queryTreatmentCarUnassign();
+	
+	public List<Car> queryCarrierUnassign();
+	
+	public Car assignCarrier(int siteId,double siteLongitude,double siteLatitude);
+	
+	public List<Car> queryCarBySiteId(int siteId);
 	
 	public List<Car> querycarWithoutVideo();
  

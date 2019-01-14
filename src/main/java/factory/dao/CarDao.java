@@ -53,8 +53,12 @@ public interface CarDao {
 	
 	public void setDriverIdToNUll(@Param("driverId") int driverId);
 	
-	public List<Car> queryCarUnassign();
+	public List<Car> queryTreatmentCarUnassign();
 	
+	public List<Car> queryCarrierUnassign();
+	
+	public List<Car> queryCarBySiteId(@Param("siteId") int siteId);
+  
 	public List<Car> querycarWithoutVideo();
 
 }

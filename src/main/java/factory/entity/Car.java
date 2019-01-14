@@ -16,6 +16,7 @@ public class Car {
 	private Site site;
 	private Video video;
 	private int siteId;
+	private int carType;
 	public int getId() {
 		return id;
 	}
@@ -94,12 +95,17 @@ public class Car {
 	public void setSite(Site site) {
 		this.site = site;
 	}
+	public int getCarType() {
+		return carType;
+	}
+	public void setCarType(int carType) {
+		this.carType = carType;
+	}
 	public Video getVideo() {
 		return video;
 	}
 	public void setVideo(Video video) {
 		this.video = video;
 	}
-	
 	
 }
