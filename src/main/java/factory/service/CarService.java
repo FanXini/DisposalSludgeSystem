@@ -41,9 +41,9 @@ public interface CarService {
 	
 	public List<Car> queryCarrierUnassign();
 	
-	public Car assignCarrier(int siteId,double siteLongitude,double siteLatitude);
+	public Car assignCar(int siteId,double siteLongitude,double siteLatitude,int carType);
 	
-	public List<Car> queryCarBySiteId(int siteId);
+	public List<Car> queryMapCarBySiteId(int siteId);
 	
 	public List<Car> querycarWithoutVideo();
 	

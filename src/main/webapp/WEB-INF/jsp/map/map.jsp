@@ -570,9 +570,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	function carInfo(car){
 			var opts = {width : 230,} // 信息窗口宽度
 			if(car.status==4)
-				var lid = '<div><h5><a href="sensor/deviceDetail?id='+car.id+'&location='+car.license+'&locationId=0'+'">'+car.license+'(返程中)</a></h5><table style="font-size:12px;">';
+				var lid = '<div><h5><a href="monitor/queryVideoByDriverId?driverId='+car.driverId+'">'+car.license+'(返程中)</a></h5><table style="font-size:12px;">';
 			else
-				var lid = '<div><h5><a href="sensor/deviceDetail?id='+car.id+'&location='+car.license+'&locationId=0'+'">'+car.license+'</a></h5><table style="font-size:12px;">';
+				var lid = '<div><h5><a href="monitor/queryVideoByDriverId?driverId='+car.driverId+'">'+car.license+'</a></h5><table style="font-size:12px;">';
 									
 			lid	+= '<tr><td style="width:40%;text-align: left;">司机：</td><td style="text-align: left;">'+car.driver.realname+'</td>'
 				+ '</tr>'

@@ -256,10 +256,8 @@ public class SiteController {
 	@RequestMapping("querySiteMapBySiteId")
 	@ResponseBody
 	public Site querySiteMapBySiteId(@RequestParam("siteId") int siteId) {
-		log.info("查询站点"+siteId);
+		log.info("工厂人员地图查询站点"+siteId);
 		Site site=siteService.querySiteMapBySiteId(siteId);
-		if(site.getSensorIdSet()!=null&&site.getSensorIdSet()!="")
-			site.setSensors(sensorService.querySensorTypeByIdSet(site.getSensorIdSet()));
 		log.info(site.toString());
 		return site;
 

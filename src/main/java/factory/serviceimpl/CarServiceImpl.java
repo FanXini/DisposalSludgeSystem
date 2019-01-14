@@ -31,7 +31,7 @@ public class CarServiceImpl implements CarService{
 		return cars;
 	}
 	/**
-	 * é–«æ°³ç¹ƒdriverIdéŒãƒ¨î‡—Caré¨å‹ªä¿Šé­ï¿½
+	 * Í¨¹ıdriverId²éÑ¯CarµÄĞÅÏ¢
 	 */
 	@Override
 	public Car queryCarByDriverId(int driverId) {
@@ -39,7 +39,7 @@ public class CarServiceImpl implements CarService{
 	}
 	
 	/**
-	 * é–«æ°³ç¹ƒæï¸¾å¢é™é”‹ç…¡ç’‡î”©aré¨å‹ªä¿Šé­ï¿½
+	 * Í¨¹ı³µÅÆºÅ²éÑ¯CarµÄĞÅÏ¢
 	 */
 	@Override
 	public Car queryCarByLicense(String license) {
@@ -47,7 +47,7 @@ public class CarServiceImpl implements CarService{
 	}
 	
 	/**
-	 * é–«æ°³ç¹ƒæï¹ç· é˜èˆµï¿½ä½¹ç…¡ç’‡î”©aré¨å‹ªä¿Šé­ï¿½
+	 * Í¨¹ı³µÁ¾×´Ì¬²éÑ¯CarµÄĞÅÏ¢
 	 */
 	@Override
 	public List<Car> queryCarByStatus(int status) {
@@ -57,7 +57,7 @@ public class CarServiceImpl implements CarService{
 	}
 	
 	/**
-	 * é’çŠ»æ«ç’æ¿ç¶
+	 * É¾³ı³µÁ¾¼ÇÂ¼
 	 */
 	public void deleteCar(int carId) {
 		// TODO Auto-generated method stub
@@ -83,7 +83,7 @@ public class CarServiceImpl implements CarService{
 	public int addCar(Car car) {
 		// TODO Auto-generated method stub
 		if (car.getLicense().equals("") || car.getLicense() == null) {
-			throw new DataNoneException("æï¸¾å¢é™ç–¯ã€ƒé—æ›ŸæšŸé¹î†»è´Ÿç»ŒçŒ´ç´’");
+			throw new DataNoneException("³µÅÆºÅ±íµ¥Êı¾İÎª¿Õ£¡");
 		}
 		else if(car.getBrand().equals("none")){
 			car.setBrand(null);
@@ -95,7 +95,7 @@ public class CarServiceImpl implements CarService{
 	public void editCar(Car car) {
 		// TODO Auto-generated method stub
 		if (car.getLicense().equals("") || car.getLicense() == null) {
-			throw new DataNoneException("æï¸¾å¢é™ç–¯ã€ƒé—æ›ŸæšŸé¹î†»è´Ÿç»ŒçŒ´ç´’");
+			throw new DataNoneException("³µÅÆºÅ±íµ¥Êı¾İÎª¿Õ!");
 		}
 		if(car.getBrand().equals("none")){
 			car.setBrand(null);
@@ -163,16 +163,20 @@ public class CarServiceImpl implements CarService{
 	}
 	
 	@Override
-	public Car assignCarrier(int siteId, double siteLongitude, double siteLatitude) {
+	public Car assignCar(int siteId, double siteLongitude, double siteLatitude,int carType) {
 		// TODO Auto-generated method stub
 		List<Car> cars=new ArrayList<Car>();
-		cars.addAll(carDao.queryCarrierUnassign());
+		if(carType == 0){
+			cars.addAll(carDao.queryTreatmentCarUnassign());
+		}else if(carType == 1){
+			cars.addAll(carDao.queryCarrierUnassign());
+		}
 		if(cars.size() == 0) return null;
 		double minDistance = Double.MAX_VALUE;
 		Car car = new Car();
 		for(int i = 0; i < cars.size();i++){
 			double dis = GpsUtil.getDistance(siteLongitude,siteLatitude,cars.get(i).getLongitude(),cars.get(i).getLatitude());
-			System.out.println("id: "+ cars.get(i).getId() + "ç’ºæ¿ˆî‡: "+ dis);
+			System.out.println("id: "+ cars.get(i).getId() + "¾àÀë "+ dis);
 			if(dis < minDistance){
 				minDistance = dis;
 				car = cars.get(i);
@@ -181,10 +185,10 @@ public class CarServiceImpl implements CarService{
 		return car;
 	}
 	@Override
-	public List<Car> queryCarBySiteId(int siteId) {
+	public List<Car> queryMapCarBySiteId(int siteId) {
 		// TODO Auto-generated method stub
 		List<Car> cars=new ArrayList<Car>();
-		cars.addAll(carDao.queryCarBySiteId(siteId));
+		cars.addAll(carDao.queryMapCarBySiteId(siteId));
 		for(Car car:cars){
 			System.out.println(car.getLicense());
 		}
@@ -207,4 +211,5 @@ public class CarServiceImpl implements CarService{
 		cars.addAll(carDao.queryCarByCarType(carType));
 		return cars;
 	}
+	
 }
