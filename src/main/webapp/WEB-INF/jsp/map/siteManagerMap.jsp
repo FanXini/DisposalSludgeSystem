@@ -36,12 +36,13 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 
 <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
+
 <style type="text/css">
 .map {
 	position: relative;
 	color: #000;
 	width: 100%;
-	height: 530px;
+	height: 100%;
 	overflow: auto;
 }
 
@@ -50,7 +51,42 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	right: 20px;
 	top: 5px;
 }
-
+.select {
+    border: 1px solid #555;
+    font-family : 微软雅黑;
+    color:black;
+    font-size: 15px;
+    text-align: center;
+    line-height: 1.2em;
+	float: right;
+	background: lavender;
+	height:35px;
+	width:110px;
+}
+.query_submit {
+	border: 1px solid #555;
+    padding: 0.5em;
+    font-family : 微软雅黑;
+    color:black;
+    font-size: 15px;
+    line-height: 1.2em;
+	float: right;
+	background: slateblue;
+	height:35px;
+	width:80px;
+	text-align: center;
+	margin:auto auto 5px 10px;
+}
+.text{
+	border: 1px solid #555;
+    padding: 0.5em;
+    line-height: 1.2em;
+	float: right;
+	background: white;
+	height:35px;
+	width:200px;
+	margin:auto auto 5px 10px;
+}
 .bottom_button {
 	position: absolute;
 	right: 2px;
@@ -83,23 +119,26 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 
 <body>
 	<div id="allmap" class="map"></div>
-	<div class="modal inmodal fade" id="myModal" tabindex="-1" role="dialog"  aria-hidden="true">
-            <div class="modal-dialog modal-sm">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                        <h6 style="font-size:16px;font-weight:bold;" id="destination" class="modal-title"></h6>
-                    </div>
-                    <div class="modal-body">
-                        <p id="editContext"></p>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-white" data-dismiss="modal">关闭</button>
-                        <button id="submitBtn" type="button" class="btn btn-primary">确定</button>
-                    </div>
-                </div>
-            </div>
-        </div>
+	<div id="selectMenu" class="selectMenu">
+			<table class="tb2" height="100%" cellspacing="0" cellpadding="0" width="100%" border="0"
+				style=" margin-left: 0px;">
+				<tr>
+					<td>
+						<select id="typeSelect" class="select" style:"">
+							<option value="-1">-车辆类型-</option>
+							<option value="0">-污泥处理车-</option>
+							<option value="1">-污泥运输车-</option>
+						</select>
+					</td>
+					<td><input id="queryStr" type="text" placeholder="" class="text"> <span
+						class="input-group-btn"></span>
+					</td>
+					<td align="center">
+						<button type="button" class="query_submit" id="querysubmit">确认</button>
+					</td>
+				</tr>
+			</table>
+	</div>
 </body>
 </html>
 <script type="text/javascript">

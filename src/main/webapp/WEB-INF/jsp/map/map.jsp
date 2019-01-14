@@ -134,7 +134,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						<select id="statusSelect" class="select">
 							<option value="-1">-状态-</option>
 						</select>
-					</div>
 					</td>
 					<td><input id="queryStr" type="text" placeholder="" class="text"> <span
 						class="input-group-btn"></span>
