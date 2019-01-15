@@ -37,7 +37,7 @@ public class VideoServiceImpl implements VideoService {
 	public void editVideo(Video video) {
 		// TODO Auto-generated method stub
 		if (video.getSerialNumber().equals("") || video.getSerialNumber() == null) {
-			throw new DataNoneException("´«¸ÐÆ÷±íµ¥Êý¾ÝÎª¿Õ£¡");
+			throw new DataNoneException("û������");
 		}
 		videodao.editVideo(video);	
 	}
@@ -61,12 +61,15 @@ public class VideoServiceImpl implements VideoService {
 		return videos;
 	}
 	
-	
 	@Override
-	public List<Video> queryVideoByCarLicense() {
+	public List<Video> fuzzyqueryVideoByCarLicense(String license) {
 		List<Video>  videos=new ArrayList<Video>();
-		videos.addAll(videodao.queryVideoByCarLicense());
+		videos.addAll(videodao.fuzzyqueryVideoByCarLicense(license));
 		return videos;
+	}
+	@Override
+	public Video queryVideoByCarLicense(String license) {
+		return videodao.queryVideoByCarLicense(license);
 	}
 	
 	@Override

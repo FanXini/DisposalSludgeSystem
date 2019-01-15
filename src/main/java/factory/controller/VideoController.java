@@ -40,7 +40,7 @@ public class VideoController {
 		List<Video> videosWithoutCar=videoService.queryVideoWhichNotCar();
 		mv.addObject("videoList", videos);// 设置需要返回的值
 		mv.addObject("carList", cars);
-		mv.addObject("videoWithoutCarList", videos);
+		mv.addObject("videoWithoutCarList", videosWithoutCar);
 		JSONArray carJson = JSONArray.fromObject(cars);
 		mv.setViewName("monitor/monitorCard"); // 跳转到指定的页面
 		return mv; // 返回到staffManage.jsp页面
@@ -119,13 +119,22 @@ public class VideoController {
 		log.info("queryVideoWhichNotCar");
 		return videoService.queryVideoWhichNotCar();
 	}
-	
-	/*@RequestMapping("queryVideoWhichNotCar")
+	@RequestMapping("fuzzyqueryVideoByCarLicense")
 	@ResponseBody
-	public List<Video> queryVideoByCarLicense(){
-		log.info("queryVideoByCarLicense");
-		return videoService.queryVideoByCarLicense();
-	}*/
+	public List <Video> fuzzyqueryVideoByCarLicense(@RequestParam("license") String license, Model model) {
+		log.info("调用fuzzyqueryVideoByCarLicense");
+		List<Video> videos = videoService.fuzzyqueryVideoByCarLicense(license);
+		return videos;
+	}
+	
+	
+	@RequestMapping("queryVideoByCarLicense")
+	@ResponseBody
+	public Video queryVideoByCarLicense(@RequestParam("license") String license, Model model) {
+		log.info("调用queryVideoByCarLicense");
+		Video video = videoService.queryVideoByCarLicense(license);
+		return video;
+	}
 	
 	@RequestMapping("queryVideoByDriverId")
 	public ModelAndView queryVideoByDriverId(@RequestParam ("driverId") int driverId,ModelAndView mv) {

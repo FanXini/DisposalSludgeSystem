@@ -12,6 +12,7 @@ public interface VideoService {
 	public Video queryVideoByserial_number(String serialNumber);
 	public List<Car> queryCarWhichNotVideo();
 	public List<Video> queryVideoWhichNotCar();
-	public List<Video> queryVideoByCarLicense();
+	public List<Video> fuzzyqueryVideoByCarLicense(String license);
+	public Video queryVideoByCarLicense(String license);
 	public Video queryVideoByDriverId(int driverId);
 }

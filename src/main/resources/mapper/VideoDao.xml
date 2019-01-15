@@ -25,8 +25,8 @@
 	<insert id="addVideo" parameterType="factory.entity.Video"
 		useGeneratedKeys="true" keyProperty="id">
 		INSERT INTO video
-		(license,serial_number,video_RTMPid,video_HLSid,del_status)
-		VALUES(#{license},#{serialNumber},#{videoRTMPid},#{videoHLSid},#{delStatus})
+		(car_Id,license,serial_number,video_RTMPid,video_HLSid,del_status)
+		VALUES(#{carId},#{license},#{serialNumber},#{videoRTMPid},#{videoHLSid},#{delStatus})
 	</insert> 
 	<update id="deleteVideo">
 		UPDATE video
@@ -56,26 +56,34 @@
 	<select id="queryAllVideo" resultMap="VideoDaoMap">
 		select *
 		from video,car
-		where video.license = car.license
+		where video.car_id = car.id
 		and video.del_status=0 
 	</select>
 	
 	<select id="queryCarWhichNotVideo" resultType="factory.entity.Car">
 		select * from car
-		where license not in(
-			select license
+			where id not in(
+			select car_id
 			from video
-			) and car_type=0
+			) and car_type=0;
 	</select>
- 	
  	<select id="queryVideoWhichNotCar" resultType="factory.entity.Video">
 		select * 
 			from video
-			where del_status=0 and license=Null
+			where del_status=1 
 	</select>
-	<select id="queryVideoByCarLicense" resultType="factory.entity.Video">
+ 	<!-- <select id="queryVideoWhichNotCar" resultType="factory.entity.Video">
 		select * 
-		from video where del_status=0 and license =#{license}
+			from video
+			where del_status=1 and license=Null
+	</select> -->
+	<select id="fuzzyqueryVideoByCarLicense"  resultType="factory.entity.Video">
+		select * 
+		from video where del_status=0 and license like CONCAT('%',#{license},'%')
+	</select>
+	<select id="queryVideoByCarLicense"  resultType="factory.entity.Video">
+		select * 
+		from video where del_status=0 and license = #{license}
 	</select>
 	
 	<select id="queryVideoByDriverId" resultMap="VideoDaoMap">

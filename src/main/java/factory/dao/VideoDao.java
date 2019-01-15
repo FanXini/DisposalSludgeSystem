@@ -14,7 +14,8 @@ public interface VideoDao {
 	public void editVideo(Video video);
 	public Video queryVideoByserial_number(@Param("serialNumber") String serial_number);
 	public List<Car> queryCarWhichNotVideo();
-	public List<Video> queryVideoWhichNotCar();
-	public List<Video> queryVideoByCarLicense();
+	public List<Video> queryVideoWhichNotCar();	
+	public List<Video> fuzzyqueryVideoByCarLicense(@Param("license") String license);
+	public Video queryVideoByCarLicense(@Param("license") String license);
 	public Video queryVideoByDriverId(@Param("driverId") int driverId);
 }

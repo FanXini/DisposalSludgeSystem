@@ -126,6 +126,164 @@
             left:-10%;           	
             }
 </style> 
+<script>
+		
+		
+		/**
+		 * 将对象编码成请求字符串
+		 * @param {any} obj 要编码的对象
+		 */
+		function encodeRequestParams(obj) {
+		    if (!obj) {
+		        return ''
+		    }
+		    const params = []
+		
+		    Object.keys(obj).forEach((key) => {
+		        let value = obj[key]
+		        if (value !== null && value !== undefined && value !== '') {
+		            params.push([key, encodeURIComponent(value)].join('='))
+		        }
+		    })
+		    let paramsString = params.join('&')
+		    if (paramsString.length == 0) {
+		        return ""
+		    }
+		    return paramsString;
+		}
+		
+		/**
+		 * get请求，返回Promise
+		 * @param {string} url 请求地址
+		 */
+		function get(url) {
+		    return new Promise((resolve, reject) => {
+		        const xhr = new XMLHttpRequest();
+		        xhr.onreadystatechange = () => {
+		            if (xhr.readyState === 4) {
+		                if (xhr.status >= 200 && (xhr.status < 300 || xhr.status === 304)) {
+		                    if (xhr.responseText) {
+		                        resolve(JSON.parse(xhr.responseText));
+		                    } else {
+		                        resolve(xhr.responseText);
+		                    }
+		                } else {
+		                    reject(`XHR unsuccessful:${xhr.status}`);
+		                }
+		            }
+		        };
+		        xhr.open('get', url, true);
+		        xhr.setRequestHeader('content-type', 'application/x-www-form-urlencoded');
+		        xhr.send(null);
+		    });
+		};
+		
+		/**
+		 * post请求
+		 * @param {string} url 请求地址
+		 * @param {any} data 请求参数
+		 */
+		function post(url, data) {
+		    return new Promise((resolve, reject) => {
+		        const xhr = new XMLHttpRequest();
+		        xhr.onreadystatechange = () => {
+		            if (xhr.readyState === 4) {
+		                if (xhr.status >= 200 && (xhr.status < 300 || xhr.status === 304)) {
+		                    resolve(JSON.parse(xhr.responseText));
+		                } else {
+		                    reject(`XHR unsuccessful:${xhr.status}`);
+		                }
+		            }
+		        };
+		        xhr.open('post', url, true);
+		        xhr.setRequestHeader('content-type', 'application/x-www-form-urlencoded');
+		        xhr.send(encodeRequestParams(data));
+		    });
+		}
+		
+		// accessToken会自动失效，需要通过后端请求刷新。详见 https://open.ys7.com/doc/zh/book/index/user.html
+		const ACCESS_TOKEN = "at.dr31pta092dj6h7l54uyc27dbh55n0r7-6ber269c57-01a6v3f-we6zziltc";
+		
+		/* const DEVICE_SERIAL = "C29134495"; */
+		const CHANNEL_NO = 1;
+		const START_PTZ_URL = "https://open.ys7.com/api/lapp/device/ptz/start";
+		const STOP_PTZ_URL = "https://open.ys7.com/api/lapp/device/ptz/stop";
+		const LIVE_LIST_URL = "https://open.ys7.com/api/lapp/live/video/list"
+		
+		/**
+		 * 停止云台
+		 * @param {int} direction 方向，不必须：0-上，1-下，2-左，3-右，4-左上，5-左下，6-右上，7-右下，8-放大，9-缩小，10-近焦距，11-远焦距
+		 * @param {string} accessToken 访问Token，必须
+		 * @param {int} deviceSerial 设备序列号，必须
+		 * @param {int} channelNo 通道，必须
+		 */
+		function stopPtz(direction, deviceSerial, accessToken = ACCESS_TOKEN, channelNo = CHANNEL_NO) {
+		 
+		    return post(STOP_PTZ_URL, { direction, accessToken, deviceSerial, channelNo })
+		        .then(response => {
+		            if (response.code != 200) {
+		                throw response;
+		            }
+		            console.log("停止成功");
+		        })
+		        .catch(error => {
+		            throw error;
+		        })
+		}
+		
+		/**
+		/**
+		 * 启动云台
+		 * @param {int} direction 方向，必须：0-上，1-下，2-左，3-右，4-左上，5-左下，6-右上，7-右下，8-放大，9-缩小，10-近焦距，11-远焦距
+		 * @param {*} speed 云台速度，必须：0-慢，1-适中，2-快
+		 * @param {string} accessToken 访问Token，必须
+		 * @param {int} deviceSerial 设备序列号，必须
+		 * @param {int} channelNo 通道，必须
+		 */
+		function startPtz(direction, speed, deviceSerial, accessToken = ACCESS_TOKEN, channelNo = CHANNEL_NO) {
+		    // 要启动，需要先停止
+		    
+		    return stopPtz(direction, deviceSerial)
+		        .then(_ => {
+		            post(START_PTZ_URL, { direction, speed, accessToken, deviceSerial, channelNo })
+		                .then(response => {
+		                    if (response.code != 200) {
+		                        throw response;
+		                    }
+		                    console.log("启动成功");
+		                })
+		                .catch(error => {
+		                    throw error;
+		                });
+		        })
+		        .catch(error => {
+		            throw error;
+		        })
+		}
+		
+		
+		/**
+		 * 获取播放地址列表
+		 * @param {int} page 页
+		 * @param {int} count 页大小，最大50
+		 * @param {string} accessToken 
+		 */
+		function requestLiveList(page = 0, count = 50, accessToken = ACCESS_TOKEN) {
+		    return post(LIVE_LIST_URL, { page, count, accessToken })
+		        .then(response => {
+		            if (response.code != 200) {
+		                throw response;
+		            }
+		            console.log("获取直播列表成功");
+		            return response;
+		        })
+		        .catch(error => {
+		            throw error;
+		        });
+		}
+		
+
+</script>
 </head>
 <body>
 <script src="https://open.ys7.com/sdk/js/1.3/ezuikit.js"></script>
@@ -143,8 +301,8 @@
 					<div class="row">
 						<div class="col-sm-6">
 							<div class="form-group">
-								<label for="addSerialNumber">监&nbsp;&nbsp;控&nbsp;&nbsp;编&nbsp;&nbsp;号</label> <input type="text"
-									placeholder="请输入C开头的摄像头编号" id="serialNumber"
+								<label for="addSerialNumber">序&nbsp;&nbsp;列&nbsp;&nbsp;号</label> <input type="text"
+									placeholder="请输入摄像头序列号" id="serialNumber"
 									class="form-control m-b control-label">
 							</div>
 						
@@ -162,16 +320,19 @@
 						<div class="col-sm-6">
 							<div class="form-group">
 								<label for="del_status">工&nbsp;&nbsp;作&nbsp;&nbsp;状&nbsp;&nbsp;态</label> 
-								<input type="text" placeholder="请输入摄像头工作状态" id="delStatus"
-									class="form-control m-b control-label">
+								<select class="form-control m-b" name="account" id="delStatus">
+									<option value="-1">工作状态</option>
+									<option value="0">在线</option>
+									<option value="1">离线</option>
+								</select>
 							</div>
 							
 							<div class="form-group">
 								<label for="license">车&nbsp;&nbsp;牌&nbsp;&nbsp;号</label>
-								<select class="form-control m-b" name="account" id="license">										
+								<select class="form-control m-b" name="account" id="addCarId">										
 										<option value="0">--请选择车牌号--</option>
 										<c:forEach items="${requestScope.carList }" var="car">
-											<option>${car.license}</option>
+											<option value=${car.id}>${car.license}</option>
 										</c:forEach>
 									</select>
 								<!-- <input type="text" placeholder="请输入车牌号" id="license" class="form-control m-b control-label"> --> 					
@@ -203,15 +364,34 @@
 					</h4>
 			</div>			
 				<div class="modal-body">
-				<div class="form-group">
-								<label for="editSerialNumber">监&nbsp;&nbsp;控&nbsp;&nbsp;编&nbsp;&nbsp;号</label> <input type="text"
-									placeholder="请输入C开头的摄像头编号" id="editSerialNumber"
-									class="form-control m-b control-label">
-					</div>
 					<div class="form-group">
-								<label for="editCarLicense">车&nbsp;&nbsp;牌&nbsp;&nbsp;号</label> <input
-									type="text" placeholder="请输入车牌号" id="editCarLicense"
-									class="form-control m-b control-label">
+								<label for="editCarLicense">车&nbsp;&nbsp;牌&nbsp;&nbsp;号</label>
+								<select class="form-control m-b" name="account" id="editCarLicense">										
+										<option value="0">--请选择修改监控的车牌号--</option>
+										<c:forEach items="${requestScope.videoList }" var="video">
+											<option value=${video.car.license}>${video.car.license}</option>
+										</c:forEach>
+									</select> 					
+					</div>			
+					<div class="form-group">
+								<label for="editSerialNumber">序&nbsp;&nbsp;列&nbsp;&nbsp;号</label>
+								<input id="editSerialNumber" type="text" class="form-control"
+								placeholder="请输入监控序列号">
+								<%-- <select class="form-control m-b" name="account" id="editSerialNumber">										
+										<option value="0">--请选修改的监控序列号--</option>
+										<c:forEach items="${requestScope.videoWithoutCarList}" var="video">
+											<option value=${video.serialNumber}>${video.serialNumber}</option>
+										</c:forEach>
+									</select>	 --%>
+					</div>
+							
+					<div class="form-group">
+								<label for="editSerialNumber">工&nbsp;&nbsp;作&nbsp;&nbsp;状&nbsp;&nbsp;态</label> 																	
+									<select class="form-control m-b" name="account" id="editStatus">
+									<option value="-1">请选择监控的工作状态</option>
+									<option value="0">在线</option>
+									<option value="1">离线</option>
+								</select>
 					</div>	
 					<div class="form-group" id="editModalContent">
 								
@@ -255,10 +435,32 @@
 			<button type="button" class="btn btn-primary" data-toggle="modal"
 				data-target="#addModal">+ 新增监控</button>
 		</div>
-	
+<!-- 	查询栏 -->	
+		<div class="row" style="margin-top: 2%">
+		<div class="search-right">
+			<div class="col-xs-offset-5 col-xs-4 query-department">
+				<!-- <form method="get" class="form-horizontal"> -->
+					<div class="form-group">
+						<div>
+							<!-- <input id="queryVideoByCarLicense" type="text" class="form-control"
+								placeholder="请输入车牌号/监控编号,不输入则查询所有车辆"> -->
+								<select class="form-control m-b" name="account" id="queryVideoByCarLicense">										
+										<option value="0">--请选择监控所在车牌号--</option>
+										<c:forEach items="${requestScope.videoList }" var="video">
+											<option value=${video.car.license}>${video.car.license}</option>
+										</c:forEach>
+									</select> 		
+						</div>
+					</div>
+			</div>
+			<div class="col-xs-1 query-department">
+				<button id="queryButton" class="btn btn-primary" type="button">查询</button>
+			</div>
+		</div>
+	</div>
 		
 	
-    <!-- 摄像头列表 -->
+   	<!-- 监控列表 -->
 	<!-- Example Pagination -->
 		<div id="page-wrapper"  class="container-fluid">
 			<div class="row clearfix video">
@@ -272,9 +474,13 @@
 						</video>
 					</div>
 					<div class="divlicense">
+						<button type="button" class="btn btn-primary" onMouseover="startPtz(0,0,'${video.serialNumber }');" onMouseout="stopPtz(0,'${video.serialNumber }');">向上</button>
+						<button type="button" class="btn btn-primary" onMouseover="startPtz(1,0,'${video.serialNumber }');" onMouseout="stopPtz(1,'${video.serialNumber }');">向下</button>
+						<button type="button" class="btn btn-primary" onMouseover="startPtz(2,0,'${video.serialNumber }');" onMouseout="stopPtz(2,'${video.serialNumber }');">向左</button>
+						<button type="button" class="btn btn-primary"onMouseover="startPtz(3,0,'${video.serialNumber }');" onMouseout="stopPtz(3,'${video.serialNumber }');">向右</button> <br/>
 						<img class="box5" alt="140x140" src="img/littercar.png" width="10%" height="10%" />
 						<p class="box6" style="text-align:center;">${video.car.license}</p>
-						<button onclick="editVideo(${video.id},'${video.car.license }','${video.serialNumber }')"
+						<button onclick="editVideo(${video.id},'${video.car.license }','${video.serialNumber }','${video.delStatus}')"
 									class="btn btn-white btn-sm" data-toggle="modal"
 									data-target="#editVideoModal">
 									<span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>编辑
@@ -289,6 +495,8 @@
 			</div>
 		</c:forEach>
 	</div>
+	
+	
 	<!-- End Example Pagination -->
 	<!-- 全局js --> 
 	<script src="js/jquery.min.js?v=2.1.4"></script>
@@ -326,22 +534,39 @@
     	});
    </c:forEach> 
 </script>
+
+<script>   
+    <c:forEach items="${requestScope.videoList }" var="video">
+        var player=new EZUIPlayer('myPlayer'+${video.id});
+    	player.on('error', function(){
+        console.log('error');
+    	});
+   		player.on('play', function(){
+    	    console.log('play');
+    	});
+    	player.on('pause', function(){
+        	console.log('pause');
+    	});
+   </c:forEach> 
+</script>
+
 <script>
 		/***************************** 新增摄像头提交************************************* */
 			$("#addVideo").click(function() {
 				/* var carId=$("#carId").val(); */
-				var license=$("#license").val();
+				var license=$("#addCarId").find("option:selected").text();
+				alert(license);
+				var carId = parseInt($("#addCarId").val());
 				var serialNumber = $("#serialNumber").val();
 				var videoRTMPid = $("#videoRTMPid").val();
 				var videoHLSid = $("#videoHLSid").val();
 				var delStatus = $("#delStatus").val();
-				alert(license)
-				alert(serialNumber)
 				$.ajax({
 					type : "POST",
 						url :　"monitor/addVideo",
 						data : JSON.stringify({
 						/* carId:carId, */
+						carId:carId,
 						license:license,
 						serialNumber:serialNumber,
 						videoRTMPid:videoRTMPid,
@@ -398,6 +623,7 @@
 			var videoId = parseInt($("#editId").val());
 			var SerialNumber = $("#editSerialNumber").val()
 			var license = $("#editCarLicense").val()
+			var delStatus = $("#editdelStatus").val()
 			alert(videoId)
 			alert(SerialNumber)
 			alert(license)
@@ -408,7 +634,8 @@
 				data:JSON.stringify({
 					id:videoId,
 					serialNumber:SerialNumber,
-					license:license
+					license:license,
+					delStatus:delStatus
 				}),
 				cache:false,
 				dataType : "json",
@@ -422,8 +649,49 @@
 				}
 			});
 		});	
+		
+		/***************************** 按照车牌号查询监控************************************* */
+		$("#queryButton").click(function() {
+			var carLicense = $("#queryVideoByCarLicense").val();
+			$.ajax({
+				type : "POST",
+				url : "monitor/queryVideoByCarLicense",
+				data: "license=" + carLicense,
+				jsonpcallback: function(){
+				},
+				success : function(data) {
+				
+					$(".video").html(
 					
-	
+					'<video class="box5" id="myPlayer'+data.id+'" poster="" controls playsInline webkit-playsinline autoplay>'
+					+'<source src="'+data.videoRTMPid+'" type="" />'
+					+'<source src="'+data.videoHLSid+'" type="application/x-mpegURL" />'   
+					+'</video>'
+					+'<br/><button type="button" style=" margin-right:60px" class="btn btn-primary" onMouseover="startPtz(0,0,\''+data.serialNumber+'\');" onMouseout="stopPtz(0,\''+data.serialNumber+'\');">向上</button>'
+					+'<button type="button" style="margin-right:60px" class="btn btn-primary" onMouseover="startPtz(1,0,\''+data.serialNumber+'\');" onMouseout="stopPtz(1,\''+data.serialNumber+'\');">向下</button>'
+					+'<button type="button" style="margin-right:60px" class="btn btn-primary" onMouseover="startPtz(2,0,\''+data.serialNumber+'\');" onMouseout="stopPtz(2,\''+data.serialNumber+'\');">向左</button>'
+					+'<button type="button" style="margin-right:60px" class="btn btn-primary" onMouseover="startPtz(3,0,\''+data.serialNumber+'\');" onMouseout="stopPtz(3,\''+data.serialNumber+'\');">向右</button> <br/>'
+					);
+					
+					 var player=new EZUIPlayer('myPlayer'+data.id);
+				    	player.on('error', function(){
+				        console.log('error');
+				    	});
+				   		player.on('play', function(){
+				    	    console.log('play');
+				    	});
+				    	player.on('pause', function(){
+				        	console.log('pause');
+				    	});
+							}
+						});
+		});
+		
+		function searchCallBack(id){
+			alert(id);
+		   
+		
+		}
 	</script>		
 </body>
 </html>
