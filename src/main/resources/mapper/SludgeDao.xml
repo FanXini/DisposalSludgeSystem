@@ -37,6 +37,41 @@
 			<result property="function" column="function" />
 		</association>
 	</resultMap>
+	
+	<resultMap id="SludgeCarMap" type="factory.entity.Sludge">
+		<id property="id" column="id" />
+		<result property="recordId" column="record_id" />
+		<result property="functionId" column="function_id" />
+		<result property="produceTime" column="produce_time" />
+		<result property="arrivalTime" column="arrival_time" />
+		<result property="destinationAddress" column="destination_address" />
+		<result property="rfidString" column="RFID" />
+		<result property="weight" column="weight" />
+		<result property="transcarId" column="transcar_id" />
+		<result property="status" column="status" />
+		<association property="car" javaType="factory.entity.Car">
+			<id property="id" column="id" />
+			<result property="driverId" column="driver_id" />
+			<result property="license" column="license" />
+			<association property="driver" javaType="factory.entity.User">
+				<id property="id" column="id" />
+				<result property="realname" column="realname" />
+				<result property="telephone" column="telephone" />
+			</association>
+		</association>
+		<association property="record" javaType="factory.entity.Record">
+			<id property="id" column="id" />
+			<result property="siteId" column="site_id" />
+			<association property="site" javaType="factory.entity.Site">
+				<id property="id" column="id" />
+				<result property="siteName" column="site_name" />
+			</association>
+		</association>
+		<association property="sludgeFunction" javaType="factory.entity.SludgeFunction">
+			<id property="id" column="id" />
+			<result property="function" column="function" />
+		</association>
+	</resultMap>
 
 
 	<select id="queryAllSludgeByInOutFlagWithMinorWareHouseId"
@@ -335,5 +370,70 @@
 		record.site_id AND
 		record.id = sludge.record_id AND
 		site.site_name=#{siteName}
+	</select>
+	
+	<!-- *********************************通过运输车司机id查询污泥块************************************ -->
+
+
+	<select id="transportsludgeofonedriver" resultMap="SludgeCarMap">
+		SELECT
+		sludge.*,record.id,record.site_id,car.id,car.license,car.driver_id,user.id,user.realname,user.telephone,site.id,site.site_name,sludge_function.id,sludge_function.`function`
+		FROM
+		sludge LEFT JOIN record ON sludge.record_id=record.id LEFT JOIN
+		car ON sludge.transcar_id=car.id LEFT JOIN site ON record.site_id=site.id
+		LEFT JOIN `user` ON car.driver_id=`user`.id LEFT JOIN sludge_function
+		ON sludge.function_id=sludge_function.id
+		WHERE sludge.del_status=0 AND
+		user.id=#{driverId} AND sludge.status!=6
+		ORDER BY sludge.produce_time DESC
+	</select>
+	
+	<!-- *********************************通过污泥块状态更新污泥块记录************************************ -->
+	<update id="insertSludgeByDriver" parameterType="factory.entity.Sludge">
+		update sludge set
+		RFID=#{rfidString},produce_time=#{produceTime},record_id=#{recordId},destination_address=#{destinationAddress},weight=#{weight},transcar_id=#{transcarId},status=0
+		where del_status=0 AND status=6
+	</update>
+	
+	<!-- *********************************根据司机id和污泥状态=6查询污泥************************************ -->
+	<select id="querysludgebydriverIdAndStatus" resultMap="SludgeCarMap">
+		SELECT
+		sludge.*,record.id,record.site_id,car.id,car.license,car.driver_id,user.id,user.realname,user.telephone,site.id,site.site_name,sludge_function.id,sludge_function.`function`
+		FROM
+		sludge LEFT JOIN record ON sludge.record_id=record.id LEFT JOIN
+		car ON sludge.transcar_id=car.id LEFT JOIN site ON
+		record.site_id=site.id
+		LEFT JOIN `user` ON car.driver_id=`user`.id LEFT
+		JOIN sludge_function
+		ON sludge.function_id=sludge_function.id
+		WHERE
+		sludge.del_status=0 AND
+		user.id=#{driverId} AND sludge.status=6
+		ORDER BY
+		sludge.produce_time DESC
+	</select>
+	
+	<!-- *********************************运输司机界面模糊查询************************************ -->
+	<select id="fussyQuerysludgebyTransDriver" resultMap="SludgeCarMap">
+		SELECT
+		sludge.*,record.id,record.site_id,car.id,car.license,car.driver_id,user.id,user.realname,user.telephone,site.id,site.site_name,sludge_function.id,sludge_function.`function`
+		FROM
+		sludge LEFT JOIN record ON sludge.record_id=record.id LEFT JOIN
+		car ON sludge.transcar_id=car.id LEFT JOIN site ON
+		record.site_id=site.id
+		LEFT JOIN `user` ON car.driver_id=`user`.id LEFT
+		JOIN sludge_function
+		ON sludge.function_id=sludge_function.id
+		WHERE
+		sludge.del_status=0 AND sludge.status!=6 AND user.id=#{driverId}
+		AND
+		(`record`.id LIKE CONCAT('%',#{condition},'%')
+		OR `site`.site_name
+		LIKE CONCAT('%',#{condition},'%') OR sludge.RFID
+		LIKE
+		CONCAT('%',#{condition},'%') or sludge.destination_address LIKE
+		CONCAT('%',#{condition},'%'))
+		ORDER BY
+		sludge.produce_time DESC
 	</select>
 </mapper>

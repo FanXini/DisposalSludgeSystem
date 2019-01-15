@@ -53,5 +53,13 @@ public interface SludgeDao {
 	public SludgeFunction querySludgeFunctionByFunction(@Param("function") String function);
 	
 	public void addSludgeFunction(SludgeFunction function);
+	
+public List<Sludge> transportsludgeofonedriver(@Param("driverId") int driverId);
+	
+	public void insertSludgeByDriver(Sludge sludge);
+	
+	public Sludge querysludgebydriverIdAndStatus(@Param("driverId") int driverId);
+	
+	public List<Sludge> fussyQuerysludgebyTransDriver(@Param("condition") String condition,@Param("driverId") int driverId);
 
 }

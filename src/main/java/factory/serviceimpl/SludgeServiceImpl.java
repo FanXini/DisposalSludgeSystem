@@ -207,5 +207,29 @@ public class SludgeServiceImpl implements SludgeService {
 		// });
 		return sludges;
 	}
+	
+	@Override
+	public List<Sludge> transportsludgeofonedriver(int driverId) {
+		// TODO Auto-generated method stub
+		List<Sludge> sludges = new ArrayList<Sludge>();
+		sludges.addAll(sludgeDao.transportsludgeofonedriver(driverId));
+		return sludges;
+	}
+	@Override
+	public void insertSludgeByDriver(Sludge sludge) {
+		sludgeDao.insertSludgeByDriver(sludge);
+	}
+	@Override
+	public Sludge querysludgebydriverIdAndStatus(int driverId) {
+		// TODO Auto-generated method stub	
+		Sludge sludge = sludgeDao.querysludgebydriverIdAndStatus(driverId);
+		return sludge;
+	}
+	@Override
+	public List<Sludge> fussyQuerysludgebyTransDriver(String condition,int driverId) {
+		List<Sludge> sludges = new ArrayList<Sludge>();
+		sludges.addAll(sludgeDao.fussyQuerysludgebyTransDriver(condition,driverId));
+		return sludges;
+	}
 
 }

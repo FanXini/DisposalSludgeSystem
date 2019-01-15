@@ -15,8 +15,23 @@ public class Sludge {
 	private SludgeFunction sludgeFunction;
 	private float weight;
 	private int transcarId;
+	private Car car;
+	private User user;
 	private MinorMudWareHouse minorMudWareHouse;
 	
+	
+	public Car getCar() {
+		return car;
+	}
+	public void setCar(Car car) {
+		this.car = car;
+	}
+	public User getUser() {
+		return user;
+	}
+	public void setUser(User user) {
+		this.user = user;
+	}
 	public int getMinorMudWareHouseId() {
 		return minorMudWareHouseId;
 	}

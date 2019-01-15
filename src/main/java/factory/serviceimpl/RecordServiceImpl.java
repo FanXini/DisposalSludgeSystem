@@ -168,9 +168,9 @@ public class RecordServiceImpl implements RecordService{
 		carDao.editWorkerCarStatusAndSiteId(carId,3,siteId);
 	}
 	@Override
-	public int insertRecordByAlert(Record record) {
+	public void insertRecordByAlert(Record record) {
 		// TODO Auto-generated method stub
-		return recordDao.insertRecordByAlert(record);
+		 recordDao.insertRecordByAlert(record);
 	}
 	@Override
 	public double queryRateOfProcessBySiteId(int siteId) {

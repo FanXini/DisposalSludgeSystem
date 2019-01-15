@@ -44,6 +44,55 @@ public class SludgeController {
 	@Autowired
 	private UserService userService;
 	
+	//污泥运输车司机工作记录
+		@RequestMapping("/transportsludgeofonedriver")
+		@ResponseBody
+		public ModelAndView transportsludgeofonedriver(@RequestParam("driverId") int driverId, ModelAndView mv){
+			log.info("调用transportsludgeofonedriver");
+			List<Sludge> sludges=sludgeService.transportsludgeofonedriver(driverId);
+			log.info(sludges.size());
+			for(Sludge item:sludges){
+				System.out.println(item.getTranscarId()+","+item.getCar().getLicense());
+			};
+			mv.addObject("sludgeList",sludges);
+			mv.setViewName("worker/transportsludge");
+			return mv;
+		}
+		
+		//污泥运输车司机插入一条污泥记录
+		@RequestMapping("insertSludgeByDriver")
+		@ResponseBody
+		public String insertRecordByAlert(@RequestBody Sludge sludge) {
+			log.info("添加一条记录");
+			log.info(sludge.getRfidString());
+			sludgeService.insertSludgeByDriver(sludge);
+			return "success";
+		}
+		
+		//查询污泥运输车司机未处理的污泥（污泥status=6）
+		@RequestMapping("querysludgebydriverIdAndStatus")
+		@ResponseBody
+		public Sludge querysludgebydriverIdAndStatus(@RequestParam("driverId") int driverId){
+			log.info("调用querysludgebydriverIdAndStatus");
+			Sludge sludge = sludgeService.querysludgebydriverIdAndStatus(driverId);
+			return sludge;
+		}
+		
+		//运输司机界面模糊查询
+		@RequestMapping("fussyQuerysludgebyTransDriver")
+		@ResponseBody
+		public List<Sludge> fussyQuerysludgebyTransDriver(@RequestParam("condition") String condition,@RequestParam("driverId") int driverId){
+			log.info("进入fussyQuerysludgebyTransDriver");
+			log.info(condition);
+			List<Sludge> sludges = new ArrayList<Sludge>();
+				sludges.addAll(sludgeService.fussyQuerysludgebyTransDriver(condition,driverId));
+				log.info(sludges.size());
+				for(Sludge item:sludges){
+					System.out.println(item.getRecordId());
+				};
+			return sludges;
+		}
+	
 	@Autowired MudWareHouseService mudWareHouseService;
 	@RequestMapping("jumpToSludge")
 	public ModelAndView querySludgeFunctionsAndJumpToSludge(ModelAndView mv){

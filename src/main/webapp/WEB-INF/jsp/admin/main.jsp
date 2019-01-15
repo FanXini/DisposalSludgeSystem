@@ -144,6 +144,14 @@
 							<i class="fa fa-book"></i> <span class="nav-label">工作记录(司机)</span>
 					</a></li>
 				</c:if>
+				
+				<!-- 工作记录(污泥运输司机) -->
+				<c:if test="${fn:contains(sessionScope.authos, 'au11th')}" >
+					<li class="line dk"></li>
+					<li><a class="J_menuItem" href="sludge/transportsludgeofonedriver?driverId=${sessionScope.user.id}"> <i
+							class="fa fa-book"></i> <span class="nav-label">工作记录(污泥运输司机)</span>
+					</a></li>
+				</c:if>
 				<!-- 一键报警(工厂) -->
 				<c:if test="${fn:contains(sessionScope.authos, 'au6th')}">
 					<li class="line dk"></li>
