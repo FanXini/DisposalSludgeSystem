@@ -198,10 +198,10 @@ public class CarServiceImpl implements CarService{
 		return car;
 	}
 	@Override
-	public List<Car> queryMapCarBySiteId(int siteId) {
+	public List<Car> queryMapCarBySiteIdAndCarTypeAndStatus(int siteId,int carType,int status) {
 		// TODO Auto-generated method stub
 		List<Car> cars=new ArrayList<Car>();
-		cars.addAll(carDao.queryMapCarBySiteId(siteId));
+		cars.addAll(carDao.queryMapCarBySiteIdAndCarTypeAndStatus(siteId,carType,status));
 		for(Car car:cars){
 			System.out.println(car.getLicense());
 		}

@@ -176,9 +176,14 @@ public class RecordServiceImpl implements RecordService{
 	public double queryRateOfProcessBySiteId(int siteId) {
 		// TODO Auto-generated method stub
 		Record record = recordDao.queryCurrentRecordBySiteId(siteId);
-		if(record.getPretreatAmount() != 0){
-			return record.getSludgesWeight()/record.getPretreatAmount();
-			
+		System.out.println(record.toString());
+		if(record.getPretreatAmount() != 0 ){
+			double rate = record.getSludgesWeight()/record.getPretreatAmount();
+			if(rate < 0 || rate > 1){
+				return -1;
+			}else{
+				return rate;
+			}
 		}else{
 			return -1;
 		}

@@ -43,7 +43,7 @@ public interface CarService {
 	
 	public Car assignCar(int siteId,double siteLongitude,double siteLatitude,int carType);
 	
-	public List<Car> queryMapCarBySiteId(int siteId);
+	public List<Car> queryMapCarBySiteIdAndCarTypeAndStatus(int siteId,int carType,int status);
 	
 	public List<Car> querycarWithoutVideo();
 	

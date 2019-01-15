@@ -142,7 +142,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	<div class="bottom_button">
 	<ul class="nav navbar-top-links navbar-right">
 		<li class="dropdown dropup"><a class="dropdown-toggle count-info" data-toggle="dropdown"
-			href="#" onclick="showCarTable();"> <i class="fa fa-truck"></i> <span class="label label-warning" id="carRedNum">3</span> </a>
+			href="#" onclick="showTreatmentCarTable();"> <i i class="fa fa-truck" style="color:#EEC591"></i> <span class="label label-warning" id="treatmentCarNum"></span> </a>
 			<ul class="dropdown-menu dropdown-messages"
 					style="background: rgba(176,196,222,0.8);max-height:300px;overflow-y:auto;">
 					<li>
@@ -156,12 +156,32 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					</li>
 					<li class="divider"></li>
 					<li>
-						<table id="carTable" class="tablelist" border="0" cellspacing="0" cellpadding="0"
+						<table id="treatmentCarTable" class="tablelist" border="0" cellspacing="0" cellpadding="0"
 								style="width:100%">
 						</table>
 					</li>
 				</ul>
 			</li>
+		<li class="dropdown dropup"><a class="dropdown-toggle count-info" data-toggle="dropdown"
+			href="#" onclick="showCarrierTable();"> <i class="fa fa-truck" style="color:gray"></i> <span id="carrierNum" class="label label-warning"></span> </a>
+			<ul class="dropdown-menu dropdown-messages"
+					style="background: rgba(176,196,222,0.8);max-height:300px;overflow-y:auto;">
+				<li>
+					<table class="tablehead" border="0" cellspacing="0" cellpadding="0" style="width:100%">
+						<tr>
+							<td>车牌号</td>
+							<td>预计到达</td>
+						</tr>
+					</table>
+				</li>
+				<li class="divider"></li>
+				<li>
+					<table id="carrierTable" class="tablelist" border="0" cellspacing="0" cellpadding="0"
+							style="width:100%">
+					</table>
+				</li>
+			</ul>
+		</li>
 	</ul>
 	</div>
 </body>
@@ -188,8 +208,15 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	var carInfoWindow = new Array();
 	var siteId=${sessionScope.user.siteId};
 	var carStatus=-1;
-	show();
 	
+	show()
+  	setInterval("show()",3000);  //定时刷新map
+	
+  	function show(){
+  		showMap(siteId,-1,-1);
+  		showNum();
+  	}
+  	
 	/***************************** 查询站点信息************************************* */
 	function queryMapSite(id){
 		var site;
@@ -222,12 +249,16 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   	}
   		
   	/***************************** 查询车辆************************************* */
-	function queryMapCar(id){
+	function queryMapCar(id,carType,status){
 		var carList;
 		$.ajax({
 			type : "POST",
-			url : "car/queryMapCarBySiteId",
-			data : "siteId="+id,
+			url : "car/queryMapCarBySiteIdAndCarTypeAndStatus",
+			data : {
+				"siteId" : id,
+				"carType" : carType,
+				"status" : status
+				},
 			async : false,
 			success : function(list) {
 				carList = list;
@@ -235,19 +266,14 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		});
 		return carList;
 	}
-	function show(){
-		showMap(queryMapSite(siteId));
-  	}
-	
-  	//setInterval("showMap()",3000);  //定时刷新map
-  	//setInterval("showNum()",3000);  //定时刷新空闲车辆及待处理站点数量
+
 	/***************************** 显示标注************************************* */
-	function showMap(site) {
+	function showMap(id,carType,status) {
 		map.clearOverlays(); //清除地图上所有覆盖物
 		carPoint=[];
 		carMarker=[];
 		carInfoWindow=[];
-		
+		site = queryMapSite(id);
 		if (site.status== "0") {
 			myIcon = new BMap.Icon("img/factory(green).png", new BMap.Size(100, 70), {
 			imageSize : new BMap.Size(100, 70)});
@@ -266,7 +292,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			siteInfo(site);
 		});
 		
-		carList = queryMapCar(site.id);
+		carList = queryMapCar(id,carType,status);
 		$.each(carList,function(i, car) {
 			if(car.carType == 0){
 				var carIcon = new BMap.Icon("img/car.png", new BMap.Size(35, 24), 
@@ -347,11 +373,17 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				map.openInfoWindow(carInfoWindow[car.id], carPoint[car.id]);
 			}
 		}
-	/***************************** 右下角查询站点所有车辆************************************* */
-	function showCarTable(){
-		$("#carTable").empty();
+	
+	/***************************** 显示右下角车辆数量************************************* */
+	function showNum(){
+		$("#treatmentCarNum").text(queryMapCar(siteId,0,-1).length);
+		$("#carrierNum").text(queryMapCar(siteId,1,-1).length);
+		};
+	/***************************** 右下角查询站点所有处理车************************************* */
+	function showTreatmentCarTable(){
+		$("#treatmentCarTable").empty();
 		var table;
-		carList = queryMapCar(siteId);
+		carList = queryMapCar(siteId,0,-1);
 		$.each(carList,function(i, car){
 			if(car.status == 1){
 				var pointSite = new BMap.Point(car.site.longitude,car.site.latitude);
@@ -363,7 +395,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						table += '<td style="width:20%;">' + car.license + '</td>';
 						table += '<td style="width:20%;">'+plan.getDuration(true)+'</td>';
 						table += '</tr>';
-						$("#carTable").append(table);
+						$("#treatmentCarTable").append(table);
 					}});		
 				driving.search(carPoint,pointSite);
 			}
@@ -372,14 +404,51 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				table += '<td style="width:20%;">' + car.license + '</td>';
 				table += '<td style="width:20%;">处理中</td>';
 				table += '</tr>';
-				$("#carTable").append(table);
+				$("#treatmentCarTable").append(table);
 			}
 			if(car.status == 3){
 				table='<tr id="'+ car.id +'" onmouseover="sel(this)" onmouseout="cle(this)" onclick="showCarInfo('+JSON.stringify(car).replace(/\"/g,"'")+')">';
 				table += '<td style="width:20%;">' + car.license + '</td>';
 				table += '<td style="width:20%;">未出发</td>';
 				table += '</tr>';
-				$("#carTable").append(table);
+				$("#treatmentCarTable").append(table);
+			}
+		});
+	}
+	
+	/***************************** 右下角查询站点所有运输车************************************* */
+	function showCarrierTable(){
+		$("#carrierTable").empty();
+		var table;
+		carList = queryMapCar(siteId,1,-1);
+		$.each(carList,function(i, car){
+			if(car.status == 1){
+				var pointSite = new BMap.Point(car.site.longitude,car.site.latitude);
+				var carPoint = new BMap.Point(car.longitude,car.latitude);
+				var driving = new BMap.DrivingRoute(map,
+					{onSearchComplete:function(results){
+						var plan=results.getPlan(0);
+						table='<tr id="'+ car.id +'" onmouseover="sel(this)" onmouseout="cle(this)" onclick="showCarInfo('+JSON.stringify(car).replace(/\"/g,"'")+')">';
+						table += '<td style="width:20%;">' + car.license + '</td>';
+						table += '<td style="width:20%;">'+plan.getDuration(true)+'</td>';
+						table += '</tr>';
+						$("#carrierTable").append(table);
+					}});		
+				driving.search(carPoint,pointSite);
+			}
+			if(car.status == 2){
+				table='<tr id="'+ car.id +'" onmouseover="sel(this)" onmouseout="cle(this)" onclick="showCarInfo('+JSON.stringify(car).replace(/\"/g,"'")+')">';
+				table += '<td style="width:20%;">' + car.license + '</td>';
+				table += '<td style="width:20%;">装箱中</td>';
+				table += '</tr>';
+				$("#carrierTable").append(table);
+			}
+			if(car.status == 3){
+				table='<tr id="'+ car.id +'" onmouseover="sel(this)" onmouseout="cle(this)" onclick="showCarInfo('+JSON.stringify(car).replace(/\"/g,"'")+')">';
+				table += '<td style="width:20%;">' + car.license + '</td>';
+				table += '<td style="width:20%;">未出发</td>';
+				table += '</tr>';
+				$("#carrierTable").append(table);
 			}
 		});
 	}
