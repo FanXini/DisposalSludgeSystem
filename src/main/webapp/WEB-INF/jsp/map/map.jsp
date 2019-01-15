@@ -148,49 +148,93 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	<div class="bottom_button">
 	<ul class="nav navbar-top-links navbar-right">
 		<li class="dropdown dropup"><a class="dropdown-toggle count-info" data-toggle="dropdown"
-			href="#" onclick="showCarTable();"> <i class="fa fa-truck"></i> <span class="label label-warning" id="carRedNum">3</span> </a>
+			href="#" onclick="showSiteTable();"> <i class="fa fa-map-marker" style="color:#EE2C2C"></i> <span id="siteRedNum" class="label label-danger"></span> </a>
 			<ul class="dropdown-menu dropdown-messages"
-					style="background: rgba(176,196,222,0.8);height:300px;overflow-y:scroll;">
-					<li>
-							<table class="tablehead" border="0" cellspacing="0" cellpadding="0"
-								style="width:100%">
-								<tr>
-									<td>车牌号</td>
-									<td>目的地</td>
-									<td>状态</td>
-								</tr>
-							</table>
-					</li>
-					<li class="divider"></li>
-					<li>
-						<table id="carTable" class="tablelist" border="0" cellspacing="0" cellpadding="0"
-								style="width:100%">
-						</table>
-					</li>
-				</ul>
-			</li>
+					style="background: rgba(176,196,222,0.8);max-height:300px;overflow-y:auto;">
+				<li>
+					<table class="tablehead" border="0" cellspacing="0" cellpadding="0"
+						style="width:100%">
+						<tr>
+							<td style="width:20%;">编号</td>
+							<td style="width:45%;">站点</td>
+							<td style="width:15%;">污泥量</td>
+							<td style="width:10%;">状态</td>
+						</tr>
+					</table>
+				</li>
+				<li class="divider"></li>
+				<li>
+					<table id="siteTable" class="tablelist" border="0" cellspacing="0" cellpadding="0"
+							style="width:100%">
+					</table>
+				</li>
+			</ul>
+		</li>
 		<li class="dropdown dropup"><a class="dropdown-toggle count-info" data-toggle="dropdown"
-			href="#" onclick="showSiteTable();"> <i class="fa fa-map-marker"></i> <span id="siteRedNum" class="label label-danger"></span> </a>
+			href="#" onclick="showTreatmentCarTable();"> <i i class="fa fa-truck"  style="color:#FFD700"></i><span class="label label-warning" id="treatmentCarNum"></span> </a>
 			<ul class="dropdown-menu dropdown-messages"
-					style="background: rgba(176,196,222,0.8);height:300px;overflow-y:scroll;">
-					<li>
-							<table class="tablehead" border="0" cellspacing="0" cellpadding="0"
-								style="width:100%">
-								<tr>
-									<td style="width:20%;">编号</td>
-									<td style="width:45%;">站点</td>
-									<td style="width:15%;">污泥量</td>
-									<td style="width:10%;">状态</td>
-								</tr>
-							</table>
-					</li>
-					<li class="divider"></li>
-					<li>
-						<table id="siteTable" class="tablelist" border="0" cellspacing="0" cellpadding="0"
-								style="width:100%">
-						</table>
-					</li>
-				</ul>
+					style="background: rgba(176,196,222,0.8);max-height:300px;overflow-y:auto;">
+				<li>
+					<table class="tablehead" border="0" cellspacing="0" cellpadding="0"
+						style="width:100%">
+						<tr>
+							<td>车牌号</td>
+							<td>目的地</td>
+							<td>状态</td>
+						</tr>
+					</table>
+				</li>
+				<li class="divider"></li>
+				<li>
+					<table id="treatmentCarTable" class="tablelist" border="0" cellspacing="0" cellpadding="0"
+							style="width:100%">
+					</table>
+				</li>
+			</ul>
+		</li>
+		<li class="dropdown dropup"><a class="dropdown-toggle count-info" data-toggle="dropdown"
+			href="#" onclick="showCarrierTable();"> <i class="fa fa-truck"  style="color:#4D4D4D"></i> <span class="label label-warning" id="carrierNum">3</span> </a>
+			<ul class="dropdown-menu dropdown-messages"
+					style="background: rgba(176,196,222,0.8);max-height:300px;overflow-y:auto;">
+				<li>
+					<table class="tablehead" border="0" cellspacing="0" cellpadding="0"
+						style="width:100%">
+						<tr>
+							<td>车牌号</td>
+							<td>目的地</td>
+							<td>状态</td>
+						</tr>
+					</table>
+				</li>
+				<li class="divider"></li>
+				<li>
+					<table id="carrierTable" class="tablelist" border="0" cellspacing="0" cellpadding="0"
+							style="width:100%">
+					</table>
+				</li>
+			</ul>
+		</li>
+		<li class="dropdown dropup"><a class="dropdown-toggle count-info" data-toggle="dropdown"
+			href="#" onclick="showWareHouseTable();"><i i class="fa fa-cubes" style="color:#EE2C2C"></i></a>
+			<ul class="dropdown-menu dropdown-messages" style="background: rgba(176,196,222,0.8);max-height:300px;overflow-y:auto;">
+				<li>
+					<table class="tablehead" border="0" cellspacing="0" cellpadding="0"
+						style="width:100%">
+						<tr>
+							<td>子仓</td>
+							<td>存储量</td>
+							<td>剩余容量</td>
+							<td>总容量</td>
+						</tr>
+					</table>
+				</li>
+				<li class="divider"></li>
+				<li>
+					<table id="wareHouseTable" class="tablelist" border="0" cellspacing="0" cellpadding="0"
+							style="width:100%">
+					</table>
+				</li>
+			</ul>
 		</li>
 	</ul>
 	</div>
@@ -264,7 +308,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <script type="text/javascript">
 	var map = new BMap.Map("allmap");
 	window.map = map;
-	//var point = new BMap.Point(112.971916, 28.197967);
+	//var point = new BMap.Point(112.971916, 28.197967);//长沙
+	var point = new BMap.Point(114.126588,22.608209);//深圳
 
 	map.addControl(new BMap.NavigationControl()); // 添加平移缩放控件
 	map.addControl(new BMap.ScaleControl()); // 添加比例尺控件
@@ -272,10 +317,14 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	map.enableScrollWheelZoom(); //启用滚轮放大缩小
 	//	map.addControl(new BMap.MapTypeControl());          //添加地图类型控件
 	map.disable3DBuilding();
-	map.centerAndZoom("深圳市", 11);
+	map.centerAndZoom(point, 12);
 	map.setMapStyle({
 		style : 'light'
 	}); //设置地图样式
+	var wareHouseName;
+	var wareHousePoint;
+	var wareHouseMarker;
+	var wareHouseInfoWindow;
 	var siteMarker = new Array();
 	var sitePoint = new Array();
 	var siteInfoWindow = new Array();
@@ -414,20 +463,115 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   			alert("请选择类型！");
   		}
   	});
-  	/***************************** 显示右下角空车及待处理站点数量************************************* */
-	function showNum(){
+  	    
+  	/***************************** 查询子智慧泥仓信息************************************* */  	
+  	function queryWareHouse(){
+  		var minorWareHouseList;
+		$.ajax({
+  			type : "POST",
+  			url : "mudWareHouse/queryMinorWareHouse",
+			async : false,
+  			success : function(list) {
+  				minorWareHouseList = list;
+  			}
+  		});
+  		return minorWareHouseList;
+  	}
+  	
+	/***************************** 查询站点信息************************************* */
+	function queryMapSite(siteId,status){
+		var sites;
+		$.ajax({
+  			type : "POST",
+  			url : "system/querySiteMapBySiteIdAndStatus",
+  			data : {
+  				"siteId" : siteId,
+  				"status" : status
+  			},
+			async : false,
+  			success : function(list) {
+  					sites = list;
+  			}
+  		});
+  		return sites;
+  	}
+	
+	/***************************** 查询站点处理进度************************************* */  	
+  	function queryRateOfProcess(siteId){
+  		var rate;
+		$.ajax({
+  			type : "POST",
+  			url : "record/queryRateOfProcessBySiteId",
+  			data : "siteId="+siteId,
+			async : false,
+  			success : function(result) {
+  				rate = result;
+  			}
+  		});
+  		return rate;
+  	}
+	
+	/***************************** 查询站点预处理量************************************* */
+  	function queryPretreatAmount(id){
+  		var value;
+		$.ajax({
+  			type : "POST",
+  			url : "record/queryCurrentPretreatAmountBySiteId",
+  			data : "siteId="+id,
+			async : false,
+  			success : function(result) {
+  				value = result;
+  			}
+  		});
+  		return value;
+  	}
+  		
+  	/***************************** 查询车辆************************************* */
+	function queryMapCar(siteId,carType,status){
+		var carList;
 		$.ajax({
 			type : "POST",
-			url : "system/queryRedNum",
-			dataType : "json",
-			contentType : "application/json",
-			success : function(result) {
-				$("#siteRedNum").text(result.site);
-				$("#carRedNum").text(result.car);
+			url : "car/queryMapCarBySiteIdAndCarTypeAndStatus",
+			data : {
+				"siteId" : siteId,
+				"carType" : carType,
+				"status" : status
+				},
+			async : false,
+			success : function(list) {
+				carList = list;
 			}
 		});
+		return carList;
 	}
-	
+  	/***************************** 显示右下角空车及待处理站点数量************************************* */
+	function showNum(){
+  		$("#treatmentCarNum").text(queryMapCar(-1,0,0).length);
+  		$("#carrierNum").text(queryMapCar(-1,1,0).length);
+  		$("#siteRedNum").text(queryMapSite(-1,2).length);
+	}
+  	
+  	/***************************** 显示主智慧泥仓************************************* */  	
+  	function showWareHouse(){
+		$.ajax({
+  			type : "POST",
+  			url : "mudWareHouse/queryMainWareHouse",
+  			success : function(list) {
+  				mainWareHouse = list[0];
+  				wareHouseName = mainWareHouse.wareHouseName;
+  				myIcon = new BMap.Icon("img/warehouse.png", new BMap.Size(90, 63), {
+					imageSize : new BMap.Size(100, 70)});
+  				wareHousePoint = new BMap.Point(mainWareHouse.longitude,mainWareHouse.latitude);
+  				wareHouseMarker = new BMap.Marker(wareHousePoint,{icon:myIcon});
+				
+				map.addOverlay(wareHouseMarker);
+				wareHouseMarker.addEventListener("mouseover",function(){
+					wareHouseInfo()
+				});
+  			}
+  		});
+  	}
+  	
 	/***************************** 显示标注************************************* */
 	function showMap(selectType,selectStatus) {
 		map.clearOverlays(); //清除地图上所有覆盖物
@@ -438,59 +582,50 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		carMarker=[];
 		carInfoWindow=[];
 		
+		showWareHouse();
 		if(selectType==0||selectType==-1){
-		$.ajax({
-				type : "POST",
-				url : "system/queryAllSite",
-				dataType : "json",
-				contentType : "application/json",
-				async: false,
-				success : function(siteList) {
-
-					var myIcon;
-					$.each(siteList,function(i, site) {
-					if(selectStatus==site.status || selectStatus==-1){
-						if (site.status== "0") {
-							myIcon = new BMap.Icon("img/factory(purple).png", new BMap.Size(40, 26), {
-							imageSize : new BMap.Size(40, 26)});
-						}
-						else if (site.status== "1") {
-							myIcon = new BMap.Icon("img/factory(yellow).png", new BMap.Size(40, 26), {
-							imageSize : new BMap.Size(40, 26)});
-						} 
-						else if (site.status== "2") {
-							myIcon = new BMap.Icon("img/factory(red).png", new BMap.Size(40, 26), {
-							imageSize : new BMap.Size(40, 26)});
-						} 
-						sitePoint[site.id] = new BMap.Point(site.longitude,site.latitude);
-						siteMarker[site.id] = new BMap.Marker(sitePoint[site.id],{icon:myIcon});
-						
-						map.addOverlay(siteMarker[site.id]);
-						if(site.status=="2")
-							siteMarker[site.id].setAnimation(BMAP_ANIMATION_BOUNCE);
-						siteMarker[site.id].addEventListener("mouseover",function(){
-						siteInfo(site)
-						});
-						}
+			siteList = queryMapSite(-1,selectStatus);
+			if(!jQuery.isEmptyObject(siteList)){
+				var myIcon;
+				$.each(siteList,function(i, site) {
+				if(selectStatus==site.status || selectStatus==-1){
+					if (site.status== "0") {
+						myIcon = new BMap.Icon("img/factory(green).png", new BMap.Size(90, 63), {
+								imageSize : new BMap.Size(100, 70)});
+					}
+					else if (site.status== "1") {
+						myIcon = new BMap.Icon("img/factory(yellow).png", new BMap.Size(90, 63), {
+							imageSize : new BMap.Size(100, 70)});
+					} 
+					else if (site.status== "2") {
+						myIcon = new BMap.Icon("img/factory(red).png", new BMap.Size(90, 63), {
+							imageSize : new BMap.Size(100, 70)});
+					} 
+					sitePoint[site.id] = new BMap.Point(site.longitude,site.latitude);
+					siteMarker[site.id] = new BMap.Marker(sitePoint[site.id],{icon:myIcon});
+					
+					map.addOverlay(siteMarker[site.id]);
+					if(site.status=="2")
+						siteMarker[site.id].setAnimation(BMAP_ANIMATION_BOUNCE);
+					siteMarker[site.id].addEventListener("mouseover",function(){
+					siteInfo(site)
 					});
-				}
-			});
+					}
+				});
+			}
 		}
 		if(selectType==1||selectType==-1){
-		$.ajax({
-				type : "POST",
-				url : "car/queryAllCarOrderByStatus",
-				dataType : "json",
-				contentType : "application/json",
-				async: false,
-				success : function(carList) {
-					var carIcon = new BMap.Icon("img/car.png", new BMap.Size(35, 24), {
-									imageSize : new BMap.Size(35, 24)});
-					$.each(carList,function(i, car) {
-					if(selectStatus==car.status || selectStatus==-1){
-						if(car.status==1||car.status==4){
-						
-						
+			carList=queryMapCar(-1,-1,selectStatus)
+			if(!jQuery.isEmptyObject(carList)){
+				$.each(carList,function(i, car) {
+					if(car.carType == 0){
+						var carIcon = new BMap.Icon("img/car.png", new BMap.Size(35, 24), 
+										{imageSize : new BMap.Size(35, 24)});
+					}else{
+						var carIcon = new BMap.Icon("img/transportCar.png", new BMap.Size(35, 35), 
+										{imageSize : new BMap.Size(35, 35)});
+					}
+					if(car.status==1||car.status==4){
 						carPoint[car.id] = new BMap.Point(car.longitude,car.latitude);
 						carMarker[car.id] = new BMap.Marker(carPoint[car.id],{icon:carIcon});
 						
@@ -500,70 +635,78 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						carMarker[car.id].addEventListener("mouseover",function(){
 							carInfo(car)
 						});
-						}
-						}
-					});
-				}
-			});
+					}
+				});
+			}
+		}
 	}
-	}
+	
+	/***************************** 泥仓信息框显示************************************* */
+	function wareHouseInfo(){
+		var opts = {width : 130, }// 信息窗口宽度
+		minorWareHouseList = queryWareHouse();
+		var lid = '<div><h5>'+wareHouseName+'</h5><table style="font-size:12px;">';
+		$.each(minorWareHouseList,function(i, minorWareHouse){
+			lid += '<tr><td style="width:40%;text-align: left;">'+minorWareHouse.serialNumber+'号仓:</td><td style="text-align: left;">'+minorWareHouse.remainCapacity+'/'+minorWareHouse.capacity+'</td></tr>';
+		});
+		lid += '</table>' + '</div>';
+		wareHouseInfoWindow = new BMap.InfoWindow(lid,opts); // 创建信息窗口对象 
+		map.openInfoWindow(wareHouseInfoWindow, wareHousePoint);
+		}
 	
 	/***************************** 站点信息框显示************************************* */
 	function siteInfo(site){
-			var value=-1;
-			var opts = {width : 230, }// 信息窗口宽度
+		var value=-1;
+		var opts = {width : 230, }// 信息窗口宽度
+		var status;
+		if (site.status== "0")
+			status="正常";
+		else if (site.status== "1")
+			status="处理中";
+		else if (site.status== "2"){
 			$.ajax({
 				type : "POST",
-				url : "system/queryUltrasonicValueBySite",
-				data : {"sensorIdSet" : site.sensorIdSet},
-				success : function(sensors) {
-					var status;
-					if (site.status== "0")
-						status="正常";
-					else if (site.status== "1")
-						status="处理中";
-					else if (site.status== "2"){
-						$.ajax({
-							type : "POST",
-							url : "system/countRecordOfCarNullBySiteId",
-							async: false,
-							data : {"siteId" : site.id},
-							success : function(result) {
-								if(result==0)
-									status="待处理(已分配)";
-								else
-									status="待处理";
-							}
-						});
-					}
-					var lid = '<div><h5><a href="sensor/deviceDetail?id='+site.id+'&location='+site.siteName+'&locationId=1'+'">'+site.siteName+'</a></h5><table style="font-size:12px;">';
-					if(!jQuery.isEmptyObject(sensors)){
-						{
-							$.each(sensors,function(i, sensor) {
-								if(sensor.typeId==2){
-									var v=sensor.sensorValue.value;
-									//alert(result.value);
-									//污泥量
-									value=100*(site.depth-v)/site.depth;
-									lid += '<tr><td style="width:40%;text-align: left;">污泥量：</td><td style="text-align: left; color: #1874CD; font-weight: bold;">'+value.toFixed(2)+'%</td></tr>';
-									return false;
-								}
-							});
-						}
-					}
-					else if(jQuery.isEmptyObject(sensors) || value==-1)
-						lid += '<tr><td style="width:40%;text-align: left;">污泥量：</td><td style="text-align: left;">无数据</td></tr>';	
-					lid += '<tr><td style="width:40%;text-align: left;">Tel:</td><td style="text-align: left;">'+site.telephone+'</td></tr>';
-					if(status=="待处理")
-						lid += '<tr onclick="dealSite('+site.id+');" style="color:#FF4500;cursor:pointer;"><td style="width:40%;text-align: left;">状态:</td><td style="text-align: left;">'+status+'</td></tr>'
+				url : "system/countRecordOfCarNullBySiteId",
+				async: false,
+				data : {"siteId" : site.id},
+				success : function(result) {
+					if(result==0)
+						status="待处理(已分配)";
 					else
-						lid += '<tr style="color:#FF4500;"><td style="width:40%;text-align: left;">状态:</td><td style="text-align: left;">'+status+'</td></tr>';
-					lid += '</table>' + '</div>';
-					siteInfoWindow[site.id] = new BMap.InfoWindow(lid,opts); // 创建信息窗口对象 
-					map.openInfoWindow(siteInfoWindow[site.id], sitePoint[site.id]);
-					}
-				}); 
+						status="待处理(未分配)";
+				}
+			});
 		}
+		var lid = '<div><h5>'+site.siteName+'</h5><table style="font-size:12px;">';
+		if(site.status=="1"){
+			var rate = queryRateOfProcess(site.id);
+			if(rate == -1){
+				lid += '<tr><td style="width:40%;text-align: left;">处理进度：</td><td style="text-align: left;">数据异常</td></tr>';	
+				}else{
+				//处理进度
+				rate = 100*rate;
+				lid += '<tr><td style="width:40%;text-align: left;">处理进度：</td><td style="text-align: left; color: #1874CD; font-weight: bold;">'+rate.toFixed(2)+'%</td></tr>';
+			}
+		}else if(site.status=="2"){
+			var value = queryPretreatAmount(site.id);
+			if(value == -1){
+				lid += '<tr><td style="width:40%;text-align: left;">预处理量：</td><td style="text-align: left;">数据异常</td></tr>';	
+				}else if(value == 0){
+					lid += '<tr><td style="width:40%;text-align: left;">预处理量：</td><td style="text-align: left; color: #1874CD; font-weight: bold;">未设置</td></tr>';
+				}else{
+					//预处理量
+					lid += '<tr><td style="width:40%;text-align: left;">预处理量：</td><td style="text-align: left; color: #1874CD; font-weight: bold;">'+value+'</td></tr>';
+				}
+		}
+		lid += '<tr><td style="width:40%;text-align: left;">Tel:</td><td style="text-align: left;">'+site.telephone+'</td></tr>';
+		if(site.status=="2")
+			lid += '<tr onclick="dealSite('+site.id+');" style="color:#FF4500;cursor:pointer;"><td style="width:40%;text-align: left;">状态:</td><td style="text-align: left;">'+status+'</td></tr>'
+		else
+			lid += '<tr style="color:#FF4500;"><td style="width:40%;text-align: left;">状态:</td><td style="text-align: left;">'+status+'</td></tr>';
+		lid += '</table>' + '</div>';
+		siteInfoWindow[site.id] = new BMap.InfoWindow(lid,opts); // 创建信息窗口对象 
+		map.openInfoWindow(siteInfoWindow[site.id], sitePoint[site.id]);
+	}
 		
 	/***************************** 车辆信息框显示************************************* */
 	function carInfo(car){
@@ -658,48 +801,98 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			}
 		});
 	}
-	/***************************** 查询所有车辆************************************* */
-	function showCarTable(){
-	$("#carTable").empty();
-	$.ajax({
-			type : "POST",
-			url : "car/queryAllCarOrderByStatus",
-			dataType : "json",
-			contentType : "application/json",
-			success : function(carList) {
-				var table;
-				$.each(carList,function(i, car) {
-					var status;
-					if (car.status== "0"){
-						table='<tr id="'+ car.id +'" style="color:#FF0000;font-weight: 700;" onmouseover="sel(this)" onmouseout="cle(this)" onclick="dealCar('+car.id+');">';
-						status="空闲";
-					}
-					else if (car.status== "1"){
-						table='<tr id="'+ car.id +'" onmouseover="sel(this)" onmouseout="cle(this)" onclick="showCarInfo('+JSON.stringify(car).replace(/\"/g,"'")+')">';
-						status="在途中";
-					}
-					else if (car.status== "2"){
-						table='<tr id="'+ car.id +'" onmouseover="sel(this)" onmouseout="cle(this)" onclick="showCarInfo('+JSON.stringify(car).replace(/\"/g,"'")+')">';
-						status="已到达";
-					}
-					else if (car.status== "3"){
-						table='<tr id="'+ car.id +'" onmouseover="sel(this)" onmouseout="cle(this)" onclick="showCarInfo('+JSON.stringify(car).replace(/\"/g,"'")+')">';
-						status="已派单";
-					}
-					else if (car.status== "4"){
-						table='<tr id="'+ car.id +'" style="color:#FFFF00;font-weight: 700;" onmouseover="sel(this)" onmouseout="cle(this)" onclick="showCarInfo('+JSON.stringify(car).replace(/\"/g,"'")+')">';
-						status="返程中";
-					}
-					table += '<td style="width:20%;">' + car.license + '</td>';
-					if (!jQuery.isEmptyObject(car.site)){
-						table += '<td style="width:45%;">' + car.site.siteName + '</td>';
-					}
-					else table += '<td style="width:45%;">' + status + '</td>';
-					table += '<td style="width:25%;">' + status + '</td>';
-					table += '</tr>';
-					$("#carTable").append(table);
-				});
+	
+	/***************************** 右下角查询所有处理车************************************* */
+	function showTreatmentCarTable(){
+		$("#treatmentCarTable").empty();
+		var table;
+		carList = queryMapCar(-1,0,-1);
+		$.each(carList,function(i, car){
+			var status;
+			if (car.status== "0"){
+				table='<tr id="'+ car.id +'" style="color:#FF0000;font-weight: 700;" onmouseover="sel(this)" onmouseout="cle(this)" onclick="dealCar('+car.id+');">';
+				status="空闲";
 			}
+			else if (car.status== "1"){
+				table='<tr id="'+ car.id +'" onmouseover="sel(this)" onmouseout="cle(this)" onclick="showCarInfo('+JSON.stringify(car).replace(/\"/g,"'")+')">';
+				status="在途中";
+			}
+			else if (car.status== "2"){
+				table='<tr id="'+ car.id +'" onmouseover="sel(this)" onmouseout="cle(this)" onclick="showCarInfo('+JSON.stringify(car).replace(/\"/g,"'")+')">';
+				status="处理中";
+			}
+			else if (car.status== "3"){
+				table='<tr id="'+ car.id +'" onmouseover="sel(this)" onmouseout="cle(this)" onclick="showCarInfo('+JSON.stringify(car).replace(/\"/g,"'")+')">';
+				status="已派单";
+			}
+			else if (car.status== "4"){
+				table='<tr id="'+ car.id +'" style="color:#FFFF00;font-weight: 700;" onmouseover="sel(this)" onmouseout="cle(this)" onclick="showCarInfo('+JSON.stringify(car).replace(/\"/g,"'")+')">';
+				status="返程";
+			}
+			table += '<td style="width:20%;">' + car.license + '</td>';
+			if (!jQuery.isEmptyObject(car.site)){
+				table += '<td style="width:45%;">' + car.site.siteName + '</td>';
+			}
+			else table += '<td style="width:45%;">' + status + '</td>';
+			table += '<td style="width:25%;">' + status + '</td>';
+			table += '</tr>';
+			$("#treatmentCarTable").append(table);
+		});
+	}
+	
+	/***************************** 右下角查询所有运输车************************************* */
+	function showCarrierTable(){
+		$("#carrierTable").empty();
+		var table;
+		carList = queryMapCar(-1,1,-1);
+		$.each(carList,function(i, car){
+			var status;
+			if (car.status== "0"){
+				table='<tr id="'+ car.id +'" style="color:#FF0000;font-weight: 700;" onmouseover="sel(this)" onmouseout="cle(this)" onclick="dealCar('+car.id+');">';
+				status="空闲";
+			}
+			else if (car.status== "1"){
+				if(car.siteId != null){
+					table='<tr id="'+ car.id +'" onmouseover="sel(this)" onmouseout="cle(this)" onclick="showCarInfo('+JSON.stringify(car).replace(/\"/g,"'")+')">';
+					status="在途中";
+				}else{
+					table='<tr id="'+ car.id +'" onmouseover="sel(this)" onmouseout="cle(this)" onclick="showCarInfo('+JSON.stringify(car).replace(/\"/g,"'")+')">';
+					status="运输中";
+				}
+			}
+			else if (car.status== "2"){
+				table='<tr id="'+ car.id +'" onmouseover="sel(this)" onmouseout="cle(this)" onclick="showCarInfo('+JSON.stringify(car).replace(/\"/g,"'")+')">';
+				status="装箱中";
+			}
+			else if (car.status== "3"){
+				table='<tr id="'+ car.id +'" onmouseover="sel(this)" onmouseout="cle(this)" onclick="showCarInfo('+JSON.stringify(car).replace(/\"/g,"'")+')">';
+				status="已派单";
+			}
+			table += '<td style="width:20%;">' + car.license + '</td>';
+			if (!jQuery.isEmptyObject(car.site)){
+				table += '<td style="width:45%;">' + car.site.siteName + '</td>';
+			}
+			else table += '<td style="width:45%;">' + status + '</td>';
+			table += '<td style="width:25%;">' + status + '</td>';
+			table += '</tr>';
+			$("#carrierTable").append(table);
+		});
+	}
+	
+	/***************************** 右下角智慧泥仓信息显示************************************* */
+	function showWareHouseTable(){
+		wareHouseInfo();
+		$("#wareHouseTable").empty();
+		var table;
+		minorWareHouseList = queryWareHouse();
+		$.each(minorWareHouseList,function(i, minorWareHouse){
+			table='<tr id="'+ minorWareHouse.id +'" onmouseover="sel(this)" onmouseout="cle(this)")">';
+			table += '<td>' + minorWareHouse.serialNumber + '号仓</td>';
+			table += '<td>' + minorWareHouse.moistrueDegree*100 + '%</td>';
+			table += '<td>' + minorWareHouse.remainCapacity + '</td>';
+			table += '<td>' + minorWareHouse.capacity + '</td>';
+			table += '</tr>';
+			$("#wareHouseTable").append(table);
 		});
 	}
 	

@@ -175,11 +175,13 @@ public class RecordServiceImpl implements RecordService{
 	@Override
 	public double queryRateOfProcessBySiteId(int siteId) {
 		// TODO Auto-generated method stub
-		Record record = recordDao.queryCurrentRecordBySiteId(siteId);
+		Record record = recordDao.queryRateOfProcessBySiteId(siteId);
 		System.out.println(record.toString());
+		
 		if(record.getPretreatAmount() != 0 ){
 			double rate = record.getSludgesWeight()/record.getPretreatAmount();
 			if(rate < 0 || rate > 1){
+				//数据异常返回-1
 				return -1;
 			}else{
 				return rate;
@@ -189,5 +191,17 @@ public class RecordServiceImpl implements RecordService{
 		}
 	}
 	
+	public double queryCurrentPretreatAmountBySiteId(int siteId) {
+		// TODO Auto-generated method stub
+		double value = recordDao.queryCurrentPretreatAmountBySiteId(siteId);
+		System.out.println(value);
+		
+		if(value < 0){
+			//数据异常返回-1
+			return -1;
+		}else{
+			return value;
+		}
+	}
 
 }

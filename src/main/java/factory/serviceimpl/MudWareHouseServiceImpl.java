@@ -22,5 +22,11 @@ public class MudWareHouseServiceImpl implements MudWareHouseService{
 		minorMudWareHouselist.addAll(mudWareHouseDao.queryMinorWareHouse());
 		return minorMudWareHouselist;
 	}
-
+	@Override
+	public List<MainMudWareHouse> queryMainWareHouse() {
+		// TODO Auto-generated method stub
+		List<MainMudWareHouse> mainMudWareHouselist=new ArrayList<>();
+		mainMudWareHouselist.addAll(mudWareHouseDao.queryMainWareHouse());
+		return mainMudWareHouselist;
+	}
 }

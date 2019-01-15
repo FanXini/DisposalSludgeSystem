@@ -41,5 +41,5 @@ public interface SiteDao {
 	
 	public List<Site> querySiteServedByOneDriver(@Param("driverId") int driverId);
 	
-	public Site querySiteMapBySiteId(@Param("siteId") int siteId);
+	public List<Site> querySiteMapBySiteIdAndStatus(@Param("siteId") int siteId,@Param("status") int status);
 }

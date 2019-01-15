@@ -180,9 +180,9 @@ public class SiteServiceImpl implements SiteService{
 	}
 
 	@Override
-	public Site querySiteMapBySiteId(int siteId) {
+	public List<Site> querySiteMapBySiteIdAndStatus(int siteId,int status) {
 		// TODO Auto-generated method stub
-		return siteDao.querySiteMapBySiteId(siteId);
+		return siteDao.querySiteMapBySiteIdAndStatus(siteId,status);
 	}
 	
 	

@@ -41,7 +41,9 @@ public interface RecordDao {
 	
 	public int insertRecordByAlert(Record record);
 	
-	public Record queryCurrentRecordBySiteId(@Param("siteId") int siteId);
+	public Record queryRateOfProcessBySiteId(@Param("siteId") int siteId);
+	
+	public double queryCurrentPretreatAmountBySiteId(@Param("siteId") int siteId);
 	
 	
 	
