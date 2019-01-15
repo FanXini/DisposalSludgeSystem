@@ -1,5 +1,6 @@
 package factory.service;
 
+import factory.entity.Car;
 import factory.entity.Sludge;
 import factory.entity.SludgeFunction;
 
@@ -41,4 +42,10 @@ public interface SludgeService {
 	public List<Sludge> querySludgeBySiteName(String siteName);
 	 
 	public List<Sludge> transportsludgeofonedriver(int driverId);
+	
+	public void insertSludgeByDriver(Sludge sludge);
+	
+	public Sludge querysludgebydriverIdAndStatus(int driverId);
+	
+	public List<Sludge> fussyQuerysludgebyTransDriver(String condition,int driverId);
 }

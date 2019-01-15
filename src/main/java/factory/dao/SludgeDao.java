@@ -1,5 +1,6 @@
 package factory.dao;
 
+import factory.entity.Car;
 import factory.entity.Sludge;
 import factory.entity.SludgeFunction;
 import org.apache.ibatis.annotations.Param;
@@ -53,5 +54,10 @@ public interface SludgeDao {
 	public void addSludgeFunction(SludgeFunction function);
 	
 	public List<Sludge> transportsludgeofonedriver(@Param("driverId") int driverId);
-
+	
+	public void insertSludgeByDriver(Sludge sludge);
+	
+	public Sludge querysludgebydriverIdAndStatus(@Param("driverId") int driverId);
+	
+	public List<Sludge> fussyQuerysludgebyTransDriver(@Param("condition") String condition,@Param("driverId") int driverId);
 }

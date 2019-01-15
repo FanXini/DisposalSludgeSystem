@@ -15,8 +15,9 @@ public class Sludge {
 	private SludgeFunction sludgeFunction;
 	private float weight;
 	private int transcarId;
-private Car car;
-	private User user;	private MinorMudWareHouse minorMudWareHouse;
+    private Car car;
+	private User user;	
+	private MinorMudWareHouse minorMudWareHouse;
 	
 	public int getMinorMudWareHouseId() {
 		return minorMudWareHouseId;
@@ -115,5 +116,4 @@ private Car car;
 	public void setUser(User user) {
 		this.user = user;
 	}
-	
 }

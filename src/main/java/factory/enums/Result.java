@@ -31,9 +31,5 @@ public enum Result {
 	 * ½ûÖ¹µÇÂ½
 	 */	
 	FORBID;
-	
-	
-	
-	
 
 }
