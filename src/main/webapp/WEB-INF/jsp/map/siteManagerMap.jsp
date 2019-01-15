@@ -139,6 +139,31 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				</tr>
 			</table>
 	</div>
+	<div class="bottom_button">
+	<ul class="nav navbar-top-links navbar-right">
+		<li class="dropdown dropup"><a class="dropdown-toggle count-info" data-toggle="dropdown"
+			href="#" onclick="showCarTable();"> <i class="fa fa-truck"></i> <span class="label label-warning" id="carRedNum">3</span> </a>
+			<ul class="dropdown-menu dropdown-messages"
+					style="background: rgba(176,196,222,0.8);max-height:300px;overflow-y:auto;">
+					<li>
+							<table class="tablehead" border="0" cellspacing="0" cellpadding="0"
+								style="width:100%">
+								<tr>
+									<td>车牌号</td>
+									<td>预计到达</td>
+								</tr>
+							</table>
+					</li>
+					<li class="divider"></li>
+					<li>
+						<table id="carTable" class="tablelist" border="0" cellspacing="0" cellpadding="0"
+								style="width:100%">
+						</table>
+					</li>
+				</ul>
+			</li>
+	</ul>
+	</div>
 </body>
 </html>
 <script type="text/javascript">
@@ -165,17 +190,53 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	var carStatus=-1;
 	show();
 	
-	function show(){
+	/***************************** 查询站点信息************************************* */
+	function queryMapSite(id){
+		var site;
 		$.ajax({
   			type : "POST",
   			url : "system/querySiteMapBySiteId",
-  			data : "siteId="+siteId,
-  			success : function(site) {
-  				if(!jQuery.isEmptyObject(site)){
-  					showMap(site);
+  			data : "siteId="+id,
+			async : false,
+  			success : function(result) {
+  				if(!jQuery.isEmptyObject(result)){
+  					site = result;
   				}
   			}
   		});
+  		return site;
+  	}
+  	
+  	function queryRateOfProcess(id){
+  		var rate;
+		$.ajax({
+  			type : "POST",
+  			url : "record/queryRateOfProcessBySiteId",
+  			data : "siteId="+id,
+			async : false,
+  			success : function(result) {
+  				rate = result;
+  			}
+  		});
+  		return rate;
+  	}
+  		
+  	/***************************** 查询车辆************************************* */
+	function queryMapCar(id){
+		var carList;
+		$.ajax({
+			type : "POST",
+			url : "car/queryMapCarBySiteId",
+			data : "siteId="+id,
+			async : false,
+			success : function(list) {
+				carList = list;
+			}
+		});
+		return carList;
+	}
+	function show(){
+		showMap(queryMapSite(siteId));
   	}
 	
   	//setInterval("showMap()",3000);  //定时刷新map
@@ -204,78 +265,55 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		siteMarker.addEventListener("mouseover",function(){
 			siteInfo(site);
 		});
-		$.ajax({
-				type : "POST",
-				url : "car/queryMapCarBySiteId",
-				data : "siteId="+site.id,
-				success : function(carList) {
-					$.each(carList,function(i, car) {
-						if(car.carType == 0){
-							var carIcon = new BMap.Icon("img/car.png", new BMap.Size(35, 24), {
-									imageSize : new BMap.Size(35, 24)});
-						}else{
-							var carIcon = new BMap.Icon("img/transportCar.png", new BMap.Size(35, 35), {
-									imageSize : new BMap.Size(35, 35)});
-						}
-						if(car.status==1){
-						
-							carPoint[car.id] = new BMap.Point(car.longitude,car.latitude);
-							carMarker[car.id] = new BMap.Marker(carPoint[car.id],{icon:carIcon});
-						
-							map.addOverlay(carMarker[car.id]);
-						
-							//鼠标悬停动作
-							carMarker[car.id].addEventListener("mouseover",function(){
-								carInfo(car);
-							});
-						}
-					});
+		
+		carList = queryMapCar(site.id);
+		$.each(carList,function(i, car) {
+			if(car.carType == 0){
+				var carIcon = new BMap.Icon("img/car.png", new BMap.Size(35, 24), 
+								{imageSize : new BMap.Size(35, 24)});
+			}else{
+				var carIcon = new BMap.Icon("img/transportCar.png", new BMap.Size(35, 35), 
+								{imageSize : new BMap.Size(35, 35)});
 				}
-			});
+			if(car.status==1){
+				carPoint[car.id] = new BMap.Point(car.longitude,car.latitude);
+				carMarker[car.id] = new BMap.Marker(carPoint[car.id],{icon:carIcon});
+				map.addOverlay(carMarker[car.id]);
+				//鼠标悬停动作
+				carMarker[car.id].addEventListener("mouseover",function(){
+					carInfo(car);
+				});
+			}
+		});
 	}
 	
 	/***************************** 站点信息框显示************************************* */
 	function siteInfo(site){
-			var value=-1;
 			var opts = {width : 230, }// 信息窗口宽度
-			$.ajax({
-				type : "POST",
-				url : "system/queryUltrasonicValueBySite",
-				data : {"sensorIdSet" : site.sensorIdSet},
-				success : function(sensors) {
-					var status;
-					if (site.status== "0")
-						status="正常";
-					else if (site.status== "1")
-						status="处理中";
-					else if (site.status== "2")
-						status="待处理";
-					var lid = '<div><h5>'+site.siteName+'</h5><table style="font-size:12px;">';
-					if(!jQuery.isEmptyObject(sensors)){
-						{
-							$.each(sensors,function(i, sensor) {
-								if(sensor.typeId==3){
-									var v=sensor.sensorValue.value;
-									//alert(result.value);
-									//污泥量
-									value=100*(site.depth-v)/site.depth;
-									lid += '<tr><td style="width:40%;text-align: left;">污泥量：</td><td style="text-align: left; color: #1874CD; font-weight: bold;">'+value.toFixed(2)+'%</td></tr>';
-									return false;
-								}
-							});
-						}
-					}
-					else if(jQuery.isEmptyObject(sensors) || value==-1)
-						lid += '<tr><td style="width:40%;text-align: left;">污泥量：</td><td style="text-align: left;">无数据</td></tr>';	
-					lid += '<tr><td style="width:40%;text-align: left;">Tel:</td><td style="text-align: left;">'+site.telephone+'</td>'
-						+ '</tr><tr style="color:#FF4500;">'
-						+ '<td style="width:40%;text-align: left;">状态:</td><td style="text-align: left;">'+status+'</td>'
-						+ '</tr>' + '</table>' + '</div>';
-					siteInfoWindow = new BMap.InfoWindow(lid,opts); // 创建信息窗口对象 
-					map.openInfoWindow(siteInfoWindow, sitePoint);
-					}
-				}); 
-		}
+			var rate = queryRateOfProcess(site.id);
+			var status;
+			if (site.status== "0")
+				status="正常";
+			else if (site.status== "1")
+				status="处理中";
+			else if (site.status== "2")
+				status="待处理";
+			var lid = '<div><h5>'+site.siteName+'</h5><table style="font-size:12px;">';
+			if(rate == -1){
+				lid += '<tr><td style="width:40%;text-align: left;">污泥量：</td><td style="text-align: left;">数据异常</td></tr>';	
+			}else{
+				//处理量
+				rate = 100*rate;
+				lid += '<tr><td style="width:40%;text-align: left;">处理进度：</td><td style="text-align: left; color: #1874CD; font-weight: bold;">'+rate.toFixed(2)+'%</td></tr>';
+			}
+			lid += '<tr><td style="width:40%;text-align: left;">Tel:</td><td style="text-align: left;">'+site.telephone+'</td>'
+				+ '</tr><tr style="color:#FF4500;">'
+				+ '<td style="width:40%;text-align: left;">状态:</td><td style="text-align: left;">'+status+'</td>'
+				+ '</tr>' + '</table>' + '</div>';
+			siteInfoWindow = new BMap.InfoWindow(lid,opts); // 创建信息窗口对象 
+			map.openInfoWindow(siteInfoWindow, sitePoint);
+			
+	}
 	/***************************** 车辆信息框显示************************************* */
 	function carInfo(car){
 			var opts = {width : 230,} // 信息窗口宽度
@@ -309,6 +347,60 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				map.openInfoWindow(carInfoWindow[car.id], carPoint[car.id]);
 			}
 		}
+	/***************************** 右下角查询站点所有车辆************************************* */
+	function showCarTable(){
+		$("#carTable").empty();
+		var table;
+		carList = queryMapCar(siteId);
+		$.each(carList,function(i, car){
+			if(car.status == 1){
+				var pointSite = new BMap.Point(car.site.longitude,car.site.latitude);
+				var carPoint = new BMap.Point(car.longitude,car.latitude);
+				var driving = new BMap.DrivingRoute(map,
+					{onSearchComplete:function(results){
+						var plan=results.getPlan(0);
+						table='<tr id="'+ car.id +'" onmouseover="sel(this)" onmouseout="cle(this)" onclick="showCarInfo('+JSON.stringify(car).replace(/\"/g,"'")+')">';
+						table += '<td style="width:20%;">' + car.license + '</td>';
+						table += '<td style="width:20%;">'+plan.getDuration(true)+'</td>';
+						table += '</tr>';
+						$("#carTable").append(table);
+					}});		
+				driving.search(carPoint,pointSite);
+			}
+			if(car.status == 2){
+				table='<tr id="'+ car.id +'" onmouseover="sel(this)" onmouseout="cle(this)" onclick="showCarInfo('+JSON.stringify(car).replace(/\"/g,"'")+')">';
+				table += '<td style="width:20%;">' + car.license + '</td>';
+				table += '<td style="width:20%;">处理中</td>';
+				table += '</tr>';
+				$("#carTable").append(table);
+			}
+			if(car.status == 3){
+				table='<tr id="'+ car.id +'" onmouseover="sel(this)" onmouseout="cle(this)" onclick="showCarInfo('+JSON.stringify(car).replace(/\"/g,"'")+')">';
+				table += '<td style="width:20%;">' + car.license + '</td>';
+				table += '<td style="width:20%;">未出发</td>';
+				table += '</tr>';
+				$("#carTable").append(table);
+			}
+		});
+	}
+	
+	/***************************** 列表鼠标响应************************************* */
+	function showCarInfo(car){
+		if(car.status == 1){
+			carInfo(car);
+		}
+		if(car.status == 2){
+			site = queryMapSite(siteId);
+			siteInfo(site);
+		}
+	}
+	
+	function sel(obj){
+		obj.style.backgroundColor="rgba(70,130,180,0.3)";
+	}
+	function cle(obj){
+		obj.style.backgroundColor="rgba(0, 0, 0, 0)";
+	}
 	
 </script>
 

@@ -41,6 +41,8 @@ public interface RecordDao {
 	
 	public int insertRecordByAlert(Record record);
 	
+	public Record queryCurrentRecordBySiteId(@Param("siteId") int siteId);
+	
 	
 	
 }

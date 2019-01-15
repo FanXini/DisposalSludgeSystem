@@ -35,6 +35,8 @@ public interface RecordService {
 
 	public void editRecordCarIdBySiteId(int siteId, int carId);
 	
-	public int insertRecordByAlert(Record record);
+	public void insertRecordByAlert(Record record);
+	
+	public double queryRateOfProcessBySiteId(int siteId);
 
 }
