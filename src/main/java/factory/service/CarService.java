@@ -48,5 +48,13 @@ public interface CarService {
 	public List<Car> querycarWithoutVideo();
 	
 	public List<Car> queryCarByCarType(int carType);
+	
+	/**
+	 * 修改车的状态和siteId,如果siteId为0,则只修改carId
+	 * @param carId
+	 * @param status
+	 * @param siteId
+	 */
+	public void editWorkerCarStatusAndSiteId(int carId,int status,int siteId);
  
 }

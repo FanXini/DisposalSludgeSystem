@@ -1,9 +1,13 @@
 package factory.serviceimpl;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Service;
 
 import factory.dao.CarDao;
@@ -12,6 +16,7 @@ import factory.entity.Car;
 import factory.entity.User;
 import factory.exception.DataNoneException;
 import factory.service.CarService;
+import factory.util.AssignCarThread;
 import factory.util.GpsUtil;
 
 
@@ -23,6 +28,9 @@ public class CarServiceImpl implements CarService{
 	
 	@Autowired
 	private UserDao userDao;
+	
+	@Autowired
+	private ThreadPoolTaskExecutor taskExecuter;
 
 	@Override
 	public List<Car> queryAllCar() {
@@ -30,25 +38,19 @@ public class CarServiceImpl implements CarService{
 		cars.addAll(carDao.queryAllCar());
 		return cars;
 	}
-	/**
-	 * 通过driverId查询Car的信息
-	 */
+
 	@Override
 	public Car queryCarByDriverId(int driverId) {
 		return carDao.queryCarByDriverId(driverId);
 	}
 	
-	/**
-	 * 通过车牌号查询Car的信息
-	 */
+
 	@Override
 	public Car queryCarByLicense(String license) {
 		return carDao.queryCarByLicense(license);
 	}
 	
-	/**
-	 * 通过车辆状态查询Car的信息
-	 */
+
 	@Override
 	public List<Car> queryCarByStatus(int status) {
 		List<Car> cars=new ArrayList<Car>();
@@ -56,9 +58,7 @@ public class CarServiceImpl implements CarService{
 		return cars;
 	}
 	
-	/**
-	 * 删除车辆记录
-	 */
+
 	public void deleteCar(int carId) {
 		// TODO Auto-generated method stub
 		carDao.deleteCar(carId);
@@ -83,7 +83,7 @@ public class CarServiceImpl implements CarService{
 	public int addCar(Car car) {
 		// TODO Auto-generated method stub
 		if (car.getLicense().equals("") || car.getLicense() == null) {
-			throw new DataNoneException("车牌号表单数据为空！");
+			throw new DataNoneException("锟斤拷锟狡号憋拷锟斤拷锟斤拷为锟秸ｏ拷");
 		}
 		else if(car.getBrand().equals("none")){
 			car.setBrand(null);
@@ -95,7 +95,7 @@ public class CarServiceImpl implements CarService{
 	public void editCar(Car car) {
 		// TODO Auto-generated method stub
 		if (car.getLicense().equals("") || car.getLicense() == null) {
-			throw new DataNoneException("车牌号表单数据为空!");
+			throw new DataNoneException("锟斤拷锟狡号憋拷锟斤拷锟斤拷为锟斤拷!");
 		}
 		if(car.getBrand().equals("none")){
 			car.setBrand(null);
@@ -166,17 +166,30 @@ public class CarServiceImpl implements CarService{
 	public Car assignCar(int siteId, double siteLongitude, double siteLatitude,int carType) {
 		// TODO Auto-generated method stub
 		List<Car> cars=new ArrayList<Car>();
-		if(carType == 0){
+		/*if(carType == 0){
 			cars.addAll(carDao.queryTreatmentCarUnassign());
 		}else if(carType == 1){
 			cars.addAll(carDao.queryCarrierUnassign());
 		}
-		if(cars.size() == 0) return null;
+		if(cars.size() == 0) return null;*/
+		Future<List<Car>> futureCar=null;
+		System.out.println(taskExecuter);
+		futureCar=(taskExecuter.submit(new AssignCarThread(carDao, carType)));
+		try {
+			cars.addAll(futureCar.get());
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		} catch (ExecutionException e) {
+			e.printStackTrace();
+		}
+		for(Car car:cars) {
+			System.out.println(car.getId());
+		}
 		double minDistance = Double.MAX_VALUE;
 		Car car = new Car();
 		for(int i = 0; i < cars.size();i++){
 			double dis = GpsUtil.getDistance(siteLongitude,siteLatitude,cars.get(i).getLongitude(),cars.get(i).getLatitude());
-			System.out.println("id: "+ cars.get(i).getId() + "距离 "+ dis);
+			System.out.println("id: "+ cars.get(i).getId() + "  "+ dis);
 			if(dis < minDistance){
 				minDistance = dis;
 				car = cars.get(i);
@@ -210,6 +223,11 @@ public class CarServiceImpl implements CarService{
 		List<Car> cars=new ArrayList<>();
 		cars.addAll(carDao.queryCarByCarType(carType));
 		return cars;
+	}
+
+	@Override
+	public void editWorkerCarStatusAndSiteId(int carId, int status, int siteId) {
+		carDao.editWorkerCarStatusAndSiteId(carId, status, siteId);		
 	}
 	
 }

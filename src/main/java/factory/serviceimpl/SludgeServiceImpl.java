@@ -34,6 +34,12 @@ public class SludgeServiceImpl implements SludgeService {
 		});*/
 		return sludges;
 	}
+	
+	@Override
+	public void addSludge(Sludge sludge) {
+		sludgeDao.addSludge(sludge);
+		
+	}
 	@Override
 	public void addOutSludge(Sludge sludge) {
 		String function = sludge.getSludgeFunction().getFunction();

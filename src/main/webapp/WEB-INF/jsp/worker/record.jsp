@@ -171,8 +171,8 @@
 				'<th data-toggle="true">状态</th>' +
 				'<th>工厂</th>' +
 				'<th>任务分配时间</th>' +
-				'<th>污泥处理量</th>' +
-				/* '<th>产生污泥块量</th>' + */
+				//'<th>污泥处理量</th>' +
+				'<th>产生污泥块量</th>' +
 				'<th data-hide="all">污泥处理开始时间</th>' +
 				'<th data-hide="all">污泥处理完成时间</th>' +
 				'<th data-hide="all">工厂地址</th>' +
@@ -252,11 +252,8 @@
 							'</div>' +
 							'</td>' */
 						table += '<td>' + record.allocationTime + '</td>'
-						if (record.sludge.weight == 0) {
-							table += '<td><span class="label label-success">待输入</td>'
-						} else {
-							table += '<td>' + record.sludge.weight + '吨</td>'
-						}
+						//table += '<td><span class="label label-success">待输入</td>
+						table += '<td>' + record.sludgesWeight + '吨</td>'
 						table += '<td>' + record.disposalTime + '</td>'
 						table += '<td><span class="pie">' + record.finishTime + '</span></td>'
 						table += '<td>' + record.site.address + '</td>'
@@ -285,6 +282,7 @@
 					$("#tableDiv").empty()
 					var table = table_start
 					$.each(recordList, function(i, record) {
+						var per=parseInt(Math.random()*100)
 						table+='<tr>'
 						if(record.status==0){
 							table += '<td class="project-status"><span class="label label-primary">已完成</td>'
@@ -299,12 +297,15 @@
 							table+='<td></td>'
 						}
 						table += '<td>' + record.site.siteName + '</td>'
+						/* table += '<td class="project-completion">' +
+							'<small>污泥处理量：'+per+' %</small>' +
+							'<div class="progress progress-mini">' +
+							'<div style="width: '+per+'%;" class="progress-bar"></div>' +
+							'</div>' +
+							'</td>' */
 						table += '<td>' + record.allocationTime + '</td>'
-						if (record.sludge.weight == 0) {
-							table += '<td><span class="label label-success">待输入</td>'
-						} else {
-							table += '<td>' + record.sludge.weight + '吨</td>'
-						}
+						//table += '<td><span class="label label-success">待输入</td>
+						table += '<td>' + record.sludgesWeight + '吨</td>'
 						table += '<td>' + record.disposalTime + '</td>'
 						table += '<td><span class="pie">' + record.finishTime + '</span></td>'
 						table += '<td>' + record.site.address + '</td>'
@@ -335,38 +336,42 @@
 					contentType : "application/json",
 					success : function(recordList) {
 						$("#tableDiv").empty()
-					var table = table_start
-					$.each(recordList, function(i, record) {
-						table+='<tr>'
-						if(record.status==0){
-							table += '<td class="project-status"><span class="label label-primary">已完成</td>'
-						}
-						else if(record.status==1){
-							table += '<td class="project-status"><span class="label label-danger">处理中</td>'
-						}
-						else if(record.status==2){
-							table += '<td class="project-status"><span class="label label-inverse">待处理</td>'
-						}
-						else{
-							table+='<td></td>'
-						}
-						table += '<td>' + record.site.siteName + '</td>'
-						table += '<td>' + record.allocationTime + '</td>'
-						if (record.sludge.weight == 0) {
-							table += '<td><span class="label label-success">待输入</td>'
-						} else {
-							table += '<td>' + record.sludge.weight + '吨</td>'
-						}
-						table += '<td>' + record.disposalTime + '</td>'
-						table += '<td><span class="pie">' + record.finishTime + '</span></td>'
-						table += '<td>' + record.site.address + '</td>'
-						table += '<td>' + record.site.telephone + '</td>'
-						table += '</tr>'
-	
-					})
-					table += table_end
-					$('#tableDiv').append(table)
-					$('.footable').footable();
+						var table = table_start
+						$.each(recordList, function(i, record) {
+							var per=parseInt(Math.random()*100)
+							table+='<tr>'
+							if(record.status==0){
+								table += '<td class="project-status"><span class="label label-primary">已完成</td>'
+							}
+							else if(record.status==1){
+								table += '<td class="project-status"><span class="label label-danger">处理中</td>'
+							}
+							else if(record.status==2){
+								table += '<td class="project-status"><span class="label label-inverse">待处理</td>'
+							}
+							else{
+								table+='<td></td>'
+							}
+							table += '<td>' + record.site.siteName + '</td>'
+							/* table += '<td class="project-completion">' +
+								'<small>污泥处理量：'+per+' %</small>' +
+								'<div class="progress progress-mini">' +
+								'<div style="width: '+per+'%;" class="progress-bar"></div>' +
+								'</div>' +
+								'</td>' */
+							table += '<td>' + record.allocationTime + '</td>'
+							//table += '<td><span class="label label-success">待输入</td>
+							table += '<td>' + record.sludgesWeight + '吨</td>'
+							table += '<td>' + record.disposalTime + '</td>'
+							table += '<td><span class="pie">' + record.finishTime + '</span></td>'
+							table += '<td>' + record.site.address + '</td>'
+							table += '<td>' + record.site.telephone + '</td>'
+							table += '</tr>'
+		
+						})
+						table += table_end
+						$('#tableDiv').append(table)
+						$('.footable').footable();
 						
 	
 					}
@@ -389,38 +394,42 @@
 					contentType : "application/json",
 					success : function(recordList) {
 						$("#tableDiv").empty()
-					var table = table_start
-					$.each(recordList, function(i, record) {
-						table+='<tr>'
-						if(record.status==0){
-							table += '<td class="project-status"><span class="label label-primary">已完成</td>'
-						}
-						else if(record.status==1){
-							table += '<td class="project-status"><span class="label label-danger">处理中</td>'
-						}
-						else if(record.status==2){
-							table += '<td class="project-status"><span class="label label-inverse">待处理</td>'
-						}
-						else{
-							table+='<td></td>'
-						}
-						table += '<td>' + record.site.siteName + '</td>'
-						table += '<td>' + record.allocationTime + '</td>'
-						if (record.sludge.weight == 0) {
-							table += '<td><span class="label label-success">待输入</td>'
-						} else {
-							table += '<td>' + record.sludge.weight + '吨</td>'
-						}
-						table += '<td>' + record.disposalTime + '</td>'
-						table += '<td><span class="pie">' + record.finishTime + '</span></td>'
-						table += '<td>' + record.site.address + '</td>'
-						table += '<td>' + record.site.telephone + '</td>'
-						table += '</tr>'
-	
-					})
-					table += table_end
-					$('#tableDiv').append(table)
-					$('.footable').footable();
+						var table = table_start
+						$.each(recordList, function(i, record) {
+							var per=parseInt(Math.random()*100)
+							table+='<tr>'
+							if(record.status==0){
+								table += '<td class="project-status"><span class="label label-primary">已完成</td>'
+							}
+							else if(record.status==1){
+								table += '<td class="project-status"><span class="label label-danger">处理中</td>'
+							}
+							else if(record.status==2){
+								table += '<td class="project-status"><span class="label label-inverse">待处理</td>'
+							}
+							else{
+								table+='<td></td>'
+							}
+							table += '<td>' + record.site.siteName + '</td>'
+							/* table += '<td class="project-completion">' +
+								'<small>污泥处理量：'+per+' %</small>' +
+								'<div class="progress progress-mini">' +
+								'<div style="width: '+per+'%;" class="progress-bar"></div>' +
+								'</div>' +
+								'</td>' */
+							table += '<td>' + record.allocationTime + '</td>'
+							//table += '<td><span class="label label-success">待输入</td>
+							table += '<td>' + record.sludgesWeight + '吨</td>'
+							table += '<td>' + record.disposalTime + '</td>'
+							table += '<td><span class="pie">' + record.finishTime + '</span></td>'
+							table += '<td>' + record.site.address + '</td>'
+							table += '<td>' + record.site.telephone + '</td>'
+							table += '</tr>'
+		
+						})
+						table += table_end
+						$('#tableDiv').append(table)
+						$('.footable').footable();
 	
 					}
 				})
