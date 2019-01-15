@@ -2,7 +2,9 @@ package factory.controller;
 
 
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -12,6 +14,7 @@ import javax.servlet.http.HttpSession;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -29,7 +32,9 @@ import factory.exception.AllocateCarForRecordConflict;
 import factory.service.CarService;
 import factory.service.RecordService;
 import factory.service.SiteService;
+import factory.service.SludgeService;
 import factory.service.UserService;
+import factory.util.AssignCarForReocrdThread;
 
 @Controller
 @RequestMapping(value="record")
@@ -42,6 +47,13 @@ public class RecordController {
 	private SiteService siteService;
 	@Autowired
 	private CarService carService;
+	
+	@Autowired
+	private SludgeService sludgeService;
+	
+	@Autowired
+	private ThreadPoolTaskExecutor taskExecuter;
+	private static SimpleDateFormat dateFormat=new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
 	
 	private static Log log=LogFactory.getLog(RecordController.class);
 	/**
@@ -150,10 +162,11 @@ public class RecordController {
 	
 	@RequestMapping("queryAllRecordOfOneDriver")
 	@ResponseBody
-	public List<Record> queryAllRecordOfOneDriver(@RequestBody User user){
-		log.info("调用queryAllRecordOfOneDriver");
+	public List<Record> queryAllRecordOfOneDisposeDriver(@RequestBody User user){
+		log.info("调用queryAllRecordOfOneDisposeDriver");
 		System.out.println(user.getId());
 		List<Record> records=recordService.queryAllRecordOfOneDriver(user.getId());
+		System.out.println(records.size()+"ha");
 		return records;
 	}
 	
@@ -204,7 +217,20 @@ public class RecordController {
 	public String insertRecordByAlert(@RequestBody Record record) {
 		log.info("添加一条记录");
 		log.info(record.getSiteId()+","+record.getPretreatAmount());
+		int siteId=record.getSiteId();
+		record.setAllocationTime(dateFormat.format(new Date()));
 		recordService.insertRecordByAlert(record);
+		System.out.println(record.getId());
+		//查询出车的经纬度
+		Site site=siteService.querySiteById(siteId);
+		/*double longitute=Double.valueOf(site.getLongitude());
+		double latitute=Double.valueOf(site.getLatitude());
+		//调度处理车
+		Car treatmentCar=carService.assignCar(siteId,longitute,latitute,0);
+		//调度运输车
+		Car transportCar=carService.assignCar(siteId, longitute, latitute, 1);*/
+		//创建一个线程去调度运输车和传输车辆
+		taskExecuter.submit(new AssignCarForReocrdThread(recordService, carService, sludgeService, record.getId(), site));
 		return "success";
 	}
 	
@@ -271,4 +297,5 @@ public class RecordController {
 		}
 		return result;
 	}
+		
 }

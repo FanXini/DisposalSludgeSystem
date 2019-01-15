@@ -39,7 +39,7 @@ public interface RecordDao {
 
 	public int countRecordOfCarNullBySiteId(int siteId);
 	
-	public void insertRecordByAlert(Record record);
+	public int insertRecordByAlert(Record record);
 	
 	
 	

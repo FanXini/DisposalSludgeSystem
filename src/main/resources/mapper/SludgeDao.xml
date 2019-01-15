@@ -245,6 +245,11 @@
 		INSERT INTO sludge (produce_time,RFID,minor_mud_warehouse_id,destination_address,status,weight,function_id,transcar_id)
 		VALUES(#{produceTime},#{rfidString},#{minorMudWareHouseId},#{destinationAddress},#{status},#{weight},#{functionId},#{transcarId})
 	</insert>
+	
+	<insert id="addSludge" useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO sludge (record_id,status,transcar_id)
+		VALUES(#{recordId},#{status},#{transcarId})
+	</insert>
 
 	<update id="deleteSludge">
 		UPDATE sludge

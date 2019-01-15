@@ -12,7 +12,7 @@
 		<result property="siteId" column="site_id"></result>
 		<result property="status" column="status" />
 		<result property="sludgesWeight" column="sludges_weight" />
-		<result property="pretreatAmount" column="pretreat_amount"/>
+		<result property="pretreatAmount" column="pretreat_amount" />
 		<association property="car" javaType="factory.entity.Car">
 			<id property="id" column="id"></id>
 			<result property="driverId" column="driver_id"></result>
@@ -46,8 +46,8 @@
 		FROM record LEFT JOIN
 		site ON record.site_id=site.id LEFT JOIN car ON
 		record.car_id=car.id
-		LEFT JOIN `user` ON car.driver_id=`user`.id 
-		WHERE record.del_status=0 
+		LEFT JOIN `user` ON car.driver_id=`user`.id
+		WHERE record.del_status=0
 		ORDER BY record.allocation_time DESC
 	</select>
 
@@ -161,15 +161,18 @@
 		record.*,car.id,car.driver_id,car.license,car.brand,user.id,user.realname,user.telephone,site.id,site.site_name,site.address,site.telephone
 		FROM record LEFT JOIN site ON record.site_id=site.id LEFT JOIN car ON
 		record.car_id=car.id LEFT JOIN `user` ON car.driver_id=`user`.id
-		WHERE record.del_status=0 AND
+		WHERE
+		record.del_status=0 AND
 		record.site_id=#{siteId}
-		ORDER BY record.allocation_time DESC
+		ORDER BY
+		record.allocation_time DESC
 	</select>
 
 	<select id="queryRecordByDriverIdOfOneFacotry" resultMap="RecordMap">
 		SELECT
 		record.*,sludge.id,sludge.weight,car.id,car.driver_id,car.license,car.brand,user.id,user.realname,user.telephone
-		FROM record LEFT JOIN car ON record.car_id=car.id LEFT JOIN `user` ON car.driver_id=`user`.id LEFT
+		FROM record LEFT JOIN car ON record.car_id=car.id LEFT JOIN `user` ON
+		car.driver_id=`user`.id LEFT
 		JOIN sludge ON sludge.record_id=record.id
 		WHERE record.del_status=0 AND
 		record.site_id=#{siteId} AND
@@ -190,30 +193,35 @@
 		#{startDate} AND #{endDate}
 		ORDER BY record.allocation_time DESC
 	</select>
-	
+
 	<select id="queryRecordOfCarNull" resultMap="RecordMap">
-		SELECT record.*,site.id,site.site_name 
-		FROM record LEFT JOIN site 
-		ON record.site_id=site.id 
+		SELECT
+		record.*,site.id,site.site_name
+		FROM record LEFT JOIN site
+		ON record.site_id=site.id
 		WHERE record.del_status=0 AND record.status=2 AND record.car_id IS NULL
 	</select>
-	
+
 	<update id="editRecordCarIdBySiteId">
 		UPDATE record
 		SET car_id=#{carId}
 		Where
-		record.del_status=0 AND record.status=2 AND record.site_id=#{siteId} AND record.car_id IS NULL
+		record.del_status=0 AND record.status=2 AND record.site_id=#{siteId}
+		AND record.car_id IS NULL
 	</update>
-	
+
 	<select id="countRecordOfCarNullBySiteId" resultType="Integer">
-		SELECT COUNT(*)
+		SELECT
+		COUNT(*)
 		FROM record
-		WHERE del_status=0 AND site_id=#{siteId} AND car_id IS NULL
+		WHERE del_status=0 AND site_id=#{siteId} AND car_id
+		IS NULL
 	</select>
-	
-	<insert id="insertRecordByAlert" parameterType="factory.entity.Record">
-	insert into
-	record(site_id,status,pretreat_amount)
-	values(#{siteId},2,#{pretreatAmount})
-	</insert>		
+
+	<insert id="insertRecordByAlert" parameterType="factory.entity.Record"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into
+		record(allocation_time,site_id,status,pretreat_amount)
+		values(#{allocationTime},#{siteId},2,#{pretreatAmount})
+	</insert>
 </mapper>

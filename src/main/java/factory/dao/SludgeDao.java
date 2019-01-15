@@ -14,7 +14,9 @@ public interface SludgeDao {
 
 	/*public List<Sludge> queryAllSludgeNotAssignFunc();*/
 	
-	public int addOutMudWareHouseSludgeRecord(Sludge sludge);
+	public void addOutMudWareHouseSludgeRecord(Sludge sludge);
+	
+	public void addSludge(Sludge sludge);
 
 	public void deleteSludge(@Param("sludgeId") int sludgeId);
 
