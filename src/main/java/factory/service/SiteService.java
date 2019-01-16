@@ -47,5 +47,5 @@ public interface SiteService {
 
 	public int countRecordOfCarNullBySiteId(int siteId);
 	
-	public Site querySiteMapBySiteId(int siteId);
+	public List<Site> querySiteMapBySiteIdAndStatus(int siteId,int status);
 }

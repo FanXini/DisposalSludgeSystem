@@ -251,15 +251,15 @@ public class SiteController {
 		}
 	}
 	/**
-	 * @description:根据站点编号查找站点地图信息
+	 * @description:地图查找站点信息
 	 */
-	@RequestMapping("querySiteMapBySiteId")
+	@RequestMapping("querySiteMapBySiteIdAndStatus")
 	@ResponseBody
-	public Site querySiteMapBySiteId(@RequestParam("siteId") int siteId) {
-		log.info("工厂人员地图查询站点"+siteId);
-		Site site=siteService.querySiteMapBySiteId(siteId);
-		log.info(site.toString());
-		return site;
+	public List<Site> querySiteMapBySiteIdAndStatus(@RequestParam("siteId") int siteId,@RequestParam("status") int status) {
+		log.info("地图查询站点信息：siteId"+siteId+"status"+status);
+		List<Site> sites=siteService.querySiteMapBySiteIdAndStatus(siteId,status);
+		log.info(sites.toString());
+		return sites;
 
 	}
 }

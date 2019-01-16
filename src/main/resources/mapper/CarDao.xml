@@ -290,15 +290,25 @@
 		AND car.car_type=1 AND car.driver_id IS NOT NULL
 	</select>
 	
-	<select id="queryMapCarBySiteId" resultMap="carDriverSiteMap">
+	<select id="queryMapCarBySiteIdAndCarTypeAndStatus" resultMap="carDriverSiteMap">
 		SELECT
 		car.*,user.id uid,site.site_name,site.latitude slatitude,site.longitude
 		slongitude,user.realname,user.telephone
 		FROM car LEFT JOIN user ON
 		car.driver_id=user.id
 		LEFT JOIN site ON car.site_id=site.id
-		WHERE
-		car.del_status=0 AND car.site_id=#{siteId}
+		<where>
+            car.del_status=0 AND car.driver_id IS NOT NULL
+            <if test="siteId != -1">
+                AND car.site_id=#{siteId}
+            </if>
+            <if test="carType != -1">
+                AND car.car_type=#{carType}
+            </if>
+            <if test="status != -1">
+                AND car.status=#{status}
+            </if>
+        </where>
 	</select>
 	
 </mapper>

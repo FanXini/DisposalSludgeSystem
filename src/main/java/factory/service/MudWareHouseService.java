@@ -8,4 +8,6 @@ import factory.entity.MinorMudWareHouse;
 public interface MudWareHouseService {
 
 	public List<MinorMudWareHouse> queryMinorWareHouse();
+	
+	public List<MainMudWareHouse> queryMainWareHouse();
 }

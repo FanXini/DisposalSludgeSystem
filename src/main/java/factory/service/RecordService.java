@@ -38,5 +38,7 @@ public interface RecordService {
 	public void insertRecordByAlert(Record record);
 	
 	public double queryRateOfProcessBySiteId(int siteId);
+	
+	public double queryCurrentPretreatAmountBySiteId(int siteId);
 
 }

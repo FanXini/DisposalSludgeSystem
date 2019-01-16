@@ -253,14 +253,14 @@ public class CarController {
 	}
 	
 	/**
-	 * @description:查找为站点分配的车辆
+	 * @description:地图查找车辆信息
 	 */
-	@RequestMapping("queryMapCarBySiteId")
+	@RequestMapping("queryMapCarBySiteIdAndCarTypeAndStatus")
 	@ResponseBody
-	public List<Car> queryMapCarBySiteId(@RequestParam("siteId") int siteId) {
-		log.info("查找为site"+siteId+"分配的车辆列表");
+	public List<Car> queryMapCarBySiteIdAndCarTypeAndStatus(@RequestParam("siteId") int siteId,@RequestParam("carType") int carType,@RequestParam("status") int status) {
+		log.info("查找site"+siteId+"carType"+carType+"status"+status+"的车辆列表");
 		try{
-			return carService.queryMapCarBySiteId(siteId);
+			return carService.queryMapCarBySiteIdAndCarTypeAndStatus(siteId,carType,status);
 		}catch (Exception e) {
 			// TODO: handle exception
 			log.info(e);

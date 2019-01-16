@@ -57,11 +57,11 @@ public class RecordController {
 	
 	private static Log log=LogFactory.getLog(RecordController.class);
 	/**
-	 * @description:ä»recordè¡¨ä¸­æŸ¥è¯¢æ‰€æœ‰è®°å½•
+	 * @description:´Órecord±íÖĞ²éÑ¯ËùÓĞ¼ÇÂ¼
 	 */
 	@RequestMapping("/jumpToRecord")
 	public ModelAndView querySiteAndDriver(ModelAndView mv){
-		log.info("è°ƒç”¨æŸ¥è¯¢å·¥å‚å’Œå¸æœºçš„æ–¹æ³•");
+		log.info("µ÷ÓÃ²éÑ¯¹¤³§ºÍË¾»úµÄ·½·¨");
 		List<User> assignCarDrivers=userService.queryCarAssignedDriver();
 		List<User> allDrivers=userService.quertAllDriver();
 		List<Site> sites=siteService.queryAllSite();		
@@ -75,7 +75,7 @@ public class RecordController {
 	@RequestMapping("queryAllRecord")
 	@ResponseBody
 	public List<Record> queryAllRecord(){
-		log.info("è°ƒç”¨queryAllRecord");
+		log.info("µ÷ÓÃqueryAllRecord");
 		List<Record> records=new ArrayList<Record>();
 		records.addAll(recordService.queryAllRecord());
 		for(Record record:records){
@@ -88,7 +88,7 @@ public class RecordController {
 	@RequestMapping("queryRecordBySiteId")
 	@ResponseBody
 	public  List<Record> queryRecordBySiteId(@RequestParam("siteId") int siteId,Model model){
-		log.info("è°ƒç”¨queryRecordBySiteId");
+		log.info("µ÷ÓÃqueryRecordBySiteId");
 		List<Record> records=new ArrayList<Record>();
 		records.addAll(recordService.queryRecordBySiteId(siteId));
 		return records;	
@@ -99,7 +99,7 @@ public class RecordController {
 	@RequestMapping("queryRecordByDriverId")
 	@ResponseBody
 	public List<Record> queryRecordByDriverId(@RequestParam("driverId") int driverId){
-		log.info("è°ƒç”¨queryRecordByDriverId");
+		log.info("µ÷ÓÃqueryRecordByDriverId");
 		List<Record> records=new ArrayList<Record>();
 		records.addAll(recordService.queryRecordByDriverId(driverId));
 		return records;
@@ -108,7 +108,7 @@ public class RecordController {
 	@RequestMapping("queryRecordByDate")
 	@ResponseBody
 	public List<Record> queryRecordByDate(@RequestParam("startDate") String startDate,@RequestParam("endDate") String endDate){
-		log.info("è°ƒç”¨queryRecordByDate");
+		log.info("µ÷ÓÃqueryRecordByDate");
 		List<Record> records=new ArrayList<Record>();
 		records.addAll(recordService.queryRecordByDate(startDate, endDate));
 		return records;
@@ -117,10 +117,10 @@ public class RecordController {
 	@RequestMapping("editRecord")
 	@ResponseBody
 	public Map<String, Object> editRecord(@RequestBody Map<String,Integer> jsonMap){
-		log.info("è°ƒç”¨editRecord");
+		log.info("µ÷ÓÃeditRecord");
 		Map<String, Object> map=new HashMap<String, Object>();
 		try {
-			//è¿™ä¸ªåœ°æ–¹è¦ç”¨äº‹åŠ¡ç®¡ç†
+			//Õâ¸öµØ·½ÒªÓÃÊÂÎñ¹ÜÀí
 			String license=recordService.editRecord(jsonMap);
 			map.put("license",license);
 			map.put("result", Result.SUCCESS);
@@ -152,7 +152,7 @@ public class RecordController {
 	
 	@RequestMapping("/recordOfOneDriver")
 	public ModelAndView recordOfOneDriver(ModelAndView mv,HttpSession session){
-		log.info("è°ƒç”¨æŸ¥è¯¢å·¥å‚çš„æ–¹æ³•");
+		log.info("µ÷ÓÃ²éÑ¯¹¤³§µÄ·½·¨");
 		User user=(User) session.getAttribute("user");
 		List<Site> sites=siteService.querySiteServedByOneDriver(user.getId());		
 		mv.addObject("siteList",sites);
@@ -163,7 +163,7 @@ public class RecordController {
 	@RequestMapping("queryAllRecordOfOneDriver")
 	@ResponseBody
 	public List<Record> queryAllRecordOfOneDisposeDriver(@RequestBody User user){
-		log.info("è°ƒç”¨queryAllRecordOfOneDisposeDriver");
+		log.info("µ÷ÓÃqueryAllRecordOfOneDisposeDriver");
 		System.out.println(user.getId());
 		List<Record> records=recordService.queryAllRecordOfOneDriver(user.getId());
 		System.out.println(records.size()+"ha");
@@ -173,7 +173,7 @@ public class RecordController {
 	@RequestMapping("queryRecordBySiteIdOfOneDriver")
 	@ResponseBody
 	public  List<Record> queryRecordBySiteIdOfOneDriver(@RequestBody Map<String, Integer> condition){
-		log.info("è°ƒç”¨queryRecordBySiteIdOfOneDriver");
+		log.info("µ÷ÓÃqueryRecordBySiteIdOfOneDriver");
 		List<Record> records=recordService.queryRecordBySiteIdOfOneDriver(condition);
 		return records;	
 	}
@@ -181,7 +181,7 @@ public class RecordController {
 	@RequestMapping("queryRecordByDateOfOneDriver")
 	@ResponseBody
 	public List<Record> queryRecordByDateOfOneDriver(@RequestBody Map<String, Object> condition){
-		log.info("è°ƒç”¨queryRecordByDateOfOneDriver");
+		log.info("µ÷ÓÃqueryRecordByDateOfOneDriver");
 		List<Record> records=recordService.queryRecordByDateOfOneDriver(condition);
 		return records;
 	}
@@ -189,7 +189,7 @@ public class RecordController {
 	
 	@RequestMapping("/recordOfOneFactory")
 	public ModelAndView recordOfOneFactory(@RequestParam("siteId") int siteId,ModelAndView mv){
-		log.info("è°ƒç”¨recordOfOneFactory");
+		log.info("µ÷ÓÃrecordOfOneFactory");
 		log.info(siteId);
 		List<User> drivers=userService.queryDriverServeOneFactory(siteId);
 		for(User user:drivers){
@@ -203,7 +203,7 @@ public class RecordController {
 	@RequestMapping("/alert")
 	@ResponseBody
 	public ModelAndView alert(@RequestParam("siteId") int siteId,ModelAndView mv){
-		log.info("è°ƒç”¨alert");
+		log.info("µ÷ÓÃalert");
 		log.info(siteId);
 		Site site = siteService.querySiteById(siteId);
 		System.out.println(site.getId()+","+site.getSiteName()+","+site.getAddress()+","+site.getTelephone()+","+site.getManage());
@@ -215,21 +215,21 @@ public class RecordController {
 	@RequestMapping("/insertRecordByAlert")
 	@ResponseBody
 	public String insertRecordByAlert(@RequestBody Record record) {
-		log.info("æ·»åŠ ä¸€æ¡è®°å½•");
+		log.info("Ìí¼ÓÒ»Ìõ¼ÇÂ¼");
 		log.info(record.getSiteId()+","+record.getPretreatAmount());
 		int siteId=record.getSiteId();
 		record.setAllocationTime(dateFormat.format(new Date()));
 		recordService.insertRecordByAlert(record);
 		System.out.println(record.getId());
-		//æŸ¥è¯¢å‡ºè½¦çš„ç»çº¬åº¦
+		//²éÑ¯³ö³µµÄ¾­Î³¶È
 		Site site=siteService.querySiteById(siteId);
 		/*double longitute=Double.valueOf(site.getLongitude());
 		double latitute=Double.valueOf(site.getLatitude());
-		//è°ƒåº¦å¤„ç†è½¦
+		//µ÷¶È´¦Àí³µ
 		Car treatmentCar=carService.assignCar(siteId,longitute,latitute,0);
-		//è°ƒåº¦è¿è¾“è½¦
+		//µ÷¶ÈÔËÊä³µ
 		Car transportCar=carService.assignCar(siteId, longitute, latitute, 1);*/
-		//åˆ›å»ºä¸€ä¸ªçº¿ç¨‹å»è°ƒåº¦è¿è¾“è½¦å’Œä¼ è¾“è½¦è¾†
+		//´´½¨Ò»¸öÏß³ÌÈ¥µ÷¶È
 		taskExecuter.submit(new AssignCarForReocrdThread(recordService, carService, sludgeService, record.getId(), site));
 		return "success";
 	}
@@ -237,7 +237,7 @@ public class RecordController {
 	@RequestMapping("queryAllRecordOfOneFactory")
 	@ResponseBody
 	public List<Record> queryAllRecordOfOneFactory(@RequestBody Site site){
-		log.info("è°ƒç”¨queryAllRecordOfOneFactory");
+		log.info("µ÷ÓÃqueryAllRecordOfOneFactory");
 		List<Record> records=recordService.queryAllRecordOfOneFactory(site.getId());
 		for(Record record:records) {
 			System.out.println(record);
@@ -248,7 +248,7 @@ public class RecordController {
 	@RequestMapping("queryRecordByDriverIdOfOneFacotry")
 	@ResponseBody
 	public  List<Record> queryRecordByDriverIdOfOneFacotry(@RequestBody Map<String, Integer> condition){
-		log.info("è°ƒç”¨queryRecordByDriverIdOfOneFacotry");
+		log.info("µ÷ÓÃqueryRecordByDriverIdOfOneFacotry");
 		List<Record> records=recordService.queryRecordByDriverIdOfOneFacotry(condition);
 		for(Record record:records){
 			System.out.println(record.getId());
@@ -260,7 +260,7 @@ public class RecordController {
 	@RequestMapping("queryRecordByDateOfOneFactory")
 	@ResponseBody
 	public List<Record> queryRecordByDateOfOneFactory(@RequestBody Map<String, Object> condition){
-		log.info("è°ƒç”¨queryRecordByDateOfOneFactory");
+		log.info("µ÷ÓÃqueryRecordByDateOfOneFactory");
 		List<Record> records=recordService.queryRecordByDateOfOneFactory(condition);
 		for(Record record:records){
 			System.out.println(record.getCar().getDriver().getRealname());
@@ -271,7 +271,7 @@ public class RecordController {
 	@RequestMapping("queryRecordOfCarNull")
 	@ResponseBody
 	public List<Record> queryRecordOfCarNull(){
-		log.info("è°ƒç”¨queryRecordOfCarNull");
+		log.info("µ÷ÓÃqueryRecordOfCarNull");
 		try {
 			List<Record> records=recordService.queryRecordOfCarNull();
 			return records;
@@ -285,7 +285,7 @@ public class RecordController {
 	@RequestMapping("editRecordCarIdBySiteId")
 	@ResponseBody
 	public Map<String,String> editRecordCarIdBySiteId(@RequestParam("siteId") int siteId,@RequestParam("carId") int carId){
-		log.info("è°ƒç”¨editRecordBySiteId");
+		log.info("µ÷ÓÃeditRecordBySiteId");
 		Map<String, String> result=new HashMap<String, String>();
 		try {
 			recordService.editRecordCarIdBySiteId(siteId,carId);
@@ -299,14 +299,26 @@ public class RecordController {
 	}
 	
 	/**
-	 * æ ¹æ®ç«™ç‚¹Idè®¡ç®—å½“å‰å¤„ç†è¿›åº¦
+	 * ¸ù¾İÕ¾µãId¼ÆËãµ±Ç°´¦Àí½ø¶È
 	 * @param siteId
-	 * @return è¿”å›å¤„ç†é‡ï¼Œ-1ä»£è¡¨æ•°æ®å¼‚å¸¸
+	 * @return ·µ»Ø´¦Àí½ø¶È£¬-1´ú±íÊı¾İÒì³£
 	 */
 	@RequestMapping("queryRateOfProcessBySiteId")
 	@ResponseBody
 	public double queryRateOfProcessBySiteId(@RequestParam("siteId") int siteId){
-		log.info("è°ƒç”¨queryRateOfProcessBySiteId");
+		log.info("µ÷ÓÃqueryRateOfProcessBySiteId,siteId:"+siteId);
 		return recordService.queryRateOfProcessBySiteId(siteId);
+	}
+	
+	/**
+	 * ¸ù¾İÕ¾µãId·µ»Øµ±Ç°Ô¤´¦ÀíÁ¿
+	 * @param siteId
+	 * @return ·µ»Ø´¦ÀíÁ¿£¬-1´ú±íÊı¾İÒì³£
+	 */
+	@RequestMapping("queryCurrentPretreatAmountBySiteId")
+	@ResponseBody
+	public double queryCurrentPretreatAmountBySiteId(@RequestParam("siteId") int siteId){
+		log.info("µ÷ÓÃqueryCurrentPretreatAmountBySiteId,siteId:"+siteId);
+		return recordService.queryCurrentPretreatAmountBySiteId(siteId);
 	}
 }
