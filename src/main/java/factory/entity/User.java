@@ -8,7 +8,7 @@ public class User {
 	private String username;
 	private String realname;
 	private String password;
-	private char sex;
+	private String sex;
 	private String email;
 	private String telephone;
 	private String idCard;
@@ -76,10 +76,10 @@ public class User {
 	public void setPassword(String password) {
 		this.password = password;
 	}
-	public char getSex() {
+	public String getSex() {
 		return sex;
 	}
-	public void setSex(char sex) {
+	public void setSex(String sex) {
 		this.sex = sex;
 	}
 	public String getEmail() {
