@@ -115,7 +115,8 @@ body {
 	<!-- 模态框   增加站点 -->
 	<div class="modal inmodal" id="addModal" tabindex="-1" role="dialog" aria-hidden="true">
 		<div class="modal-dialog">
-			<div class="modal-content animated bounceInRight">
+		
+		<div class="modal-content animated bounceInRight">
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal">
 						<span aria-hidden="true">&times;</span><span class="sr-only">关闭</span>
@@ -123,46 +124,53 @@ body {
 					<h4 class="modal-title">新增站点</h4>
 			</div>
 				<div class="modal-body">
-					<div class="container" style="width: 540px">
+					<div class="container" style="width: 540px;">
+					
 						<form class="form-inline" id="addForm">
-						<div class="col-sm-6">
-							<div class="form-group"><label for="addSerialNumber">编号：</label> <input type="text"
-								placeholder="请输入F开头的站点编号" id="addSerialNumber" class="form-control" autocomplete="off"  name="serialNumber">
+						<div class="col-sm-6" style="margin: 0 auto; width:500px;">
+							<div class="form-group" style="width:450px; margin: 5px auto; display:block">
+								<label for="addSerialNumber">编&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;号：</label> 
+								<input type="text" style="width:375px" placeholder="请输入F开头的站点编号" id="addSerialNumber" class="form-control" autocomplete="off"  name="serialNumber">
 							</div>
-							<div class="form-group"><label for="addSiteName">站点名：</label> <input type="text"
-								placeholder="请输入站点名" id="addSiteName" class="form-control" autocomplete="off" name="siteName">
+							<div class="form-group" style="width:450px; margin: 5px auto; display:block">
+								<label for="addSiteName">站&nbsp;&nbsp;点&nbsp;&nbsp;名：</label> 
+								<input type="text" style="width:375px" placeholder="请输入站点名" id="addSiteName" class="form-control" autocomplete="off" name="siteName">
 							</div>
-							<div id="distpickerAdd">
-								<div class="form-group"><label for="addProvince">省：</label> <select id="addProvince"
-									class="form-control" data-province="广东省"></select>
+							<div id="distpickerAdd" style="width:450px; margin: 5px auto; display:block">
+								<div style="float:left"><label>省&nbsp;&nbsp;市&nbsp;&nbsp;区：</label> </div>
+								<div class="form-group" style="width:125px;float:left;">
+									<select id="addProvince" class="form-control" data-province="广东省" style="width:125px"></select>
+								</div>
+								<div class="form-group" style="width:125px; float:left">
+									<select id="addCity" class="form-control" data-city="深圳市" style="width:125px"></select>
+								</div>
+								<div class="form-group" style="width:125px;bfloat:left"> 
+									<select id="addRegion" class="form-control" style="width:125px;"></select>
+								</div>
 							</div>
-								<div class="form-group"><label for="addCity">市：</label> <select id="addCity"
-									class="form-control" data-city="深圳市"></select>
-							</div>
-								<div class="form-group"><label for="addRegion">区：</label> <select id="addRegion"
-									class="form-control"></select>
+							<div class="form-group" style="width:450px; margin: 5px auto; display:block">
+								<label for="addAddress">详细地址：</label> 
+								<textarea placeholder="请输入详细地址" style="vertical-align: top; height:50px;width:375px" rows="2" id="addAddress" class="form-control m-b control-label" autocomplete="off" name="address"></textarea>
 							</div>
 							</div>
-							<div class="form-group"><label for="addAddress">详细地址：</label> <input type="text"
-								placeholder="请输入详细地址" id="addAddress" class="form-control m-b control-label" autocomplete="off" name="address">
-							</div>
-							</div>
-							<div class="col-sm-6">
-<!-- 							<div class="form-group"><label for="addManager">负责人：</label> <input type="text"
+							<!-- <div class="col-sm-6">
+							<div class="form-group"><label for="addManager">负责人：</label> <input type="text"
 								placeholder="请输入负责人" id="addManager" class="form-control m-b control-label" name="manager" autocomplete="off" list="addManagerList"/>
 								<datalist id="addManagerList">
 								</datalist>
-							</div>
+							</div> 
 							<div class="form-group"><label for="addManagerTel">负责人电话：</label> <input type="text"
 								placeholder="请输入负责人电话" id="addManagerTel" class="form-control m-b control-label" autocomplete="off" name="managerTel">
-							</div> -->
+							</div> 
 							<div class="form-group"><label for="addTel">电话：</label> <input type="text"
 								placeholder="请输入站点电话" id="addTel" class="form-control m-b control-label" autocomplete="off" name="tel">
 							</div>
-							<div class="form-group"><label for="addDepth">池深：</label> <input type="text"
-								placeholder="请输入池深" id="addDepth" class="form-control m-b control-label" autocomplete="off" name="depth">
+							
+							<div class="form-group"><label for="addAddress">详细地址：</label> <input type="text"
+								placeholder="请输入详细地址" id="addAddress" class="form-control m-b control-label" autocomplete="off" name="address">
 							</div>
-							</div>
+							<!-- 
+							</div>-->
 								
 						</form>
 				</div>
@@ -188,12 +196,15 @@ body {
 				<div class="modal-body">
 					<div class="container" style="width: 540px">
 						<form class="form-inline" id="editForm">
-							<div class="form-group"><label for="editSerialNumber">编号：</label> <input type="text"
-								id="editSerialNumber" class="form-control" disabled="true">
+							<div class="form-group" style="width:250px; margin: 5px auto; display:block; float:left">
+								<label for="editSerialNumber">编&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;号：</label> 
+								<input type="text" id="editSerialNumber" style="width:180px" class="form-control" disabled="true">
 							</div>
-							<div class="form-group"><label for="editSiteName">站点名：</label> <input type="text"
-								placeholder="请输入站点名" id="editSiteName" class="form-control" autocomplete="off" name="siteName">
-							</div>
+							<div class="form-group" style="width:250px; margin: 5px auto; display:block; float:left"> 
+								<label for="editSiteName">站&nbsp;&nbsp;点&nbsp;名：</label> 
+								<input type="text" style="width:180px" placeholder="请输入站点名" id="editSiteName" class="form-control" autocomplete="off" name="siteName">
+							</div>							
+							
 							<!-- <div id="distpickerEdit">
 								<div class="form-group"><label for="editProvince">省：</label> <select id="editProvince"
 									class="form-control"></select>
@@ -205,20 +216,24 @@ body {
 									class="form-control"></select>
 							</div>
 							</div> -->
-							<div class="form-group"><label for="editAddress">详细地址：</label>
+							<!--<div class="form-group"><label for="editAddress">详细地址：</label>
 							<input type="text" placeholder="请输入详细地址" id="editAddress" class="form-control m-b control-label" autocomplete="off" name="address">
+							</div>  -->
+							<div class="form-group" style="width:250px; margin: 5px auto; display:block; float:left">
+								<label for="editManager">负&nbsp;&nbsp;责&nbsp;人：</label>
+								<select class="form-control m-b" id="editManager" style="width:175px" name="manager"></select>
 							</div>
-							<div class="form-group"><label for="editManager">负责人：</label>
-							<select class="form-control m-b" id="editManager" name="manager"></select>
+							<div class="form-group" style="display:none">
+								<label for="editManagerTel">负责人电话：</label> 
+								<input type="hidden" id="editManagerTel" class="form-control" disabled="true">
 							</div>
-							<div class="form-group"><label for="editManagerTel">负责人电话：</label> <input type="text" 
-							id="editManagerTel" class="form-control" disabled="true">
+							<div class="form-group" style="width:250px; margin: 5px auto; display:block; float:left">
+								<label for="editTel">电&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;话：</label> 
+								<input type="text" style="width:180px" placeholder="请输入站点电话" id="editTel" class="form-control m-b control-label" autocomplete="off" name="tel">
 							</div>
-							<div class="form-group"><label for="editTel">电话：</label> <input type="text"
-								placeholder="请输入站点电话" id="editTel" class="form-control m-b control-label" autocomplete="off" name="tel">
-							</div>
-							<div class="form-group"><label for="editDepth">池深：</label> <input type="text"
-								placeholder="请输入池深" id="editDepth" class="form-control m-b control-label" autocomplete="off" name="depth">
+							<div class="form-group">
+								<label for="editAddress">详细地址：</label> 
+								<textarea style="vertical-align: top; height:50px;width:430px" rows="2" placeholder="请输入详细地址" id="editAddress" class="form-control m-b control-label" autocomplete="off" name="address"></textarea>
 							</div>
 							<!-- <div class="form-group" style="width:80%;"><label for="addSensor">传感器：</label> <select
 								id="addSensor" data-placeholder="选择传感器" class="chosen-select" style="width:80%;" multiple
@@ -414,7 +429,7 @@ body {
 				$('.dataTables-example').dataTable();
 			}
 	});
-	}
+	}	
 	
 	/***************************** 模糊查询************************************* */
 	$("#querySubmit").click(function(){
