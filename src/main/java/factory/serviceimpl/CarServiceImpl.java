@@ -322,7 +322,7 @@ public class CarServiceImpl implements CarService{
 							sludgeStatus=SludgeStatus.ARRIVEDESFROMMWH.ordinal();
 						}
 						sludgeDao.setArrivalTimeAndStatusById(processingSludge.getId(), sludgeStatus, arrivalTime);
-						//修改为空闲状态
+						//修改为空闲状态,并且修改siteId为null
 						carDao.editWorkerCarStatusAndSiteId(carId, CarStatus.LEISURE.ordinal(),0); 
 						return new Car(CarStatus.LEISURE.ordinal(), carType);
 					}

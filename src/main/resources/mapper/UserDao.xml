@@ -117,17 +117,18 @@
 	</select>
 
 	<select id="queryNoCarAssignedDriver" resultType="factory.entity.User">
-
 		SELECT DISTINCT
 		*
 		FROM user
-		WHERE user.del_status=0 AND
+		WHERE user.del_status=0 AND 
+		user.role_id in (3,4) AND 
+		user.check_status=1 AND
 		user.id NOT IN(
 		SELECT driver_id
 		FROM car
 		WHERE car.del_status=0 AND driver_id IS not NULL OR
 		TRIM(driver_id)=''
-		) AND user.role_id=3 AND user.check_status=1
+		)
 	</select>
 	
 	<select id="queryCarAssignedDriver" resultType="factory.entity.User">
