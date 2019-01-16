@@ -91,7 +91,7 @@
 								<div class="col-sm-9">
 									<input type="text" class="form-control m-b control-label"
 										id="CarLicense"
-										value="${requestScope.sludgeList.get(0).car.license}">
+										value=" ">
 								</div>
 							</div>
 						</div>
@@ -262,6 +262,7 @@
 						}					
 						else{
 							$("#addRecordId").val(sludge.recordId);
+							$("#CarLicense").val(sludge.car.license);
 						}
 					}
 				});
