@@ -44,6 +44,8 @@
 			<result property="siteName" column="site_name" />
 			<result property="latitude" column="slatitude" />
 			<result property="longitude" column="slongitude" />
+			<result property="telephone" column="stelephone" />
+		    <result property="status" column="sstatus" />
 		</association>
 	</resultMap>
 
@@ -292,8 +294,8 @@
 	
 	<select id="queryMapCarBySiteIdAndCarTypeAndStatus" resultMap="carDriverSiteMap">
 		SELECT
-		car.*,user.id uid,site.site_name,site.latitude slatitude,site.longitude
-		slongitude,user.realname,user.telephone
+		car.*,user.id uid,site.id sid,site.site_name,site.latitude slatitude,site.longitude
+		slongitude,site.status sstatus,site.telephone stelephone,user.realname,user.telephone
 		FROM car LEFT JOIN user ON
 		car.driver_id=user.id
 		LEFT JOIN site ON car.site_id=site.id

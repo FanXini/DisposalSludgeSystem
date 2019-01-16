@@ -126,8 +126,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					<td>
 						<select id="typeSelect" class="select">
 							<option value="-1">-类型-</option>
-							<option value="0">-站点-</option>
-							<option value="1">-车辆-</option>
+							<option value="3">-站点-</option>
+							<option value="0">-处理车-</option>
+							<option value="1">-运输车-</option>
 						</select>
 					</td>
 					<td>
@@ -340,13 +341,15 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   	
   	/***************************** 类型联动************************************* */
   	$("#typeSelect").change(function(){
-  		if($("#typeSelect").val()==0)
+  		var ts = $("#typeSelect").val();
+		showMap(ts,-1);
+  		if(ts == 3)
   		{
   			$("#statusSelect").empty();
   			$("#statusSelect").append('<option value="-1">-状态-</option><option value="0">正常</option><option value="1">处理中</option><option value="2">待处理</option>');
   			$("#queryStr").attr("placeholder","编号/站点名/Tel");
   		}
-  		else if($("#typeSelect").val()==1)
+  		else if(ts == 0 || ts == 1)
   		{
   			$("#statusSelect").empty();
   			$("#statusSelect").append('<option value="-1">-状态-</option><option value="1">在途中</option><option value="4">返程中</option>');
@@ -362,7 +365,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   	});
     /***************************** 状态选择************************************* */
   	$("#statusSelect").change(function(){
-  		if($("#typeSelect").val()==0){
+  		if($("#typeSelect").val()==3){
   			var s=$("#statusSelect").val()
   			switch(s){
   				case '0':{
@@ -390,7 +393,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   					}
   			}
   		}
-  		if($("#typeSelect").val()==1){
+  		if($("#typeSelect").val()==0 || ("#typeSelect").val()==1){
   			switch($("#statusSelect").val()){
   				case '1':{
 	  				clearInterval(interval);
@@ -583,7 +586,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		carInfoWindow=[];
 		
 		showWareHouse();
-		if(selectType==0||selectType==-1){
+		if(selectType==3||selectType==-1){
 			siteList = queryMapSite(-1,selectStatus);
 			if(!jQuery.isEmptyObject(siteList)){
 				var myIcon;
@@ -614,8 +617,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				});
 			}
 		}
-		if(selectType==1||selectType==-1){
-			carList=queryMapCar(-1,-1,selectStatus)
+		if(selectType==0||selectType==1||selectType==-1){
+			carList=queryMapCar(-1,selectType,selectStatus)
 			if(!jQuery.isEmptyObject(carList)){
 				$.each(carList,function(i, car) {
 					if(car.carType == 0){
@@ -742,7 +745,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			}
 		}
 	
-	/***************************** 查询所有站点************************************* */
+	/***************************** 右下角查询所有站点************************************* */
 	function showSiteTable(){
 	$("#siteTable").empty();
 	$.ajax({
@@ -810,7 +813,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		$.each(carList,function(i, car){
 			var status;
 			if (car.status== "0"){
-				table='<tr id="'+ car.id +'" style="color:#FF0000;font-weight: 700;" onmouseover="sel(this)" onmouseout="cle(this)" onclick="dealCar('+car.id+');">';
+				table='<tr id="'+ car.id +'" style="color:#FF0000;font-weight: 700;" onmouseover="sel(this)" onmouseout="cle(this)" onclick="wareHouseInfo();">';
 				status="空闲";
 			}
 			else if (car.status== "1"){
@@ -818,7 +821,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				status="在途中";
 			}
 			else if (car.status== "2"){
-				table='<tr id="'+ car.id +'" onmouseover="sel(this)" onmouseout="cle(this)" onclick="showCarInfo('+JSON.stringify(car).replace(/\"/g,"'")+')">';
+				table='<tr id="'+ car.id +'" onmouseover="sel(this)" onmouseout="cle(this)" onclick="showSiteInfo('+JSON.stringify(car.site).replace(/\"/g,"'")+')">';
 				status="处理中";
 			}
 			else if (car.status== "3"){
@@ -848,11 +851,11 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		$.each(carList,function(i, car){
 			var status;
 			if (car.status== "0"){
-				table='<tr id="'+ car.id +'" style="color:#FF0000;font-weight: 700;" onmouseover="sel(this)" onmouseout="cle(this)" onclick="dealCar('+car.id+');">';
+				table='<tr id="'+ car.id +'" style="color:#FF0000;font-weight: 700;" onmouseover="sel(this)" onmouseout="cle(this)" onclick="wareHouseInfo();">';
 				status="空闲";
 			}
 			else if (car.status== "1"){
-				if(car.siteId != null){
+				if(car.siteId != null && car.siteId != ""){
 					table='<tr id="'+ car.id +'" onmouseover="sel(this)" onmouseout="cle(this)" onclick="showCarInfo('+JSON.stringify(car).replace(/\"/g,"'")+')">';
 					status="在途中";
 				}else{
@@ -861,7 +864,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				}
 			}
 			else if (car.status== "2"){
-				table='<tr id="'+ car.id +'" onmouseover="sel(this)" onmouseout="cle(this)" onclick="showCarInfo('+JSON.stringify(car).replace(/\"/g,"'")+')">';
+				table='<tr id="'+ car.id +'" onmouseover="sel(this)" onmouseout="cle(this)" onclick="showSiteInfo('+JSON.stringify(car.site).replace(/\"/g,"'")+')">';
 				status="装箱中";
 			}
 			else if (car.status== "3"){
