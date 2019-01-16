@@ -56,5 +56,7 @@ public interface CarService {
 	 * @param siteId
 	 */
 	public void editWorkerCarStatusAndSiteId(int carId,int status,int siteId);
+	
+	public Car updateCarStatusByButton(Map<String, Integer> map);
  
 }

@@ -1,7 +1,8 @@
 <%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
 <%
-String path = request.getContextPath();
-String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
+	String path = request.getContextPath();
+	String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort()
+			+ path + "/";
 %>
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
@@ -24,7 +25,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	<link rel="stylesheet" type="text/css" href="styles.css">
 	-->
 
-<link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+<link
+	href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css"
+	rel="stylesheet">
 <link rel="shortcut icon" href="favicon.ico">
 <link href="css/bootstrap.min.css?v=3.3.6" rel="stylesheet">
 <link href="css/font-awesome.css?v=4.4.0" rel="stylesheet">
@@ -32,9 +35,11 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <link href="css/animate.css" rel="stylesheet">
 <link href="css/style.css?v=4.1.0" rel="stylesheet">
 <script src="https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script>
-<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=5TmZTw10oplDe4ZehEM6UjnY6rDgocd8"></script>
+<script type="text/javascript"
+	src="http://api.map.baidu.com/api?v=2.0&ak=5TmZTw10oplDe4ZehEM6UjnY6rDgocd8"></script>
 
-<script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script
+	src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
 <style type="text/css">
 .map {
@@ -83,23 +88,31 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 
 <body>
 	<div id="allmap" class="map"></div>
-	<div class="modal inmodal fade" id="myModal" tabindex="-1" role="dialog"  aria-hidden="true">
-            <div class="modal-dialog modal-sm">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                        <h6 style="font-size:16px;font-weight:bold;" id="destination" class="modal-title"></h6>
-                    </div>
-                    <div class="modal-body">
-                        <p id="editContext"></p>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-white" data-dismiss="modal">关闭</button>
-                        <button id="submitBtn" type="button" class="btn btn-primary">确定</button>
-                    </div>
-                </div>
-            </div>
-        </div>
+	<div class="modal inmodal fade" id="myModal" tabindex="-1"
+		role="dialog" aria-hidden="true">
+		<div class="modal-dialog modal-sm">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">
+						<span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+					</button>
+					<h6 style="font-size: 16px; font-weight: bold;" id="destination"
+						class="modal-title"></h6>
+				</div>
+				<div class="modal-body">
+					<p id="editContext"></p>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-white" data-dismiss="modal">关闭</button>
+					<button id="submitBtn" type="button" class="btn btn-primary">确定</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div>
+		<input id="nowStatus" value="0" type="hidden" />
+		<button id="updateCarStatusButton" class="btn btn-primary" onclick="updateCarStatus()">暂无任务</button>
+	</div>
 </body>
 </html>
 <script type="text/javascript">
@@ -123,162 +136,252 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	var carMarker = new Array();
 	var carPoint = new Array();
 	var carInfoWindow = new Array();
-	var userId=${sessionScope.user.id};
-	var carStatus=-1;
+	var userId = ${sessionScope.user.id};
+	var carStatus = -1;
+
 	show();
-	
-	function show(){
+	updateCarStatus();
+
+	function updateCarStatus() {
+		var nowStatus=parseInt($("#nowStatus").val())
 		$.ajax({
-  			type : "POST",
-  			url : "car/queryWorkerMapCar",
-  			data : "userId="+userId,
-  			success : function(carList) {
-  				if(jQuery.isEmptyObject(carList)){
-  					alert("暂无任务");
-  					showMap(0);
-  				}
-  				else{
-  					$.each(carList,function(i, car) {
-  						carStatus=car.status;
-  						showMap(car.site.id);
-  					});
-  				}
-  			}
-  		});
-  	}
-	
-  	//setInterval("showMap()",3000);  //定时刷新map
-  	//setInterval("showNum()",3000);  //定时刷新空闲车辆及待处理站点数量
+			type : "POST",
+			url : "car/updateCarStatusByButton",
+			data : JSON.stringify({
+				driverId : userId,
+				nowStatus : nowStatus
+			}),
+			dataType : "JSON",
+			contentType : "application/json",
+			success : function(car) {
+				alert(car.status+" "+car.carType);
+				if(car.status==0){ //空闲状态
+					$("#updateCarStatusButton").html("暂无任务");
+					$("#nowStatus").val(0);
+					$("#updateCarStatusButton").attr("disabled",true);
+				}
+				else if(car.status==1) { //在途中
+					$("#updateCarStatusButton").html("已到达");
+					$("#nowStatus").val(1);
+					$("#updateCarStatusButton").attr("disabled",false);
+				}
+				else if(car.status==2){ //已经到达状态
+					if(car.carType==0){  //如果是处理车
+						$("#updateCarStatusButton").html("处理完成,返程");
+					}
+					else if (car.carType==1){  //如果是运输车
+						$("#updateCarStatusButton").html("污泥块运达目的地");		
+					}
+					$("#updateCarStatusButton").attr("disabled",false);
+					$("#nowStatus").val(2);
+				}
+				else if(car.status==3){ //如果是分配但是为出发状态
+					$("#updateCarStatusButton").html("前往工厂");
+					$("#nowStatus").val(3);
+					$("#updateCarStatusButton").attr("disabled",false);
+				}
+				else if(car.status==4){ //返程状态
+					$("#updateCarStatusButton").html("到达仓库");
+					$("#updateCarStatusButton").attr("disabled",false);
+					$("#nowStatus").val(4);
+				}
+			}
+		})
+	}
+	function show() {
+		$.ajax({
+			type : "POST",
+			url : "car/queryWorkerMapCar",
+			data : "userId=" + userId,
+			success : function(carList) {
+				if (jQuery.isEmptyObject(carList)) {
+					alert("暂无任务");
+					showMap(0);
+				} else {
+					$.each(carList, function(i, car) {
+						carStatus = car.status;
+						showMap(car.site.id);
+					});
+				}
+			}
+		});
+	}
+
+	//setInterval("showMap()",3000);  //定时刷新map
+	//setInterval("showNum()",3000);  //定时刷新空闲车辆及待处理站点数量
 	/***************************** 显示标注************************************* */
 	function showMap(id) {
 		map.clearOverlays(); //清除地图上所有覆盖物
-		sitePoint=[];
-		siteMarker=[];
-		siteInfoWindow=[];
-		carPoint=[];
-		carMarker=[];
-		carInfoWindow=[];
-		
-		$.ajax({
-				type : "POST",
-				url : "system/queryAllSite",
-				dataType : "json",
-				contentType : "application/json",
-				async: false,
-				success : function(siteList) {
+		sitePoint = [];
+		siteMarker = [];
+		siteInfoWindow = [];
+		carPoint = [];
+		carMarker = [];
+		carInfoWindow = [];
 
-					var myIcon;
-					$.each(siteList,function(i, site) {
-						if (site.status== "0") {
-							myIcon = new BMap.Icon("img/factory(purple).png", new BMap.Size(40, 26), {
-							imageSize : new BMap.Size(40, 26)});
-						}
-						else if (site.status== "1") {
-							myIcon = new BMap.Icon("img/factory(yellow).png", new BMap.Size(40, 26), {
-							imageSize : new BMap.Size(40, 26)});
-						} 
-						else if (site.status== "2") {
-							myIcon = new BMap.Icon("img/factory(red).png", new BMap.Size(40, 26), {
-							imageSize : new BMap.Size(40, 26)});
-						} 
-						sitePoint[site.id] = new BMap.Point(site.longitude,site.latitude);
-						siteMarker[site.id] = new BMap.Marker(sitePoint[site.id],{icon:myIcon});
-						
-						map.addOverlay(siteMarker[site.id]);
-						if(site.id==id){
-							siteMarker[site.id].setAnimation(BMAP_ANIMATION_BOUNCE);
-							map.centerAndZoom(sitePoint[site.id], 13);
-							siteInfo(site,id);
-						} 
-						siteMarker[site.id].addEventListener("mouseover",function(){
-						siteInfo(site,id)
+		$.ajax({
+			type : "POST",
+			url : "system/queryAllSite",
+			dataType : "json",
+			contentType : "application/json",
+			async : false,
+			success : function(siteList) {
+
+				var myIcon;
+				$.each(siteList,
+						function(i, site) {
+							if (site.status == "0") {
+								myIcon = new BMap.Icon(
+										"img/factory(purple).png",
+										new BMap.Size(40, 26), {
+											imageSize : new BMap.Size(40, 26)
+										});
+							} else if (site.status == "1") {
+								myIcon = new BMap.Icon(
+										"img/factory(yellow).png",
+										new BMap.Size(40, 26), {
+											imageSize : new BMap.Size(40, 26)
+										});
+							} else if (site.status == "2") {
+								myIcon = new BMap.Icon("img/factory(red).png",
+										new BMap.Size(40, 26), {
+											imageSize : new BMap.Size(40, 26)
+										});
+							}
+							sitePoint[site.id] = new BMap.Point(site.longitude,
+									site.latitude);
+							siteMarker[site.id] = new BMap.Marker(
+									sitePoint[site.id], {
+										icon : myIcon
+									});
+
+							map.addOverlay(siteMarker[site.id]);
+							if (site.id == id) {
+								siteMarker[site.id]
+										.setAnimation(BMAP_ANIMATION_BOUNCE);
+								map.centerAndZoom(sitePoint[site.id], 13);
+								siteInfo(site, id);
+							}
+							siteMarker[site.id].addEventListener("mouseover",
+									function() {
+										siteInfo(site, id)
+									});
 						});
-					});
-				}
-			});
+			}
+		});
 	}
-	
+
 	/***************************** 站点信息框显示************************************* */
-	function siteInfo(site,id){
-			var value=-1;
-			var opts = {width : 230, }// 信息窗口宽度
-			$.ajax({
-				type : "POST",
-				url : "system/queryUltrasonicValueBySite",
-				data : {"sensorIdSet" : site.sensorIdSet},
-				success : function(sensors) {
-					var status;
-					if (site.status== "0")
-						status="正常";
-					else if (site.status== "1")
-						status="处理中";
-					else if (site.status== "2")
-						status="待处理";
-					if(site.id==id){
-						if(carStatus==3)
-							var lid = '<div><h5><a onclick="go(\''+site.siteName+'\');">'+site.siteName+'(点击出发)</a></h5><table style="font-size:12px;">';
-						if(carStatus==1)
-							var lid = '<div><h5><a onclick="arrive(\''+site.siteName+'\');">'+site.siteName+'(点击到达)</a></h5><table style="font-size:12px;">';
+	function siteInfo(site, id) {
+		var value = -1;
+		var opts = {
+			width : 230,
+		}// 信息窗口宽度
+		$
+				.ajax({
+					type : "POST",
+					url : "system/queryUltrasonicValueBySite",
+					data : {
+						"sensorIdSet" : site.sensorIdSet
+					},
+					success : function(sensors) {
+						var status;
+						if (site.status == "0")
+							status = "正常";
+						else if (site.status == "1")
+							status = "处理中";
+						else if (site.status == "2")
+							status = "待处理";
+						if (site.id == id) {
+							if (carStatus == 3)
+								var lid = '<div><h5><a onclick="go(\''
+										+ site.siteName
+										+ '\');">'
+										+ site.siteName
+										+ '(点击出发)</a></h5><table style="font-size:12px;">';
+							if (carStatus == 1)
+								var lid = '<div><h5><a onclick="arrive(\''
+										+ site.siteName
+										+ '\');">'
+										+ site.siteName
+										+ '(点击到达)</a></h5><table style="font-size:12px;">';
+						} else
+							var lid = '<div><h5>' + site.siteName
+									+ '</h5><table style="font-size:12px;">';
+						if (!jQuery.isEmptyObject(sensors)) {
+							{
+								$
+										.each(
+												sensors,
+												function(i, sensor) {
+													if (sensor.typeId == 3) {
+														var v = sensor.sensorValue.value;
+														//alert(result.value);
+														//污泥量
+														value = 100
+																* (site.depth - v)
+																/ site.depth;
+														lid += '<tr><td style="width:40%;text-align: left;">污泥量：</td><td style="text-align: left; color: #1874CD; font-weight: bold;">'
+																+ value
+																		.toFixed(2)
+																+ '%</td></tr>';
+														return false;
+													}
+												});
+							}
+						} else if (jQuery.isEmptyObject(sensors) || value == -1)
+							lid += '<tr><td style="width:40%;text-align: left;">污泥量：</td><td style="text-align: left;">无数据</td></tr>';
+						lid += '<tr><td style="width:40%;text-align: left;">Tel:</td><td style="text-align: left;">'
+								+ site.telephone
+								+ '</td>'
+								+ '</tr><tr style="color:#FF4500;">'
+								+ '<td style="width:40%;text-align: left;">状态:</td><td style="text-align: left;">'
+								+ status
+								+ '</td>'
+								+ '</tr>'
+								+ '</table>'
+								+ '</div>';
+						siteInfoWindow[site.id] = new BMap.InfoWindow(lid, opts); // 创建信息窗口对象 
+						map.openInfoWindow(siteInfoWindow[site.id],
+								sitePoint[site.id]);
 					}
-					else
-						var lid = '<div><h5>'+site.siteName+'</h5><table style="font-size:12px;">';
-					if(!jQuery.isEmptyObject(sensors)){
-						{
-							$.each(sensors,function(i, sensor) {
-								if(sensor.typeId==3){
-									var v=sensor.sensorValue.value;
-									//alert(result.value);
-									//污泥量
-									value=100*(site.depth-v)/site.depth;
-									lid += '<tr><td style="width:40%;text-align: left;">污泥量：</td><td style="text-align: left; color: #1874CD; font-weight: bold;">'+value.toFixed(2)+'%</td></tr>';
-									return false;
-								}
-							});
-						}
-					}
-					else if(jQuery.isEmptyObject(sensors) || value==-1)
-						lid += '<tr><td style="width:40%;text-align: left;">污泥量：</td><td style="text-align: left;">无数据</td></tr>';	
-					lid += '<tr><td style="width:40%;text-align: left;">Tel:</td><td style="text-align: left;">'+site.telephone+'</td>'
-						+ '</tr><tr style="color:#FF4500;">'
-						+ '<td style="width:40%;text-align: left;">状态:</td><td style="text-align: left;">'+status+'</td>'
-						+ '</tr>' + '</table>' + '</div>';
-					siteInfoWindow[site.id] = new BMap.InfoWindow(lid,opts); // 创建信息窗口对象 
-					map.openInfoWindow(siteInfoWindow[site.id], sitePoint[site.id]);
-					}
-				}); 
-		}
-	function go(siteName){
-		$("#destination").text("目的地："+siteName);
+				});
+	}
+	function go(siteName) {
+		$("#destination").text("目的地：" + siteName);
 		$("#editContext").text("确定出发?");
 		$("#myModal").modal('show');
 	}
-	
-	function arrive(siteName){
-		$("#destination").text("目的地："+siteName);
+
+	function arrive(siteName) {
+		$("#destination").text("目的地：" + siteName);
 		$("#editContext").text("确定到达?");
 		$("#myModal").modal('show');
 	}
-	
-	$("#submitBtn").click(function(){
-		var editStatus=-1;
-		if(carStatus==1) editStatus=2;
-		if(carStatus==3) editStatus=1;
+
+	$("#submitBtn").click(function() {
+		var editStatus = -1;
+		if (carStatus == 1)
+			editStatus = 2;
+		if (carStatus == 3)
+			editStatus = 1;
 		$.ajax({
-  			type : "POST",
-  			url : "car/editWorkerCarStatus",
-  			data : "userId="+userId+"&status="+editStatus,
-  			success : function(result) {
-  				if(result.result=="success"){
-  					if(carStatus==1) alert("已到达");
-  					if(carStatus==3) alert("已出发");
-  					$("#myModal").modal('hide');
-  					show();
-  				}
-  				else{
-  					alert("状态更改失败");
-  				}
-  			}
-  		});
+			type : "POST",
+			url : "car/editWorkerCarStatus",
+			data : "userId=" + userId + "&status=" + editStatus,
+			success : function(result) {
+				if (result.result == "success") {
+					if (carStatus == 1)
+						alert("已到达");
+					if (carStatus == 3)
+						alert("已出发");
+					$("#myModal").modal('hide');
+					show();
+				} else {
+					alert("状态更改失败");
+				}
+			}
+		});
 	});
 </script>
 

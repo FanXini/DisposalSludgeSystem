@@ -436,4 +436,15 @@
 		ORDER BY
 		sludge.produce_time DESC
 	</select>
+	
+	<select id="queryProcessingSludgeByCarIdAndStatus" resultType="factory.entity.Sludge">
+		select id,status
+		from sludge
+		where transcar_id=#{transcarId} AND status in(0,2,4)	
+	</select>
+	<update id="setArrivalTimeAndStatusById">
+		UPDATE sludge
+		SET arrival_time=#{arrivalTime},status=#{status}
+		where id=#{sludgeId}
+	</update>
 </mapper>

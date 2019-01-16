@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import factory.dao.CarDao;
 import factory.dao.RecordDao;
+import factory.dao.SiteDao;
 import factory.entity.Car;
 import factory.entity.Record;
 import factory.enums.Result;
@@ -20,6 +21,9 @@ import factory.service.RecordService;
 public class RecordServiceImpl implements RecordService{
 	@Autowired
 	private RecordDao recordDao;
+	
+	@Autowired 
+	private SiteDao siteDao;
 	
 	@Autowired
 	private CarDao carDao;
@@ -202,6 +206,11 @@ public class RecordServiceImpl implements RecordService{
 		}else{
 			return value;
 		}
+	}
+	@Override
+	public void synUpdateRecordAndSiteStatus(int recordId, int siteId, int status) {
+		recordDao.updateRecordStatusById(recordId, status);
+		siteDao.updateSiteStatusById(siteId, status);
 	}
 
 }

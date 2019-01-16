@@ -1,9 +1,12 @@
 package test;
 
+import java.util.Date;
 import java.util.List;
 
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import com.mysql.fabric.xmlrpc.base.Data;
 
 import factory.dao.SludgeDao;
 import factory.entity.Sludge;
@@ -13,6 +16,11 @@ public class SludgeTest extends BaseTest {
 
 	@Autowired
 	private SludgeDao sludgeDao;
+	
+	@Test
+	public void test1() {
+		sludgeDao.setArrivalTimeAndStatusById(40, 1, "2001-12-12 10:10:10");
+	}
 	/*
 	 * @Test public void queryAllSludgeFunction(){ List<SludgeFunction>
 	 * sludgeFunctions=sludgeDao.queryAllSludgeFunction();

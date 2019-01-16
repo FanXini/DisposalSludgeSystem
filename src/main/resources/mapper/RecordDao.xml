@@ -222,7 +222,7 @@
 		useGeneratedKeys="true" keyProperty="id">
 		insert into
 		record(allocation_time,site_id,status,pretreat_amount)
-		values(#{allocationTime},#{siteId},2,#{pretreatAmount})
+		values(#{allocationTime},#{siteId},#{status},#{pretreatAmount})
 	</insert>
 	
 	<select id="queryRateOfProcessBySiteId" resultType="factory.entity.Record">
@@ -237,5 +237,31 @@
 		FROM record
 		WHERE record.del_status=0 AND record.status != 0 AND record.site_id=#{siteId} 
 		ORDER BY record.allocation_time DESC LIMIT 1
-	</select>		
+	</select>	
+	
+	<update id="updateRecordStatusById">
+		UPDATE record
+		SET status=#{status}
+		WHERE id=#{recordId} AND del_status=0
+	</update>	
+	
+	<select id="queryRecordByCarIdAndStatus" resultType="factory.entity.Record">
+		SELECT id,site_id
+		FROM record
+		WHERE car_id=#{carId} AND status=#{status} AND del_status=0
+	</select>
+	
+	<update id="UpdateRecordStatusAndTimeById">
+		UPDATE record
+		SET status=#{status},
+		<choose>
+			<when test="timeFlag==0">
+				disposal_time=#{time}
+			</when>
+			<when test="timeFlag==1">
+				finish_time=#{time}
+			</when>
+		</choose>
+		where id=#{recordId}
+	</update>
 </mapper>

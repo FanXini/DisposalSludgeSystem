@@ -8,6 +8,9 @@ import factory.entity.Car;
 import factory.entity.Record;
 import factory.entity.Site;
 import factory.entity.Sludge;
+import factory.enums.CarStatus;
+import factory.enums.RecordStatus;
+import factory.enums.SludgeStatus;
 import factory.service.CarService;
 import factory.service.RecordService;
 import factory.service.SludgeService;
@@ -54,8 +57,8 @@ public class AssignCarForReocrdThread implements Runnable{
 				Car disPacherTreatmentCar=selectMinDistanceCar(unAssinTreatmentCar);
 				//将分配车id存到record记录中
 				recordService.updateCarId(recordId, disPacherTreatmentCar.getId());
-				//修改车的状态 3表示已分配还未出发
-				carService.editWorkerCarStatusAndSiteId(disPacherTreatmentCar.getId(), 3, site.getId());
+				//修改车的状态为已分配还未出发,并将car的siteId设置为0
+				carService.editWorkerCarStatusAndSiteId(disPacherTreatmentCar.getId(), CarStatus.NODEPARTURE.ordinal(), site.getId());
 				log.info("为"+recordId+"：请求 分配处理车:"+disPacherTreatmentCar.getLicense());
 				break;
 			}
@@ -77,10 +80,11 @@ public class AssignCarForReocrdThread implements Runnable{
 				log.info("为"+recordId+"：请求 分配运输车:"+disPacherCarrier.getLicense());
 				Sludge sludge=new Sludge();
 				sludge.setRecordId(recordId);
-				sludge.setStatus(6);
+				//设置sludge的状态为虚拟状态，还未产出
+				sludge.setStatus(SludgeStatus.VIRTUAL.ordinal());
 				sludge.setTranscarId(disPacherCarrier.getId());
 				sludgeService.addSludge(sludge);
-				carService.editWorkerCarStatusAndSiteId(disPacherCarrier.getId(), 3, site.getId());
+				carService.editWorkerCarStatusAndSiteId(disPacherCarrier.getId(), CarStatus.NODEPARTURE.ordinal(), site.getId());
 				log.info(sludge.getId());
 				break;
 			}

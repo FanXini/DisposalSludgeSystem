@@ -49,7 +49,8 @@
 				</li>
 
 				<!-- 主页 -->
-				<c:if test="${fn:contains(sessionScope.authos, 'au1th') && !fn:contains(sessionScope.authos, 'au10th') && !fn:contains(sessionScope.authos, 'au14th')}">
+				<c:if
+					test="${fn:contains(sessionScope.authos, 'au1th') && !fn:contains(sessionScope.authos, 'au10th') && !fn:contains(sessionScope.authos, 'au14th')}">
 					<li class="line dk"></li>
 					<li><a class="J_menuItem" href="main/map/map"> <i
 							class="fa fa-home"></i> <span class="nav-label">主页</span>
@@ -63,14 +64,15 @@
 							class="fa fa-home"></i> <span class="nav-label">主页(司机)</span>
 					</a></li>
 				</c:if>
-				
-								<!-- 司机主页 -->
-				<c:if test="${fn:contains(sessionScope.authos, 'au14th')}" >
+
+				<!-- 司机主页 -->
+				<c:if test="${fn:contains(sessionScope.authos, 'au14th')}">
 					<li class="line dk"></li>
-					<li><a class="J_menuItem" href="main/map/siteManagerMap"> <i
-							class="fa fa-home"></i> <span class="nav-label">主页(工厂人员)</span>
+					<li><a class="J_menuItem" href="main/map/siteManagerMap">
+							<i class="fa fa-home"></i> <span class="nav-label">主页(工厂人员)</span>
 					</a></li>
 				</c:if>
+
 
 				<!-- 个人信息 -->
 				<c:if test="${fn:contains(sessionScope.authos, 'au2th')}">
@@ -128,12 +130,13 @@
 							class="fa fa fa-bar-chart-o"></i> <span class="nav-label">监控</span>
 					</a></li>
 				</c:if>
-				
+
 				<!-- 运输车监控 -->
 				<c:if test="${fn:contains(sessionScope.authos, 'au13th')}">
 					<li class="line dk"></li>
-					<li><a class="J_menuItem" href="monitor/queryVideoByDriverId?driverId=${sessionScope.user.id }"> <i
-							class="fa fa fa-bar-chart-o"></i> <span class="nav-label">监控</span>
+					<li><a class="J_menuItem"
+						href="monitor/queryVideoByDriverId?driverId=${sessionScope.user.id }">
+							<i class="fa fa fa-bar-chart-o"></i> <span class="nav-label">监控</span>
 					</a></li>
 				</c:if>
 
@@ -144,12 +147,13 @@
 							<i class="fa fa-book"></i> <span class="nav-label">工作记录(司机)</span>
 					</a></li>
 				</c:if>
-				
+
 				<!-- 工作记录(污泥运输司机) -->
-				<c:if test="${fn:contains(sessionScope.authos, 'au11th')}" >
+				<c:if test="${fn:contains(sessionScope.authos, 'au11th')}">
 					<li class="line dk"></li>
-					<li><a class="J_menuItem" href="sludge/transportsludgeofonedriver?driverId=${sessionScope.user.id}"> <i
-							class="fa fa-book"></i> <span class="nav-label">工作记录(污泥运输司机)</span>
+					<li><a class="J_menuItem"
+						href="sludge/transportsludgeofonedriver?driverId=${sessionScope.user.id}">
+							<i class="fa fa-book"></i> <span class="nav-label">工作记录(污泥运输司机)</span>
 					</a></li>
 				</c:if>
 				<!-- 一键报警(工厂) -->
@@ -225,39 +229,42 @@
 					<h1 class="text-info"
 						style="text-align: center; font-family: Microsoft Yahei;">基于物联网的车载式污泥干化处理系统</h1>
 				</div>
-			</nav>
+				</nav>
+			</div>
+			<div class="row J_mainContent" id="content-main">
+
+				<c:if
+					test="${fn:contains(sessionScope.authos, 'au1th') && !fn:contains(sessionScope.authos, 'au10th') && !fn:contains(sessionScope.authos, 'au14th')}">
+					<iframe id="J_iframe" width="100%" height="100%" src="main/map/map"
+						frameborder="0" data-id="index_v1.html" seamless></iframe>
+				</c:if>
+				<c:if test="${fn:contains(sessionScope.authos, 'au10th')}">
+					<iframe id="J_iframe" width="100%" height="100%"
+						src="main/map/workerMap" frameborder="0" data-id="index_v1.html"
+						seamless></iframe>
+				</c:if>
+				<c:if test="${fn:contains(sessionScope.authos, 'au14th')}">
+					<iframe id="J_iframe" width="100%" height="100%"
+						src="main/map/siteManagerMap" frameborder="0"
+						data-id="index_v1.html" seamless></iframe>
+				</c:if>
+			</div>
+			<!--右侧部分结束-->
 		</div>
-		<div class="row J_mainContent" id="content-main">
-		
-		<c:if test="${fn:contains(sessionScope.authos, 'au1th') && !fn:contains(sessionScope.authos, 'au10th') && !fn:contains(sessionScope.authos, 'au14th')}" >
-			<iframe id="J_iframe" width="100%" height="100%" src="main/map/map"
-					frameborder="0" data-id="index_v1.html" seamless></iframe>
-		</c:if>
-		<c:if test="${fn:contains(sessionScope.authos, 'au10th')}">
-			<iframe id="J_iframe" width="100%" height="100%" src="main/map/workerMap"
-					frameborder="0" data-id="index_v1.html" seamless></iframe>
-		</c:if>
-		<c:if test="${fn:contains(sessionScope.authos, 'au14th')}">
-			<iframe id="J_iframe" width="100%" height="100%" src="main/map/siteManagerMap"
-					frameborder="0" data-id="index_v1.html" seamless></iframe>
-		</c:if>
-		</div>
-		<!--右侧部分结束-->
-	</div>
 
-	<!-- 全局js -->
-	<script src="js/jquery.min.js?v=2.1.4"></script>
-	<script src="js/bootstrap.min.js?v=3.3.6"></script>
-	<script src="js/plugins/metisMenu/jquery.metisMenu.js"></script>
-	<script src="js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
-	<script src="js/plugins/layer/layer.min.js"></script>
+		<!-- 全局js -->
+		<script src="js/jquery.min.js?v=2.1.4"></script>
+		<script src="js/bootstrap.min.js?v=3.3.6"></script>
+		<script src="js/plugins/metisMenu/jquery.metisMenu.js"></script>
+		<script src="js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+		<script src="js/plugins/layer/layer.min.js"></script>
 
-	<!-- 自定义js -->
-	<script src="js/hAdmin.js?v=4.1.0"></script>
-	<script type="text/javascript" src="js/index.js"></script>
+		<!-- 自定义js -->
+		<script src="js/hAdmin.js?v=4.1.0"></script>
+		<script type="text/javascript" src="js/index.js"></script>
 
-	<!-- 第三方插件 -->
-	<script src="js/plugins/pace/pace.min.js"></script>
+		<!-- 第三方插件 -->
+		<script src="js/plugins/pace/pace.min.js"></script>
 
 </body>
 

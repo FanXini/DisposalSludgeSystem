@@ -27,7 +27,9 @@ import factory.entity.Car;
 import factory.entity.Record;
 import factory.entity.Site;
 import factory.entity.User;
+import factory.enums.RecordStatus;
 import factory.enums.Result;
+import factory.enums.SiteStatus;
 import factory.exception.AllocateCarForRecordConflict;
 import factory.service.CarService;
 import factory.service.RecordService;
@@ -219,7 +221,11 @@ public class RecordController {
 		log.info(record.getSiteId()+","+record.getPretreatAmount());
 		int siteId=record.getSiteId();
 		record.setAllocationTime(dateFormat.format(new Date()));
+		//设置record状态为待处理
+		record.setStatus(RecordStatus.WATINGPROCESS.ordinal());
 		recordService.insertRecordByAlert(record);
+		//修改工厂的状态为待处理
+		siteService.updateSiteStatusById(siteId, SiteStatus.WATINGPROCESS.ordinal());
 		System.out.println(record.getId());
 		//查询出车的经纬度
 		Site site=siteService.querySiteById(siteId);

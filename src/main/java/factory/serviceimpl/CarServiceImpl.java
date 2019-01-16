@@ -1,8 +1,11 @@
 package factory.serviceimpl;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
@@ -11,9 +14,18 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Service;
 
 import factory.dao.CarDao;
+import factory.dao.RecordDao;
+import factory.dao.SiteDao;
+import factory.dao.SludgeDao;
 import factory.dao.UserDao;
 import factory.entity.Car;
+import factory.entity.Record;
+import factory.entity.Sludge;
 import factory.entity.User;
+import factory.enums.CarStatus;
+import factory.enums.RecordStatus;
+import factory.enums.SiteStatus;
+import factory.enums.SludgeStatus;
 import factory.exception.DataNoneException;
 import factory.service.CarService;
 import factory.util.AssignCarThread;
@@ -30,7 +42,18 @@ public class CarServiceImpl implements CarService{
 	private UserDao userDao;
 	
 	@Autowired
+	private RecordDao recordDao;
+	
+	@Autowired
+	private SiteDao siteDao;
+	
+	@Autowired
+	private SludgeDao sludgeDao;
+	
+	@Autowired
 	private ThreadPoolTaskExecutor taskExecuter;
+	
+	private static SimpleDateFormat dataFormat=new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
 
 	@Override
 	public List<Car> queryAllCar() {
@@ -228,6 +251,91 @@ public class CarServiceImpl implements CarService{
 	@Override
 	public void editWorkerCarStatusAndSiteId(int carId, int status, int siteId) {
 		carDao.editWorkerCarStatusAndSiteId(carId, status, siteId);		
+	}
+
+	@Override
+	public Car updateCarStatusByButton(Map<String, Integer> map) {
+		int driverId=map.get("driverId");
+		int nowStatus=map.get("nowStatus");
+		Car car=carDao.queryCarByDriverId(driverId);
+		int carStatusInDB=car.getStatus();
+		int carType=car.getCarType();
+		int carId=car.getId();
+		if(nowStatus!=carStatusInDB || nowStatus==CarStatus.LEISURE.ordinal()) { //是由页面触发而不是按钮触发
+			return new Car(carStatusInDB, carType);
+		}
+		else {
+			if(nowStatus==carStatusInDB) { //状态一致
+				//如果车目前的状态是已分配任务,但还未出发
+				//司机触发按钮表示开始出发
+				if(nowStatus==CarStatus.NODEPARTURE.ordinal()) {
+					//修改成在途中
+					carDao.editWorkerCarStatus(driverId, CarStatus.ONTHEWAY.ordinal());
+					return new Car(CarStatus.ONTHEWAY.ordinal(), carType);
+				}
+				//如果车目前的状态是在途中
+				//司机触发按钮表示已到达
+				else if(nowStatus==CarStatus.ONTHEWAY.ordinal()) {
+					//修改成已到达
+					carDao.editWorkerCarStatus(driverId, CarStatus.ARRIVAL.ordinal());
+					if(carType==0) { //如果是处理车到达,要修改record和site的状态为处理中
+						//查询现在处理的是哪个任务
+						Record treatmentRecord=recordDao.queryRecordByCarIdAndStatus(car.getId(), RecordStatus.WATINGPROCESS.ordinal());
+						//修改record的状态为处理中,并且设置任务开始时间,0表示存的是任务开始时间
+						recordDao.UpdateRecordStatusAndTimeById(treatmentRecord.getId(), RecordStatus.PROCESSING.ordinal(), dataFormat.format(new Date()), 0);
+						//修改site的状态为处理中
+						siteDao.updateSiteStatusById(treatmentRecord.getSiteId(), SiteStatus.PROCESSING.ordinal());
+						
+					}
+					return new Car(CarStatus.ARRIVAL.ordinal(), carType);
+				}
+				//如果车目前的状态是已到达
+				//司机触发按钮表示到底处理任务/运输任务完成了
+				else if(nowStatus==CarStatus.ARRIVAL.ordinal()) {
+					if(carType==0) { //如果是处理车
+						// 修改为车的状态返程状态,修改site为null
+						carDao.editWorkerCarStatusAndSiteId(car.getId(), CarStatus.GETBACK.ordinal(),0); 
+						//查询现在处理的是哪个任务
+						Record treatmentRecord=recordDao.queryRecordByCarIdAndStatus(car.getId(), RecordStatus.PROCESSING.ordinal());
+						//修改record的状态为处理完成
+						recordDao.UpdateRecordStatusAndTimeById(treatmentRecord.getId(), RecordStatus.ACCOMPLISH.ordinal(), dataFormat.format(new Date()), 1);
+						//修改site的状态为正常
+						siteDao.updateSiteStatusById(treatmentRecord.getSiteId(), SiteStatus.NORMAL.ordinal());
+						return new Car(CarStatus.GETBACK.ordinal(),carType);
+					}
+					else if(carType==1) { //如果是运输车
+			
+						//查询当前运输的的污泥
+						Sludge processingSludge=sludgeDao.queryProcessingSludgeByCarIdAndStatus(carId);
+						String arrivalTime=dataFormat.format(new Date());
+						int sludgeStatus=0;
+						//如果是产出地到泥仓路上；
+						if(processingSludge.getStatus()==SludgeStatus.FACTORYTOMWHRAOD.ordinal()) {
+							sludgeStatus=SludgeStatus.STOREINMWH.ordinal();
+						}
+						//如果是产出地到目的地路上；
+						else if (processingSludge.getStatus()==SludgeStatus.FACTORYTODESROAD.ordinal()){
+							sludgeStatus=SludgeStatus.ARRIVEDESFROMFACTORY.ordinal();
+						}
+						//如果是泥仓地到泥仓路上；
+						else if (processingSludge.getStatus()==SludgeStatus.MWHTODESROAD.ordinal()){
+							sludgeStatus=SludgeStatus.ARRIVEDESFROMMWH.ordinal();
+						}
+						sludgeDao.setArrivalTimeAndStatusById(processingSludge.getId(), sludgeStatus, arrivalTime);
+						//修改为空闲状态
+						carDao.editWorkerCarStatus(driverId, CarStatus.LEISURE.ordinal());
+						return new Car(CarStatus.LEISURE.ordinal(), carType);
+					}
+				}
+				//如果处理车目前的状态返程
+				//司机触发按钮表示到达仓库了
+				else if(nowStatus==CarStatus.GETBACK.ordinal()) {
+					carDao.editWorkerCarStatus(driverId, CarStatus.LEISURE.ordinal());
+					return new Car(CarStatus.LEISURE.ordinal(),carType);
+				}
+			}
+		}
+		return null;
 	}
 	
 }

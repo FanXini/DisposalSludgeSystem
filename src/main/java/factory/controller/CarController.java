@@ -20,6 +20,7 @@ import org.springframework.web.servlet.ModelAndView;
 import factory.entity.Car;
 import factory.entity.Site;
 import factory.entity.User;
+import factory.enums.CarStatus;
 import factory.enums.Result;
 import factory.exception.DataNoneException;
 import factory.service.CarService;
@@ -272,5 +273,15 @@ public class CarController {
 	@ResponseBody List<Car> queryCarByCarType(@RequestParam("carType") int carType){
 		log.info("queryCarByCarType type:"+carType);
 		return carService.queryCarByCarType(carType);
+	}
+	@RequestMapping("updateCarStatusByButton")
+	@ResponseBody
+	public Car updateCarStatusByButton(@RequestBody Map<String, Integer> map) {
+		try {
+			return carService.updateCarStatusByButton(map);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
 }

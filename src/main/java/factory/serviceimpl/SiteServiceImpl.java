@@ -184,6 +184,11 @@ public class SiteServiceImpl implements SiteService{
 		// TODO Auto-generated method stub
 		return siteDao.querySiteMapBySiteIdAndStatus(siteId,status);
 	}
+
+	@Override
+	public void updateSiteStatusById(int siteId,int status) {
+		siteDao.updateSiteStatusById(siteId,status);
+	}
 	
 	
 

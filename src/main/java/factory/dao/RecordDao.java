@@ -45,6 +45,12 @@ public interface RecordDao {
 	
 	public double queryCurrentPretreatAmountBySiteId(@Param("siteId") int siteId);
 	
+	public void updateRecordStatusById(@Param("recordId") int recordId,@Param("status") int status);
+	
+	public Record queryRecordByCarIdAndStatus(@Param("carId") int carId,@Param("status") int status);
+	
+	public void UpdateRecordStatusAndTimeById(@Param("recordId") int recordId,@Param("status") int status,@Param("time") String time,@Param("timeFlag")int timeFlag);
+	
 	
 	
 }

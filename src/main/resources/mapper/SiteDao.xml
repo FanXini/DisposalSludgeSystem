@@ -112,6 +112,12 @@
 		WHERE
 		id=#{id}
 	</update>
+	
+	<update id="updateSiteStatusById">
+		UPDATE site
+		SET status=#{status}
+		WHERE id=#{siteId} and del_status=0
+	</update>
 
 	<select id="querySiteSerialNumberAndName" resultType="Integer">
 		SELECT

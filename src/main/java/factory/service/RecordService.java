@@ -2,6 +2,8 @@ package factory.service;
 
 import java.util.List;
 import java.util.Map;
+
+import factory.entity.Car;
 import factory.entity.Record;
 public interface RecordService {
 	
@@ -40,5 +42,8 @@ public interface RecordService {
 	public double queryRateOfProcessBySiteId(int siteId);
 	
 	public double queryCurrentPretreatAmountBySiteId(int siteId);
+	
+	public void synUpdateRecordAndSiteStatus(int recordId,int siteId,int status);
+	
 
 }

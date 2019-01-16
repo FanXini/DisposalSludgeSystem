@@ -1,6 +1,6 @@
 package factory.entity;
 
-
+import factory.enums.CarStatus;
 
 public class Car {
 
@@ -17,6 +17,15 @@ public class Car {
 	private int siteId;
 	//添加车辆污泥处理类型-刘见宇
 	private int carType;
+	
+	public Car() {
+		
+	}
+	
+	public Car(int status,int carType) {
+		this.status=status;
+		this.carType=carType;
+	}
 	public int getId() {
 		return id;
 	}
