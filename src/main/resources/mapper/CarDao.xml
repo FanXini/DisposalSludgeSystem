@@ -230,13 +230,14 @@
 
 	<select id="queryMapCar" resultMap="carDriverSiteMap">
 		SELECT
-		car.*,site.site_name,site.latitude slatitude,site.longitude
-		slongitude,user.realname,user.telephone
+		car.*,user.id uid,site.id sid,site.site_name,site.latitude slatitude,site.longitude
+		slongitude,site.status sstatus,site.telephone stelephone,user.realname,user.telephone
 		FROM car LEFT JOIN user ON
 		car.driver_id=user.id
 		LEFT JOIN site ON car.site_id=site.id
 		WHERE
-		car.del_status=0 AND(car.license like CONCAT('%',#{queryStr},'%') or
+		car.del_status=0 AND car.car_type = #{carType} AND car.driver_id IS NOT NULL
+		AND (car.license like CONCAT('%',#{queryStr},'%') or
 		site.site_name like CONCAT('%',#{queryStr},'%')
 		or user.realname like
 		CONCAT('%',#{queryStr},'%') or user.telephone like
@@ -311,6 +312,7 @@
                 AND car.status=#{status}
             </if>
         </where>
+        ORDER BY car.status
 	</select>
 	
 </mapper>

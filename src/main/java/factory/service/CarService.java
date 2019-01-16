@@ -29,7 +29,7 @@ public interface CarService {
 
 	public List<Car> queryAllCarOrderByStatus();
 
-	public List<Car> queryMapCar(String queryStr);
+	public List<Car> queryMapCar(String queryStr,int carType);
 
 	public List<Car> queryWorkerMapCar(int userId);
 
