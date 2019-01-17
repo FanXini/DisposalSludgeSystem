@@ -245,13 +245,12 @@
 	</select>
 
 	<select id="queryWorkerMapCar" resultMap="carDriverSiteMap">
-		SELECT car.*,site.id
-		sid
+		SELECT car.*,car.*,user.id uid,site.id sid,site.site_name,site.latitude slatitude,site.longitude
+		slongitude,site.status sstatus,site.telephone stelephone,user.realname,user.telephone
 		FROM car LEFT JOIN user ON car.driver_id=user.id
 		LEFT JOIN site ON
 		car.site_id=site.id
 		WHERE car.del_status=0 AND car.driver_id=#{userId}
-		AND (car.status=1 OR car.status=3)
 	</select>
 
 	<update id="editWorkerCarStatus">
