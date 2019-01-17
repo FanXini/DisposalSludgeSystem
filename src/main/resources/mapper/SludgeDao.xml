@@ -75,16 +75,16 @@
 
 
 	<select id="queryAllSludgeByInOutFlagWithMinorWareHouseId"
-		resultMap="SludgeMap">
+		resultMap="SludgeCarMap">
 		<!-- SELECT sludge.*,record.id,record.car_id,record.site_id,car.id,car.license,car.driver_id,user.id,user.realname,user.telephone,site.id,site.site_name,sludge_function.id,sludge_function.`function` 
 			FROM sludge,record,car,user,site,sludge_function WHERE sludge.del_status=0 
 			AND sludge.record_id=record.id AND sludge.function_id=sludge_function.id 
 			AND record.car_id=car.id AND car.driver_id=user.id AND record.site_id=site.id -->
 		SELECT
-		sludge.*,record.id,record.car_id,record.site_id,car.id,car.license,car.driver_id,user.id,user.realname,user.telephone,site.id,site.site_name,sludge_function.id,sludge_function.`function`
+		sludge.*,record.id,record.site_id,car.id,car.license,car.driver_id,user.id,user.realname,user.telephone,site.id,site.site_name,sludge_function.id,sludge_function.`function`
 		FROM
 		sludge LEFT JOIN record ON sludge.record_id=record.id LEFT JOIN
-		car ON record.car_id=car.id LEFT JOIN site ON record.site_id=site.id
+		car ON sludge.transcar_id=car.id LEFT JOIN site ON record.site_id=site.id
 		LEFT JOIN `user` ON car.driver_id=`user`.id LEFT JOIN sludge_function
 		ON sludge.function_id=sludge_function.id
 		WHERE sludge.del_status=0
@@ -108,9 +108,9 @@
 
 	<!-- *********************************通过工厂id查询污泥块************************************ -->
 
-	<select id="querySludgeBySiteId" resultMap="SludgeMap">
+	<select id="querySludgeBySiteId" resultMap="SludgeCarMap">
 		SELECT
-		sludge.*,record.id,record.car_id,record.site_id,car.id,car.license,car.driver_id,user.id,user.realname,user.telephone,site.id,site.site_name,sludge_function.id,sludge_function.`function`
+		sludge.*,record.id,record.site_id,car.id,car.license,car.driver_id,user.id,user.realname,user.telephone,site.id,site.site_name,sludge_function.id,sludge_function.`function`
 		FROM
 		sludge LEFT JOIN record ON sludge.record_id=record.id LEFT JOIN
 		car ON record.car_id=car.id LEFT JOIN site ON record.site_id=site.id
@@ -122,12 +122,12 @@
 	</select>
 	<!-- *********************************通过工厂id和出入工厂类型查询污泥块************************************ -->
 	<select id="querySludgeBySiteIdAndInOutFlagWithMinorWareHouseId"
-		resultMap="SludgeMap">
+		resultMap="SludgeCarMap">
 		SELECT
-		sludge.*,record.id,record.car_id,record.site_id,car.id,car.license,car.driver_id,user.id,user.realname,user.telephone,site.id,site.site_name,sludge_function.id,sludge_function.`function`
+		sludge.*,record.id,record.site_id,car.id,car.license,car.driver_id,user.id,user.realname,user.telephone,site.id,site.site_name,sludge_function.id,sludge_function.`function`
 		FROM
 		sludge LEFT JOIN record ON sludge.record_id=record.id LEFT JOIN
-		car ON record.car_id=car.id LEFT JOIN site ON record.site_id=site.id
+		car ON sludge.transcar_id=car.id LEFT JOIN site ON record.site_id=site.id
 		LEFT JOIN `user` ON car.driver_id=`user`.id LEFT JOIN sludge_function
 		ON sludge.function_id=sludge_function.id
 		WHERE sludge.del_status=0 AND
@@ -168,12 +168,12 @@
 
 
 	<select id="querySludgeByDriverIdAndInOutFlagWithMinorWareHouseId"
-		resultMap="SludgeMap">
+		resultMap="SludgeCarMap">
 		SELECT
-		sludge.*,record.id,record.car_id,record.site_id,car.id,car.license,car.driver_id,user.id,user.realname,user.telephone,site.id,site.site_name,sludge_function.id,sludge_function.`function`
+		sludge.*,record.id,record.site_id,car.id,car.license,car.driver_id,user.id,user.realname,user.telephone,site.id,site.site_name,sludge_function.id,sludge_function.`function`
 		FROM
 		sludge LEFT JOIN record ON sludge.record_id=record.id LEFT JOIN
-		car ON record.car_id=car.id LEFT JOIN site ON record.site_id=site.id
+		car ON sludge.transcar_id=car.id LEFT JOIN site ON record.site_id=site.id
 		LEFT JOIN `user` ON car.driver_id=`user`.id LEFT JOIN sludge_function
 		ON sludge.function_id=sludge_function.id
 		WHERE sludge.del_status=0 AND
@@ -197,12 +197,12 @@
 
 	<!-- *********************************通过日期查询污泥块************************************ -->
 	<select id="querySludgeByDateAndInOutFlagWithMinorWareHouseId"
-		resultMap="SludgeMap">
+		resultMap="SludgeCarMap">
 		SELECT
-		sludge.*,record.id,record.car_id,record.site_id,car.id,car.license,car.driver_id,user.id,user.realname,user.telephone,site.id,site.site_name,sludge_function.id,sludge_function.`function`
+		sludge.*,record.id,record.site_id,car.id,car.license,car.driver_id,user.id,user.realname,user.telephone,site.id,site.site_name,sludge_function.id,sludge_function.`function`
 		FROM
 		sludge LEFT JOIN record ON sludge.record_id=record.id LEFT JOIN
-		car ON record.car_id=car.id LEFT JOIN site ON record.site_id=site.id
+		car ON sludge.transcar_id=car.id LEFT JOIN site ON record.site_id=site.id
 		LEFT JOIN `user` ON car.driver_id=`user`.id LEFT JOIN sludge_function
 		ON sludge.function_id=sludge_function.id
 		WHERE sludge.del_status=0 AND
@@ -303,12 +303,12 @@
 	</update>
 
 
-	<select id="queryAllSludgeOfOneFactory" resultMap="SludgeMap">
+	<select id="queryAllSludgeOfOneFactory" resultMap="SludgeCarMap">
 		SELECT
-		sludge.*,record.id,record.car_id,record.site_id,car.id,car.license,car.driver_id,user.id,user.realname,user.telephone,site.id,site.site_name,sludge_function.id,sludge_function.`function`
+		sludge.*,record.id,record.site_id,car.id,car.license,car.driver_id,user.id,user.realname,user.telephone,site.id,site.site_name,sludge_function.id,sludge_function.`function`
 		FROM
 		sludge LEFT JOIN record ON sludge.record_id=record.id LEFT JOIN
-		car ON record.car_id=car.id LEFT JOIN site ON record.site_id=site.id
+		car ON sludge.transcar_id=car.id LEFT JOIN site ON record.site_id=site.id
 		LEFT JOIN `user` ON car.driver_id=`user`.id LEFT JOIN sludge_function
 		ON sludge.function_id=sludge_function.id
 		WHERE sludge.del_status=0 AND
@@ -316,12 +316,12 @@
 		ORDER BY sludge.produce_time DESC
 	</select>
 
-	<select id="querySludgeByDriverIdOfOneFacotry" resultMap="SludgeMap">
+	<select id="querySludgeByDriverIdOfOneFacotry" resultMap="SludgeCarMap">
 		SELECT
-		sludge.*,record.id,record.car_id,record.site_id,car.id,car.license,car.driver_id,user.id,user.realname,user.telephone,site.id,site.site_name,sludge_function.id,sludge_function.`function`
+		sludge.*,record.id,record.site_id,car.id,car.license,car.driver_id,user.id,user.realname,user.telephone,site.id,site.site_name,sludge_function.id,sludge_function.`function`
 		FROM
 		sludge LEFT JOIN record ON sludge.record_id=record.id LEFT JOIN
-		car ON record.car_id=car.id LEFT JOIN site ON record.site_id=site.id
+		car ON sludge.transcar_id=car.id LEFT JOIN site ON record.site_id=site.id
 		LEFT JOIN `user` ON car.driver_id=`user`.id LEFT JOIN sludge_function
 		ON sludge.function_id=sludge_function.id
 		WHERE sludge.del_status=0 AND
@@ -331,12 +331,12 @@
 		sludge.produce_time DESC
 	</select>
 
-	<select id="querySludegByDateOfOneFactory" resultMap="SludgeMap">
+	<select id="querySludegByDateOfOneFactory" resultMap="SludgeCarMap">
 		SELECT
-		sludge.*,record.id,record.car_id,record.site_id,car.id,car.license,car.driver_id,user.id,user.realname,user.telephone,site.id,site.site_name,sludge_function.id,sludge_function.`function`
+		sludge.*,record.id,record.site_id,car.id,car.license,car.driver_id,user.id,user.realname,user.telephone,site.id,site.site_name,sludge_function.id,sludge_function.`function`
 		FROM
 		sludge LEFT JOIN record ON sludge.record_id=record.id LEFT JOIN
-		car ON record.car_id=car.id LEFT JOIN site ON record.site_id=site.id
+		car ON sludge.transcar_id=car.id LEFT JOIN site ON record.site_id=site.id
 		LEFT JOIN `user` ON car.driver_id=`user`.id LEFT JOIN sludge_function
 		ON sludge.function_id=sludge_function.id
 		WHERE sludge.del_status=0 AND

@@ -238,7 +238,7 @@
 										</button>
 										<ul class="dropdown-menu">
 
-											<c:forEach items="${requestScope.driverList }" var="driver">
+											<c:forEach items="${requestScope.assignCarTransportDriver}" var="driver">
 												<li><a class="btn btn-success driver"
 													name="${driver.id }" href="javascript:void(0)">${driver.realname }</a></li>
 											</c:forEach>
@@ -330,14 +330,13 @@
 				'<th>RFID</th>' +
 				'<th>产地</th>' +
 				'<th>目的地</th>' +
-				'<th>处理人</th>' +
+				'<th>运输司机</th>' +
 				'<th>污泥块重量</th>' +
 				'<th>污泥功能</th>' +
 				'<th data-hide="all">污泥产出时间</th>' +
 				'<th data-hide="all">污泥到达时间</th>' +
-				'<th data-hide="all">污泥运输车</th>' +
-				'<th data-hide="all">处理人号码</th>' +
-				'<th data-hide="all">处理污泥车车牌号</th>' +
+				'<th data-hide="all">污泥运输车司机号码</th>' +
+				'<th data-hide="all">污泥运输车车牌号</th>' +
 				'</tr>' +
 				'</thead>' +
 				'<tbody>'
@@ -415,7 +414,7 @@
 						}
 						table += '<td>' + (sludge.record.site.siteName==null?"":sludge.record.site.siteName)+ '</td>'
 						table += '<td>' + (sludge.destinationAddress ==null?"":sludge.destinationAddress)+ '</td>'
-						table += '<td class="project-manage">' +(sludge.record.car.driver.realname==null?"":sludge.record.car.driver.realname) + '</td>'
+						table += '<td class="project-manage">' +(sludge.car.driver.realname==null?"":sludge.car.driver.realname) + '</td>'
 						if (sludge.weight == 0) {
 							table += '<td><span class="label label-success">待输入</td>'
 						} else {
@@ -428,13 +427,8 @@
 						}
 						table += '<td>' + (sludge.produceTime==null?"": sludge.produceTime)+ '</td>'
 						table += '<td class="project-manager">' + (sludge.arrivalTime ==null?"": sludge.arrivalTime )+ '</td>'
-						if (sludge.transcarId != 0) {
-							table += '<td>' + sludge.transcarId + '</td>'
-						} else {
-							table += '<td></td>'
-						}
-						table += '<td>' + (sludge.record.car.driver.telephone==null?"":sludge.record.car.driver.telephone) + '</td>'
-						table += '<td>' + ( sludge.record.car.license ==null?"": sludge.record.car.license)+ '</td>'
+						table += '<td>' + (sludge.car.driver.telephone==null?"":sludge.car.driver.telephone) + '</td>'
+						table += '<td>' + ( sludge.car.license ==null?"": sludge.car.license)+ '</td>'
 						table += '</tr>'
 	
 					})
@@ -476,7 +470,7 @@
 							}
 							table += '<td>' + (sludge.record.site.siteName==null?"":sludge.record.site.siteName)+ '</td>'
 							table += '<td>' + (sludge.destinationAddress ==null?"":sludge.destinationAddress)+ '</td>'
-							table += '<td class="project-manage">' +(sludge.record.car.driver.realname==null?"":sludge.record.car.driver.realname)+ '</td>'
+							table += '<td class="project-manage">' +(sludge.car.driver.realname==null?"":sludge.car.driver.realname)+ '</td>'
 							if (sludge.weight == 0) {
 								table += '<td><span class="label label-success">待输入</td>'
 							} else {
@@ -489,13 +483,8 @@
 						}
 							table += '<td>' + (sludge.produceTime ==null?"": sludge.produceTime )+ '</td>'
 							table += '<td class="project-manager">' + (sludge.arrivalTime ==null?"": sludge.arrivalTime ) + '</td>'
-							if (sludge.transcarId != 0) {
-								table += '<td>' + sludge.transcarId + '</td>'
-							} else {
-								table += '<td></td>'
-							}
-							table += '<td>' + (sludge.record.car.driver.telephone==null?"":sludge.record.car.driver.telephone) + '</td>';
-							table += '<td>' + ( sludge.record.car.license ==null?"": sludge.record.car.license)+ '</td>';
+							table += '<td>' + (sludge.car.driver.telephone==null?"":sludge.car.driver.telephone) + '</td>';
+							table += '<td>' + ( sludge.car.license ==null?"": sludge.car.license)+ '</td>';
 							table += '</tr>';
 	
 						})
@@ -540,7 +529,7 @@
 							}
 							table += '<td>' + (sludge.record.site.siteName==null?"":sludge.record.site.siteName)+ '</td>'
 							table += '<td>' + (sludge.destinationAddress ==null?"":sludge.destinationAddress)+ '</td>'
-							table += '<td class="project-manage">' + (sludge.record.car.driver.realname==null?"":sludge.record.car.driver.realname) + '</td>'
+							table += '<td class="project-manage">' + (sludge.car.driver.realname==null?"":sludge.car.driver.realname) + '</td>'
 							if (sludge.weight == 0) {
 								table += '<td><span class="label label-success">待输入</td>'
 							} else {
@@ -553,13 +542,8 @@
 						}
 							table += '<td>' + (sludge.produceTime ==null?"": sludge.produceTime ) + '</td>'
 							table += '<td class="project-manager">' + (sludge.arrivalTime ==null?"":sludge.arrivalTime )+ '</td>'
-							if (sludge.transcarId != 0) {
-								table += '<td>' + sludge.transcarId + '</td>'
-							} else {
-								table += '<td></td>'
-							}
-							table += '<td>' + (sludge.record.car.driver.telephone==null?"":sludge.record.car.driver.telephone) + '</td>'
-							table += '<td>' + ( sludge.record.car.license ==null?"": sludge.record.car.license)+ '</td>'
+							table += '<td>' + (sludge.car.driver.telephone==null?"":sludge.car.driver.telephone) + '</td>'
+							table += '<td>' + ( sludge.transcarId ==null?"":sludge.transcarId)+ '</td>'
 							table += '</tr>'
 	
 						})
@@ -603,7 +587,7 @@
 							}
 							table += '<td>' + (sludge.record.site.siteName==null?"":sludge.record.site.siteName)+ '</td>'
 							table += '<td>' + (sludge.destinationAddress ==null?"":sludge.destinationAddress)+ '</td>'
-							table += '<td class="project-manage">' + (sludge.record.car.driver.realname==null?"":sludge.record.car.driver.realname) + '</td>'
+							table += '<td class="project-manage">' + (sludge.driver.realname==null?"":sludge.car.driver.realname) + '</td>'
 							if (sludge.weight == 0) {
 								table += '<td><span class="label label-success">待输入</td>'
 							} else {
@@ -621,8 +605,8 @@
 							} else {
 								table += '<td></td>'
 							}
-							table += '<td>' + (sludge.record.car.driver.telephone==null?"":sludge.record.car.driver.telephone) + '</td>'
-							table += '<td>' + ( sludge.record.car.license ==null?"": sludge.record.car.license)+ '</td>'
+							table += '<td>' + (sludge.car.driver.telephone==null?"":sludge.car.driver.telephone) + '</td>'
+							table += '<td>' + ( sludge.car.license ==null?"": sludge.car.license)+ '</td>'
 							table += '</tr>'
 	
 						})
@@ -668,7 +652,7 @@
 							}
 							table += '<td>' + (sludge.record.site.siteName==null?"":sludge.record.site.siteName)+ '</td>'
 							table += '<td>' + (sludge.destinationAddress ==null?"":sludge.destinationAddress)+ '</td>'
-							table += '<td class="project-manage">' + (sludge.record.car.driver.realname==null?"":sludge.record.car.driver.realname) + '</td>'
+							table += '<td class="project-manage">' + (sludge.car.driver.realname==null?"":sludge.car.driver.realname) + '</td>'
 							if (sludge.weight == 0) {
 								table += '<td><span class="label label-success">待输入</td>'
 							} else {
@@ -681,13 +665,8 @@
 						}
 							table += '<td>' + (sludge.produceTime ==null?"": sludge.produceTime ) + '</td>'
 							table += '<td class="project-manager">' + (sludge.arrivalTime ==null?"":sludge.arrivalTime )+ '</td>'
-							if (sludge.transcarId != 0) {
-								table += '<td>' + sludge.transcarId + '</td>'
-							} else {
-								table += '<td></td>'
-							}
-							table += '<td>' + (sludge.record.car.driver.telephone==null?"":sludge.record.car.driver.telephone) + '</td>'
-							table += '<td>' + ( sludge.record.car.license ==null?"": sludge.record.car.license)+ '</td>'
+							table += '<td>' + (sludge.car.driver.telephone==null?"":sludge.car.driver.telephone) + '</td>'
+							table += '<td>' + (sludge.car.license ==null?"": sludge.car.license)+ '</td>'
 							table += '</tr>'
 	
 						})

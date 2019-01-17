@@ -113,7 +113,13 @@
 	<select id="queryCarAssignTranSportDriver" resultMap="UserMap">
 		SELECT user.id,user.realname,car.id as car_id
 		FROM user LEFT JOIN car on user.id=car.driver_id
-		AND car.car_type=1 and car.del_status=0;
+		WHERE car.car_type=1 and car.del_status=0;
+	</select>
+	
+	<select id="queryCarAssignTreatDriver" resultMap="UserMap">
+		SELECT user.id,user.realname,car.id as car_id
+		FROM user LEFT JOIN car on user.id=car.driver_id
+		WHERE car.car_type=0 and car.del_status=0;
 	</select>
 
 	<select id="queryNoCarAssignedDriver" resultType="factory.entity.User">
@@ -143,7 +149,7 @@
 		) AND user.role_id=3 AND user.check_status=1
 	</select>
 
-	<select id="queryDriverServeOneFactory" resultType="factory.entity.User">
+	<select id="queryTreatDriverServeOneFactory" resultType="factory.entity.User">
 		select
 		DISTINCT `user`.id,`user`.realname
 		FROM record,`user`,car
@@ -152,7 +158,22 @@
 		record.site_id=#{siteId} AND
 		record.car_id=car.id AND
 		car.driver_id=`user`.id AND
-		user.check_status=1
+		user.check_status=1 AND
+		car_type = 0
+	</select>
+	
+		<select id="queryTransDriverServeOneFactory" resultType="factory.entity.User">
+		select
+		DISTINCT `user`.id,`user`.realname
+		FROM sludge,record,`user`,car
+		WHERE
+		sludge.del_status=0 AND
+		record.del_status=0 AND
+		record.site_id=#{siteId} AND
+		sludge.transcar_id=car.id AND
+		car.driver_id=`user`.id AND
+		user.check_status=1 AND
+		car_type = 1
 	</select>
 
 	<update id="modifyPasswordByUsername" parameterType="factory.entity.User">

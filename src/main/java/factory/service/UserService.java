@@ -24,7 +24,9 @@ public interface UserService {
 	/*public void removdeUser(String name);*/
 	public void deleteUser(Map<String, Integer> deleteUserInfo);
 
-	public List<User> queryDriverServeOneFactory(int siteId);
+	public List<User> queryTreatDriverServeOneFactory(int siteId);
+	
+	public List<User> queryTransDriverServeOneFactory(int siteId);
 
 	public Map<String, String> modifyPasswordByUsername(Map<String, Object> userInfo);
 
@@ -47,6 +49,8 @@ public interface UserService {
 	public int addUser(Map<String,String> userInfo);
 	
 	public List<User> queryCarAssignTranSportDriver();
+	
+	public List<User> queryCarAssignTreatDriver();
 	
 	public List<User> queryNoCarAssignedDriver();
 	

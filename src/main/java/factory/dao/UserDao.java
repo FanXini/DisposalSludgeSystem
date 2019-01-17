@@ -18,13 +18,17 @@ public interface UserDao{
 	
 	public List<User> queryCarAssignTranSportDriver();
 	
+	public  List<User> queryCarAssignTreatDriver();
+	
 	public List<User> queryUserByCheckStutas(@Param("checkStatus") int checkStatus);
 
 	public List<User> queryNoCarAssignedDriver();
 	
 	public List<User> queryCarAssignedDriver();
 
-	public List<User> queryDriverServeOneFactory(@Param("siteId") int siteId);
+	public List<User> queryTreatDriverServeOneFactory(@Param("siteId") int siteId);
+	
+	public List<User> queryTransDriverServeOneFactory(@Param("siteId") int siteId);
 
 	public int modifyPasswordByUsername(User user);
 

@@ -1,4 +1,5 @@
 <%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
+
 <%
 String path = request.getContextPath();
 String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
@@ -179,8 +180,7 @@ html,body {
 	</div>
 
 	<div style="text-align:center;"></div>
-	<script type="text/javascript">
-	
+	<script type="text/javascript">		
 		$(document).ready(function() {
 			$("#editUserinfo").click(function() {
 				var reg = /^[a-zA-Z0-9_-]+@([a-zA-Z0-9]+\.)+(com|cn|net|org)$/;
@@ -250,6 +250,5 @@ html,body {
 			})
 		})
 	</script>
-
 </body>
 </html>

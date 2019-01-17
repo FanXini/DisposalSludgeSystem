@@ -71,9 +71,16 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public List<User> queryDriverServeOneFactory(int siteId) {
+	public List<User> queryTreatDriverServeOneFactory(int siteId) {
 		List<User> drivers = new ArrayList<User>();
-		drivers.addAll(userDao.queryDriverServeOneFactory(siteId));
+		drivers.addAll(userDao.queryTreatDriverServeOneFactory(siteId));
+		return drivers;
+	}
+	
+	@Override
+	public List<User> queryTransDriverServeOneFactory(int siteId) {
+		List<User> drivers = new ArrayList<User>();
+		drivers.addAll(userDao.queryTransDriverServeOneFactory(siteId));
 		return drivers;
 	}
 
@@ -208,6 +215,13 @@ public class UserServiceImpl implements UserService {
 	public List<User> queryCarAssignTranSportDriver(){
 		List<User> transportDrivers = new ArrayList<User>();
 		transportDrivers.addAll(userDao.queryCarAssignTranSportDriver());
+		return transportDrivers;
+	}
+	
+	@Override
+	public List<User> queryCarAssignTreatDriver(){
+		List<User> transportDrivers = new ArrayList<User>();
+		transportDrivers.addAll(userDao.queryCarAssignTreatDriver());
 		return transportDrivers;
 	}
 
