@@ -137,20 +137,19 @@
 	var carMarker = new Array();
 	var carPoint = new Array();
 	var carInfoWindow = new Array();
-	var userId = $
-	{
-		sessionScope.user.id
-	};
+	var userId = ${sessionScope.user.id};
 	var carStatus = -1;
 
 	show();
 	flushCarStatus();
 	function flushCarStatus() {
+		alert("haha")
 		$.ajax({
 			type : "POST",
 			url : "car/flushCarStatus",
 			data : "driverId=" + userId,
 			success : function(car) {
+				alert(car.status)
 				if (car.status == 0) { //空闲状态
 					$("#updateCarStatusButton").html("暂无任务");
 					$("#nowStatus").val(0);
