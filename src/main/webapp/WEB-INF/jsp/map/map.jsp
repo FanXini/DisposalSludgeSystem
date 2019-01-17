@@ -360,6 +360,8 @@ h5{
 	var carStatus = {LEISURE : 0,ONTHEWAY : 1,ARRIVAL : 2,NODEPARTURE : 3,GETBACK : 4,ALL : -1};
 	var leisureTreatmentCarNum = 0;
 	var leisureCarrierNum = 0;
+	var nodepartureTreatmentCarNum = 0;
+	var nodepartureCarrierNum = 0;
 	showMap(-1,-1);
 	
 	var interval=setInterval("showMap(-1,-1)",5000);
@@ -551,11 +553,13 @@ h5{
 	}
   	/***************************** 显示右下角空车及待处理站点数量************************************* */
 	function showNum(){
-		leisureTreatmentCarNum = queryMapCar(-1,0,0).length;
-		leisureCarrierNum = queryMapCar(-1,1,0).length;
+		leisureTreatmentCarNum = queryMapCar(-1,carType["TREATMENT"],carStatus["LEISURE"]).length;
+		leisureCarrierNum = queryMapCar(-1,carType["CARRIER"],carStatus["LEISURE"]).length;
+		nodepartureTreatmentCarNum =  queryMapCar(-1,carType["TREATMENT"],carStatus["NODEPARTURE"]).length;
+		nodepartureCarrierNum =  queryMapCar(-1,carType["CARRIER"],carStatus["NODEPARTURE"]).length;
   		$("#treatmentCarNum").text(leisureTreatmentCarNum);
   		$("#carrierNum").text(leisureCarrierNum);
-  		$("#siteRedNum").text(queryMapSite(-1,2).length);
+  		$("#siteRedNum").text(queryMapSite(-1,siteStatus["WATINGPROCESS"]).length);
 	}
   	
   	/***************************** 显示主智慧泥仓************************************* */  	
@@ -568,11 +572,11 @@ h5{
   				wareHouseName = mainWareHouse.wareHouseName;
   				var carrierImg = '';
   				var treatmentImg = '';
-  				if(leisureCarrierNum > 0) carrierImg = 'C';
-  				if(leisureTreatmentCarNum > 0) treatmentImg = 'T';
+  				if((leisureCarrierNum + nodepartureCarrierNum) > 0) carrierImg = 'C';
+  				if((leisureTreatmentCarNum + nodepartureTreatmentCarNum) > 0) treatmentImg = 'T';
   				
-  				myIcon = new BMap.Icon("img/warehouse"+carrierImg+treatmentImg+".png", new BMap.Size(100, 70), {
-					imageSize : new BMap.Size(100, 70)});
+  				myIcon = new BMap.Icon("img/warehouse"+carrierImg+treatmentImg+".png", new BMap.Size(90, 75), {
+					imageSize : new BMap.Size(90, 75)});
   				wareHousePoint = new BMap.Point(mainWareHouse.longitude,mainWareHouse.latitude);
   				wareHouseMarker = new BMap.Marker(wareHousePoint,{icon:myIcon});
 				
@@ -619,9 +623,9 @@ h5{
 					siteMarker[site.id] = new BMap.Marker(sitePoint[site.id],{icon:myIcon});
 					
 					map.addOverlay(siteMarker[site.id]);
-					if(site.status=="2"){
+					/* if(site.status=="2"){
 						siteMarker[site.id].setAnimation(BMAP_ANIMATION_BOUNCE);
-					}
+					} */
 					siteMarker[site.id].addEventListener("mouseover",function(){
 						siteInfo(site)});
 				});
@@ -687,6 +691,15 @@ h5{
 			lid += '<ul class="list-inline" style="font-size:11px;color:#777;">';
 			$.each(carrierList,function(i, carrier) {
 				lid += '<li>'+carrier.license+'</li>';
+			});
+			lid += "</ul></div>"
+		}
+		if((nodepartureTreatmentCarNum+nodepartureCarrierNum) > 0){
+			var nodepartureCarList = queryMapCar(-1,carType["ALL"],carStatus["NODEPARTURE"]);
+			lid += '<div class="infowindow"><span class="line"></span><span class="txt">待出发</span><span class="line"></span></div><div class="carlist">';
+			lid += '<ul class="list-inline" style="font-size:11px;color:#777;">';
+			$.each(nodepartureCarList,function(i, nodepartureCar) {
+				lid += '<li>'+nodepartureCar.license+'</li>';
 			});
 			lid += "</ul></div>"
 		}
