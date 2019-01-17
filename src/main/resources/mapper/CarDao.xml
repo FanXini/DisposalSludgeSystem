@@ -315,4 +315,10 @@
         ORDER BY car.status
 	</select>
 	
+	<select id="queryCarIdBySensorId">
+		select id
+		from car
+		where #{sensorId} IN CONCAT('(',sensor_id_set,')')
+	</select>
+	
 </mapper>

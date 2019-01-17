@@ -86,6 +86,7 @@
 				<div class="modal-body">
 					<div class="container" style="width: 540px">
 						<input type="hidden" id="addSludgeId">
+						<input type="hidden" id="transCarId" />
 						<div class="form-group">
 							<div>
 								<label for="Groupname" class="col-sm-3 control-label">污泥来源：</label>
@@ -303,6 +304,7 @@
 						}					
 						else{
 							$("#addSludgeId").val(sludge.id);
+							$("#transcarId").val(sludge.transcarId);
 							$("#siteName").val(sludge.record.site.siteName);
 						}
 					}
@@ -324,6 +326,7 @@
 	   
 	   $("#addSludgeButton").click(function() {
 	   var sludgeId = parseInt($("#addSludgeId").val());
+	   var transcarId = parseInt($("#transcarId").val());
 	   var rfidString = $("#addSludgeRFID").val();
 	   var weight = $("#addSludgeWeight").val();
 	   var desType=parseInt($("#selectDesType").val());
@@ -336,6 +339,7 @@
 				id:sludgeId,
 				rfidString:rfidString,
 				weight:weight,
+				transcarId:transcarId,
 				minorMudWareHouseId:minorMudWareHouseId,
 				destinationAddress:destinationAddress
 			}
@@ -350,6 +354,7 @@
 					id:sludgeId,
 					rfidString:rfidString,
 					weight:weight,
+					transcarId:transcarId,
 					sludgeFunction:sludgeFunction,
 					destinationAddress:destinationAddress
 			}

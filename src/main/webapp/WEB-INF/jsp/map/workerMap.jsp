@@ -189,7 +189,7 @@
 			dataType : "JSON",
 			contentType : "application/json",
 			success : function(car) {
-				alert(car.status + " " + car.carType);
+				//alert(car.status + " " + car.carType);
 				if (car.status == 0) { //空闲状态
 					$("#updateCarStatusButton").html("暂无任务");
 					$("#nowStatus").val(0);

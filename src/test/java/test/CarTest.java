@@ -14,13 +14,12 @@ import factory.service.CarService;
 public class CarTest extends BaseTest{
 	@Autowired
 	private  CarDao carDao;
-	@Autowired
-	private  CarService carService;
+
 	private List<Car> carList;
 	
 	@Test	
 	public void diaodu() {
-		
+		System.out.println(carDao.queryCarIdBySensorId(23).getId());
 	}
 	/*@Test
 	public void test(){
@@ -31,7 +30,7 @@ public class CarTest extends BaseTest{
 		}
 	}*/
 	
-	@Test
+/*	@Test
 	public void addCar (){
 		Car car=new Car();
 		car.setLicense("haha");
@@ -39,7 +38,7 @@ public class CarTest extends BaseTest{
 		car.setDriverId(-1);
 		carDao.addCar(car);
 		System.out.println(car.getId());
-	}
+	}*/
 	
 	/*@Test
 	public  void fuzzyQueryCar(){
@@ -54,7 +53,7 @@ public class CarTest extends BaseTest{
 		}
 	}*/
 	
-	public static void main(String argrs[]){
+	/*public static void main(String argrs[]){
 		List<Integer> list=new ArrayList<Integer>();
 		List<Integer> list2=new ArrayList<Integer>();
 		list2.add(1);
@@ -65,9 +64,9 @@ public class CarTest extends BaseTest{
 		for(Integer num:list){
 			System.out.println(num);
 		}
-	}
+	}*/
 	
-	@Test
+	/*@Test
 	public void queryCarByLicense(){
 		Car car=carDao.queryCarByLicense("ÏæA56723");
 		System.out.println(carList.size());
@@ -83,7 +82,7 @@ public class CarTest extends BaseTest{
 			System.out.println(car.getBrand());
 		}
 	}
-	
+	*/
 	/*@Test
 	public void assignCarrier(){
 		Car car=carService.assignCarrier(53,113.91604,22.544044);

@@ -71,7 +71,7 @@ public class SocketThread implements Runnable {
 					if (headInfo == 'G' || headInfo == 'H') { // gps和温湿度都是有两个数据
 						sensorValue.setValue2(Double.valueOf(info[2]));
 						if (headInfo == 'G') { // gps数据有状态修改功能
-
+							
 						}
 					}
 					//加入到传感器对应的数据库中，通过sensorValue中的headInfo选择对应的sql语句

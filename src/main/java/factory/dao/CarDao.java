@@ -62,6 +62,8 @@ public interface CarDao {
 	public List<Car> querycarWithoutVideo();
 	
 	public List<Car> queryCarByCarType(@Param("carType") int carType);
+	
+	public Car queryCarIdBySensorId(@Param("sensorId") int sensorId);
 
 }
 

@@ -243,9 +243,10 @@ public class SludgeServiceImpl implements SludgeService {
 				sludge.setFunctionId(addSludgeFunction.getId());
 			}
 		}
-		int minorMudWareHoseId=sludge.getMinorMudWareHouseId();
 		sludge.setProduceTime(format.format(new Date()));
 		sludgeDao.insertSludgeByDriver(sludge);
+		System.out.println(sludge.getTranscarId());
+		carDao.editWorkerCarStatusAndSiteId(sludge.getTranscarId(), CarStatus.ONTHEWAY.ordinal(), 0);
 	}
 	@Override
 	public Sludge querysludgebydriverIdAndStatus(int driverId) {
