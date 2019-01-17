@@ -591,6 +591,7 @@ h5{
 	/***************************** 显示标注************************************* */
 	function showMap(selectType,selectStatus) {
 		map.clearOverlays(); //清除地图上所有覆盖物
+		showWareHouse();
 		sitePoint=[];
 		siteMarker=[];
 		siteInfoWindow=[];
