@@ -143,7 +143,6 @@
 	show();
 	flushCarStatus();
 	function flushCarStatus() {
-		alert("haha")
 		$.ajax({
 			type : "POST",
 			url : "car/flushCarStatus",
