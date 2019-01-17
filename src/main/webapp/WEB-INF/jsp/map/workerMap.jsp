@@ -148,7 +148,6 @@
 			url : "car/flushCarStatus",
 			data : "driverId=" + userId,
 			success : function(car) {
-				alert(car.status)
 				if (car.status == 0) { //空闲状态
 					$("#updateCarStatusButton").html("暂无任务");
 					$("#nowStatus").val(0);
