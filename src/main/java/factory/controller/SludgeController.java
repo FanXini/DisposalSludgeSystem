@@ -1,5 +1,7 @@
 package factory.controller;
 
+import static org.hamcrest.CoreMatchers.nullValue;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -50,10 +52,13 @@ public class SludgeController {
 		public ModelAndView transportsludgeofonedriver(@RequestParam("driverId") int driverId, ModelAndView mv){
 			log.info("µ÷ÓÃtransportsludgeofonedriver");
 			List<Sludge> sludges=sludgeService.transportsludgeofonedriver(driverId);
-			log.info(sludges.size());
+			/*log.info(sludges.size());
 			for(Sludge item:sludges){
 				System.out.println(item.getTranscarId()+","+item.getCar().getLicense());
-			};
+			};*/
+			if (sludges==null&&sludges.size()<0) {
+				sludges =null;
+			} 
 			mv.addObject("sludgeList",sludges);
 			mv.setViewName("worker/transportsludge");
 			return mv;
@@ -231,7 +236,7 @@ public class SludgeController {
 		List<SludgeFunction> sludgeFunctions=new ArrayList<SludgeFunction>();
 		List<User> drivers=new ArrayList<User>();
 		sludgeFunctions.addAll(sludgeService.queryAllSludgeFunction());
-		drivers.addAll(userService.queryDriverServeOneFactory(siteId));	
+		drivers.addAll(userService.queryTransDriverServeOneFactory(siteId));	
 		mv.addObject("sludgeFunctions",sludgeFunctions);
 		mv.addObject("driverList",drivers);
 		mv.setViewName("factory/sludge");

@@ -37,6 +37,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
 <style type="text/css">
+h5{
+	text-align:center;
+}
+
 .map {
 	position: relative;
 	color: #000;
@@ -114,6 +118,26 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 .tablelist tr {
 	cursor: pointer;
 }
+
+.infowindow {
+	height: 25px;
+	line-height:20px;
+	text-align: center;
+}
+.infowindow .line {
+	display: inline-block;
+	width: 30%;
+	border-top: 1px solid #ccc ;
+}
+.infowindow .txt {
+	font-size:12px;
+	vertical-align: 30%;
+}
+.carlist{
+	margin:2px 2px 2px 2px;
+	text-align:center;
+}
+
 </style>
 </head>
 
@@ -126,8 +150,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					<td>
 						<select id="typeSelect" class="select">
 							<option value="-1">-类型-</option>
-							<option value="0">-站点-</option>
-							<option value="1">-车辆-</option>
+							<option value="2">-站点-</option>
+							<option value="0">-处理车-</option>
+							<option value="1">-运输车-</option>
 						</select>
 					</td>
 					<td>
@@ -155,10 +180,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					<table class="tablehead" border="0" cellspacing="0" cellpadding="0"
 						style="width:100%">
 						<tr>
-							<td style="width:20%;">编号</td>
+							<td style="width:10%;">编号</td>
 							<td style="width:45%;">站点</td>
-							<td style="width:15%;">污泥量</td>
-							<td style="width:10%;">状态</td>
+							<td style="width:25%;">状态</td>
 						</tr>
 					</table>
 				</li>
@@ -239,7 +263,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	</ul>
 	</div>
 	
-	<!-- 分配处理人Modal -->
+	<!-- 手动分配处理人Modal -->
 	<div class="modal fade" id="dealSiteModal" tabindex="-1" role="dialog"
 		aria-labelledby="myModalLabel">
 		<div class="modal-dialog" role="document">
@@ -328,29 +352,44 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	var siteMarker = new Array();
 	var sitePoint = new Array();
 	var siteInfoWindow = new Array();
+	var siteStatus = {NORMAL : 0,PROCESSING : 1,WATINGPROCESS : 2};
 	var carMarker = new Array();
 	var carPoint = new Array();
 	var carInfoWindow = new Array();
-
+	var carType = {TREATMENT : 0,CARRIER : 1,ALL : -1};
+	var carStatus = {LEISURE : 0,ONTHEWAY : 1,ARRIVAL : 2,NODEPARTURE : 3,GETBACK : 4,ALL : -1};
+	var leisureTreatmentCarNum = 0;
+	var leisureCarrierNum = 0;
 	showMap(-1,-1);
+	
 	var interval=setInterval("showMap(-1,-1)",5000);
-	showNum();
+	
   	//setInterval("showMap()",3000);  //定时刷新map
   	//setInterval("showNum()",3000);  //定时刷新空闲车辆及待处理站点数量
   	
   	/***************************** 类型联动************************************* */
   	$("#typeSelect").change(function(){
-  		if($("#typeSelect").val()==0)
+  		var ts = $("#typeSelect").val();
+  		clearInterval(interval);
+		showMap(ts,-1);
+		interval=setInterval("showMap("+ts+",-1)",5000);
+  		if(ts == 2)
   		{
   			$("#statusSelect").empty();
-  			$("#statusSelect").append('<option value="-1">-状态-</option><option value="0">正常</option><option value="1">处理中</option><option value="2">待处理</option>');
+  			$("#statusSelect").append('<option value="-1">-状态-</option><option value="0">正常</option><option value="1">正在处理</option><option value="2">待处理</option>');
   			$("#queryStr").attr("placeholder","编号/站点名/Tel");
   		}
-  		else if($("#typeSelect").val()==1)
+  		else if(ts == 0)
   		{
   			$("#statusSelect").empty();
-  			$("#statusSelect").append('<option value="-1">-状态-</option><option value="1">在途中</option><option value="4">返程中</option>');
-  			$("#queryStr").attr("placeholder","车牌号/司机/Tel");
+  			$("#statusSelect").append('<option value="-1">-状态-</option><option value="1">在途中</option><option value="4">返程</option>');
+  			$("#queryStr").attr("placeholder","车牌号/目的地/司机/Tel");
+  		}
+  		else if(ts == 1)
+  		{
+  			$("#statusSelect").empty();
+  			$("#statusSelect").append('<option value="-1">-状态-</option><option value="1">在途中</option><option value="4">运输中</option>');
+  			$("#queryStr").attr("placeholder","车牌号/目的地/司机/Tel");
   		}
   		 else{
   			$("#statusSelect").empty();
@@ -362,66 +401,24 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   	});
     /***************************** 状态选择************************************* */
   	$("#statusSelect").change(function(){
-  		if($("#typeSelect").val()==0){
-  			var s=$("#statusSelect").val()
-  			switch(s){
-  				case '0':{
-  					clearInterval(interval);
-  					showMap(0,0);
-  					interval=setInterval("showMap(0,0)",5000);
-  					}
-  					break;
-  				case '1':{
-  					clearInterval(interval);
-  					showMap(0,1);
-  					interval=setInterval("showMap(0,1)",5000);
-  					}
-  					break;
-  				case '2':{
-  					clearInterval(interval);
-  					showMap(0,2);
-  					interval=setInterval("showMap(0,2)",5000);
-  					}
-  					break;
-  				default:{
-  					clearInterval(interval);
-  					showMap(0,-1);
-  					interval=setInterval("showMap(0,-1)",5000);
-  					}
-  			}
-  		}
-  		if($("#typeSelect").val()==1){
-  			switch($("#statusSelect").val()){
-  				case '1':{
-	  				clearInterval(interval);
-	  				showMap(1,1)
-  					interval=setInterval("showMap(1,1)",5000);
-  					}
-  					break;
-  				case '4':{
-  					clearInterval(interval);
-  					showMap(1,4);
-  					interval=setInterval("showMap(1,4)",5000);
-  					}
-  					break;
-  				default:{
-  					clearInterval(interval);
-  					showMap(1,-1);
-  					interval=setInterval("showMap(1,-1)",5000);
-  					}
-  			}
-  		}
-  			
+  		var typeS = $("#typeSelect").val();
+  		var statusS = $("#statusSelect").val();
+		clearInterval(interval);
+		showMap(typeS, statusS);
+		interval=setInterval("showMap("+typeS+","+statusS+")",5000);
   	});
-  	    /***************************** 输入框精确查找************************************* */
+  	/***************************** 输入框精确查找************************************* */
   	$("#querysubmit").click(function(){
   		var queryStr=$("#queryStr").val();
+  		var typeS =$("#typeSelect").val();
+  		var statusS = $("#statusSelect").val();
   		if($.trim(queryStr)==""){
   			clearInterval(interval);
-  			showMap(-1,-1);
+  			showMap(typeS, statusS);
+  			interval=setInterval("showMap("+typeS+","+statusS+")",5000);
   			return;
   		}
-  		if($("#typeSelect").val()==0){
+  		if(typeS==2){
   			//alert("站点查找:"+queryStr);
   			clearInterval(interval);
   			showMap(-1,-1);
@@ -440,20 +437,28 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   				}
   			});
   		}
-  		if($("#typeSelect").val()==1){
+  		if(typeS == 1 || typeS == 0){
   			//alert("车辆查找:"+queryStr);
   			clearInterval(interval);
   			showMap(-1,-1);
   			$.ajax({
   				type : "POST",
   				url : "car/queryMapCar",
-  				data : {"queryStr" : queryStr},
+  				data : {"queryStr" : queryStr,
+  						"carType" : typeS},
   				success : function(carList) {
   					if(jQuery.isEmptyObject(carList))
   						alert("查找失败");
   					else{
   						$.each(carList,function(i, car) {
-  							carInfo(car);
+  							if(car.status == 1){
+  								siteInfo(car.site);
+  							}else if(car.status == 0 || car.status == 3){
+  								wareHouseInfo();
+  							}
+  							else{
+  								carInfo(car);
+  							}
   						});
   					}
   				}
@@ -546,8 +551,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	}
   	/***************************** 显示右下角空车及待处理站点数量************************************* */
 	function showNum(){
-  		$("#treatmentCarNum").text(queryMapCar(-1,0,0).length);
-  		$("#carrierNum").text(queryMapCar(-1,1,0).length);
+		leisureTreatmentCarNum = queryMapCar(-1,0,0).length;
+		leisureCarrierNum = queryMapCar(-1,1,0).length;
+  		$("#treatmentCarNum").text(leisureTreatmentCarNum);
+  		$("#carrierNum").text(leisureCarrierNum);
   		$("#siteRedNum").text(queryMapSite(-1,2).length);
 	}
   	
@@ -559,7 +566,12 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   			success : function(list) {
   				mainWareHouse = list[0];
   				wareHouseName = mainWareHouse.wareHouseName;
-  				myIcon = new BMap.Icon("img/warehouse.png", new BMap.Size(90, 63), {
+  				var carrierImg = '';
+  				var treatmentImg = '';
+  				if(leisureCarrierNum > 0) carrierImg = 'C';
+  				if(leisureTreatmentCarNum > 0) treatmentImg = 'T';
+  				
+  				myIcon = new BMap.Icon("img/warehouse"+carrierImg+treatmentImg+".png", new BMap.Size(100, 70), {
 					imageSize : new BMap.Size(100, 70)});
   				wareHousePoint = new BMap.Point(mainWareHouse.longitude,mainWareHouse.latitude);
   				wareHouseMarker = new BMap.Marker(wareHousePoint,{icon:myIcon});
@@ -581,60 +593,70 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		carPoint=[];
 		carMarker=[];
 		carInfoWindow=[];
-		
+		showNum();
 		showWareHouse();
-		if(selectType==0||selectType==-1){
+		if(selectType==2||selectType==-1){
 			siteList = queryMapSite(-1,selectStatus);
 			if(!jQuery.isEmptyObject(siteList)){
 				var myIcon;
 				$.each(siteList,function(i, site) {
-				if(selectStatus==site.status || selectStatus==-1){
-					if (site.status== "0") {
-						myIcon = new BMap.Icon("img/factory(green).png", new BMap.Size(90, 63), {
+					var carrierImg = '';
+					var treatmentImg = '';
+					if(queryMapCar(site.id,carType["CARRIER"],carStatus["ARRIVAL"]).length>0){
+						carrierImg = 'C';
+					}
+					if(site.status == siteStatus["PROCESSING"] && queryMapCar(site.id,carType["TREATMENT"],carStatus["ARRIVAL"]).length>0){
+						treatmentImg = 'T'
+					}
+					if(carrierImg == 'C' || treatmentImg == 'T'){
+						myIcon = new BMap.Icon("img/factory"+site.status+carrierImg+treatmentImg+".png", new BMap.Size(100, 50), {
+							imageSize : new BMap.Size(100, 50)});
+					}else{
+						myIcon = new BMap.Icon("img/factory"+site.status+".png", new BMap.Size(100, 70), {
 								imageSize : new BMap.Size(100, 70)});
 					}
-					else if (site.status== "1") {
-						myIcon = new BMap.Icon("img/factory(yellow).png", new BMap.Size(90, 63), {
-							imageSize : new BMap.Size(100, 70)});
-					} 
-					else if (site.status== "2") {
-						myIcon = new BMap.Icon("img/factory(red).png", new BMap.Size(90, 63), {
-							imageSize : new BMap.Size(100, 70)});
-					} 
 					sitePoint[site.id] = new BMap.Point(site.longitude,site.latitude);
 					siteMarker[site.id] = new BMap.Marker(sitePoint[site.id],{icon:myIcon});
 					
 					map.addOverlay(siteMarker[site.id]);
-					if(site.status=="2")
+					if(site.status=="2"){
 						siteMarker[site.id].setAnimation(BMAP_ANIMATION_BOUNCE);
-					siteMarker[site.id].addEventListener("mouseover",function(){
-					siteInfo(site)
-					});
 					}
+					siteMarker[site.id].addEventListener("mouseover",function(){
+						siteInfo(site)});
 				});
 			}
 		}
-		if(selectType==1||selectType==-1){
-			carList=queryMapCar(-1,-1,selectStatus)
+		if(selectType != 2){
+			var carList;
+			//状态为运输中查询时，status依然为1
+			if(selectType == 1 && selectStatus == 4){
+				carList=queryMapCar(-1,selectType,1);
+			}else{
+				carList=queryMapCar(-1,selectType,selectStatus);
+			}
 			if(!jQuery.isEmptyObject(carList)){
 				$.each(carList,function(i, car) {
-					if(car.carType == 0){
-						var carIcon = new BMap.Icon("img/car.png", new BMap.Size(35, 24), 
-										{imageSize : new BMap.Size(35, 24)});
-					}else{
-						var carIcon = new BMap.Icon("img/transportCar.png", new BMap.Size(35, 35), 
-										{imageSize : new BMap.Size(35, 35)});
-					}
-					if(car.status==1||car.status==4){
-						carPoint[car.id] = new BMap.Point(car.longitude,car.latitude);
-						carMarker[car.id] = new BMap.Marker(carPoint[car.id],{icon:carIcon});
-						
-						map.addOverlay(carMarker[car.id]);
-						
-						//鼠标悬停动作
-						carMarker[car.id].addEventListener("mouseover",function(){
-							carInfo(car)
-						});
+					if(car.status == 1 || car.status == 4){
+						if(selectStatus == -1 || !((car.carType == 1 && car.siteId != null && car.siteId != '' && selectStatus == 4)
+								|| (car.carType == 1 && (selectStatus == 1) && (car.siteId == null || car.siteId == '')))){
+							if(car.carType == 0){
+								var carIcon = new BMap.Icon("img/car.png", new BMap.Size(35, 24), 
+												{imageSize : new BMap.Size(35, 24)});
+							}else{
+								var carIcon = new BMap.Icon("img/transportCar.png", new BMap.Size(35, 35), 
+												{imageSize : new BMap.Size(35, 35)});
+							}
+	
+							carPoint[car.id] = new BMap.Point(car.longitude,car.latitude);
+							carMarker[car.id] = new BMap.Marker(carPoint[car.id],{icon:carIcon});
+							
+							map.addOverlay(carMarker[car.id]);
+							
+							//鼠标悬停动作
+							carMarker[car.id].addEventListener("mouseover",function(){
+								carInfo(car)});
+						}
 					}
 				});
 			}
@@ -645,11 +667,29 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	function wareHouseInfo(){
 		var opts = {width : 130, }// 信息窗口宽度
 		minorWareHouseList = queryWareHouse();
-		var lid = '<div><h5>'+wareHouseName+'</h5><table style="font-size:12px;">';
+		var lid = '<div class="carlist"><h5>'+wareHouseName+'</h5><ul class="list-unstyled" style="font-size:11px;color:#777;"';
 		$.each(minorWareHouseList,function(i, minorWareHouse){
-			lid += '<tr><td style="width:40%;text-align: left;">'+minorWareHouse.serialNumber+'号仓:</td><td style="text-align: left;">'+minorWareHouse.remainCapacity+'/'+minorWareHouse.capacity+'</td></tr>';
+			lid += '<li>'+minorWareHouse.serialNumber+'号仓:'+minorWareHouse.remainCapacity+'/'+minorWareHouse.capacity+'</li>';
 		});
-		lid += '</table>' + '</div>';
+		lid += '</ul>' + '</div>';
+		if(leisureTreatmentCarNum > 0){
+			var treatmentCarList = queryMapCar(-1,carType["TREATMENT"],carStatus["LEISURE"]);
+			lid += '<div class="infowindow"><span class="line"></span><span class="txt">空闲处理车</span><span class="line"></span></div><div class="carlist">';
+			lid += '<ul class="list-inline" style="font-size:11px;color:#777;">' ;
+			$.each(treatmentCarList,function(i, treatmentCar) {
+				lid += '<li>'+treatmentCar.license+'</li>';
+			});
+			lid += "</ul></div>"
+		}
+		if(leisureCarrierNum > 0){
+			var carrierList = queryMapCar(-1,carType["CARRIER"],carStatus["LEISURE"]);
+			lid += '<div class="infowindow"><span class="line"></span><span class="txt">空闲运输车</span><span class="line"></span></div><div class="carlist">';
+			lid += '<ul class="list-inline" style="font-size:11px;color:#777;">';
+			$.each(carrierList,function(i, carrier) {
+				lid += '<li>'+carrier.license+'</li>';
+			});
+			lid += "</ul></div>"
+		}
 		wareHouseInfoWindow = new BMap.InfoWindow(lid,opts); // 创建信息窗口对象 
 		map.openInfoWindow(wareHouseInfoWindow, wareHousePoint);
 		}
@@ -659,146 +699,141 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		var value=-1;
 		var opts = {width : 230, }// 信息窗口宽度
 		var status;
+		var currentTreatmentCarList = [];
+		var currentCarrierList = queryMapCar(site.id,carType["CARRIER"],carStatus["ARRIVAL"]);//在站点正在装箱的车辆
 		if (site.status== "0")
 			status="正常";
-		else if (site.status== "1")
-			status="处理中";
-		else if (site.status== "2"){
-			$.ajax({
-				type : "POST",
-				url : "system/countRecordOfCarNullBySiteId",
-				async: false,
-				data : {"siteId" : site.id},
-				success : function(result) {
-					if(result==0)
-						status="待处理(已分配)";
-					else
-						status="待处理(未分配)";
-				}
-			});
+		else if (site.status== "1"){
+			status="正在处理";
+			currentTreatmentCarList = queryMapCar(site.id,carType["TREATMENT"],carStatus["ARRIVAL"]);
 		}
-		var lid = '<div><h5>'+site.siteName+'</h5><table style="font-size:12px;">';
+		else if (site.status== "2"){
+			var carNum = queryMapCar(site.id,0,1).length;//在途中的车辆数
+			carNum += queryMapCar(site.id,0,3).length;//已派单未出发的车辆数
+			if(carNum==0)
+				status="待处理(未分配)";
+			else
+				status="待处理(已分配处理车"+carNum+"辆)";
+			}
+		var lid = '<div class="carlist"><h5>'+site.siteName+'</h5><ul class="list-unstyled" style="font-size:11px;color:#777;">';
 		if(site.status=="1"){
 			var rate = queryRateOfProcess(site.id);
 			if(rate == -1){
-				lid += '<tr><td style="width:40%;text-align: left;">处理进度：</td><td style="text-align: left;">数据异常</td></tr>';	
+				lid += '<li>处理进度：<span style="color: #1874CD; font-weight: bold;">数据异常</span></li>';	
 				}else{
 				//处理进度
 				rate = 100*rate;
-				lid += '<tr><td style="width:40%;text-align: left;">处理进度：</td><td style="text-align: left; color: #1874CD; font-weight: bold;">'+rate.toFixed(2)+'%</td></tr>';
+				lid += '<li>处理进度：<span style="color: #1874CD; font-weight: bold;">'+rate.toFixed(2)+'%</span></li>';
 			}
 		}else if(site.status=="2"){
 			var value = queryPretreatAmount(site.id);
 			if(value == -1){
-				lid += '<tr><td style="width:40%;text-align: left;">预处理量：</td><td style="text-align: left;">数据异常</td></tr>';	
+				lid += '<li>预处理量：<span style="color: #1874CD; font-weight: bold;">数据异常</span></li>';	
 				}else if(value == 0){
-					lid += '<tr><td style="width:40%;text-align: left;">预处理量：</td><td style="text-align: left; color: #1874CD; font-weight: bold;">未设置</td></tr>';
+					lid += '<li>预处理量：<span style="color: #1874CD; font-weight: bold;">未设置</span></li>';
 				}else{
 					//预处理量
-					lid += '<tr><td style="width:40%;text-align: left;">预处理量：</td><td style="text-align: left; color: #1874CD; font-weight: bold;">'+value+'</td></tr>';
+					lid += '<li>预处理量：<span style="color: #1874CD; font-weight: bold;">'+value+'</span></li>';
 				}
 		}
-		lid += '<tr><td style="width:40%;text-align: left;">Tel:</td><td style="text-align: left;">'+site.telephone+'</td></tr>';
-		if(site.status=="2")
-			lid += '<tr onclick="dealSite('+site.id+');" style="color:#FF4500;cursor:pointer;"><td style="width:40%;text-align: left;">状态:</td><td style="text-align: left;">'+status+'</td></tr>'
-		else
-			lid += '<tr style="color:#FF4500;"><td style="width:40%;text-align: left;">状态:</td><td style="text-align: left;">'+status+'</td></tr>';
-		lid += '</table>' + '</div>';
+		lid += '<li>Tel:'+site.telephone+'</li>';
+		lid += '<li style="color:#FF4500;">状态:'+status+'</li>';
+		lid += '</ul>' + '</div>';
+		if(currentTreatmentCarList.length != 0){
+			lid += '<div class="infowindow"><span class="line"></span><span class="txt">处理车</span><span class="line"></span></div><div class="carlist">';
+			lid += '<ul class="list-inline" style="font-size:11px;color:#777;"';
+			$.each(currentTreatmentCarList,function(i, treatmentCar) {
+				lid += '<li><a href="monitor/queryVideoByDriverId?driverId='+treatmentCar.driverId+'">'+treatmentCar.license+'</a></li>';
+			});
+			lid += "</ul></div>"
+		}
+		if(currentCarrierList.length != 0){
+			lid += '<div class="infowindow"><span class="line"></span><span class="txt">正在装箱</span><span class="line"></span></div><div class="carlist">';
+			lid += '<ul class="list-inline" style="font-size:11px;color:#777;"';
+			$.each(currentCarrierList,function(i, carrier) {
+				lid += '<li>'+carrier.license+'</li>';
+			});
+			lid += "</ul></div>"
+		}
 		siteInfoWindow[site.id] = new BMap.InfoWindow(lid,opts); // 创建信息窗口对象 
 		map.openInfoWindow(siteInfoWindow[site.id], sitePoint[site.id]);
 	}
 		
 	/***************************** 车辆信息框显示************************************* */
 	function carInfo(car){
-			var opts = {width : 230,} // 信息窗口宽度
-			if(car.status==4)
-				var lid = '<div><h5><a href="monitor/queryVideoByDriverId?driverId='+car.driverId+'">'+car.license+'(返程中)</a></h5><table style="font-size:12px;">';
-			else
-				var lid = '<div><h5><a href="monitor/queryVideoByDriverId?driverId='+car.driverId+'">'+car.license+'</a></h5><table style="font-size:12px;">';
-									
-			lid	+= '<tr><td style="width:40%;text-align: left;">司机：</td><td style="text-align: left;">'+car.driver.realname+'</td>'
-				+ '</tr>'
-				+ '<tr>'
-				+ '<td style="width:40%;text-align: left;">Tel:</td><td style="text-align: left;">'+car.driver.telephone+'</td>'
-				+ '</tr>';
-			if(car.status==1){
-				var pointSite = new BMap.Point(car.site.longitude,car.site.latitude);
-				var driving = new BMap.DrivingRoute(map,
-					{onSearchComplete:function(results){
-						var plan=results.getPlan(0);
-						lid += '<tr style="color:#FF4500;"><td style="width:40%;text-align: left;">目的地:</td><td style="text-align: left;">'+car.site.siteName+'</td></tr>';
-						lid += '<tr><td style="width:40%;text-align: left;">预计到达:</td><td style="text-align: left;">'+plan.getDuration(true)+'</td></tr>';
-						lid += '</table>' + '</div>';
-						carInfoWindow[car.id] = new BMap.InfoWindow(lid,opts); // 创建信息窗口对象 
-						map.openInfoWindow(carInfoWindow[car.id], carPoint[car.id]);
-					}});		
-				driving.search(carPoint[car.id],pointSite);
-				//alert("目的地:"+car.site.longitude+","+car.site.latitude);
-			}
-			else{
-				lid += '</table>' + '</div>';
-				carInfoWindow[car.id] = new BMap.InfoWindow(lid,opts); // 创建信息窗口对象 
-				map.openInfoWindow(carInfoWindow[car.id], carPoint[car.id]);
-			}
+		var opts = {width : 230,} // 信息窗口宽度
+		if(car.status==4)
+			var lid = '<div><h5><a href="monitor/queryVideoByDriverId?driverId='+car.driverId+'">'+car.license+'(返程中)</a></h5><table style="font-size:12px;">';
+		else if(car.status==1 && (car.siteId == null || car.siteId == ''))
+			var lid = '<div><h5>'+car.license+'(运输中)</h5><table style="font-size:12px;">';
+		else if (car.carType == 1)
+			var lid = '<div><h5>'+car.license+'</h5><table style="font-size:12px;">';
+		else
+			var lid = '<div><h5><a href="monitor/queryVideoByDriverId?driverId='+car.driverId+'">'+car.license+'</a></h5><table style="font-size:12px;">';
+								
+		lid	+= '<tr><td style="width:40%;text-align: left;">司机：</td><td style="text-align: left;">'+car.driver.realname+'</td>'
+			+ '</tr>'
+			+ '<tr>'
+			+ '<td style="width:40%;text-align: left;">Tel:</td><td style="text-align: left;">'+car.driver.telephone+'</td>'
+			+ '</tr>';
+		if(car.status==1 && car.siteId != null && car.siteId != ''){
+			var pointSite = new BMap.Point(car.site.longitude,car.site.latitude);
+			var driving = new BMap.DrivingRoute(map,
+				{onSearchComplete:function(results){
+					var plan=results.getPlan(0);
+					lid += '<tr style="color:#FF4500;"><td style="width:40%;text-align: left;">目的地:</td><td style="text-align: left;">'+car.site.siteName+'</td></tr>';
+					lid += '<tr><td style="width:40%;text-align: left;">预计到达:</td><td style="text-align: left;">'+plan.getDuration(true)+'</td></tr>';
+					lid += '</table>' + '</div>';
+					carInfoWindow[car.id] = new BMap.InfoWindow(lid,opts); // 创建信息窗口对象 
+					map.openInfoWindow(carInfoWindow[car.id], carPoint[car.id]);
+				}});		
+			driving.search(carPoint[car.id],pointSite);
+			//alert("目的地:"+car.site.longitude+","+car.site.latitude);
 		}
+		else{
+			lid += '</table>' + '</div>';
+			carInfoWindow[car.id] = new BMap.InfoWindow(lid,opts); // 创建信息窗口对象 
+			map.openInfoWindow(carInfoWindow[car.id], carPoint[car.id]);
+		}
+	}
 	
-	/***************************** 查询所有站点************************************* */
+	/***************************** 右下角查询所有站点************************************* */
 	function showSiteTable(){
-	$("#siteTable").empty();
-	$.ajax({
-			type : "POST",
-			url : "system/queryAllSite",
-			dataType : "json",
-			contentType : "application/json",
-			success : function(siteList) {
-				var table;
-				$.each(siteList,function(i, site) {
-					$.ajax({
-						type : "POST",
-						url : "system/queryUltrasonicValueBySite",
-						data : {"sensorIdSet" : site.sensorIdSet},
-						async: false,
-						success : function(sensors) {
-							var status;
-							if (site.status== "0"){
-								table='<tr id="'+ site.id +'" onmouseover="sel(this)" onmouseout="cle(this)" onclick="showSiteInfo('+JSON.stringify(site).replace(/\"/g,"'")+')">';
-								status="正常";
-							}
-							else if (site.status== "1"){
-								table='<tr id="'+ site.id +'" style="color:#FFFF00;" onmouseover="sel(this)" onmouseout="cle(this)" onclick="showSiteInfo('+JSON.stringify(site).replace(/\"/g,"'")+')">';
-								status="处理中";
-							}
-							else if (site.status== "2"){
-								table='<tr id="'+ site.id +'" style="color:#FF0000;font-weight: 700;" onmouseover="sel(this)" onmouseout="cle(this)" onclick="showSiteInfo('+JSON.stringify(site).replace(/\"/g,"'")+')">';
-								status="待处理";
-							}				
-							
-							table += '<td style="width:20%;">' + site.serialNumber + '</td>';
-							table += '<td style="width:45%;">' + site.siteName + '</td>';
-							if(!jQuery.isEmptyObject(sensors)){
-								{
-									var value=-1;
-									$.each(sensors,function(i, sensor) {
-										if(sensor.typeId==2){
-											var v=sensor.sensorValue.value;
-											//alert(result.value);
-											//污泥量
-											value=100*(site.depth-v)/site.depth;
-											table += '<td style="width:15%;">' + value.toFixed(2) + '%</td>';
-											return false;
-										}
-									});
-								}
-							}
-							else if(jQuery.isEmptyObject(sensors) || value==-1)
-								table += '<td style="width:15%;">无数据</td>';
-							table += '<td style="width:10%;">' + status + '</td>';
-							table += '</tr>';
-							$("#siteTable").append(table);
-						}
-					});
-				});
+		$("#siteTable").empty();
+		var siteList = queryMapSite(-1,-1);
+		var table;
+		$.each(siteList,function(i, site) {
+			var status;
+			if (site.status== "0"){
+				table='<tr id="'+ site.id +'" onmouseover="sel(this)" onmouseout="cle(this)" onclick="showSiteInfo('+JSON.stringify(site).replace(/\"/g,"'")+')">';
+				status="正常";
 			}
+			else if (site.status== "1"){
+				table='<tr id="'+ site.id +'" style="color:#FFFF00;" onmouseover="sel(this)" onmouseout="cle(this)" onclick="showSiteInfo('+JSON.stringify(site).replace(/\"/g,"'")+')">';
+				var rate = queryRateOfProcess(site.id);
+				status="正在处理";
+				if(rate == -1){
+					status=status + "(数据异常)";	
+					}else{
+					//处理进度
+					rate = 100*rate;
+					status = status + "(" + rate.toFixed(2)+"%)";
+				}
+			}
+			else if (site.status== "2"){
+				table='<tr id="'+ site.id +'" style="color:#FF0000;font-weight: 700;" onmouseover="sel(this)" onmouseout="cle(this)" onclick="showSiteInfo('+JSON.stringify(site).replace(/\"/g,"'")+')">';
+				var carNum = queryMapCar(site.id,0,1).length;//在途中的车辆数
+				carNum += queryMapCar(site.id,0,3).length;//已派单未出发的车辆数
+				if(carNum==0)
+					status="待处理(未分配)";
+				else
+					status="待处理(已分配处理车"+carNum+"辆)";
+			}				
+			table += '<td style="width:10%;">' + site.serialNumber + '</td>';
+			table += '<td style="width:45%;">' + site.siteName + '</td>';
+			table += '<td style="width:25%;">' + status + '</td>';
+			table += '</tr>';
+			$("#siteTable").append(table);
 		});
 	}
 	
@@ -810,7 +845,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		$.each(carList,function(i, car){
 			var status;
 			if (car.status== "0"){
-				table='<tr id="'+ car.id +'" style="color:#FF0000;font-weight: 700;" onmouseover="sel(this)" onmouseout="cle(this)" onclick="dealCar('+car.id+');">';
+				table='<tr id="'+ car.id +'" style="color:#FF0000;font-weight: 700;" onmouseover="sel(this)" onmouseout="cle(this)" onclick="wareHouseInfo();">';
 				status="空闲";
 			}
 			else if (car.status== "1"){
@@ -818,11 +853,11 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				status="在途中";
 			}
 			else if (car.status== "2"){
-				table='<tr id="'+ car.id +'" onmouseover="sel(this)" onmouseout="cle(this)" onclick="showCarInfo('+JSON.stringify(car).replace(/\"/g,"'")+')">';
-				status="处理中";
+				table='<tr id="'+ car.id +'" onmouseover="sel(this)" onmouseout="cle(this)" onclick="showSiteInfo('+JSON.stringify(car.site).replace(/\"/g,"'")+')">';
+				status="正在处理";
 			}
 			else if (car.status== "3"){
-				table='<tr id="'+ car.id +'" onmouseover="sel(this)" onmouseout="cle(this)" onclick="showCarInfo('+JSON.stringify(car).replace(/\"/g,"'")+')">';
+				table='<tr id="'+ car.id +'" onmouseover="sel(this)" onmouseout="cle(this)" onclick="wareHouseInfo();">';
 				status="已派单";
 			}
 			else if (car.status== "4"){
@@ -848,11 +883,11 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		$.each(carList,function(i, car){
 			var status;
 			if (car.status== "0"){
-				table='<tr id="'+ car.id +'" style="color:#FF0000;font-weight: 700;" onmouseover="sel(this)" onmouseout="cle(this)" onclick="dealCar('+car.id+');">';
+				table='<tr id="'+ car.id +'" style="color:#FF0000;font-weight: 700;" onmouseover="sel(this)" onmouseout="cle(this)" onclick="wareHouseInfo();">';
 				status="空闲";
 			}
 			else if (car.status== "1"){
-				if(car.siteId != null){
+				if(car.siteId != null && car.siteId != ""){
 					table='<tr id="'+ car.id +'" onmouseover="sel(this)" onmouseout="cle(this)" onclick="showCarInfo('+JSON.stringify(car).replace(/\"/g,"'")+')">';
 					status="在途中";
 				}else{
@@ -861,11 +896,11 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				}
 			}
 			else if (car.status== "2"){
-				table='<tr id="'+ car.id +'" onmouseover="sel(this)" onmouseout="cle(this)" onclick="showCarInfo('+JSON.stringify(car).replace(/\"/g,"'")+')">';
-				status="装箱中";
+				table='<tr id="'+ car.id +'" onmouseover="sel(this)" onmouseout="cle(this)" onclick="showSiteInfo('+JSON.stringify(car.site).replace(/\"/g,"'")+')">';
+				status="正在装箱";
 			}
 			else if (car.status== "3"){
-				table='<tr id="'+ car.id +'" onmouseover="sel(this)" onmouseout="cle(this)" onclick="showCarInfo('+JSON.stringify(car).replace(/\"/g,"'")+')">';
+				table='<tr id="'+ car.id +'" onmouseover="sel(this)" onmouseout="cle(this)" onclick="wareHouseInfo();">';
 				status="已派单";
 			}
 			table += '<td style="width:20%;">' + car.license + '</td>';
@@ -905,24 +940,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	function showCarInfo(car){
 		clearInterval(interval);
 		showMap(-1,-1);
-		if(car.status== "2" || car.status== "3"){
-			$.ajax({
-  				type : "POST",
-  				url : "system/queryMapSite",
-  				data : {"queryStr" : car.site.siteName},
-  				success : function(siteList) {
-  					if(jQuery.isEmptyObject(siteList))
-  						alert("定位失败");
-  					else{
-  						$.each(siteList,function(i, site) {
-  							siteInfo(site);
-  						});
-  					}
-  				}
-  			});
-		}
-		else
-			carInfo(car);
+		carInfo(car);
 	}
 	
 	function sel(obj){
@@ -932,7 +950,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		obj.style.backgroundColor="rgba(0, 0, 0, 0)";
 	}
 	
-	/***************************** 任务分配************************************* */	
+	/***************************** 手动任务分配（暂无此功能）************************************* */	
 	function dealSite(siteId){
 		$("#dealSiteId").val(siteId);
 		$.ajax({

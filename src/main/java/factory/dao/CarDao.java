@@ -36,7 +36,7 @@ public interface CarDao {
 	public List<Car> queryAllCarOrderByStatus();
 
 
-	public List<Car> queryMapCar(String queryStr);
+	public List<Car> queryMapCar(@Param("queryStr") String queryStr,@Param("carType") int carType);
 
 
 	public List<Car> queryWorkerMapCar(@Param("userId") int userId);

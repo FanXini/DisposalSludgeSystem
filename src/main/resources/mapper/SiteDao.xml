@@ -186,5 +186,6 @@
                 AND site.status=#{status}
             </if>
         </where>
+        ORDER BY site.status DESC;
 	</select>
 </mapper>

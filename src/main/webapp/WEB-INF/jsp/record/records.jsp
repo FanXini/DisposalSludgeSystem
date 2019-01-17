@@ -170,7 +170,7 @@
 										</button>
 										<ul class="dropdown-menu">
 
-											<c:forEach items="${requestScope.driverList }" var="driver">
+											<c:forEach items="${requestScope.assignCarTreatDriver }" var="driver">
 												<li><a class="btn btn-success driver"
 													name="${driver.id }" href="javascript:void(0)">${driver.realname }</a></li>
 											</c:forEach>

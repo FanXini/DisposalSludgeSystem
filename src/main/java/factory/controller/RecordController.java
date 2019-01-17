@@ -67,7 +67,7 @@ public class RecordController {
 		List<User> assignCarDrivers=userService.queryCarAssignedDriver();
 		List<User> allDrivers=userService.quertAllDriver();
 		List<Site> sites=siteService.queryAllSite();		
-		mv.addObject("assignCarDriverList",assignCarDrivers);
+		mv.addObject("assignCarTreatDriver",userService.queryCarAssignTreatDriver());
 		mv.addObject("driverList",allDrivers);
 		mv.addObject("siteList",sites);
 		mv.setViewName("record/records");
@@ -193,7 +193,7 @@ public class RecordController {
 	public ModelAndView recordOfOneFactory(@RequestParam("siteId") int siteId,ModelAndView mv){
 		log.info("µ÷ÓÃrecordOfOneFactory");
 		log.info(siteId);
-		List<User> drivers=userService.queryDriverServeOneFactory(siteId);
+		List<User> drivers=userService.queryTreatDriverServeOneFactory(siteId);
 		for(User user:drivers){
 			System.out.println(user.getRealname());
 		}

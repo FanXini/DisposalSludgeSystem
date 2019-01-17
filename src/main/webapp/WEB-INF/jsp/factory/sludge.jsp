@@ -272,15 +272,14 @@
 				'<th data-toggle="true">状态</th>' +
 				'<th>RFID</th>' +
 				'<th>目的地</th>' +
-				'<th>处理人</th>' +
+				'<th>污泥运输车司机</th>' +
 				'<th>产生污泥块量</th>' +
 				'<th>操作</th>' +
 				'<th>污泥功能</th>' +
 				'<th data-hide="all">污泥产出时间</th>' +
 				'<th data-hide="all">污泥到达时间</th>' +
-				'<th data-hide="all">污泥运输车</th>' +
-				'<th data-hide="all">处理人号码</th>' +
-				'<th data-hide="all">处理污泥车车牌号</th>' +
+				'<th data-hide="all">污泥运输车司机号码</th>' +
+				'<th data-hide="all">污泥运输车车牌号</th>' +
 				'</tr>' +
 				'</thead>' +
 				'<tbody>'
@@ -348,7 +347,7 @@
 							table += '<td class="project-status"><span class="label label-danger">未绑定RFID</td>'
 						}
 						table += '<td>' + (sludge.destinationAddress ==null?"":sludge.destinationAddress) + '</td>'
-						table += '<td class="project-manage">' + (sludge.record.car.driver.realname==null?"":sludge.record.car.driver.realname) + '</td>'
+						table += '<td class="project-manage">' + (sludge.car.driver.realname==null?"":sludge.car.driver.realname) + '</td>'
 						if(sludge.weight==0){
 							table += '<td><span class="label label-success">待输入</td>'
 						}else{
@@ -365,13 +364,8 @@
 						}
 						table += '<td>' + (sludge.produceTime==null?"": sludge.produceTime) + '</td>'
 						table += '<td class="project-manager">' + (sludge.arrivalTime ==null?"": sludge.arrivalTime ) + '</td>'
-						if (sludge.transcarId != 0) {
-							table += '<td>' + sludge.transcarId + '</td>'
-						} else {
-							table += '<td></td>'
-						}
-						table += '<td>' + (sludge.record.car.driver.telephone==null?"":sludge.record.car.driver.telephone) + '</td>'
-						table += '<td>' + ( sludge.record.car.license ==null?"": sludge.record.car.license) + '</td>'
+						table += '<td>' + (sludge.car.driver.telephone==null?"":sludge.car.driver.telephone) + '</td>'
+						table += '<td>' + ( sludge.car.license ==null?"": sludge.car.license) + '</td>'
 						table += '</tr>'	
 					})
 					table += table_end
@@ -410,7 +404,7 @@
 							table += '<td class="project-status"><span class="label label-danger">未绑定RFID</td>'
 						}
 						table += '<td>' + (sludge.destinationAddress ==null?"":sludge.destinationAddress) + '</td>'
-						table += '<td class="project-manage">' + (sludge.record.car.driver.realname==null?"":sludge.record.car.driver.realname) + '</td>'
+						table += '<td class="project-manage">' + (sludge.car.driver.realname==null?"":sludge.car.driver.realname) + '</td>'
 						if(sludge.weight==0){
 							table += '<td><span class="label label-success">待输入</td>'
 						}else{
@@ -427,14 +421,9 @@
 						}
 						table += '<td>' + (sludge.produceTime ==null?"": sludge.produceTime ) + '</td>'
 						table += '<td class="project-manager">' + (sludge.arrivalTime ==null?"": sludge.arrivalTime ) + '</td>'
-						if (sludge.transcarId != 0) {
-							table += '<td>' + sludge.transcarId + '</td>'
-						} else {
-							table += '<td></td>'
-						}
-							table += '<td>' + (sludge.record.car.driver.telephone==null?"":sludge.record.car.driver.telephone) + '</td>'
-							table += '<td>' + ( sludge.record.car.license ==null?"": sludge.record.car.license)+ '</td>'
-							table += '</tr>'
+						table += '<td>' + (sludge.car.driver.telephone==null?"":sludge.car.driver.telephone) + '</td>'
+						table += '<td>' + ( sludge.car.license ==null?"": sludge.car.license)+ '</td>'
+						table += '</tr>'
 	
 					})
 					table += table_end
@@ -477,7 +466,7 @@
 							table += '<td class="project-status"><span class="label label-danger">未绑定RFID</td>'
 						}
 						table += '<td>' + (sludge.destinationAddress ==null?"":sludge.destinationAddress) + '</td>'
-						table += '<td class="project-manage">' + (sludge.record.car.driver.realname==null?"":sludge.record.car.driver.realname) + '</td>'
+						table += '<td class="project-manage">' + (sludge.car.driver.realname==null?"":sludge.car.driver.realname) + '</td>'
 						if(sludge.weight==0){
 							table += '<td><span class="label label-success">待输入</td>'
 						}else{
@@ -494,13 +483,8 @@
 						}
 						table += '<td>' + (sludge.produceTime ==null?"": sludge.produceTime ) + '</td>'
 						table += '<td class="project-manager">' + (sludge.arrivalTime ==null?"":sludge.arrivalTime ) + '</td>'
-						if (sludge.transcarId != 0) {
-								table += '<td>' + sludge.transcarId + '</td>'
-							} else {
-								table += '<td></td>'
-						}
-						table += '<td>' + (sludge.record.car.driver.telephone==null?"":sludge.record.car.driver.telephone) + '</td>'
-						table += '<td>' + (sludge.record.car.license ==null?"": sludge.record.car.license) + '</td>'
+						table += '<td>' + (sludge.car.driver.telephone==null?"":sludge.car.driver.telephone) + '</td>'
+						table += '<td>' + (sludge.car.license ==null?"": sludge.car.license) + '</td>'
 						table += '</tr>'
 	
 					})

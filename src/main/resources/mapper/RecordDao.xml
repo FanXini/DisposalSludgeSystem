@@ -214,8 +214,9 @@
 		SELECT
 		COUNT(*)
 		FROM record
-		WHERE del_status=0 AND site_id=#{siteId} AND car_id
-		IS NULL
+		WHERE del_status=0
+		AND site_id=#{siteId} 
+		AND car_id IS NULL
 	</select>
 
 	<insert id="insertRecordByAlert" parameterType="factory.entity.Record"

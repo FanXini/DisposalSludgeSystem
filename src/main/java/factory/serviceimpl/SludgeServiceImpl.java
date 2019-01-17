@@ -1,13 +1,14 @@
 package factory.serviceimpl;
 
+import factory.dao.CarDao;
 import factory.dao.SludgeDao;
 import factory.entity.Sludge;
 import factory.entity.SludgeFunction;
+import factory.enums.CarStatus;
+import factory.enums.SludgeStatus;
 import factory.service.SludgeService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.support.StaticApplicationContext;
 import org.springframework.stereotype.Service;
-
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -15,6 +16,9 @@ import java.util.*;
 public class SludgeServiceImpl implements SludgeService {
 	@Autowired
 	private SludgeDao sludgeDao;
+	
+	@Autowired
+	private CarDao carDao;
 
 	@Override
 	public List<SludgeFunction> queryAllSludgeFunction() {
@@ -43,6 +47,7 @@ public class SludgeServiceImpl implements SludgeService {
 	@Override
 	public void addOutSludge(Sludge sludge) {
 		String function = sludge.getSludgeFunction().getFunction();
+		//没有这个功能就新增一个功能
 		SludgeFunction sludgeFunction = sludgeDao.querySludgeFunctionByFunction(function);
 		if (sludgeFunction != null) {
 			sludge.setFunctionId(sludgeFunction.getId());
@@ -59,9 +64,12 @@ public class SludgeServiceImpl implements SludgeService {
 		if (sludge.getDestinationAddress().equals("none")) {
 			sludge.setRfidString(null);
 		}
-		sludge.setStatus(4); //4表示从智慧仓到目的地的状态
+		sludge.setStatus(SludgeStatus.MWHTODESROAD.ordinal()); //4表示从智慧仓到目的地的状态
 		sludge.setProduceTime(format.format(new Date()));
 		sludgeDao.addOutMudWareHouseSludgeRecord(sludge);
+		//修改车的状态
+		carDao.editWorkerCarStatusAndSiteId(sludge.getTranscarId(), CarStatus.ONTHEWAY.ordinal(), 0);
+		
 	}
 
 	@Override
