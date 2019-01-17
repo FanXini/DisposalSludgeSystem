@@ -18,6 +18,8 @@ public interface UserDao{
 	
 	public List<User> queryCarAssignTranSportDriver();
 	
+	public List<User> queryCarAssignTranSportDriverInLeisureStatus();
+	
 	public  List<User> queryCarAssignTreatDriver();
 	
 	public List<User> queryUserByCheckStutas(@Param("checkStatus") int checkStatus);
