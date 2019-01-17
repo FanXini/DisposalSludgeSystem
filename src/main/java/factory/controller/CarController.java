@@ -155,11 +155,11 @@ public class CarController {
 	
 	@RequestMapping("queryMapCar")
 	@ResponseBody
-	public List<Car> queryMapCar(@RequestParam("queryStr") String queryStr) {
+	public List<Car> queryMapCar(@RequestParam("queryStr") String queryStr,@RequestParam("carType") int carType) {
 		log.info("µÿÕº≤È—Ø≥µ¡æ");
 		List<Car> carList=new ArrayList<Car>();
 		try{
-			carList=carService.queryMapCar(queryStr);
+			carList=carService.queryMapCar(queryStr,carType);
 		}catch (Exception e) {
 			// TODO: handle exception
 			log.info(e);

@@ -106,7 +106,7 @@ public class CarServiceImpl implements CarService{
 	public int addCar(Car car) {
 		// TODO Auto-generated method stub
 		if (car.getLicense().equals("") || car.getLicense() == null) {
-			throw new DataNoneException("���ƺű�����Ϊ�գ�");
+			throw new DataNoneException("锟斤拷锟狡号憋拷锟斤拷锟斤拷为锟秸ｏ拷");
 		}
 		else if(car.getBrand().equals("none")){
 			car.setBrand(null);
@@ -118,7 +118,7 @@ public class CarServiceImpl implements CarService{
 	public void editCar(Car car) {
 		// TODO Auto-generated method stub
 		if (car.getLicense().equals("") || car.getLicense() == null) {
-			throw new DataNoneException("���ƺű�����Ϊ��!");
+			throw new DataNoneException("锟斤拷锟狡号憋拷锟斤拷锟斤拷为锟斤拷!");
 		}
 		if(car.getBrand().equals("none")){
 			car.setBrand(null);
@@ -144,9 +144,9 @@ public class CarServiceImpl implements CarService{
 		return cars;
 	}
 	@Override
-	public List<Car> queryMapCar(String queryStr) {
+	public List<Car> queryMapCar(String queryStr, int carType) {
 		// TODO Auto-generated method stub
-		return carDao.queryMapCar(queryStr);
+		return carDao.queryMapCar(queryStr, carType);
 	}
 	@Override
 	public List<Car> queryWorkerMapCar(int userId) {
@@ -261,74 +261,75 @@ public class CarServiceImpl implements CarService{
 		int carStatusInDB=car.getStatus();
 		int carType=car.getCarType();
 		int carId=car.getId();
-		if(nowStatus!=carStatusInDB || nowStatus==CarStatus.LEISURE.ordinal()) { //是由页面触发而不是按钮触发
+		if(nowStatus!=carStatusInDB || nowStatus==CarStatus.LEISURE.ordinal()) { //鏄敱椤甸潰瑙﹀彂鑰屼笉鏄寜閽Е鍙�
 			return new Car(carStatusInDB, carType);
 		}
 		else {
-			if(nowStatus==carStatusInDB) { //状态一致
-				//如果车目前的状态是已分配任务,但还未出发
-				//司机触发按钮表示开始出发
+			if(nowStatus==carStatusInDB) { //鐘舵�佷竴鑷�
+				//濡傛灉杞︾洰鍓嶇殑鐘舵�佹槸宸插垎閰嶄换鍔�,浣嗚繕鏈嚭鍙�
+				//鍙告満瑙﹀彂鎸夐挳琛ㄧず寮�濮嬪嚭鍙�
 				if(nowStatus==CarStatus.NODEPARTURE.ordinal()) {
-					//修改成在途中
+					//淇敼鎴愬湪閫斾腑
 					carDao.editWorkerCarStatus(driverId, CarStatus.ONTHEWAY.ordinal());
 					return new Car(CarStatus.ONTHEWAY.ordinal(), carType);
 				}
-				//如果车目前的状态是在途中
-				//司机触发按钮表示已到达
+				//濡傛灉杞︾洰鍓嶇殑鐘舵�佹槸鍦ㄩ�斾腑
+				//鍙告満瑙﹀彂鎸夐挳琛ㄧず宸插埌杈�
 				else if(nowStatus==CarStatus.ONTHEWAY.ordinal()) {
-					//修改成已到达
+					//淇敼鎴愬凡鍒拌揪
 					carDao.editWorkerCarStatus(driverId, CarStatus.ARRIVAL.ordinal());
-					if(carType==0) { //如果是处理车到达,要修改record和site的状态为处理中
-						//查询现在处理的是哪个任务
+					if(carType==0) { //濡傛灉鏄鐞嗚溅鍒拌揪,瑕佷慨鏀箁ecord鍜宻ite鐨勭姸鎬佷负澶勭悊涓�
+						//鏌ヨ鐜板湪澶勭悊鐨勬槸鍝釜浠诲姟
 						Record treatmentRecord=recordDao.queryRecordByCarIdAndStatus(car.getId(), RecordStatus.WATINGPROCESS.ordinal());
-						//修改record的状态为处理中,并且设置任务开始时间,0表示存的是任务开始时间
+						//淇敼record鐨勭姸鎬佷负澶勭悊涓�,骞朵笖璁剧疆浠诲姟寮�濮嬫椂闂�,0琛ㄧず瀛樼殑鏄换鍔″紑濮嬫椂闂�
 						recordDao.UpdateRecordStatusAndTimeById(treatmentRecord.getId(), RecordStatus.PROCESSING.ordinal(), dataFormat.format(new Date()), 0);
-						//修改site的状态为处理中
+						//淇敼site鐨勭姸鎬佷负澶勭悊涓�
 						siteDao.updateSiteStatusById(treatmentRecord.getSiteId(), SiteStatus.PROCESSING.ordinal());
 						
 					}
 					return new Car(CarStatus.ARRIVAL.ordinal(), carType);
 				}
-				//如果车目前的状态是已到达
-				//司机触发按钮表示到底处理任务/运输任务完成了
+				//濡傛灉杞︾洰鍓嶇殑鐘舵�佹槸宸插埌杈�
+				//鍙告満瑙﹀彂鎸夐挳琛ㄧず鍒板簳澶勭悊浠诲姟/杩愯緭浠诲姟瀹屾垚浜�
 				else if(nowStatus==CarStatus.ARRIVAL.ordinal()) {
-					if(carType==0) { //如果是处理车
-						// 修改为车的状态返程状态,修改site为null
+					if(carType==0) { //濡傛灉鏄鐞嗚溅
+						// 淇敼涓鸿溅鐨勭姸鎬佽繑绋嬬姸鎬�,淇敼site涓簄ull
 						carDao.editWorkerCarStatusAndSiteId(car.getId(), CarStatus.GETBACK.ordinal(),0); 
-						//查询现在处理的是哪个任务
+						//鏌ヨ鐜板湪澶勭悊鐨勬槸鍝釜浠诲姟
 						Record treatmentRecord=recordDao.queryRecordByCarIdAndStatus(car.getId(), RecordStatus.PROCESSING.ordinal());
-						//修改record的状态为处理完成
+						//淇敼record鐨勭姸鎬佷负澶勭悊瀹屾垚
 						recordDao.UpdateRecordStatusAndTimeById(treatmentRecord.getId(), RecordStatus.ACCOMPLISH.ordinal(), dataFormat.format(new Date()), 1);
-						//修改site的状态为正常
+						//淇敼site鐨勭姸鎬佷负姝ｅ父
 						siteDao.updateSiteStatusById(treatmentRecord.getSiteId(), SiteStatus.NORMAL.ordinal());
 						return new Car(CarStatus.GETBACK.ordinal(),carType);
 					}
-					else if(carType==1) { //如果是运输车
+					else if(carType==1) { //濡傛灉鏄繍杈撹溅
 			
-						//查询当前运输的的污泥
+						//鏌ヨ褰撳墠杩愯緭鐨勭殑姹℃偿
 						Sludge processingSludge=sludgeDao.queryProcessingSludgeByCarIdAndStatus(carId);
 						String arrivalTime=dataFormat.format(new Date());
 						int sludgeStatus=0;
-						//如果是产出地到泥仓路上；
+						//濡傛灉鏄骇鍑哄湴鍒版偿浠撹矾涓婏紱
 						if(processingSludge.getStatus()==SludgeStatus.FACTORYTOMWHRAOD.ordinal()) {
 							sludgeStatus=SludgeStatus.STOREINMWH.ordinal();
 						}
-						//如果是产出地到目的地路上；
+						//濡傛灉鏄骇鍑哄湴鍒扮洰鐨勫湴璺笂锛�
 						else if (processingSludge.getStatus()==SludgeStatus.FACTORYTODESROAD.ordinal()){
 							sludgeStatus=SludgeStatus.ARRIVEDESFROMFACTORY.ordinal();
 						}
-						//如果是泥仓地到泥仓路上；
+						//濡傛灉鏄偿浠撳湴鍒版偿浠撹矾涓婏紱
 						else if (processingSludge.getStatus()==SludgeStatus.MWHTODESROAD.ordinal()){
 							sludgeStatus=SludgeStatus.ARRIVEDESFROMMWH.ordinal();
 						}
 						sludgeDao.setArrivalTimeAndStatusById(processingSludge.getId(), sludgeStatus, arrivalTime);
+
 						//修改为空闲状态,并且修改siteId为null
 						carDao.editWorkerCarStatusAndSiteId(carId, CarStatus.LEISURE.ordinal(),0); 
 						return new Car(CarStatus.LEISURE.ordinal(), carType);
 					}
 				}
-				//如果处理车目前的状态返程
-				//司机触发按钮表示到达仓库了
+				//濡傛灉澶勭悊杞︾洰鍓嶇殑鐘舵�佽繑绋�
+				//鍙告満瑙﹀彂鎸夐挳琛ㄧず鍒拌揪浠撳簱浜�
 				else if(nowStatus==CarStatus.GETBACK.ordinal()) {
 					carDao.editWorkerCarStatus(driverId, CarStatus.LEISURE.ordinal());
 					return new Car(CarStatus.LEISURE.ordinal(),carType);
