@@ -44,6 +44,9 @@ public class SludgeController {
 	@Autowired
 	private UserService userService;
 	
+	@Autowired
+	private MudWareHouseService mudWareHouseService;
+	
 	//污泥运输车司机工作记录
 		@RequestMapping("/transportsludgeofonedriver")
 		@ResponseBody
@@ -54,19 +57,25 @@ public class SludgeController {
 			for(Sludge item:sludges){
 				System.out.println(item.getTranscarId()+","+item.getCar().getLicense());
 			};
+			List<MinorMudWareHouse> minorMudWareHouses=mudWareHouseService.queryMinorWareHouse();
 			mv.addObject("sludgeList",sludges);
+			mv.addObject("minorMudWareHouseList",minorMudWareHouses);
 			mv.setViewName("worker/transportsludge");
 			return mv;
 		}
 		
 		//污泥运输车司机插入一条污泥记录
-		@RequestMapping("insertSludgeByDriver")
+		@RequestMapping("updateSludgeVirtualToRealByDriver")
 		@ResponseBody
-		public String insertRecordByAlert(@RequestBody Sludge sludge) {
-			log.info("添加一条记录");
-			log.info(sludge.getRfidString());
-			sludgeService.insertSludgeByDriver(sludge);
-			return "success";
+		public Result updateSludgeVirtualToRealByDriver(@RequestBody Sludge sludge) {
+			log.info("updateSludgeVirtualToRealByDriver");
+			try {
+				sludgeService.insertSludgeByDriver(sludge);
+				return Result.SUCCESS;
+			} catch (Exception e) {
+				e.printStackTrace();
+				return Result.ERROR;
+			}
 		}
 		
 		//查询污泥运输车司机未处理的污泥（污泥status=6）
@@ -93,7 +102,6 @@ public class SludgeController {
 			return sludges;
 		}
 	
-	@Autowired MudWareHouseService mudWareHouseService;
 	@RequestMapping("jumpToSludge")
 	public ModelAndView querySludgeFunctionsAndJumpToSludge(ModelAndView mv){
 		log.info("调用进入sludge.jsp的方法");

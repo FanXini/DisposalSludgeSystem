@@ -390,9 +390,17 @@
 	
 	<!-- *********************************通过污泥块状态更新污泥块记录************************************ -->
 	<update id="insertSludgeByDriver" parameterType="factory.entity.Sludge">
-		update sludge set
-		RFID=#{rfidString},produce_time=#{produceTime},record_id=#{recordId},destination_address=#{destinationAddress},weight=#{weight},transcar_id=#{transcarId},status=0
-		where del_status=0 AND status=6
+		update sludge 
+		set RFID=#{rfidString},produce_time=#{produceTime},destination_address=#{destinationAddress},weight=#{weight},
+		<choose>
+			<when test="minorMudWareHouseId==0"> <!-- 直接去目的地-->
+				function_id=#{functionId},status=2
+			</when>
+			<otherwise>
+				minor_mud_warehouse_id=#{minorMudWareHouseId},status=0
+			</otherwise>
+		</choose>	
+		where id=#{id}
 	</update>
 	
 	<!-- *********************************根据司机id和污泥状态=6查询污泥************************************ -->

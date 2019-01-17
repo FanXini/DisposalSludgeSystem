@@ -707,7 +707,6 @@
 				var oriDes = desAddr
 				var weight=parseFloat($("#addOutSludgeWeight").val())
 				var func=$("#sludgeFunc").val();
-				alert(func)
 				var mudWareHouseId=parseInt($("#addOutSludgeMinorWareHouseId").val());
 				var transCarId=parseInt($("#selectTransCarId").val());
 				if (RFID == '' || RFID == null) {

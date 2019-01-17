@@ -1,6 +1,7 @@
 package factory.serviceimpl;
 
 import factory.dao.CarDao;
+import factory.dao.MudWareHouseDao;
 import factory.dao.SludgeDao;
 import factory.entity.Sludge;
 import factory.entity.SludgeFunction;
@@ -19,6 +20,9 @@ public class SludgeServiceImpl implements SludgeService {
 	
 	@Autowired
 	private CarDao carDao;
+	
+	@Autowired
+	private MudWareHouseDao mudWareHouseDao;
 
 	@Override
 	public List<SludgeFunction> queryAllSludgeFunction() {
@@ -225,6 +229,22 @@ public class SludgeServiceImpl implements SludgeService {
 	}
 	@Override
 	public void insertSludgeByDriver(Sludge sludge) {
+		if (sludge.getSludgeFunction() != null) {
+			String function = sludge.getSludgeFunction().getFunction();
+			SludgeFunction sludgeFunctionInDB = sludgeDao.querySludgeFunctionByFunction(function);
+			if(sludgeFunctionInDB!=null) {
+				sludge.setFunctionId(sludgeFunctionInDB.getId());
+			}
+			else {
+				SludgeFunction addSludgeFunction = new SludgeFunction();
+				addSludgeFunction.setFunction(function);
+				addSludgeFunction.setDescription(function);
+				sludgeDao.addSludgeFunction(addSludgeFunction);
+				sludge.setFunctionId(addSludgeFunction.getId());
+			}
+		}
+		int minorMudWareHoseId=sludge.getMinorMudWareHouseId();
+		sludge.setProduceTime(format.format(new Date()));
 		sludgeDao.insertSludgeByDriver(sludge);
 	}
 	@Override

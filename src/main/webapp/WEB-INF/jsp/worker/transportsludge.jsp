@@ -62,7 +62,7 @@
 	<!-- 用来存id -->
 	<input id="sludgeId" type="hidden" />
 	<input id="trIndex" type="hidden" />
-	  <body>
+<body>
 	<%
 		java.text.SimpleDateFormat simpleDateFormat = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		java.util.Date currentTime = new java.util.Date();
@@ -71,9 +71,9 @@
 
 	<!-- Modal -->
 
-	<!-- ***********************************新增车辆模态框************************************* -->
-	<div class="modal inmodal" id="addSludgeModal" tabindex="-1" role="dialog"
-		aria-hidden="true">
+	<!-- ***********************************新增污泥块模态框************************************* -->
+	<div class="modal inmodal" id="addSludgeModal" tabindex="-1"
+		role="dialog" aria-hidden="true">
 		<div class="modal-dialog">
 			<div class="modal-content animated bounceInRight">
 				<div class="modal-header">
@@ -85,34 +85,17 @@
 				</div>
 				<div class="modal-body">
 					<div class="container" style="width: 540px">
+						<input type="hidden" id="addSludgeId">
 						<div class="form-group">
 							<div>
-								<label for="Groupname" class="col-sm-3 control-label">车牌号：</label>
+								<label for="Groupname" class="col-sm-3 control-label">污泥来源：</label>
 								<div class="col-sm-9">
 									<input type="text" class="form-control m-b control-label"
-										id="CarLicense"
-										value=" ">
+										id="siteName" value=" ">
 								</div>
 							</div>
 						</div>
-						<div class="form-group">
-							<div>
-								<label for="Groupname" class="col-sm-3 control-label">司机：</label>
-								<div class="col-sm-9">
-									<input type="text" class="form-control m-b" id="CarDriver"
-										value="${sessionScope.user.realname}">
-								</div>
-							</div>
-						</div>
-						<div class="form-group">
-							<div>
-								<label for="Groupname" class="col-sm-3 control-label">任务编号：</label>
-								<div class="col-sm-9">
-									<input type="text" class="form-control m-b" id="addRecordId"
-										value=" ">
-								</div>
-							</div>
-						</div>
+
 						<div class="form-group">
 							<div>
 								<label for="Groupname" class="col-sm-3 control-label">污泥块编号：</label>
@@ -135,17 +118,47 @@
 							<div>
 								<label for="Groupname" class="col-sm-3 control-label">目的地：</label>
 								<div class="col-sm-9">
-									<input type="text" class="form-control m-b" id="addDestination"
-										placeholder="请输入运输目的地">
+									<select class="form-control m-b" id="selectDesType">
+										<option value="0">泥仓</option>
+										<option value="1">直接前往目的地</option>
+									</select>
 								</div>
 							</div>
 						</div>
-						<div class="form-group">
+
+						<div class="form-group" id="minorMudWareDiv">
 							<div>
-								<label for="Groupname" class="col-sm-3 control-label">生成时间：</label>
+								<label for="Groupname" class="col-sm-3 control-label">泥仓号：</label>
 								<div class="col-sm-9">
-									<input type="text" class="form-control m-b" id="addProduceTime"
-										value="<%=time%>">
+									<select class="form-control m-b" id="selectMinorMudWare">
+									
+									<c:forEach items="${requestScope.minorMudWareHouseList}" var="minorMudWareHouse">
+										<option value="${minorMudWareHouse.id}"}>${minorMudWareHouse.serialNumber}号仓</option>			
+									</c:forEach>
+										
+									</select>
+								</div>
+							</div>
+						</div>
+
+						<div class="form-group" id="sludgeFuncDiv">
+							<div>
+								<label for="Groupname" class="col-sm-3 control-label">用途：</label>
+								<div class="col-sm-9">
+									<input type="text" placeholder="请输入污泥块功能" id="sludgeFunc"
+										class="form-control m-b control-label" name="sludgeFunc"
+										autocomplete="off" list="addOutSludgeFuncList" />
+									<datalist id="addOutSludgeFuncList"> </datalist>
+								</div>
+							</div>
+						</div>
+
+						<div class="form-group" id="destinationDiv">
+							<div>
+								<label for="Groupname" class="col-sm-3 control-label">目的地：</label>
+								<div class="col-sm-9">
+									<input type="text" class="form-control m-b" id="addDestination"
+										placeholder="请输入运输目的地">
 								</div>
 							</div>
 						</div>
@@ -195,7 +208,7 @@
 				<!-- Example Pagination -->
 				<div class="form-horizontal" id=sludgeList>
 					<div class="contact-box" id="${sludge.id}">
-						<table id=customers >
+						<table id=customers>
 							<tr>
 								<th>任务编号</th>
 								<th>污泥块编号</th>
@@ -206,12 +219,24 @@
 							</tr>
 							<tr id=row>
 								<c:forEach items="${requestScope.sludgeList}" var="sludge">
-									<td>${sludge.recordId}</td>
-									<td>${sludge.rfidString}</td>
-									<td>${sludge.produceTime}</td>
-									<td>${sludge.record.site.siteName}</td>
-									<td>${sludge.destinationAddress}</td>
-									<td>${sludge.weight}</td>
+									<c:if test="${sludge.recordId != '0'}">
+										<td>${sludge.recordId}</td>
+									</c:if>
+									<c:if test="${sludge.rfidString != '0'}">
+										<td>${sludge.rfidString}</td>
+									</c:if>
+									<c:if test="${sludge.produceTime != '0'}">
+										<td>${sludge.produceTime}</td>
+									</c:if>
+									<c:if test="${sludge.record.site.siteName != '0'}">
+										<td>${sludge.record.site.siteName}</td>
+									</c:if>
+									<c:if test="${sludge.destinationAddress != '0'}">
+										<td>${sludge.destinationAddress}</td>
+									</c:if>
+									<c:if test="${sludge.weight != '0'}">
+										<td>${sludge.weight}</td>
+									</c:if>
 							</tr>
 							</c:forEach>
 						</table>
@@ -227,31 +252,47 @@
 	<script src="js/bootstrap.min.js?v=3.3.6"></script>
 	<script src="js/jquery.min.js?v=2.1.4"></script>
 	<script src="js/bootstrap.min.js?v=3.3.6"></script>
-	<!-- jQuery Validation plugin javascript--> 
+	<!-- jQuery Validation plugin javascript-->
 	<script src="js/plugins/data/bootstrap-datetimepicker.min.js"></script>
 	<script src="js/plugins/data/bootstrap-datetimepicker.zh-CN.js"></script>
 	<script src="js/plugins/footable/footable.all.min.js"></script>
-	
+
 	<!-- Data Tables -->
-	<script src="js/plugins/dataTables/jquery.dataTables.js"></script> 
+	<script src="js/plugins/dataTables/jquery.dataTables.js"></script>
 	<script src="js/plugins/dataTables/dataTables.bootstrap.js"></script>
-	<script src="js/plugins/validate/jquery.validate.min.js"></script> 
+	<script src="js/plugins/validate/jquery.validate.min.js"></script>
 	<script src="js/plugins/validate/messages_zh.min.js"></script>
-	<script src="js/system/form-validate-siteManage.js"></script> 
-	<!-- distpicker --> 
-	<script src="js/distpicker/distpicker.data.js"></script> 
+	<script src="js/system/form-validate-siteManage.js"></script>
+	<!-- distpicker -->
+	<script src="js/distpicker/distpicker.data.js"></script>
 	<script src="js/distpicker/distpicker.js"></script>
-	<script src="js/distpicker/main.js"></script> 
-	<!-- Chosen --> 
-	<script src="js/plugins/chosen/chosen.jquery.js"></script> 
+	<script src="js/distpicker/main.js"></script>
+	<!-- Chosen -->
+	<script src="js/plugins/chosen/chosen.jquery.js"></script>
 	<!-- 自定义js -->
 	<script src="js/content.js?v=1.0.0"></script>
-	<script src="http://cdn.bootcss.com/jquery/1.11.3/jquery.min.js"></script>  
-	<script src="http://cdn.bootcss.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>  
+	<script src="http://cdn.bootcss.com/jquery/1.11.3/jquery.min.js"></script>
+	<script
+		src="http://cdn.bootcss.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 	<script>
 	$(document).ready(function() {
+		$("#sludgeFuncDiv").hide();
+		$("#destinationDiv").hide();		
+		$("#selectDesType").change(function(){
+			var desType=parseInt($("#selectDesType").val());
+			if(desType==0){ //现在是选择的去向是泥仓
+				$("#sludgeFuncDiv").hide();
+				$("#destinationDiv").hide();
+				$("#minorMudWareDiv").show();
+			}
+			else if(desType==1){
+				$("#minorMudWareDiv").hide();
+				$("#sludgeFuncDiv").show();
+				$("#destinationDiv").show();
+			}
+		})
 		$("#addSludgeModal").on('shown.bs.modal', function() {
-	 	var driverId = ${sessionScope.user.id}
+	 		var driverId = ${sessionScope.user.id}
 	 		$.ajax({
 			type : "POST",
 			url : "sludge/querysludgebydriverIdAndStatus",
@@ -261,34 +302,65 @@
 							alert('当前未分配污泥运输任务，无需添加记录')
 						}					
 						else{
-							$("#addRecordId").val(sludge.recordId);
-							$("#CarLicense").val(sludge.car.license);
+							$("#addSludgeId").val(sludge.id);
+							$("#siteName").val(sludge.record.site.siteName);
 						}
 					}
-				});
 			});
+	 		//查询污泥块功能
+	 		$.ajax({
+				type : "POST",
+				url : "sludge/queryAllFunc",
+				success : function(funcList) {
+					$("#addOutSludgeFuncList").empty();
+					$.each(funcList,function(i,func) {
+						$("#addOutSludgeFuncList").append('<option>'+func.function+'</option>');
+					});
+				}
+			});
+	 		
+		});
 
 	   
 	   $("#addSludgeButton").click(function() {
+	   var sludgeId = parseInt($("#addSludgeId").val());
 	   var rfidString = $("#addSludgeRFID").val();
-	   var produceTime = $("#addProduceTime").val();
-	   var recordId = $("#addRecordId").val();
-	   var destinationAddress = $("#addDestination").val();
 	   var weight = $("#addSludgeWeight").val();
-	   var transcarId = ${requestScope.sludgeList.get(0).transcarId};
+	   var desType=parseInt($("#selectDesType").val());
+	   //alert(sludgeId+" "+rfidString+" "+weight+" "+desType)
+	   var postData={};
+		if(desType==0){ //现在是选择的去向是泥仓
+			var minorMudWareHouseId=parseInt($("#selectMinorMudWare").val());
+			var destinationAddress=$('#selectMinorMudWare option:selected').text();//选中的文本
+			postData={
+				id:sludgeId,
+				rfidString:rfidString,
+				weight:weight,
+				minorMudWareHouseId:minorMudWareHouseId,
+				destinationAddress:destinationAddress
+			}
+		}
+		else if(desType==1){
+			var func=$("#sludgeFunc").val();
+			var destinationAddress=$("#addDestination").val();
+			var sludgeFunction={
+					function:func
+			}
+			postData={
+					id:sludgeId,
+					rfidString:rfidString,
+					weight:weight,
+					sludgeFunction:sludgeFunction,
+					destinationAddress:destinationAddress
+			}
+			alert(postData)
+		}
 	   $.ajax({
 	   		type:"POST",
-	   		url : "sludge/insertSludgeByDriver",
-	   		data : JSON.stringify({
-	   			rfidString : rfidString,
-	   			produceTime : produceTime,
-	   			recordId : recordId,
-	   			destinationAddress : destinationAddress,
-	   			weight : weight,
-	   			transcarId : transcarId
-	   		}),
+	   		url : "sludge/updateSludgeVirtualToRealByDriver",
+	   		data : JSON.stringify(postData),
 	   		contentType : "application/json",
-	   		dataType : "text",
+	   		dataType : "JSON",
 	   		success : function(result) {
 					alert("污泥记录添加成功");
 					$('#addSludgeModal').modal('hide');
@@ -324,12 +396,12 @@
 					var rows = "";
 					$.each(sludges, function(i, sludge) {		
 					   rows +='<tr>'+
-					    '<td>'+sludge.recordId+'</td>'+
-					    '<td>'+sludge.rfidString+'</td>'+
-					    '<td>'+sludge.produceTime+'</td>'+
-					    '<td>'+sludge.record.site.siteName+'</td>'+
-					    '<td>'+sludge.destinationAddress+'</td>'+
-					    '<td>'+sludge.weight+'</td>'+
+					    '<td>'+(sludge.recordId ==null?"": sludge.recordId)+'</td>'+
+					    '<td>'+(sludge.rfidString ==null?"": sludge.rfidString)+'</td>'+
+					    '<td>'+(sludge.produceTime ==null?"": sludge.produceTime)+'</td>'+
+					    '<td>'+(sludge.record.site.siteName ==null?"": sludge.record.site.siteName)+'</td>'+
+					    '<td>'+(sludge.destinationAddress ==null?"": sludge.destinationAddress)+'</td>'+
+					    '<td>'+(sludge.weight ==null?"": sludge.weight)+'</td>'+
 						'</tr>';
 					});
 					 $("#customers").html(rowhead+rows+'<table>');

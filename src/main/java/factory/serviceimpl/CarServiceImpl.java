@@ -106,7 +106,7 @@ public class CarServiceImpl implements CarService{
 	public int addCar(Car car) {
 		// TODO Auto-generated method stub
 		if (car.getLicense().equals("") || car.getLicense() == null) {
-			throw new DataNoneException("é”Ÿæ–¤æ‹·é”Ÿç‹¡å·æ†‹æ‹·é”Ÿæ–¤æ‹·é”Ÿæ–¤æ‹·ä¸ºé”Ÿç§¸ï½æ‹·");
+			throw new DataNoneException("Ã»ÓĞÊı¾İ");
 		}
 		else if(car.getBrand().equals("none")){
 			car.setBrand(null);
@@ -118,7 +118,7 @@ public class CarServiceImpl implements CarService{
 	public void editCar(Car car) {
 		// TODO Auto-generated method stub
 		if (car.getLicense().equals("") || car.getLicense() == null) {
-			throw new DataNoneException("é”Ÿæ–¤æ‹·é”Ÿç‹¡å·æ†‹æ‹·é”Ÿæ–¤æ‹·é”Ÿæ–¤æ‹·ä¸ºé”Ÿæ–¤æ‹·!");
+			throw new DataNoneException("Ã»ÓĞÊı¾İ");
 		}
 		if(car.getBrand().equals("none")){
 			car.setBrand(null);
@@ -261,75 +261,75 @@ public class CarServiceImpl implements CarService{
 		int carStatusInDB=car.getStatus();
 		int carType=car.getCarType();
 		int carId=car.getId();
-		if(nowStatus!=carStatusInDB || nowStatus==CarStatus.LEISURE.ordinal()) { //é„îˆœæ•±æ¤¤ç”¸æ½°ç‘™ï¹€å½‚é‘°å±¼ç¬‰é„îˆ›å¯œé–½î†¿Ğ•é™ï¿½
+		if(nowStatus!=carStatusInDB || nowStatus==CarStatus.LEISURE.ordinal()) {//ÊÇÓÉÒ³Ãæ´¥·¢¶ø²»ÊÇ°´Å¥´¥·¢
 			return new Car(carStatusInDB, carType);
 		}
 		else {
-			if(nowStatus==carStatusInDB) { //é˜èˆµï¿½ä½·ç«´é‘·ï¿½
-				//æ¿¡å‚›ç‰æï¸¾æ´°é“å¶‡æ®‘é˜èˆµï¿½ä½¹æ§¸å®¸æ’åé–°å¶„æ¢é”ï¿½,æµ£å—šç¹•éˆî„åš­é™ï¿½
-				//é™å‘Šæº€ç‘™ï¹€å½‚é¸å¤æŒ³ç›ã„§ãšå¯®ï¿½æ¿®å¬ªåš­é™ï¿½
+			if(nowStatus==carStatusInDB) { //×´Ì¬Ò»ÖÂ
+				//Èç¹û³µÄ¿Ç°µÄ×´Ì¬ÊÇÒÑ·ÖÅäÈÎÎñ,µ«»¹Î´³ö·¢
+				//Ë¾»ú´¥·¢°´Å¥±íÊ¾¿ªÊ¼³ö·¢
 				if(nowStatus==CarStatus.NODEPARTURE.ordinal()) {
-					//æ·‡î†½æ•¼é´æ„¬æ¹ªé–«æ–¾è…‘
+					//ĞŞ¸Ä³ÉÔÚÍ¾ÖĞ
 					carDao.editWorkerCarStatus(driverId, CarStatus.ONTHEWAY.ordinal());
 					return new Car(CarStatus.ONTHEWAY.ordinal(), carType);
 				}
-				//æ¿¡å‚›ç‰æï¸¾æ´°é“å¶‡æ®‘é˜èˆµï¿½ä½¹æ§¸é¦ã„©ï¿½æ–¾è…‘
-				//é™å‘Šæº€ç‘™ï¹€å½‚é¸å¤æŒ³ç›ã„§ãšå®¸æ’åŸŒæˆï¿½
+				//Èç¹û³µÄ¿Ç°µÄ×´Ì¬ÊÇÔÚÍ¾ÖĞ
+				//Ë¾»ú´¥·¢°´Å¥±íÊ¾ÒÑµ½´ï
 				else if(nowStatus==CarStatus.ONTHEWAY.ordinal()) {
-					//æ·‡î†½æ•¼é´æ„¬å‡¡é’æ‹Œæª
+					//ĞŞ¸Ä³ÉÒÑµ½´ï
 					carDao.editWorkerCarStatus(driverId, CarStatus.ARRIVAL.ordinal());
-					if(carType==0) { //æ¿¡å‚›ç‰é„îˆšî˜©éå—šæº…é’æ‹Œæª,ç‘•ä½·æ…¨é€ç®ecordéœå®»iteé¨å‹­å§¸é¬ä½·è´Ÿæ¾¶å‹­æ‚Šæ¶“ï¿½
-						//éŒãƒ¨î‡—éœæ¿æ¹ªæ¾¶å‹­æ‚Šé¨å‹¬æ§¸éîƒé‡œæµ è¯²å§Ÿ
+					if(carType==0) {  //Èç¹ûÊÇ´¦Àí³µµ½´ï,ÒªĞŞ¸ÄrecordºÍsiteµÄ×´Ì¬Îª´¦ÀíÖĞ
+						//²éÑ¯ÏÖÔÚ´¦ÀíµÄÊÇÄÄ¸öÈÎÎñ
 						Record treatmentRecord=recordDao.queryRecordByCarIdAndStatus(car.getId(), RecordStatus.WATINGPROCESS.ordinal());
-						//æ·‡î†½æ•¼recordé¨å‹­å§¸é¬ä½·è´Ÿæ¾¶å‹­æ‚Šæ¶“ï¿½,éªæœµç¬–ç’å‰§ç–†æµ è¯²å§Ÿå¯®ï¿½æ¿®å¬«æ¤‚é—‚ï¿½,0ç›ã„§ãšç€›æ¨¼æ®‘é„îˆ™æ¢é”â€³ç´‘æ¿®å¬«æ¤‚é—‚ï¿½
+						//ĞŞ¸ÄrecordµÄ×´Ì¬Îª´¦ÀíÖĞ,²¢ÇÒÉèÖÃÈÎÎñ¿ªÊ¼Ê±¼ä,0±íÊ¾´æµÄÊÇÈÎÎñ¿ªÊ¼Ê±¼ä
 						recordDao.UpdateRecordStatusAndTimeById(treatmentRecord.getId(), RecordStatus.PROCESSING.ordinal(), dataFormat.format(new Date()), 0);
-						//æ·‡î†½æ•¼siteé¨å‹­å§¸é¬ä½·è´Ÿæ¾¶å‹­æ‚Šæ¶“ï¿½
+						//ĞŞ¸ÄsiteµÄ×´Ì¬Îª´¦ÀíÖĞ
 						siteDao.updateSiteStatusById(treatmentRecord.getSiteId(), SiteStatus.PROCESSING.ordinal());
 						
 					}
 					return new Car(CarStatus.ARRIVAL.ordinal(), carType);
 				}
-				//æ¿¡å‚›ç‰æï¸¾æ´°é“å¶‡æ®‘é˜èˆµï¿½ä½¹æ§¸å®¸æ’åŸŒæˆï¿½
-				//é™å‘Šæº€ç‘™ï¹€å½‚é¸å¤æŒ³ç›ã„§ãšé’æ¿ç°³æ¾¶å‹­æ‚Šæµ è¯²å§Ÿ/æ©æ„¯ç·­æµ è¯²å§Ÿç€¹å±¾åšæµœï¿½
+				//Èç¹û³µÄ¿Ç°µÄ×´Ì¬ÊÇÒÑµ½´ï
+				//Ë¾»ú´¥·¢°´Å¥±íÊ¾µ½µ×´¦ÀíÈÎÎñ/ÔËÊäÈÎÎñÍê³ÉÁË
 				else if(nowStatus==CarStatus.ARRIVAL.ordinal()) {
-					if(carType==0) { //æ¿¡å‚›ç‰é„îˆšî˜©éå—šæº…
-						// æ·‡î†½æ•¼æ¶“é¸¿æº…é¨å‹­å§¸é¬ä½½ç¹‘ç»‹å¬¬å§¸é¬ï¿½,æ·‡î†½æ•¼siteæ¶“ç°„ull
+					if(carType==0) {  //Èç¹ûÊÇ´¦Àí³µ
+						// ĞŞ¸ÄÎª³µµÄ×´Ì¬·µ³Ì×´Ì¬,ĞŞ¸ÄsiteÎªnull
 						carDao.editWorkerCarStatusAndSiteId(car.getId(), CarStatus.GETBACK.ordinal(),0); 
-						//éŒãƒ¨î‡—éœæ¿æ¹ªæ¾¶å‹­æ‚Šé¨å‹¬æ§¸éîƒé‡œæµ è¯²å§Ÿ
+						//²éÑ¯ÏÖÔÚ´¦ÀíµÄÊÇÄÄ¸öÈÎÎñ
 						Record treatmentRecord=recordDao.queryRecordByCarIdAndStatus(car.getId(), RecordStatus.PROCESSING.ordinal());
-						//æ·‡î†½æ•¼recordé¨å‹­å§¸é¬ä½·è´Ÿæ¾¶å‹­æ‚Šç€¹å±¾åš
+						//ĞŞ¸ÄrecordµÄ×´Ì¬Îª´¦ÀíÍê³É
 						recordDao.UpdateRecordStatusAndTimeById(treatmentRecord.getId(), RecordStatus.ACCOMPLISH.ordinal(), dataFormat.format(new Date()), 1);
-						//æ·‡î†½æ•¼siteé¨å‹­å§¸é¬ä½·è´Ÿå§ï½…çˆ¶
+						//ĞŞ¸ÄsiteµÄ×´Ì¬ÎªÕı³£
 						siteDao.updateSiteStatusById(treatmentRecord.getSiteId(), SiteStatus.NORMAL.ordinal());
 						return new Car(CarStatus.GETBACK.ordinal(),carType);
 					}
-					else if(carType==1) { //æ¿¡å‚›ç‰é„îˆç¹æˆæ’¹æº…
+					else if(carType==1) {//Èç¹ûÊÇÔËÊä³µ
 			
-						//éŒãƒ¨î‡—è¤°æ’³å¢ æ©æ„¯ç·­é¨å‹­æ®‘å§¹â„ƒå¿
+						//²éÑ¯µ±Ç°ÔËÊäµÄµÄÎÛÄà
 						Sludge processingSludge=sludgeDao.queryProcessingSludgeByCarIdAndStatus(carId);
 						String arrivalTime=dataFormat.format(new Date());
 						int sludgeStatus=0;
-						//æ¿¡å‚›ç‰é„îˆ™éª‡é‘å“„æ¹´é’ç‰ˆå¿æµ æ’¹çŸ¾æ¶“å©ç´±
+						//Èç¹ûÊÇ²ú³öµØµ½Äà²ÖÂ·ÉÏ£»
 						if(processingSludge.getStatus()==SludgeStatus.FACTORYTOMWHRAOD.ordinal()) {
 							sludgeStatus=SludgeStatus.STOREINMWH.ordinal();
 						}
-						//æ¿¡å‚›ç‰é„îˆ™éª‡é‘å“„æ¹´é’æ‰®æ´°é¨å‹«æ¹´ç’ºîˆ™ç¬‚é”›ï¿½
+						//Èç¹ûÊÇ²ú³öµØµ½Ä¿µÄµØÂ·ÉÏ£»
 						else if (processingSludge.getStatus()==SludgeStatus.FACTORYTODESROAD.ordinal()){
 							sludgeStatus=SludgeStatus.ARRIVEDESFROMFACTORY.ordinal();
 						}
-						//æ¿¡å‚›ç‰é„îˆ›å¿æµ æ’³æ¹´é’ç‰ˆå¿æµ æ’¹çŸ¾æ¶“å©ç´±
+						//Èç¹ûÊÇÄà²ÖµØµ½Äà²ÖÂ·ÉÏ£»
 						else if (processingSludge.getStatus()==SludgeStatus.MWHTODESROAD.ordinal()){
 							sludgeStatus=SludgeStatus.ARRIVEDESFROMMWH.ordinal();
 						}
 						sludgeDao.setArrivalTimeAndStatusById(processingSludge.getId(), sludgeStatus, arrivalTime);
 
-						//ä¿®æ”¹ä¸ºç©ºé—²çŠ¶æ€,å¹¶ä¸”ä¿®æ”¹siteIdä¸ºnull
+						//ĞŞ¸ÄÎª¿ÕÏĞ×´Ì¬
 						carDao.editWorkerCarStatusAndSiteId(carId, CarStatus.LEISURE.ordinal(),0); 
 						return new Car(CarStatus.LEISURE.ordinal(), carType);
 					}
 				}
-				//æ¿¡å‚›ç‰æ¾¶å‹­æ‚Šæï¸¾æ´°é“å¶‡æ®‘é˜èˆµï¿½ä½½ç¹‘ç»‹ï¿½
-				//é™å‘Šæº€ç‘™ï¹€å½‚é¸å¤æŒ³ç›ã„§ãšé’æ‹Œæªæµ æ’³ç°±æµœï¿½
+				//Èç¹û´¦Àí³µÄ¿Ç°µÄ×´Ì¬·µ³Ì
+				//Ë¾»ú´¥·¢°´Å¥±íÊ¾µ½´ï²Ö¿âÁË
 				else if(nowStatus==CarStatus.GETBACK.ordinal()) {
 					carDao.editWorkerCarStatus(driverId, CarStatus.LEISURE.ordinal());
 					return new Car(CarStatus.LEISURE.ordinal(),carType);

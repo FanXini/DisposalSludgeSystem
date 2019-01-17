@@ -12,4 +12,10 @@
 		SELECT *
 		FROM main_mud_warehouse
 	</select>
+	
+	<select id="queryMinorMudWareHouseById" resultType="factory.entity.MinorMudWareHouse">
+		SELECT * 
+		FROM minor_mud_warehouse
+		WHERE id=#{id}
+	</select>
 </mapper>
