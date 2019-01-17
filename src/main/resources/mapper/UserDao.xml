@@ -116,6 +116,12 @@
 		WHERE car.car_type=1 and car.del_status=0;
 	</select>
 	
+	<select id="queryCarAssignTranSportDriverInLeisureStatus" resultMap="UserMap">
+		SELECT user.id,user.realname,car.id as car_id
+		FROM user LEFT JOIN car on user.id=car.driver_id
+		WHERE car.del_status=0 and car.car_type=1 and status=0;
+	</select>
+	
 	<select id="queryCarAssignTreatDriver" resultMap="UserMap">
 		SELECT user.id,user.realname,car.id as car_id
 		FROM user LEFT JOIN car on user.id=car.driver_id

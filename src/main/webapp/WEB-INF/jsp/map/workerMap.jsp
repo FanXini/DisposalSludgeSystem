@@ -206,6 +206,7 @@ h5{
 	map.setMapStyle({
 		style : 'light'
 	}); //设置地图样式
+  
 	var siteMarker;
 	var sitePoint;
 	var siteInfoWindow;
@@ -216,6 +217,7 @@ h5{
 	var wareHousePoint;
 	var wareHouseMarker;
 	var wareHouseInfoWindow;
+
 	var userId = ${sessionScope.user.id};
 	var carStatus = -1;
 

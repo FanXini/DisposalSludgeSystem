@@ -117,7 +117,7 @@ public class SludgeController {
 		mv.addObject("minorMudWareHouses",minorMudWareHouses);
 		mv.addObject("driverList",drivers);
 		mv.addObject("siteList",sites);
-		mv.addObject("assignCarTransportDriver",userService.queryCarAssignTranSportDriver());
+		mv.addObject("assignCarTransportDriverInLeisureStatus",userService.queryCarAssignTranSportDriverInLeisureStatus());
 		mv.setViewName("mudwarehouse/sludge");
 		log.info(minorMudWareHouses.size());
 		return mv;

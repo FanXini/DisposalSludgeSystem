@@ -5,6 +5,8 @@ import factory.entity.User;
 import java.util.List;
 import java.util.Map;
 
+import javax.management.Query;
+
 public interface UserService {
 
 	public List<User> queryAllUser();
@@ -49,6 +51,8 @@ public interface UserService {
 	public int addUser(Map<String,String> userInfo);
 	
 	public List<User> queryCarAssignTranSportDriver();
+	
+	public List<User> queryCarAssignTranSportDriverInLeisureStatus();
 	
 	public List<User> queryCarAssignTreatDriver();
 	

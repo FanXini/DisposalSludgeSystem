@@ -70,7 +70,7 @@
 
 								<div class="col-sm-9">
 									<select class="form-control m-b control-label" id="selectTransCarId">
-										<c:forEach items="${requestScope.assignCarTransportDriver }"
+										<c:forEach items="${requestScope.assignCarTransportDriverInLeisureStatus }"
 											var="transportDriver">
 											<option value="${transportDriver.car.id}">${transportDriver.realname}</option>
 										</c:forEach>
@@ -322,6 +322,17 @@
 						});
 					}
 				});
+				
+				/* $.ajax({
+					type : "POST",
+					url : "user/queryAssignCarTransportDriverInLeisureStatus",
+					success : function(funcList) {
+						$("#addOutSludgeFuncList").empty();
+						$.each(funcList,function(i,func) {
+							$("#addOutSludgeFuncList").append('<option>'+func.function+'</option>');
+						});
+					}
+				}); */
 			});
 			var table_start = '<table id="table" class="footable table-hover table table-stripped toggle-arrow-tiny" data-page-size="7">' +
 				'<thead>' +
