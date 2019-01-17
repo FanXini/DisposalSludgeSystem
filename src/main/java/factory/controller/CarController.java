@@ -270,7 +270,8 @@ public class CarController {
 	}
 	
 	@RequestMapping("queryCarByCarType")
-	@ResponseBody List<Car> queryCarByCarType(@RequestParam("carType") int carType){
+	@ResponseBody 
+	List<Car> queryCarByCarType(@RequestParam("carType") int carType){
 		log.info("queryCarByCarType type:"+carType);
 		return carService.queryCarByCarType(carType);
 	}
@@ -284,4 +285,15 @@ public class CarController {
 			return null;
 		}
 	}
+	@RequestMapping("flushCarStatus")
+	@ResponseBody
+	public Car flushCarStatus(@RequestParam("driverId") int driverId) {
+		try {
+			return carService.flushCarStatus(driverId);
+		}catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
 }

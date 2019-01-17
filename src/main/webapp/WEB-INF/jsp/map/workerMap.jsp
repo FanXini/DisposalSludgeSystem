@@ -109,10 +109,6 @@
 			</div>
 		</div>
 	</div>
-	<div>
-		<input id="nowStatus" value="0" type="hidden" />
-		<button id="updateCarStatusButton" class="btn btn-primary" onclick="updateCarStatus()">暂无任务</button>
-	</div>
 </body>
 </html>
 <script type="text/javascript">
@@ -140,7 +136,46 @@
 	var carStatus = -1;
 
 	show();
-	updateCarStatus();
+	flushCarStatus();
+	function flushCarStatus(){
+		$.ajax({
+			type:"POST",
+			url:"car/flushCarStatus",
+			data:"driverId="+userId,
+			success:function(car){
+				if(car.status==0){ //空闲状态
+					$("#updateCarStatusButton").html("暂无任务");
+					$("#nowStatus").val(0);
+					$("#updateCarStatusButton").attr("disabled",true);
+				}
+				else if(car.status==1) { //在途中
+					$("#updateCarStatusButton").html("已到达");
+					$("#nowStatus").val(1);
+					$("#updateCarStatusButton").attr("disabled",false);
+				}
+				else if(car.status==2){ //已经到达状态
+					if(car.carType==0){  //如果是处理车
+						$("#updateCarStatusButton").html("处理完成,返程");
+					}
+					else if (car.carType==1){  //如果是运输车
+						$("#updateCarStatusButton").html("污泥块运达目的地");		
+					}
+					$("#updateCarStatusButton").attr("disabled",false);
+					$("#nowStatus").val(2);
+				}
+				else if(car.status==3){ //如果是分配但是为出发状态
+					$("#updateCarStatusButton").html("前往工厂");
+					$("#nowStatus").val(3);
+					$("#updateCarStatusButton").attr("disabled",false);
+				}
+				else if(car.status==4){ //返程状态
+					$("#updateCarStatusButton").html("到达仓库");
+					$("#updateCarStatusButton").attr("disabled",false);
+					$("#nowStatus").val(4);
+				}
+			}
+		})
+	}
 
 	function updateCarStatus() {
 		var nowStatus=parseInt($("#nowStatus").val())
@@ -206,7 +241,8 @@
 			}
 		});
 	}
-
+	
+	setInterval("flushCarStatus()",3000);
 	//setInterval("showMap()",3000);  //定时刷新map
 	//setInterval("showNum()",3000);  //定时刷新空闲车辆及待处理站点数量
 	/***************************** 显示标注************************************* */

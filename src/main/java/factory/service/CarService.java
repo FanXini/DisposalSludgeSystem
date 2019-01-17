@@ -39,6 +39,8 @@ public interface CarService {
 
 	public List<Car> queryTreatmentCarUnassign();
 	
+	public Car flushCarStatus(int driverId);
+	
 	public List<Car> queryCarrierUnassign();
 	
 	public Car assignCar(int siteId,double siteLongitude,double siteLatitude,int carType);

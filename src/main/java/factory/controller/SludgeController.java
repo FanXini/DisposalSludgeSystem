@@ -49,11 +49,10 @@ public class SludgeController {
 	@Autowired
 	private MudWareHouseService mudWareHouseService;
 	
-	//污泥运输车司机工作记录
 		@RequestMapping("/transportsludgeofonedriver")
 		@ResponseBody
 		public ModelAndView transportsludgeofonedriver(@RequestParam("driverId") int driverId, ModelAndView mv){
-			log.info("调用transportsludgeofonedriver");
+			log.info("transportsludgeofonedriver");
 			List<Sludge> sludges=sludgeService.transportsludgeofonedriver(driverId);
 			/*log.info(sludges.size());
 			for(Sludge item:sludges){
@@ -63,8 +62,6 @@ public class SludgeController {
 			if (sludges==null&&sludges.size()<0) {
 				sludges =null;
 			} 
-
-			};
 			List<MinorMudWareHouse> minorMudWareHouses=mudWareHouseService.queryMinorWareHouse();
 
 			mv.addObject("sludgeList",sludges);
@@ -73,7 +70,6 @@ public class SludgeController {
 			return mv;
 		}
 		
-		//污泥运输车司机插入一条污泥记录
 		@RequestMapping("updateSludgeVirtualToRealByDriver")
 		@ResponseBody
 		public Result updateSludgeVirtualToRealByDriver(@RequestBody Sludge sludge) {
@@ -87,11 +83,10 @@ public class SludgeController {
 			}
 		}
 		
-		//查询污泥运输车司机未处理的污泥（污泥status=6）
 		@RequestMapping("querysludgebydriverIdAndStatus")
 		@ResponseBody
 		public Sludge querysludgebydriverIdAndStatus(@RequestParam("driverId") int driverId){
-			log.info("调用querysludgebydriverIdAndStatus");
+			log.info("querysludgebydriverIdAndStatus");
 			Sludge sludge = sludgeService.querysludgebydriverIdAndStatus(driverId);
 			return sludge;
 		}
@@ -113,7 +108,7 @@ public class SludgeController {
 	
 	@RequestMapping("jumpToSludge")
 	public ModelAndView querySludgeFunctionsAndJumpToSludge(ModelAndView mv){
-		log.info("调用进入sludge.jsp的方法");
+		log.info("querySludgeFunctionsAndJumpToSludge");
 		List<User> drivers=new ArrayList<User>();
 		List<Site> sites=new ArrayList<Site>();
 		drivers.addAll(userService.quertAllDriver());
@@ -130,7 +125,7 @@ public class SludgeController {
 	@RequestMapping("queryAllFunc")
 	@ResponseBody
 	public List<SludgeFunction> queryAllFunc(){
-		log.info("查询所有污泥的功能");
+		log.info("queryAllFunc");
 		return sludgeService.queryAllSludgeFunction();
 	}
 	@RequestMapping("queryAllSludgeByInOutFlagAndWareHouseSerial")
@@ -138,19 +133,6 @@ public class SludgeController {
 	public List<Sludge> queryAllSludgeByInOutFlagAndWareHouseSerial(@RequestBody Map<String, Integer> map){
 		int inOutFlag=map.get("inOutFlag");
 		int minorWareHouseId=map.get("minorWareHouseId");
-		if(inOutFlag==0) {
-			log.info("查询所有入仓污泥块记录");
-		}
-		else if (inOutFlag==1){
-			log.info("查询所有出仓污泥块记录");
-		}
-		else if (inOutFlag==2){
-			log.info("查询所有未入仓污泥块记录");
-		}
-		else if (inOutFlag==3){
-			log.info("所有种类");
-		}
-		System.out.println(minorWareHouseId+"号");
 		List<Sludge> sludges=new ArrayList<Sludge>();
 		sludges.addAll(sludgeService.queryAllSludgeByInOutFlagWithMinorWareHouseId(inOutFlag, minorWareHouseId));
 		return sludges;
@@ -159,7 +141,7 @@ public class SludgeController {
 	@RequestMapping("deleteSludge")
 	@ResponseBody
 	public Result deleteSludge(@RequestParam("sludgeId") int sludgeId){
-		log.info("删除污泥块");
+		log.info("deleteSludge");
 		System.out.println(sludgeId);
 		try {
 			sludgeService.deleteSludge(sludgeId);
@@ -172,7 +154,7 @@ public class SludgeController {
 	@RequestMapping("addOutSludge")
 	@ResponseBody
 	public Result addOutSludge(@RequestBody Sludge sludge) {
-		log.info("新增出仓污泥块记录");
+		log.info("addOutSludge");
 		try {
 			sludgeService.addOutSludge(sludge);
 			return Result.SUCCESS;
@@ -185,7 +167,7 @@ public class SludgeController {
 	@RequestMapping("editSludge")
 	@ResponseBody
 	public Result editSludge(@RequestBody Sludge sludge){
-		log.info("调用修改污泥块方法");
+		log.info("editSludge");
 		System.out.println(sludge.getId()+" "+sludge.getDestinationAddress()+sludge.getSludgeFunction().getFunction());
 		try {
 			sludgeService.editSludge(sludge);
@@ -199,11 +181,10 @@ public class SludgeController {
 	@RequestMapping("querySludgeBySiteIdAndInOutFlag")
 	@ResponseBody
 	public  List<Sludge> querySludgeBySiteIdAndInOutFlag(@RequestBody Map<String, Integer> map){
-		log.info("调用querySludgeBySiteIdAndInOutFlag");
+		log.info("querySludgeBySiteIdAndInOutFlag");
 		int siteId=map.get("siteId");
 		int inOutFlag=map.get("inOutFlag");
 		int minorWareHouseId=map.get("minorWareHouseId");
-		log.info("要查询的siteId:"+map.get("siteId"));
 		
 		List<Sludge> sludges=sludgeService.querySludgeBySiteIdAndInOutFlagWithMinorWareHouseId(siteId, inOutFlag, minorWareHouseId);
 		return sludges;	
@@ -214,7 +195,7 @@ public class SludgeController {
 	@RequestMapping("querySludgeByDriverId")
 	@ResponseBody
 	public List<Sludge> querySludgeByDriverId(@RequestParam("driverId") int driverId){
-		log.info("调用querySludgeByDriverId");
+		log.info("querySludgeByDriverId");
 		List<Sludge> sludges=sludgeService.querySludgeByDriverId(driverId);
 		return sludges;
 	}
@@ -222,7 +203,7 @@ public class SludgeController {
 	@RequestMapping("querySludgeByDriverIdAndInOutFlag")
 	@ResponseBody
 	public List<Sludge> querySludgeByDriverIdAndInOutFlag(@RequestBody Map<String, Integer> map){
-		log.info("调用querySludgeByDriverIdAndInOutFlag");
+		log.info("querySludgeByDriverIdAndInOutFlag");
 		int driverId=(int) map.get("driverId");
 		int inOutFlag=(int) map.get("inOutFlag");
 		int minorWareHouseId=map.get("minorWareHouseId");
@@ -233,7 +214,7 @@ public class SludgeController {
 	@RequestMapping("querySludgeByDateAndInOutFlag")
 	@ResponseBody
 	public List<Sludge> querySludgeByDateAndInOutFlag(@RequestBody Map<String, String> map){
-		log.info("调用querySludgeByDateAndInOutFlag");
+		log.info("querySludgeByDateAndInOutFlag");
 		String startDate=map.get("startDate");
 		String endDate=map.get("endDate");
 		int inOutFlag=Integer.valueOf(map.get("inOutFlag"));
@@ -244,7 +225,7 @@ public class SludgeController {
 	
 	@RequestMapping("jumpToSludgeOfOneFactory")
 	public ModelAndView querySludgeFunctionsAndJumpToSludgeOfOneFactroy(@RequestParam("siteId") int siteId,ModelAndView mv){
-		log.info("调用进入sludge.jsp的方法");
+		log.info("querySludgeFunctionsAndJumpToSludgeOfOneFactroy");
 		List<SludgeFunction> sludgeFunctions=new ArrayList<SludgeFunction>();
 		List<User> drivers=new ArrayList<User>();
 		sludgeFunctions.addAll(sludgeService.queryAllSludgeFunction());
@@ -258,21 +239,21 @@ public class SludgeController {
 	@RequestMapping("queryAllSludgeOfOneFactory")
 	@ResponseBody
 	public List<Sludge> queryAllSludgeOfOneFactory(@RequestBody Site site){
-		log.info("调用queryAllSludgeOfOneFactory");
+		log.info("queryAllSludgeOfOneFactory");
 		return sludgeService.queryAllSludgeOfOneFactory(site.getId());
 	}
 	
 	@RequestMapping("querySludgeByDriverIdOfOneFactory")
 	@ResponseBody
 	public  List<Sludge> querySludgeByDriverIdOfOneFactory(@RequestBody Map<String, Integer> condition){
-		log.info("调用querySludgeByDriverIdOfOneFactory");
+		log.info("querySludgeByDriverIdOfOneFactory");
 		return sludgeService.querySludgeByDriverIdOfOneFacotry(condition);	
 	}
 	
 	@RequestMapping("querySludgeByDateOfOneFactory")
 	@ResponseBody
 	public List<Sludge> querySludgeByDateOfOneFactory(@RequestBody Map<String,Object> condition){
-		log.info("调用querySludgeByDateOfOneFactory");
+		log.info("querySludgeByDateOfOneFactory");
 		for(Map.Entry<String, Object> entry:condition.entrySet()){
 			System.out.print(entry.getKey()+"   "+entry.getValue());
 		}

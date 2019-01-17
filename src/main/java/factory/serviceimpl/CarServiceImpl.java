@@ -338,5 +338,10 @@ public class CarServiceImpl implements CarService{
 		}
 		return null;
 	}
+
+	@Override
+	public Car flushCarStatus(int driverId) {
+		return carDao.queryCarByDriverId(driverId);
+	}
 	
 }
