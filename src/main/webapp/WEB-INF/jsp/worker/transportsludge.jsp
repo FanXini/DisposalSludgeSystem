@@ -86,7 +86,7 @@
 				<div class="modal-body">
 					<div class="container" style="width: 540px">
 						<input type="hidden" id="addSludgeId">
-						<input type="hidden" id="transCarId" />
+						<input type="hidden" id="transcarId" >
 						<div class="form-group">
 							<div>
 								<label for="Groupname" class="col-sm-3 control-label">污泥来源：</label>
