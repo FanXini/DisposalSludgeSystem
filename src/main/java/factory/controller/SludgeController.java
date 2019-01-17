@@ -46,48 +46,61 @@ public class SludgeController {
 	@Autowired
 	private UserService userService;
 	
-	//ÎÛÄàÔËÊä³µË¾»ú¹¤×÷¼ÇÂ¼
+	@Autowired
+	private MudWareHouseService mudWareHouseService;
+	
+	//æ±¡æ³¥è¿è¾“è½¦å¸æœºå·¥ä½œè®°å½•
 		@RequestMapping("/transportsludgeofonedriver")
 		@ResponseBody
 		public ModelAndView transportsludgeofonedriver(@RequestParam("driverId") int driverId, ModelAndView mv){
-			log.info("µ÷ÓÃtransportsludgeofonedriver");
+			log.info("è°ƒç”¨transportsludgeofonedriver");
 			List<Sludge> sludges=sludgeService.transportsludgeofonedriver(driverId);
 			/*log.info(sludges.size());
 			for(Sludge item:sludges){
 				System.out.println(item.getTranscarId()+","+item.getCar().getLicense());
+
 			};*/
 			if (sludges==null&&sludges.size()<0) {
 				sludges =null;
 			} 
+
+			};
+			List<MinorMudWareHouse> minorMudWareHouses=mudWareHouseService.queryMinorWareHouse();
+
 			mv.addObject("sludgeList",sludges);
+			mv.addObject("minorMudWareHouseList",minorMudWareHouses);
 			mv.setViewName("worker/transportsludge");
 			return mv;
 		}
 		
-		//ÎÛÄàÔËÊä³µË¾»ú²åÈëÒ»ÌõÎÛÄà¼ÇÂ¼
-		@RequestMapping("insertSludgeByDriver")
+		//æ±¡æ³¥è¿è¾“è½¦å¸æœºæ’å…¥ä¸€æ¡æ±¡æ³¥è®°å½•
+		@RequestMapping("updateSludgeVirtualToRealByDriver")
 		@ResponseBody
-		public String insertRecordByAlert(@RequestBody Sludge sludge) {
-			log.info("Ìí¼ÓÒ»Ìõ¼ÇÂ¼");
-			log.info(sludge.getRfidString());
-			sludgeService.insertSludgeByDriver(sludge);
-			return "success";
+		public Result updateSludgeVirtualToRealByDriver(@RequestBody Sludge sludge) {
+			log.info("updateSludgeVirtualToRealByDriver");
+			try {
+				sludgeService.insertSludgeByDriver(sludge);
+				return Result.SUCCESS;
+			} catch (Exception e) {
+				e.printStackTrace();
+				return Result.ERROR;
+			}
 		}
 		
-		//²éÑ¯ÎÛÄàÔËÊä³µË¾»úÎ´´¦ÀíµÄÎÛÄà£¨ÎÛÄàstatus=6£©
+		//æŸ¥è¯¢æ±¡æ³¥è¿è¾“è½¦å¸æœºæœªå¤„ç†çš„æ±¡æ³¥ï¼ˆæ±¡æ³¥status=6ï¼‰
 		@RequestMapping("querysludgebydriverIdAndStatus")
 		@ResponseBody
 		public Sludge querysludgebydriverIdAndStatus(@RequestParam("driverId") int driverId){
-			log.info("µ÷ÓÃquerysludgebydriverIdAndStatus");
+			log.info("è°ƒç”¨querysludgebydriverIdAndStatus");
 			Sludge sludge = sludgeService.querysludgebydriverIdAndStatus(driverId);
 			return sludge;
 		}
 		
-		//ÔËÊäË¾»ú½çÃæÄ£ºı²éÑ¯
+		//è¿è¾“å¸æœºç•Œé¢æ¨¡ç³ŠæŸ¥è¯¢
 		@RequestMapping("fussyQuerysludgebyTransDriver")
 		@ResponseBody
 		public List<Sludge> fussyQuerysludgebyTransDriver(@RequestParam("condition") String condition,@RequestParam("driverId") int driverId){
-			log.info("½øÈëfussyQuerysludgebyTransDriver");
+			log.info("è¿›å…¥fussyQuerysludgebyTransDriver");
 			log.info(condition);
 			List<Sludge> sludges = new ArrayList<Sludge>();
 				sludges.addAll(sludgeService.fussyQuerysludgebyTransDriver(condition,driverId));
@@ -98,10 +111,9 @@ public class SludgeController {
 			return sludges;
 		}
 	
-	@Autowired MudWareHouseService mudWareHouseService;
 	@RequestMapping("jumpToSludge")
 	public ModelAndView querySludgeFunctionsAndJumpToSludge(ModelAndView mv){
-		log.info("µ÷ÓÃ½øÈësludge.jspµÄ·½·¨");
+		log.info("è°ƒç”¨è¿›å…¥sludge.jspçš„æ–¹æ³•");
 		List<User> drivers=new ArrayList<User>();
 		List<Site> sites=new ArrayList<Site>();
 		drivers.addAll(userService.quertAllDriver());
@@ -118,7 +130,7 @@ public class SludgeController {
 	@RequestMapping("queryAllFunc")
 	@ResponseBody
 	public List<SludgeFunction> queryAllFunc(){
-		log.info("²éÑ¯ËùÓĞÎÛÄàµÄ¹¦ÄÜ");
+		log.info("æŸ¥è¯¢æ‰€æœ‰æ±¡æ³¥çš„åŠŸèƒ½");
 		return sludgeService.queryAllSludgeFunction();
 	}
 	@RequestMapping("queryAllSludgeByInOutFlagAndWareHouseSerial")
@@ -127,18 +139,18 @@ public class SludgeController {
 		int inOutFlag=map.get("inOutFlag");
 		int minorWareHouseId=map.get("minorWareHouseId");
 		if(inOutFlag==0) {
-			log.info("²éÑ¯ËùÓĞÈë²ÖÎÛÄà¿é¼ÇÂ¼");
+			log.info("æŸ¥è¯¢æ‰€æœ‰å…¥ä»“æ±¡æ³¥å—è®°å½•");
 		}
 		else if (inOutFlag==1){
-			log.info("²éÑ¯ËùÓĞ³ö²ÖÎÛÄà¿é¼ÇÂ¼");
+			log.info("æŸ¥è¯¢æ‰€æœ‰å‡ºä»“æ±¡æ³¥å—è®°å½•");
 		}
 		else if (inOutFlag==2){
-			log.info("²éÑ¯ËùÓĞÎ´Èë²ÖÎÛÄà¿é¼ÇÂ¼");
+			log.info("æŸ¥è¯¢æ‰€æœ‰æœªå…¥ä»“æ±¡æ³¥å—è®°å½•");
 		}
 		else if (inOutFlag==3){
-			log.info("ËùÓĞÖÖÀà");
+			log.info("æ‰€æœ‰ç§ç±»");
 		}
-		System.out.println(minorWareHouseId+"ºÅ");
+		System.out.println(minorWareHouseId+"å·");
 		List<Sludge> sludges=new ArrayList<Sludge>();
 		sludges.addAll(sludgeService.queryAllSludgeByInOutFlagWithMinorWareHouseId(inOutFlag, minorWareHouseId));
 		return sludges;
@@ -147,7 +159,7 @@ public class SludgeController {
 	@RequestMapping("deleteSludge")
 	@ResponseBody
 	public Result deleteSludge(@RequestParam("sludgeId") int sludgeId){
-		log.info("É¾³ıÎÛÄà¿é");
+		log.info("åˆ é™¤æ±¡æ³¥å—");
 		System.out.println(sludgeId);
 		try {
 			sludgeService.deleteSludge(sludgeId);
@@ -160,7 +172,7 @@ public class SludgeController {
 	@RequestMapping("addOutSludge")
 	@ResponseBody
 	public Result addOutSludge(@RequestBody Sludge sludge) {
-		log.info("ĞÂÔö³ö²ÖÎÛÄà¿é¼ÇÂ¼");
+		log.info("æ–°å¢å‡ºä»“æ±¡æ³¥å—è®°å½•");
 		try {
 			sludgeService.addOutSludge(sludge);
 			return Result.SUCCESS;
@@ -173,7 +185,7 @@ public class SludgeController {
 	@RequestMapping("editSludge")
 	@ResponseBody
 	public Result editSludge(@RequestBody Sludge sludge){
-		log.info("µ÷ÓÃĞŞ¸ÄÎÛÄà¿é·½·¨");
+		log.info("è°ƒç”¨ä¿®æ”¹æ±¡æ³¥å—æ–¹æ³•");
 		System.out.println(sludge.getId()+" "+sludge.getDestinationAddress()+sludge.getSludgeFunction().getFunction());
 		try {
 			sludgeService.editSludge(sludge);
@@ -187,11 +199,11 @@ public class SludgeController {
 	@RequestMapping("querySludgeBySiteIdAndInOutFlag")
 	@ResponseBody
 	public  List<Sludge> querySludgeBySiteIdAndInOutFlag(@RequestBody Map<String, Integer> map){
-		log.info("µ÷ÓÃquerySludgeBySiteIdAndInOutFlag");
+		log.info("è°ƒç”¨querySludgeBySiteIdAndInOutFlag");
 		int siteId=map.get("siteId");
 		int inOutFlag=map.get("inOutFlag");
 		int minorWareHouseId=map.get("minorWareHouseId");
-		log.info("Òª²éÑ¯µÄsiteId:"+map.get("siteId"));
+		log.info("è¦æŸ¥è¯¢çš„siteId:"+map.get("siteId"));
 		
 		List<Sludge> sludges=sludgeService.querySludgeBySiteIdAndInOutFlagWithMinorWareHouseId(siteId, inOutFlag, minorWareHouseId);
 		return sludges;	
@@ -202,7 +214,7 @@ public class SludgeController {
 	@RequestMapping("querySludgeByDriverId")
 	@ResponseBody
 	public List<Sludge> querySludgeByDriverId(@RequestParam("driverId") int driverId){
-		log.info("µ÷ÓÃquerySludgeByDriverId");
+		log.info("è°ƒç”¨querySludgeByDriverId");
 		List<Sludge> sludges=sludgeService.querySludgeByDriverId(driverId);
 		return sludges;
 	}
@@ -210,7 +222,7 @@ public class SludgeController {
 	@RequestMapping("querySludgeByDriverIdAndInOutFlag")
 	@ResponseBody
 	public List<Sludge> querySludgeByDriverIdAndInOutFlag(@RequestBody Map<String, Integer> map){
-		log.info("µ÷ÓÃquerySludgeByDriverIdAndInOutFlag");
+		log.info("è°ƒç”¨querySludgeByDriverIdAndInOutFlag");
 		int driverId=(int) map.get("driverId");
 		int inOutFlag=(int) map.get("inOutFlag");
 		int minorWareHouseId=map.get("minorWareHouseId");
@@ -221,7 +233,7 @@ public class SludgeController {
 	@RequestMapping("querySludgeByDateAndInOutFlag")
 	@ResponseBody
 	public List<Sludge> querySludgeByDateAndInOutFlag(@RequestBody Map<String, String> map){
-		log.info("µ÷ÓÃquerySludgeByDateAndInOutFlag");
+		log.info("è°ƒç”¨querySludgeByDateAndInOutFlag");
 		String startDate=map.get("startDate");
 		String endDate=map.get("endDate");
 		int inOutFlag=Integer.valueOf(map.get("inOutFlag"));
@@ -232,7 +244,7 @@ public class SludgeController {
 	
 	@RequestMapping("jumpToSludgeOfOneFactory")
 	public ModelAndView querySludgeFunctionsAndJumpToSludgeOfOneFactroy(@RequestParam("siteId") int siteId,ModelAndView mv){
-		log.info("µ÷ÓÃ½øÈësludge.jspµÄ·½·¨");
+		log.info("è°ƒç”¨è¿›å…¥sludge.jspçš„æ–¹æ³•");
 		List<SludgeFunction> sludgeFunctions=new ArrayList<SludgeFunction>();
 		List<User> drivers=new ArrayList<User>();
 		sludgeFunctions.addAll(sludgeService.queryAllSludgeFunction());
@@ -246,21 +258,21 @@ public class SludgeController {
 	@RequestMapping("queryAllSludgeOfOneFactory")
 	@ResponseBody
 	public List<Sludge> queryAllSludgeOfOneFactory(@RequestBody Site site){
-		log.info("µ÷ÓÃqueryAllSludgeOfOneFactory");
+		log.info("è°ƒç”¨queryAllSludgeOfOneFactory");
 		return sludgeService.queryAllSludgeOfOneFactory(site.getId());
 	}
 	
 	@RequestMapping("querySludgeByDriverIdOfOneFactory")
 	@ResponseBody
 	public  List<Sludge> querySludgeByDriverIdOfOneFactory(@RequestBody Map<String, Integer> condition){
-		log.info("µ÷ÓÃquerySludgeByDriverIdOfOneFactory");
+		log.info("è°ƒç”¨querySludgeByDriverIdOfOneFactory");
 		return sludgeService.querySludgeByDriverIdOfOneFacotry(condition);	
 	}
 	
 	@RequestMapping("querySludgeByDateOfOneFactory")
 	@ResponseBody
 	public List<Sludge> querySludgeByDateOfOneFactory(@RequestBody Map<String,Object> condition){
-		log.info("µ÷ÓÃquerySludgeByDateOfOneFactory");
+		log.info("è°ƒç”¨querySludgeByDateOfOneFactory");
 		for(Map.Entry<String, Object> entry:condition.entrySet()){
 			System.out.print(entry.getKey()+"   "+entry.getValue());
 		}

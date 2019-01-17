@@ -133,12 +133,167 @@
 	left: -10%;
 }
 </style>
+<script>
+		
+		
+		/**
+		 * 将对象编码成请求字符串
+		 * @param {any} obj 要编码的对象
+		 */
+		function encodeRequestParams(obj) {
+		    if (!obj) {
+		        return ''
+		    }
+		    const params = []
+		
+		    Object.keys(obj).forEach((key) => {
+		        let value = obj[key]
+		        if (value !== null && value !== undefined && value !== '') {
+		            params.push([key, encodeURIComponent(value)].join('='))
+		        }
+		    })
+		    let paramsString = params.join('&')
+		    if (paramsString.length == 0) {
+		        return ""
+		    }
+		    return paramsString;
+		}
+		
+		/**
+		 * get请求，返回Promise
+		 * @param {string} url 请求地址
+		 */
+		function get(url) {
+		    return new Promise((resolve, reject) => {
+		        const xhr = new XMLHttpRequest();
+		        xhr.onreadystatechange = () => {
+		            if (xhr.readyState === 4) {
+		                if (xhr.status >= 200 && (xhr.status < 300 || xhr.status === 304)) {
+		                    if (xhr.responseText) {
+		                        resolve(JSON.parse(xhr.responseText));
+		                    } else {
+		                        resolve(xhr.responseText);
+		                    }
+		                } else {
+		                    reject(`XHR unsuccessful:${xhr.status}`);
+		                }
+		            }
+		        };
+		        xhr.open('get', url, true);
+		        xhr.setRequestHeader('content-type', 'application/x-www-form-urlencoded');
+		        xhr.send(null);
+		    });
+		};
+		
+		/**
+		 * post请求
+		 * @param {string} url 请求地址
+		 * @param {any} data 请求参数
+		 */
+		function post(url, data) {
+		    return new Promise((resolve, reject) => {
+		        const xhr = new XMLHttpRequest();
+		        xhr.onreadystatechange = () => {
+		            if (xhr.readyState === 4) {
+		                if (xhr.status >= 200 && (xhr.status < 300 || xhr.status === 304)) {
+		                    resolve(JSON.parse(xhr.responseText));
+		                } else {
+		                    reject(`XHR unsuccessful:${xhr.status}`);
+		                }
+		            }
+		        };
+		        xhr.open('post', url, true);
+		        xhr.setRequestHeader('content-type', 'application/x-www-form-urlencoded');
+		        xhr.send(encodeRequestParams(data));
+		    });
+		}
+		
+		// accessToken会自动失效，需要通过后端请求刷新。详见 https://open.ys7.com/doc/zh/book/index/user.html
+		const ACCESS_TOKEN = "at.dr31pta092dj6h7l54uyc27dbh55n0r7-6ber269c57-01a6v3f-we6zziltc";
+		
+		/* const DEVICE_SERIAL = "C29134495"; */
+		const CHANNEL_NO = 1;
+		const START_PTZ_URL = "https://open.ys7.com/api/lapp/device/ptz/start";
+		const STOP_PTZ_URL = "https://open.ys7.com/api/lapp/device/ptz/stop";
+		const LIVE_LIST_URL = "https://open.ys7.com/api/lapp/live/video/list"
+		
+		/**
+		 * 停止云台
+		 * @param {int} direction 方向，不必须：0-上，1-下，2-左，3-右，4-左上，5-左下，6-右上，7-右下，8-放大，9-缩小，10-近焦距，11-远焦距
+		 * @param {string} accessToken 访问Token，必须
+		 * @param {int} deviceSerial 设备序列号，必须
+		 * @param {int} channelNo 通道，必须
+		 */
+		function stopPtz(direction, deviceSerial, accessToken = ACCESS_TOKEN, channelNo = CHANNEL_NO) {
+		 
+		    return post(STOP_PTZ_URL, { direction, accessToken, deviceSerial, channelNo })
+		        .then(response => {
+		            if (response.code != 200) {
+		                throw response;
+		            }
+		            console.log("停止成功");
+		        })
+		        .catch(error => {
+		            throw error;
+		        })
+		}
+		
+		/**
+		/**
+		 * 启动云台
+		 * @param {int} direction 方向，必须：0-上，1-下，2-左，3-右，4-左上，5-左下，6-右上，7-右下，8-放大，9-缩小，10-近焦距，11-远焦距
+		 * @param {*} speed 云台速度，必须：0-慢，1-适中，2-快
+		 * @param {string} accessToken 访问Token，必须
+		 * @param {int} deviceSerial 设备序列号，必须
+		 * @param {int} channelNo 通道，必须
+		 */
+		function startPtz(direction, speed, deviceSerial, accessToken = ACCESS_TOKEN, channelNo = CHANNEL_NO) {
+		    // 要启动，需要先停止
+		    
+		    return stopPtz(direction, deviceSerial)
+		        .then(_ => {
+		            post(START_PTZ_URL, { direction, speed, accessToken, deviceSerial, channelNo })
+		                .then(response => {
+		                    if (response.code != 200) {
+		                        throw response;
+		                    }
+		                    console.log("启动成功");
+		                })
+		                .catch(error => {
+		                    throw error;
+		                });
+		        })
+		        .catch(error => {
+		            throw error;
+		        })
+		}
+		
+		
+		/**
+		 * 获取播放地址列表
+		 * @param {int} page 页
+		 * @param {int} count 页大小，最大50
+		 * @param {string} accessToken 
+		 */
+		function requestLiveList(page = 0, count = 50, accessToken = ACCESS_TOKEN) {
+		    return post(LIVE_LIST_URL, { page, count, accessToken })
+		        .then(response => {
+		            if (response.code != 200) {
+		                throw response;
+		            }
+		            console.log("获取直播列表成功");
+		            return response;
+		        })
+		        .catch(error => {
+		            throw error;
+		        });
+		}
+		
+
+</script>
 </head>
 <body>
 	<script src="https://open.ys7.com/sdk/js/1.3/ezuikit.js"></script>
-	
-
-
 
 	<!-- 摄像头-->
 	<!-- Example Pagination -->
@@ -154,6 +309,10 @@
 							type="application/x-mpegURL" /> </video>
 					</div>
 					<div class="divlicense">
+						<button type="button" class="btn btn-primary" onMouseover="startPtz(0,0,'${requestScope.video.serialNumber }');" onMouseout="stopPtz(0,'${video.serialNumber }');">向上</button>
+						<button type="button" class="btn btn-primary" onMouseover="startPtz(1,0,'${requestScope.video.serialNumber }');" onMouseout="stopPtz(1,'${video.serialNumber }');">向下</button>
+						<button type="button" class="btn btn-primary" onMouseover="startPtz(2,0,'${requestScope.video.serialNumber }');" onMouseout="stopPtz(2,'${video.serialNumber }');">向左</button>
+						<button type="button" class="btn btn-primary" onMouseover="startPtz(3,0,'${requestScope.video.serialNumber }');" onMouseout="stopPtz(3,'${video.serialNumber }');">向右</button> <br/>
 						<img class="box5" alt="140x140" src="img/littercar.png"
 							width="10%" height="10%" />
 						<p class="box6" style="text-align: center;">${requestScope.video.car.license}</p>
