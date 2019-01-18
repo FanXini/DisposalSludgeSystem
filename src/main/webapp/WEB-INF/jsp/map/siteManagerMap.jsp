@@ -385,9 +385,9 @@ h5{
 			siteMarker = new BMap.Marker(sitePoint,{icon:myIcon});
 			
 			map.addOverlay(siteMarker);
-			if(site.status=="2"){
+			/* if(site.status=="2"){
 				siteMarker.setAnimation(BMAP_ANIMATION_BOUNCE);
-			}
+			} */
 			siteMarker.addEventListener("mouseover",function(){
 				siteInfo(site);
 			});
@@ -460,15 +460,15 @@ h5{
 		lid += '<li style="color:#FF4500;">状态:'+status+'</li>';
 		lid += '</ul>' + '</div>';
 		if(currentTreatmentCarList.length != 0){
-			lid += '<div class="infowindow"><span class="line"></span><span class="txt">处理车</span><span class="line"></span></div><div class="carlist">';
+			lid += '<div class="infowindow"><span class="line"></span><span class="txt" style="color:#FFD700;">'+currentTreatmentCarList.length+'辆车处理中</span><span class="line"></span></div><div class="carlist">';
 			lid += '<ul class="list-inline" style="font-size:11px;color:#777;"';
 			$.each(currentTreatmentCarList,function(i, treatmentCar) {
-				lid += '<li><a href="monitor/queryVideoByDriverId?driverId='+treatmentCar.driverId+'">'+treatmentCar.license+'</a></li>';
+				lid += '<li><a href="monitor/queryVideoByDriverId?driverId='+treatmentCar.driverId+'" style="color: #777;">'+treatmentCar.license+'</a></li>';
 			});
 			lid += "</ul></div>"
 		}
 		if(currentCarrierList.length != 0){
-			lid += '<div class="infowindow"><span class="line"></span><span class="txt">正在装箱</span><span class="line"></span></div><div class="carlist">';
+			lid += '<div class="infowindow"><span class="line"></span><span class="txt" style="color:#4F94CD;">'+currentCarrierList.length+'辆车正在装箱</span><span class="line"></span></div><div class="carlist">';
 			lid += '<ul class="list-inline" style="font-size:11px;color:#777;"';
 			$.each(currentCarrierList,function(i, carrier) {
 				lid += '<li>'+carrier.license+'</li>';

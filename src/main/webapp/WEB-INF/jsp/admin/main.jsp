@@ -227,7 +227,7 @@
 					<a class="navbar-minimalize minimalize-styl-2 btn btn-info"><i
 						class="fa fa-bars"></i> </a>
 					<h1 class="text-info"
-						style="text-align: center; font-family: Microsoft Yahei;">基于物联网的车载式污泥干化处理系统</h1>
+						style="text-align: center; font-family: Microsoft Yahei;font-weight:bold; color:#3872cf;">基于物联网的车载式污泥干化处理系统</h1>
 				</div>
 				</nav>
 			</div>
