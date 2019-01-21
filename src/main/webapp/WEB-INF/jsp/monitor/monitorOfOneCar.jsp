@@ -471,7 +471,7 @@
 					},
 					yaxis : {
 						min : 0,
-						max : 500
+						max : 3
 					},
 					legend : {
 						show : true

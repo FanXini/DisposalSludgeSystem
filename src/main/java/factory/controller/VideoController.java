@@ -153,4 +153,15 @@ public class VideoController {
 		return mv;
 	}
 	
+	@RequestMapping("queryVideoAndSensorByCarId")
+	public ModelAndView queryVideoAndSensorByCarId(@RequestParam ("carId") int carId,ModelAndView mv) {
+		log.info("queryVideoAndSensorByCarId");
+		Video video=videoService.queryVideoByCarId(carId);
+		List<Sensor> sensors = sensorService.querySensorsByCarId(carId);
+		mv.addObject("video",video);
+		mv.addObject("sensorList", sensors);// 设置需要返回的值
+		mv.setViewName("monitor/monitorOfOneCar");
+		return mv;
+	}
+	
 }

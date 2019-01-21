@@ -188,7 +188,7 @@ initial-scale=1.0">
 					},
 					yaxis : {
 						min : 0,
-						max : 500
+						max : 3
 					},
 					legend : {
 						show : true

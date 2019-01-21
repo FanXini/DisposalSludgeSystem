@@ -93,6 +93,12 @@
 		and video.del_status=0 
 	</select>
 	
+	<select id="queryVideoByCarId" resultType="factory.entity.Video">
+		select *
+		from video
+		where video.car_id = #{carId} AND video.del_status=0 
+	</select>
+	
 	
 	
 </mapper>

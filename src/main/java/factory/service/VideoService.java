@@ -15,4 +15,5 @@ public interface VideoService {
 	public List<Video> fuzzyqueryVideoByCarLicense(String license);
 	public Video queryVideoByCarLicense(String license);
 	public Video queryVideoByDriverId(int driverId);
+	public Video queryVideoByCarId(int carId);
 }

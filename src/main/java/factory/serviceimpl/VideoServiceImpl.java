@@ -76,5 +76,10 @@ public class VideoServiceImpl implements VideoService {
 	public Video queryVideoByDriverId(int driverId) {
 		return videodao.queryVideoByDriverId(driverId);
 	}
+
+	@Override
+	public Video queryVideoByCarId(int carId) {
+		return videodao.queryVideoByCarId(carId);
+	}
 	
 }
