@@ -353,12 +353,16 @@ body {
 																	table += '<td></td>'
 																}
 
-																table += '<td><a href="sensor/deviceDetail?id='
+																/* table += '<td><a href="sensor/deviceDetail?id='
 																		+ car.id
 																		+ '&location='
 																		+ car.license
 																		+ '&locationId=0'
-																		+ '">设备</a></td>'
+																		+ '">设备</a></td>' */
+																table += '<td><a href="monitor/queryVideoByDriverId?driverId='
+														 			+ ${sessionScope.user.id }
+																	+ '">设备</a></td>'
+																		
 																if (car.status == 0) {
 																	table += '<td class="project-status"><span class="label label-inverse">空闲</td>'
 																	table += '<td>'
@@ -499,12 +503,15 @@ body {
 													table += '<td></td>'
 												}
 
-												table += '<td><a href="sensor/deviceDetail?id='
+												/* table += '<td><a href="sensor/deviceDetail?id='
 														+ car.id
 														+ '&location='
 														+ car.license
 														+ '&locationId=0'
-														+ '">设备</a></td>'
+														+ '">设备</a></td>' */
+												table += '<td><a href="monitor/queryVideoByDriverId?driverId='
+												 	+ ${sessionScope.user.id }
+													+ '">设备</a></td>'
 												if (car.status == 0) {
 													table += '<td class="project-status"><span class="label label-inverse">空闲</td>'
 													table += '<td>'

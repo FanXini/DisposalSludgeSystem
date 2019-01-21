@@ -23,7 +23,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import factory.entity.Car;
 import factory.entity.Record;
 import factory.entity.Site;
 import factory.entity.User;

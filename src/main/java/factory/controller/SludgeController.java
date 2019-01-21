@@ -91,11 +91,10 @@ public class SludgeController {
 			return sludge;
 		}
 		
-		//运输司机界面模糊查询
 		@RequestMapping("fussyQuerysludgebyTransDriver")
 		@ResponseBody
 		public List<Sludge> fussyQuerysludgebyTransDriver(@RequestParam("condition") String condition,@RequestParam("driverId") int driverId){
-			log.info("进入fussyQuerysludgebyTransDriver");
+			log.info("fussyQuerysludgebyTransDriver");
 			log.info(condition);
 			List<Sludge> sludges = new ArrayList<Sludge>();
 				sludges.addAll(sludgeService.fussyQuerysludgebyTransDriver(condition,driverId));

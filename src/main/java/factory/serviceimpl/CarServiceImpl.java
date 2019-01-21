@@ -1,5 +1,7 @@
 package factory.serviceimpl;
 
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -261,8 +263,9 @@ public class CarServiceImpl implements CarService{
 		int carStatusInDB=car.getStatus();
 		int carType=car.getCarType();
 		int carId=car.getId();
+		int siteId=car.getSiteId();
 		if(nowStatus!=carStatusInDB || nowStatus==CarStatus.LEISURE.ordinal()) {//是由页面触发而不是按钮触发
-			return new Car(carStatusInDB, carType);
+			return new Car(carStatusInDB, carType,siteId);
 		}
 		else {
 			if(nowStatus==carStatusInDB) { //状态一致
@@ -271,14 +274,14 @@ public class CarServiceImpl implements CarService{
 				if(nowStatus==CarStatus.NODEPARTURE.ordinal()) {
 					//修改成在途中
 					carDao.editWorkerCarStatus(driverId, CarStatus.ONTHEWAY.ordinal());
-					return new Car(CarStatus.ONTHEWAY.ordinal(), carType);
+					return new Car(CarStatus.ONTHEWAY.ordinal(), carType,siteId);
 				}
 				//如果车目前的状态是在途中
 				//司机触发按钮表示已到达
 				else if(nowStatus==CarStatus.ONTHEWAY.ordinal()) {
 					//修改成已到达
 					carDao.editWorkerCarStatus(driverId, CarStatus.ARRIVAL.ordinal());
-					if(carType==0) {  //如果是处理车到达,要修改record和site的状态为处理中
+					if(carType==0) {  //如果是处理车到达,要修改record和site的状态为处理中,并设置record开始时间
 						//查询现在处理的是哪个任务
 						Record treatmentRecord=recordDao.queryRecordByCarIdAndStatus(car.getId(), RecordStatus.WATINGPROCESS.ordinal());
 						//修改record的状态为处理中,并且设置任务开始时间,0表示存的是任务开始时间
@@ -287,52 +290,59 @@ public class CarServiceImpl implements CarService{
 						siteDao.updateSiteStatusById(treatmentRecord.getSiteId(), SiteStatus.PROCESSING.ordinal());
 						
 					}
-					return new Car(CarStatus.ARRIVAL.ordinal(), carType);
+					else if(carType==1) { //如果是污泥车，要判断是到达污泥厂，还是到达目的地
+						if(car.getSiteId()==0) {  //污泥到达目的地
+							//查询当前运输的的污泥
+							Sludge processingSludge=sludgeDao.queryProcessingSludgeByCarIdAndStatus(carId);
+							String arrivalTime=dataFormat.format(new Date());
+							int sludgeStatus=0;
+							//如果是产出地到泥仓路上；
+							if(processingSludge.getStatus()==SludgeStatus.FACTORYTOMWHRAOD.ordinal()) {
+								sludgeStatus=SludgeStatus.STOREINMWH.ordinal();
+							}
+							//如果是产出地到目的地路上；
+							else if (processingSludge.getStatus()==SludgeStatus.FACTORYTODESROAD.ordinal()){
+								sludgeStatus=SludgeStatus.ARRIVEDESFROMFACTORY.ordinal();
+							}
+							//如果是泥仓地到泥仓路上；
+							else if (processingSludge.getStatus()==SludgeStatus.MWHTODESROAD.ordinal()){
+								sludgeStatus=SludgeStatus.ARRIVEDESFROMMWH.ordinal();
+							}
+							sludgeDao.setArrivalTimeAndStatusById(processingSludge.getId(), sludgeStatus, arrivalTime);
+						}
+					}
+					return new Car(CarStatus.ARRIVAL.ordinal(), carType,siteId);
 				}
 				//如果车目前的状态是已到达
-				//司机触发按钮表示到底处理任务/运输任务完成了
+				//司机触发按钮表示到底处理任务完成 或者是  运输任务开始/结束了
 				else if(nowStatus==CarStatus.ARRIVAL.ordinal()) {
 					if(carType==0) {  //如果是处理车
 						// 修改为车的状态返程状态,修改site为null
-						carDao.editWorkerCarStatusAndSiteId(car.getId(), CarStatus.GETBACK.ordinal(),0); 
+						carDao.editWorkerCarStatusAndSiteId(carId, CarStatus.GETBACK.ordinal(),0); 
 						//查询现在处理的是哪个任务
 						Record treatmentRecord=recordDao.queryRecordByCarIdAndStatus(car.getId(), RecordStatus.PROCESSING.ordinal());
 						//修改record的状态为处理完成
 						recordDao.UpdateRecordStatusAndTimeById(treatmentRecord.getId(), RecordStatus.ACCOMPLISH.ordinal(), dataFormat.format(new Date()), 1);
 						//修改site的状态为正常
 						siteDao.updateSiteStatusById(treatmentRecord.getSiteId(), SiteStatus.NORMAL.ordinal());
-						return new Car(CarStatus.GETBACK.ordinal(),carType);
+						return new Car(CarStatus.GETBACK.ordinal(),carType,0);
 					}
 					else if(carType==1) {//如果是运输车
-			
-						//查询当前运输的的污泥
-						Sludge processingSludge=sludgeDao.queryProcessingSludgeByCarIdAndStatus(carId);
-						String arrivalTime=dataFormat.format(new Date());
-						int sludgeStatus=0;
-						//如果是产出地到泥仓路上；
-						if(processingSludge.getStatus()==SludgeStatus.FACTORYTOMWHRAOD.ordinal()) {
-							sludgeStatus=SludgeStatus.STOREINMWH.ordinal();
+						if(siteId!=0) { //开始将污泥运输到目的地,工厂置为0
+							carDao.editWorkerCarStatusAndSiteId(carId, CarStatus.ONTHEWAY.ordinal(),0);
+							return new Car(CarStatus.ONTHEWAY.ordinal(),carType,0);
 						}
-						//如果是产出地到目的地路上；
-						else if (processingSludge.getStatus()==SludgeStatus.FACTORYTODESROAD.ordinal()){
-							sludgeStatus=SludgeStatus.ARRIVEDESFROMFACTORY.ordinal();
+						else {  //送到了目的地,返程
+							carDao.editWorkerCarStatus(driverId, CarStatus.GETBACK.ordinal());
+							return new Car(CarStatus.GETBACK.ordinal(),carType,siteId);
 						}
-						//如果是泥仓地到泥仓路上；
-						else if (processingSludge.getStatus()==SludgeStatus.MWHTODESROAD.ordinal()){
-							sludgeStatus=SludgeStatus.ARRIVEDESFROMMWH.ordinal();
-						}
-						sludgeDao.setArrivalTimeAndStatusById(processingSludge.getId(), sludgeStatus, arrivalTime);
-
-						//修改为空闲状态
-						carDao.editWorkerCarStatusAndSiteId(carId, CarStatus.LEISURE.ordinal(),0); 
-						return new Car(CarStatus.LEISURE.ordinal(), carType);
 					}
 				}
 				//如果处理车目前的状态返程
 				//司机触发按钮表示到达仓库了
 				else if(nowStatus==CarStatus.GETBACK.ordinal()) {
 					carDao.editWorkerCarStatus(driverId, CarStatus.LEISURE.ordinal());
-					return new Car(CarStatus.LEISURE.ordinal(),carType);
+					return new Car(CarStatus.LEISURE.ordinal(),carType,siteId);
 				}
 			}
 		}

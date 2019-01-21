@@ -915,7 +915,7 @@ h5{
 			}
 			else if (car.status== "2"){
 				table='<tr id="'+ car.id +'" onmouseover="sel(this)" onmouseout="cle(this)" onclick="showSiteInfo('+JSON.stringify(car.site).replace(/\"/g,"'")+')">';
-				status="正在装箱";
+				status="正在装\卸箱";
 			}
 			else if (car.status== "3"){
 				table='<tr id="'+ car.id +'" onmouseover="sel(this)" onmouseout="cle(this)" onclick="wareHouseInfo();">';

@@ -78,14 +78,14 @@ public class AssignCarForReocrdThread implements Runnable{
 			if(unAssignCarrier.size()!=0) { //如果存在空闲的运输车
 				Car disPacherCarrier=selectMinDistanceCar(unAssignCarrier);
 				log.info("为"+recordId+"：请求 分配运输车:"+disPacherCarrier.getLicense());
+				//修改运输车的状态
+				carService.editWorkerCarStatusAndSiteId(disPacherCarrier.getId(), CarStatus.NODEPARTURE.ordinal(), site.getId());
 				Sludge sludge=new Sludge();
 				sludge.setRecordId(recordId);
 				//设置sludge的状态为虚拟状态，还未产出
 				sludge.setStatus(SludgeStatus.VIRTUAL.ordinal());
 				sludge.setTranscarId(disPacherCarrier.getId());
 				sludgeService.addSludge(sludge);
-				carService.editWorkerCarStatusAndSiteId(disPacherCarrier.getId(), CarStatus.NODEPARTURE.ordinal(), site.getId());
-				log.info(sludge.getId());
 				break;
 			}
 			log.info("暂为空闲运输车,3秒后重新分配");

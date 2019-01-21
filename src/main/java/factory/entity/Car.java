@@ -22,9 +22,10 @@ public class Car {
 		
 	}
 	
-	public Car(int status,int carType) {
+	public Car(int status,int carType,int siteId) {
 		this.status=status;
 		this.carType=carType;
+		this.siteId=siteId;
 	}
 	public int getId() {
 		return id;
