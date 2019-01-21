@@ -384,5 +384,11 @@
 		where
 		sensor_id=#{sensorId}
 	</update>
+	
+	<select id="querySensorsByDriverId" resultMap="sensorMap">
+		select *
+		from sensor,car,user,sensor_type
+		where sensor.car_id = car.id and sensor.type_id=sensor_type.id and car.driver_id=user.id and user.id=#{driverId}
+	</select>
 
 </mapper>

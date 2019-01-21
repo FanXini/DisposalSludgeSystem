@@ -12,24 +12,21 @@
 <title>实时监控</title>
 <meta charset="UTF-8">
 <meta http-equiv="pragma" content="no-cache">
-<meta name="viewport"
-	content="width=device-width,initial-scale=1,maximum-scale=1.0" />
+<meta name="viewport"content="width=device-width,initial-scale=1,maximum-scale=1.0" />
 <meta http-equiv="cache-control" content="no-cache">
 <meta http-equiv="expires" content="0">
 <meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
 <meta http-equiv="description" content="This is my page">
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 <meta name="renderer" content="webkit">
-<link
-	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
-	rel="stylesheet">
+<link rel="shortcut icon" href="favicon.ico">
+<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
 <link rel="shortcut icon" href="favicon.ico">
 <link href="css/bootstrap.min.css?v=3.3.6" rel="stylesheet">
 <link href="css/font-awesome.min.css?v=4.4.0" rel="stylesheet">
 <link href="css/animate.css" rel="stylesheet">
 <link href="css/style.css?v=4.1.0" rel="stylesheet">
-<link href="css/plugins/dataTables/dataTables.bootstrap.css"
-	rel="stylesheet">
+<link href="css/plugins/dataTables/dataTables.bootstrap.css" rel="stylesheet">
 <link href="css/plugins/chosen/chosen.css" rel="stylesheet">
 <!-- 全局js -->
 <script src="js/jquery.min.js?v=2.1.4"></script>
@@ -132,10 +129,12 @@
 	top: 10%;
 	left: -10%;
 }
+#box {
+  margin:20px auto; width:600px; height:150px;
+  padding: 5px;
+}
 </style>
-<script>
-		
-		
+<script>	
 		/**
 		 * 将对象编码成请求字符串
 		 * @param {any} obj 要编码的对象
@@ -157,8 +156,7 @@
 		        return ""
 		    }
 		    return paramsString;
-		}
-		
+		}		
 		/**
 		 * get请求，返回Promise
 		 * @param {string} url 请求地址
@@ -206,17 +204,14 @@
 		        xhr.setRequestHeader('content-type', 'application/x-www-form-urlencoded');
 		        xhr.send(encodeRequestParams(data));
 		    });
-		}
-		
+		}		
 		// accessToken会自动失效，需要通过后端请求刷新。详见 https://open.ys7.com/doc/zh/book/index/user.html
-		const ACCESS_TOKEN = "at.dr31pta092dj6h7l54uyc27dbh55n0r7-6ber269c57-01a6v3f-we6zziltc";
-		
+		const ACCESS_TOKEN = "at.dr31pta092dj6h7l54uyc27dbh55n0r7-6ber269c57-01a6v3f-we6zziltc";		
 		/* const DEVICE_SERIAL = "C29134495"; */
 		const CHANNEL_NO = 1;
 		const START_PTZ_URL = "https://open.ys7.com/api/lapp/device/ptz/start";
 		const STOP_PTZ_URL = "https://open.ys7.com/api/lapp/device/ptz/stop";
-		const LIVE_LIST_URL = "https://open.ys7.com/api/lapp/live/video/list"
-		
+		const LIVE_LIST_URL = "https://open.ys7.com/api/lapp/live/video/list"		
 		/**
 		 * 停止云台
 		 * @param {int} direction 方向，不必须：0-上，1-下，2-左，3-右，4-左上，5-左下，6-右上，7-右下，8-放大，9-缩小，10-近焦距，11-远焦距
@@ -236,8 +231,7 @@
 		        .catch(error => {
 		            throw error;
 		        })
-		}
-		
+		}		
 		/**
 		/**
 		 * 启动云台
@@ -266,9 +260,7 @@
 		        .catch(error => {
 		            throw error;
 		        })
-		}
-		
-		
+		}				
 		/**
 		 * 获取播放地址列表
 		 * @param {int} page 页
@@ -294,10 +286,9 @@
 </head>
 <body>
 	<script src="https://open.ys7.com/sdk/js/1.3/ezuikit.js"></script>
-
 	<!-- 摄像头-->
 	<!-- Example Pagination -->
-	<div id="page-wrapper" class="container-fluid">
+	<div id="box" class="container-fluid">
 		<div class="row clearfix video">
 			<div class="col-md-12 column">
 				<div class="" id="${requestScope.video.id}">
@@ -320,6 +311,75 @@
 				</div>
 			</div>
 		</div>
+		</div>
+<!--  HistoryDataModel -->
+	<div class="modal inmodal" id="myModal" tabindex="-1" role="dialog" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content animated bounceInRight">
+				<div class="col-sm-12">
+					<div class="ibox float-e-margins">
+						<div class="ibox-title">
+							<h5>动态图</h5>
+							<div class="ibox-tools">
+								<a class="close-link" id="clearInterval"> 
+								<i class="fa fa-times"></i>
+								</a>
+							</div>
+						</div>
+						<div class="ibox-content">
+							<div class="flot-chart">
+								<div class="flot-chart-content" id="flot-line-chart-moving"></div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+		<div class="col-sm-12">	
+				<div class="ibox">
+					<!-- 内容 -->
+					<div class="wrapper wrapper-content animated fadeInRight">
+						<div class="row">
+							<c:forEach items="${requestScope.sensorList}" var="sensor">
+								<div class="col-sm-3">
+									<div class="contact-box">
+										<c:if test="${sensor.status ==0}">
+											<label class="label label-primary pull-right ">正常</label>
+										</c:if>
+										<c:if test="${sensor.status ==1}">
+											<label class="label label-danger pull-right ">异常</label>
+										</c:if>
+										<div class="row">
+											<div class="col-sm-4">
+												<div class="text-center">
+													<img alt="image" class="img-circle m-t-xs img-responsive"
+														src="img/littercar.png">
+													<div class="m-t-xs font-bold">设备照片</div>
+												</div>
+											</div>
+											<div class="col-sm-8">
+												<div>
+													<label class="label">编号</label>
+													<div class="h5 text-info inline">${sensor.serialNumber }</div>
+												</div>
+												<div>
+													<label class="label">类型</label>
+													<div class="h5 text-info inline">${sensor.sensorType.type}</div>
+												</div>
+												<c:if test="${sensor.sensorType.type=='氨气传感器'||sensor.sensorType.type=='硫化氢传感器' }">
+													<button class="btn btn-sm btn-info"
+														onclick="javascript:showRealTimeData(${sensor.id },'${sensor.sensorType.type}')">实时数据</button>
+												</c:if>
+											</div>
+										</div>
+									</div>
+								</div>
+							</c:forEach>
+						</div>
+					</div>
+				</div>		
+		</div>				
 		<!-- End Example Pagination -->
 		<!-- 全局js -->
 		<script src="js/jquery.min.js?v=2.1.4"></script>
@@ -343,6 +403,14 @@
 		<script src="js/distpicker/main.js"></script>
 		<!-- Chosen -->
 		<script src="js/plugins/chosen/chosen.jquery.js"></script>
+		<!-- 全局js -->		
+		<script src="js/plugins/flot/jquery.flot.js"></script>
+		<script src="js/plugins/flot/jquery.flot.tooltip.min.js"></script>
+		<script src="js/plugins/flot/jquery.flot.resize.js"></script>
+		<script src="js/plugins/flot/jquery.flot.pie.js"></script>
+		<!-- 自定义js -->
+		<script src="js/content.js?v=1.0.0"></script>
+		<script type="text/javascript" src="js/plugins/chartJs/Chart.js"></script>		
 		<script>   
 		$(document).ready(function(){
 			 var player=new EZUIPlayer('myPlayer'+${requestScope.video.id});
@@ -357,6 +425,129 @@
 		    	});
 		})
   
-</script>
+	</script>
+<script>		
+			$(function() {
+				//可以这样迭代函数
+				$('.contact-box').each(function() {
+					animationHover(this, 'pulse');
+				});
+			});
+			var property={
+					grid : {
+						color : "#999999",
+						tickColor : "#D4D4D4",
+						borderWidth : 0,
+						minBorderMargin : 20,
+						labelMargin : 10,
+						backgroundColor : {
+							colors : [ "#ffffff", "#ffffff" ]
+						},
+						margin : {
+							top : 8,
+							bottom : 20,
+							left : 20
+						},
+						markings : function(axes) {
+							var markings = [];
+							var xaxis = axes.xaxis;
+							for (var x = Math.floor(xaxis.min); x < xaxis.max; x += xaxis.tickSize * 2) {
+								markings.push({
+									xaxis : {
+										from : x,
+										to : x + xaxis.tickSize
+									},
+									color : "#fff"
+								});
+							}
+							return markings;
+						}
+					},
+					colors : [ "#1ab394" ],
+					xaxis : {
+						tickFormatter : function() {
+							return "";
+						}
+					},
+					yaxis : {
+						min : 0,
+						max : 500
+					},
+					legend : {
+						show : true
+					}
+				}		
+			var globalData = null;
+			var interval=null;
+			function showRealTimeData(sensorId, sensorType) {
+				var container = $("#flot-line-chart-moving");
+				globalData = sensorData(sensorId, sensorType)
+				var res=[];
+				for(var i=0;i<globalData.length;i++){
+					res.push([i,globalData[i]])
+				}
+				series = [ {
+					data : res,
+					lines : {
+						fill : true
+					}
+				} ];
+		
+				var plot = $.plot(container, series,property);
+				
+				$("#myModal").modal("show")
+		
+				// Update the random dataset at 25FPS for a smoothly-animating chart
+		
+				interval=setInterval(function updateRandom() {
+					series[0].data = queryRealTimeValue(sensorId); //只更新最前的数据
+					plot.setData(series);
+					plot.draw();
+				}, 500);
+			}
+			/* 查询出10条最早的历史记录 */
+			function sensorData(sensorId, sensorType) {
+				var data = [];
+				var carId = $("#queryVideoByCarLicense").val();
+				$.ajax({
+					type : "POST",
+					url : "sensor/queryHistoryData",
+					data : JSON.stringify({
+						sensorId : sensorId,
+						sensorType : sensorType
+					}),
+					async : false,
+					dataType : "json",
+					contentType : "application/json",
+					success : function(historyData) {
+						data = historyData;
+					}
+				})
+				return data;
+			}
+			/* 查询此时最新的数据 */
+			function queryRealTimeValue(sensorId) {
+			    var res=[]
+				$.ajax({
+					type : "POST",
+					url : "sensor/queryRealTimeValue?sensorId=" + parseInt(sensorId),
+					async:false,
+					success : function(value) {
+						globalData.shift();
+						globalData.push(value)
+						for (var i = 0; i < globalData.length; i++) {
+							res.push([ i, globalData[i]])
+						}
+					}
+				})
+				return res;
+			}			
+			$("#clearInterval").click(function(){
+				$("#myModal").modal('hide');
+				clearInterval(interval);
+				interval=null;
+			})
+			
+		</script>
 </body>
 </html>

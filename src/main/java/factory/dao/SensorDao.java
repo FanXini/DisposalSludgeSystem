@@ -70,6 +70,8 @@ public interface SensorDao {
 	//修改实时数据
 	public void updateSensorRealTimeValue(SensorValue sensorValue);
 	
+	public List<Sensor> querySensorsByDriverId(@Param("driverId") int driverId);
+	
 	
 
 }

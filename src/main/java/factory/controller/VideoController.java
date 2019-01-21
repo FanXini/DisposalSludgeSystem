@@ -18,11 +18,13 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import factory.entity.Car;
+import factory.entity.Sensor;
 import factory.entity.Site;
 import factory.entity.User;
 import factory.entity.Video;
 import factory.enums.Result;
 import factory.exception.DataNoneException;
+import factory.service.SensorService;
 import factory.service.VideoService;
 import net.sf.json.JSONArray;
 @Controller
@@ -30,6 +32,9 @@ import net.sf.json.JSONArray;
 public class VideoController {
 	@Autowired
 	private VideoService videoService;
+	
+	@Autowired
+	private SensorService sensorService;
 	
 	private static Log log=LogFactory.getLog(VideoController.class);	
 	@RequestMapping("/jumpToVideo")
@@ -141,8 +146,11 @@ public class VideoController {
 		log.info("queryVideoByDriverId");
 		System.out.println(driverId);
 		Video video=videoService.queryVideoByDriverId(driverId);
+		List<Sensor> sensors = sensorService.querySensorsByDriverId(driverId);
 		mv.addObject("video",video);
+		mv.addObject("sensorList", sensors);// 设置需要返回的值
 		mv.setViewName("monitor/monitorOfOneCar");
+		
 		return mv;
 	}
 	

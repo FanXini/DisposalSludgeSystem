@@ -34,6 +34,8 @@ public interface SensorService {
 	
 	public Float queryRealTimeValueBySensorId(int sensorId);
 	
+	public List<Sensor> querySensorsByDriverId(int driverId);
+	
 	
 
 }

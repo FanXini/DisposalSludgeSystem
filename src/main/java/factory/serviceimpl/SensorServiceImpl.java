@@ -261,5 +261,13 @@ public class SensorServiceImpl implements SensorService {
 		// TODO Auto-generated method stub
 		return sensorDao.queryRealTimeValueBySensorId(sensorId);
 	}
+	
+	@Override
+	public List<Sensor> querySensorsByDriverId(int driverId) {
+		//List<Sensor>  sensors=new ArrayList<Sensor>();
+		//sensors.addAll(sensorDao.querySensorsByDriverId(driverId));
+		return sensorDao.querySensorsByDriverId(driverId);
+		//return sensors;
+	}
 
 }
