@@ -679,19 +679,19 @@ h5{
 		lid += '</ul>' + '</div>';
 		if(leisureTreatmentCarNum > 0){
 			var treatmentCarList = queryMapCar(-1,carType["TREATMENT"],carStatus["LEISURE"]);
-			lid += '<div class="infowindow"><span class="line"></span><span class="txt" style="color:#FFD700;">'+treatmentCarList.length+'辆空闲处理车</span><span class="line"></span></div><div class="carlist">';
+			lid += '<div class="infowindow"><span class="line"></span><span class="txt" style="color:#0000FF;">'+treatmentCarList.length+'辆空闲处理车</span><span class="line"></span></div><div class="carlist">';
 			lid += '<ul class="list-inline" style="font-size:11px;color:#777;">' ;
 			$.each(treatmentCarList,function(i, treatmentCar) {
-				lid += '<li>'+treatmentCar.license+'</li>';
+				lid += '<li style="color:#0000FF; font:bold;">'+treatmentCar.license+'</li>';
 			});
 			lid += "</ul></div>"
 		}
 		if(leisureCarrierNum > 0){
 			var carrierList = queryMapCar(-1,carType["CARRIER"],carStatus["LEISURE"]);
-			lid += '<div class="infowindow"><span class="line"></span><span class="txt" style="color:#4F94CD;">'+carrierList.length+'辆空闲运输车</span><span class="line"></span></div><div class="carlist">';
+			lid += '<div class="infowindow"><span class="line"></span><span class="txt" style="color:#B22222;">'+carrierList.length+'辆空闲运输车</span><span class="line"></span></div><div class="carlist">';
 			lid += '<ul class="list-inline" style="font-size:11px;color:#777;">';
 			$.each(carrierList,function(i, carrier) {
-				lid += '<li>'+carrier.license+'</li>';
+				lid += '<li style="color:#B22222">'+carrier.license+'</li>';
 			});
 			lid += "</ul></div>"
 		}

@@ -15,6 +15,14 @@ public class UserTest extends BaseTest{
 	private UserDao userDao;
 	
 	@Test
+	public void hah() {
+		List<User> driver=userDao.queryTransDriverServeOneFactory(53);
+		for(User user:driver) {
+			System.out.println(user.getRealname());
+		}
+	}
+	
+	@Test
 	public  void test(){
 		String username="fanxin";
 		User user=userDao.queryUserByUsername(username);

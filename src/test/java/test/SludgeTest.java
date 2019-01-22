@@ -19,7 +19,11 @@ public class SludgeTest extends BaseTest {
 	
 	@Test
 	public void test1() {
-		sludgeDao.setArrivalTimeAndStatusById(40, 1, "2001-12-12 10:10:10");
+		//sludgeDao.setArrivalTimeAndStatusById(40, 1, "2001-12-12 10:10:10");
+		List<Sludge> sludges=sludgeDao.queryAllSludgeOfOneFactory(53);
+		for(Sludge sludge:sludges) {
+			System.out.println(sludge.getCar().getDriver().getRealname());
+		}
 	}
 	/*
 	 * @Test public void queryAllSludgeFunction(){ List<SludgeFunction>

@@ -174,7 +174,7 @@
 		FROM sludge,record,`user`,car
 		WHERE
 		sludge.del_status=0 AND
-		record.del_status=0 AND
+		sludge.record_id=record.id AND
 		record.site_id=#{siteId} AND
 		sludge.transcar_id=car.id AND
 		car.driver_id=`user`.id AND
