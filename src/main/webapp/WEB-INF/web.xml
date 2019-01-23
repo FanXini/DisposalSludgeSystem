@@ -52,9 +52,6 @@
 		<load-on-startup>1</load-on-startup>
 	</servlet> -->
 
-	<welcome-file-list><!--指定欢迎页面 -->
-		<welcome-file>login.html</welcome-file>
-	</welcome-file-list>
 	<error-page> <!--当系统出现404错误，跳转到页面nopage.html -->
 		<error-code>404</error-code>
 		<location>/pages-404.html</location>
