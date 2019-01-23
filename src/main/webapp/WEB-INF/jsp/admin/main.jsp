@@ -124,11 +124,23 @@
 				</c:if>
 
 				<!-- 监控 -->
-				<c:if test="${fn:contains(sessionScope.authos, 'au4th')}">
+				<%-- <c:if test="${fn:contains(sessionScope.authos, 'au4th')}">
 					<li class="line dk"></li>
 					<li><a class="J_menuItem" href="monitor/jumpToVideo"> <i
 							class="fa fa fa-bar-chart-o"></i> <span class="nav-label">监控</span>
 					</a></li>
+				</c:if> --%>
+				<!-- 实时监控-->
+				<c:if test="${fn:contains(sessionScope.authos, 'au4th')}">
+					<li class="line dk"></li>
+					<li><a href="mailbox.html"><i class="fa fa-spin fa-cog"></i>
+							<span class="nav-label">实时监控 </span><span class="fa arrow"></span></a>
+						<ul class="nav nav-second-level">
+							<li><a class="J_menuItem" href="monitor/jumpToFactoryVideo"><i
+									class="fa fa-user"></i>工厂监控</a></li>
+							<li><a class="J_menuItem" href="monitor/jumpToVideo"><i
+									class="fa fa-car"></i>污泥处理车监控</a></li>							
+						</ul></li>
 				</c:if>
 
 				<!-- 运输车监控 -->
@@ -136,6 +148,15 @@
 					<li class="line dk"></li>
 					<li><a class="J_menuItem"
 						href="monitor/queryVideoByDriverId?driverId=${sessionScope.user.id }">
+							<i class="fa fa fa-bar-chart-o"></i> <span class="nav-label">监控</span>
+					</a></li>
+				</c:if>
+				
+				<!-- 工厂监控 -->			
+				<c:if test="${fn:contains(sessionScope.authos, 'au14th')}">
+					<li class="line dk"></li>
+					<li><a class="J_menuItem"
+						href="monitor/queryFactoryVideoBySiteId?siteId=${sessionScope.user.siteId }">
 							<i class="fa fa fa-bar-chart-o"></i> <span class="nav-label">监控</span>
 					</a></li>
 				</c:if>
