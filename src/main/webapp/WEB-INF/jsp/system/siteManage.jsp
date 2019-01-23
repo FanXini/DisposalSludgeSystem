@@ -136,6 +136,10 @@ body {
 								<label for="addSiteName">站&nbsp;&nbsp;点&nbsp;&nbsp;名：</label> 
 								<input type="text" style="width:375px" placeholder="请输入站点名" id="addSiteName" class="form-control" autocomplete="off" name="siteName">
 							</div>
+							<div class="form-group" style="width:450px; margin: 5px auto; display:block">
+								<label for="addTel">电&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;话：</label> 
+								<input type="text" placeholder="请输入站点电话" id="addTel" class="form-control m-b control-label" autocomplete="off" name="tel">
+							</div>
 							<div id="distpickerAdd" style="width:450px; margin: 5px auto; display:block">
 								<div style="float:left"><label>省&nbsp;&nbsp;市&nbsp;&nbsp;区：</label> </div>
 								<div class="form-group" style="width:125px;float:left;">
@@ -632,7 +636,8 @@ body {
 		var id=$("#editId").val();
 		var serialNumber=$("#editSerialNumber").val();
 		var siteName=$("#editSiteName").val();
-		var manager=$("#editManager").val();
+		var managerId=$("#editManager").val();
+		var manager=$("#editManager").find("option:selected").text();
 		var telephone=$("#editTel").val();
 		var depth=$("#editDepth").val();
 		var address=$("#editAddress").val();

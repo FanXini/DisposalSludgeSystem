@@ -701,9 +701,9 @@ h5{
 			lid += '<ul class="list-inline" style="font-size:11px;color:#777;">';
 			$.each(nodepartureCarList,function(i, nodepartureCar) {
 				if(nodepartureCar.carType == carType["TREATMENT"]){
-					lid += '<li style="color:#FFD700;">'+nodepartureCar.license+'</li>';
+					lid += '<li style="color:#0000FF;">'+nodepartureCar.license+'</li>';
 				}else{
-					lid += '<li style="color:#4F94CD;">'+nodepartureCar.license+'</li>';
+					lid += '<li style="color:#B22222;">'+nodepartureCar.license+'</li>';
 					}
 			});
 			lid += "</ul></div>"
@@ -758,16 +758,16 @@ h5{
 		lid += '<li style="color:#FF4500;">状态:'+status+'</li>';
 		lid += '</ul>' + '</div>';
 		if(currentTreatmentCarList.length != 0){
-			lid += '<div class="infowindow"><span class="line"></span><span class="txt" style="color:#FFD700;">'+currentTreatmentCarList.length+'辆车处理中</span><span class="line"></span></div><div class="carlist">';
-			lid += '<ul class="list-inline" style="font-size:11px;color:#777;"';
+			lid += '<div class="infowindow"><span class="line"></span><span class="txt" style="color:#0000FF;">'+currentTreatmentCarList.length+'辆车处理中</span><span class="line"></span></div><div class="carlist">';
+			lid += '<ul class="list-inline" style="font-size:11px;color:#0000FF;"';
 			$.each(currentTreatmentCarList,function(i, treatmentCar) {
-				lid += '<li><a href="monitor/queryVideoByDriverId?driverId='+treatmentCar.driverId+'" style="color: #777;">'+treatmentCar.license+'</a></li>';
+				lid += '<li><a href="monitor/queryVideoByDriverId?driverId='+treatmentCar.driverId+'" style="color: #0000FF;">'+treatmentCar.license+'</a></li>';
 			});
 			lid += "</ul></div>"
 		}
 		if(currentCarrierList.length != 0){
-			lid += '<div class="infowindow"><span class="line"></span><span class="txt" style="color:#4F94CD;">'+currentCarrierList.length+'辆车正在装箱</span><span class="line"></span></div><div class="carlist">';
-			lid += '<ul class="list-inline" style="font-size:11px;color:#777;"';
+			lid += '<div class="infowindow"><span class="line"></span><span class="txt" style="color:#B22222;">'+currentCarrierList.length+'辆车正在装箱</span><span class="line"></span></div><div class="carlist">';
+			lid += '<ul class="list-inline" style="font-size:11px;color:#B22222;"';
 			$.each(currentCarrierList,function(i, carrier) {
 				lid += '<li>'+carrier.license+'</li>';
 			});
