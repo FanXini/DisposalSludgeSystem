@@ -9,7 +9,7 @@
 <html>
 <head>
 <base href="<%=basePath%>">
-<title>实时监控</title>
+<title>污泥处理车实时监控</title>
      <meta charset="UTF-8">
 	<meta http-equiv="pragma" content="no-cache">
 	<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1.0" />

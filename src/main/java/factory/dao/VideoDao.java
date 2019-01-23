@@ -19,4 +19,11 @@ public interface VideoDao {
 	public Video queryVideoByCarLicense(@Param("license") String license);
 	public Video queryVideoByDriverId(@Param("driverId") int driverId);
 	public Video queryVideoByCarId(@Param("carId") int carId);
+	
+	public List<Video> queryAllFactoryVideo();
+	public void addFactoryVideo(Video videoInfo);
+	public List<Site> querySiteWhichNotVideo();
+	public Video queryFactoryVideoBySiteId(@Param("siteId") int siteId);
+	public void editFactoryVideo(Video video);
+	public Video queryVideoBySiteName(@Param("license") String license);
 }

@@ -2,12 +2,14 @@ package factory.entity;
 public class Video {
 	private int id;
 	private int carId;
+	private int siteId;
 	private String license;
 	private String serialNumber;
 	private String videoRTMPid;
 	private String videoHLSid;
 	private int delStatus;
 	private Car car;
+	private Site site;
 	public int getId() {
 		return id;
 	}
@@ -19,6 +21,13 @@ public class Video {
 	}
 	public void setCarId(int carId) {
 		this.carId = carId;
+	}
+	
+	public int getSiteId() {
+		return siteId;
+	}
+	public void setSiteId(int siteId) {
+		this.siteId = siteId;
 	}
 	public String getLicense() {
 		return license;
@@ -56,5 +65,10 @@ public class Video {
 	public void setCar(Car car) {
 		this.car = car;
 	}
-	
+	public Site getSite() {
+		return site;
+	}
+	public void setSite(Site site) {
+		this.site = site;
+	}
 }
