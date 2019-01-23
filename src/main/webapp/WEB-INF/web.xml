@@ -1,11 +1,32 @@
-<web-app xmlns="http://xmlns.jcp.org/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee
-                      http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
-	version="3.1" metadata-complete="true" id="WebApp_1527740660340">
+<?xml version="1.0" encoding="UTF-8"?>  
+<web-app xmlns="http://java.sun.com/xml/ns/j2ee"  
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"  
+   xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd"  
+    version="3.1"> 
+
 	<!-- 如果是用mvn命令生成的xml，需要修改servlet版本为3.1 -->
 	<welcome-file-list>
 		<welcome-file>login.jsp</welcome-file>
 	</welcome-file-list>
+	
+	<security-constraint>  
+   		<web-resource-collection>  
+      		<url-pattern>/*</url-pattern>  
+      		<http-method>PUT</http-method>  
+			<http-method>DELETE</http-method>  
+			<http-method>HEAD</http-method>  
+			<http-method>OPTIONS</http-method>  
+			<http-method>TRACE</http-method>  
+   		</web-resource-collection>  
+   		<auth-constraint>  
+   		</auth-constraint>  
+	 </security-constraint>  
+ 	<login-config>  
+  		<auth-method>BASIC</auth-method>  
+ 	</login-config> 
+	
+	
+	
 
 
 	<!-- 配置DispatcherServlet -->
