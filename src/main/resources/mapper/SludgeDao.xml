@@ -87,7 +87,7 @@
 		car ON sludge.transcar_id=car.id LEFT JOIN site ON record.site_id=site.id
 		LEFT JOIN `user` ON car.driver_id=`user`.id LEFT JOIN sludge_function
 		ON sludge.function_id=sludge_function.id
-		WHERE sludge.del_status=0
+		WHERE sludge.del_status=0 AND sludge.status!=6
 		<if test="minorWareHouseId!=0">
 			and sludge.minor_mud_warehouse_id=#{minorWareHouseId}
 		</if>
@@ -116,7 +116,7 @@
 		car ON record.car_id=car.id LEFT JOIN site ON record.site_id=site.id
 		LEFT JOIN `user` ON car.driver_id=`user`.id LEFT JOIN sludge_function
 		ON sludge.function_id=sludge_function.id
-		WHERE sludge.del_status=0 AND
+		WHERE sludge.del_status=0 AND sludge.status!=6 AND
 		site.id=#{siteId}
 		ORDER BY sludge.produce_time DESC
 	</select>
@@ -130,7 +130,7 @@
 		car ON sludge.transcar_id=car.id LEFT JOIN site ON record.site_id=site.id
 		LEFT JOIN `user` ON car.driver_id=`user`.id LEFT JOIN sludge_function
 		ON sludge.function_id=sludge_function.id
-		WHERE sludge.del_status=0 AND
+		WHERE sludge.del_status=0 AND sludge.status!=6 AND
 		site.id=#{siteId}
 		<if test="minorWareHouseId!=0">
 			and sludge.minor_mud_warehouse_id=#{minorWareHouseId}
@@ -159,7 +159,7 @@
 		car ON record.car_id=car.id LEFT JOIN site ON record.site_id=site.id
 		LEFT JOIN `user` ON car.driver_id=`user`.id LEFT JOIN sludge_function
 		ON sludge.function_id=sludge_function.id
-		WHERE sludge.del_status=0 AND
+		WHERE sludge.del_status=0 AND sludge.status!=6 AND
 		user.id=#{driverId}
 		ORDER BY sludge.produce_time DESC
 	</select>
@@ -176,7 +176,7 @@
 		car ON sludge.transcar_id=car.id LEFT JOIN site ON record.site_id=site.id
 		LEFT JOIN `user` ON car.driver_id=`user`.id LEFT JOIN sludge_function
 		ON sludge.function_id=sludge_function.id
-		WHERE sludge.del_status=0 AND
+		WHERE sludge.del_status=0 AND sludge.status!=6 AND
 		user.id=#{driverId}
 		<if test="minorWareHouseId!=0">
 			and sludge.minor_mud_warehouse_id=#{minorWareHouseId}
@@ -205,7 +205,7 @@
 		car ON sludge.transcar_id=car.id LEFT JOIN site ON record.site_id=site.id
 		LEFT JOIN `user` ON car.driver_id=`user`.id LEFT JOIN sludge_function
 		ON sludge.function_id=sludge_function.id
-		WHERE sludge.del_status=0 AND
+		WHERE sludge.del_status=0 AND sludge.status!=6 AND
 		sludge.produce_time BETWEEN #{startDate} AND #{endDate}
 		<if test="minorWareHouseId!=0">
 			and sludge.minor_mud_warehouse_id=#{minorWareHouseId}
@@ -238,7 +238,7 @@
 		car ON record.car_id=car.id LEFT JOIN site ON record.site_id=site.id
 		LEFT JOIN `user` ON car.driver_id=`user`.id LEFT JOIN sludge_function
 		ON sludge.function_id=sludge_function.id
-		WHERE sludge.del_status=0 AND
+		WHERE sludge.del_status=0 AND sludge.status!=6 AND
 		sludge.produce_time BETWEEN #{startDate} AND #{endDate}
 		ORDER BY
 		sludge.produce_time DESC
@@ -266,7 +266,7 @@
 		SELECT
 		id,function
 		FROM sludge_function
-		where del_status=0 AND
+		where del_status=0
 		function=#{function}
 	</select>
 
@@ -311,7 +311,7 @@
 		car ON sludge.transcar_id=car.id LEFT JOIN site ON record.site_id=site.id
 		LEFT JOIN `user` ON car.driver_id=`user`.id LEFT JOIN sludge_function
 		ON sludge.function_id=sludge_function.id
-		WHERE sludge.del_status=0 AND
+		WHERE sludge.del_status=0 AND sludge.status!=6 AND 
 		record.site_id=#{siteId}
 		ORDER BY sludge.produce_time DESC
 	</select>
@@ -324,7 +324,7 @@
 		car ON sludge.transcar_id=car.id LEFT JOIN site ON record.site_id=site.id
 		LEFT JOIN `user` ON car.driver_id=`user`.id LEFT JOIN sludge_function
 		ON sludge.function_id=sludge_function.id
-		WHERE sludge.del_status=0 AND
+		WHERE sludge.del_status=0 AND sludge.status!=6 AND 
 		car.driver_id=#{driverId} AND
 		record.site_id=#{siteId}
 		ORDER BY
@@ -339,7 +339,7 @@
 		car ON sludge.transcar_id=car.id LEFT JOIN site ON record.site_id=site.id
 		LEFT JOIN `user` ON car.driver_id=`user`.id LEFT JOIN sludge_function
 		ON sludge.function_id=sludge_function.id
-		WHERE sludge.del_status=0 AND
+		WHERE sludge.del_status=0 AND sludge.status!=6 AND
 		record.site_id=#{siteId} AND
 		sludge.produce_time BETWEEN #{startDate}
 		AND #{endDate}

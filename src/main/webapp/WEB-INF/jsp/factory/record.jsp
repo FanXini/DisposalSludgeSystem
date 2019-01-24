@@ -294,12 +294,12 @@
 							'<div style="width: '+per+'%;" class="progress-bar"></div>' +
 							'</div>' +
 							'</td>' */
-						table += '<td>' + record.allocationTime + '</td>'
-						table += '<td>'+record.sludgesWeight+'吨</td>'
-						table += '<td>' + record.disposalTime + '</td>'
-						table += '<td><span class="pie">' + record.finishTime + '</span></td>'
-						table += '<td>' + record.car.driver.telephone + '</td>'
-						table += '<td>' + record.car.license + '</td>'
+						table += '<td>' + (record.allocationTime ==null?"": record.allocationTime) + '</td>'
+						table += '<td>'+ (record.sludgesWeight ==null?"": record.sludgesWeight)+'吨</td>'
+						table += '<td>' + (record.disposalTime  ==null?"": record.disposalTime)+ '</td>'
+						table += '<td><span class="pie">' + (record.finishTime  ==null?"": record.finishTime) + '</span></td>'
+						table += '<td>' + (record.car.driver.telephone  ==null?"": record.car.driver.telephone) + '</td>'
+						table += '<td>' + (record.car.license   ==null?"": record.car.license )+ '</td>'
 						table += '</tr>'
 	
 					})

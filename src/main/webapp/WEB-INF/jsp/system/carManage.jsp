@@ -285,13 +285,15 @@ body {
 				+ '<th>操作</th>'
 				+ '</tr>'
 				+ '</thead>' + '<tbody>'
-		var table_end = '</tbody>' + '<tfoot>' + '</tfoot>' + '</table>'
+		var table_end = '</tbody>' + '<tfoot>' + '</tfoot>' + '</table>'		
 		$("#editCarModal").on('shown.bs.modal', function() {
 			$.ajax({
 				type : "POST",
 				url : "user/queryNoCarAssignedDriverList",
 				success : function(driverList) {
 					$("#editDriverId").empty();
+					var option2 = new Option('--oriRealName--', '0')
+					$("#editDriverId")[0].options.add(option2);
 					var option1 = new Option('--暂不分配--', '0')
 					$("#editDriverId")[0].options.add(option1);
 					$.each(driverList, function(i, driver) {
@@ -321,13 +323,13 @@ body {
 															carList,
 															function(i, car) {
 																table += '<tr class="gradeX" id="' + car.id + '">'
-																table += '<td>'
+																table += '<td id="' + car.license + '">'
 																		+ car.license
 																		+ '</td>'
 																if (car.brand == null) {
 																	car.brand = ''
 																}
-																table += '<td>'
+																table += '<td id="' + car.brand + '">'
 																		+ car.brand
 																		+ '</td>'
 																if (car.carType == 0) {
@@ -338,11 +340,11 @@ body {
 																	table += '<td></td>'
 																}
 																if (car.driver.realname != null) {
-																	table += '<td>'
+																	table += '<td id="' + car.driver.realname + '">'
 																			+ car.driver.realname
 																			+ '</td>'
 																	if (car.driver.telephone != null) {
-																		table += '<td>'
+																		table += '<td id="' + car.driver.telephone + '">'
 																				+ car.driver.telephone
 																				+ '</td>'
 																	} else {
