@@ -71,6 +71,7 @@
 			where id not in(
 			select car_id
 			from video
+			where del_status=0
 			) and car_type=0;
 	</select>
  	<select id="queryVideoWhichNotCar" resultType="factory.entity.Video">
@@ -126,6 +127,7 @@
 			where id not in(
 			select site_id
 			from video
+			where del_status=0
 			) 
 	</select>
 	
