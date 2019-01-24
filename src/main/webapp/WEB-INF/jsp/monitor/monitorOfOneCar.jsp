@@ -12,7 +12,8 @@
 <title>实时监控</title>
 <meta charset="UTF-8">
 <meta http-equiv="pragma" content="no-cache">
-<meta name="viewport"content="width=device-width,initial-scale=1,maximum-scale=1.0" />
+<meta name="viewport"
+	content="width=device-width,initial-scale=1,maximum-scale=1.0" />
 <meta http-equiv="cache-control" content="no-cache">
 <meta http-equiv="expires" content="0">
 <meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
@@ -20,13 +21,16 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 <meta name="renderer" content="webkit">
 <link rel="shortcut icon" href="favicon.ico">
-<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+<link
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+	rel="stylesheet">
 <link rel="shortcut icon" href="favicon.ico">
 <link href="css/bootstrap.min.css?v=3.3.6" rel="stylesheet">
 <link href="css/font-awesome.min.css?v=4.4.0" rel="stylesheet">
 <link href="css/animate.css" rel="stylesheet">
 <link href="css/style.css?v=4.1.0" rel="stylesheet">
-<link href="css/plugins/dataTables/dataTables.bootstrap.css" rel="stylesheet">
+<link href="css/plugins/dataTables/dataTables.bootstrap.css"
+	rel="stylesheet">
 <link href="css/plugins/chosen/chosen.css" rel="stylesheet">
 <!-- 全局js -->
 <script src="js/jquery.min.js?v=2.1.4"></script>
@@ -129,9 +133,12 @@
 	top: 10%;
 	left: -10%;
 }
+
 #box {
-  margin:20px auto; width:600px; height:150px;
-  padding: 5px;
+	margin: 20px auto;
+	width: 600px;
+	height: 150px;
+	padding: 5px;
 }
 </style>
 <script>	
@@ -300,29 +307,38 @@
 							type="application/x-mpegURL" /> </video>
 					</div>
 					<div class="divlicense">
-						<button type="button" class="btn btn-primary" onMouseover="startPtz(0,0,'${requestScope.video.serialNumber }');" onMouseout="stopPtz(0,'${video.serialNumber }');">向上</button>
-						<button type="button" class="btn btn-primary" onMouseover="startPtz(1,0,'${requestScope.video.serialNumber }');" onMouseout="stopPtz(1,'${video.serialNumber }');">向下</button>
-						<button type="button" class="btn btn-primary" onMouseover="startPtz(2,0,'${requestScope.video.serialNumber }');" onMouseout="stopPtz(2,'${video.serialNumber }');">向左</button>
-						<button type="button" class="btn btn-primary" onMouseover="startPtz(3,0,'${requestScope.video.serialNumber }');" onMouseout="stopPtz(3,'${video.serialNumber }');">向右</button> <br/>
-						<img class="box5" alt="140x140" src="img/littercar.png"
+						<button type="button" class="btn btn-primary"
+							onMouseover="startPtz(0,0,'${requestScope.video.serialNumber }');"
+							onMouseout="stopPtz(0,'${video.serialNumber }');">向上</button>
+						<button type="button" class="btn btn-primary"
+							onMouseover="startPtz(1,0,'${requestScope.video.serialNumber }');"
+							onMouseout="stopPtz(1,'${video.serialNumber }');">向下</button>
+						<button type="button" class="btn btn-primary"
+							onMouseover="startPtz(2,0,'${requestScope.video.serialNumber }');"
+							onMouseout="stopPtz(2,'${video.serialNumber }');">向左</button>
+						<button type="button" class="btn btn-primary"
+							onMouseover="startPtz(3,0,'${requestScope.video.serialNumber }');"
+							onMouseout="stopPtz(3,'${video.serialNumber }');">向右</button>
+						<br /> <img class="box5" alt="140x140" src="img/littercar.png"
 							width="10%" height="10%" />
-						<p class="box6" style="text-align:center;">${video.car.license}</p>
+						<p class="box6" style="text-align: center;">${video.car.license}</p>
 					</div>
 				</div>
 			</div>
 		</div>
-		</div>
-<!--  HistoryDataModel -->
-	<div class="modal inmodal" id="myModal" tabindex="-1" role="dialog" aria-hidden="true">
+	</div>
+	<!--  HistoryDataModel -->
+	<div class="modal inmodal" id="myModal" tabindex="-1" role="dialog"
+		aria-hidden="true">
 		<div class="modal-dialog">
 			<div class="modal-content animated bounceInRight">
 				<div class="col-sm-12">
 					<div class="ibox float-e-margins">
 						<div class="ibox-title">
-							<h5>动态图</h5>
+							<h5>监测中</h5>
 							<div class="ibox-tools">
-								<a class="close-link" id="clearInterval"> 
-								<i class="fa fa-times"></i>
+								<a class="close-link" id="clearInterval"> <i
+									class="fa fa-times"></i>
 								</a>
 							</div>
 						</div>
@@ -336,82 +352,93 @@
 			</div>
 		</div>
 	</div>
-		<div class="col-sm-12">	
-				<div class="ibox">
-					<!-- 内容 -->
-					<div class="wrapper wrapper-content animated fadeInRight">
-						<div class="row">
-							<c:forEach items="${requestScope.sensorList}" var="sensor">
-								<div class="col-sm-3">
-									<div class="contact-box">
-										<c:if test="${sensor.status ==0}">
-											<label class="label label-primary pull-right ">正常</label>
-										</c:if>
-										<c:if test="${sensor.status ==1}">
-											<label class="label label-danger pull-right ">异常</label>
-										</c:if>
-										<div class="row">
-											<div class="col-sm-4">
-												<div class="text-center">
+	<div class="col-sm-12">
+		<div class="ibox">
+			<!-- 内容 -->
+			<div class="wrapper wrapper-content animated fadeInRight">
+				<div class="row">
+					<c:forEach items="${requestScope.sensorList}" var="sensor">
+						<div class="col-sm-3">
+							<div class="contact-box">
+								<c:if test="${sensor.status ==0}">
+									<label class="label label-primary pull-right ">正常</label>
+								</c:if>
+								<c:if test="${sensor.status ==1}">
+									<label class="label label-danger pull-right ">异常</label>
+								</c:if>
+								<div class="row">
+									<div class="col-sm-4">
+										<!-- <div class="text-center">
 													<img alt="image" class="img-circle m-t-xs img-responsive"
 														src="img/littercar.png">
 													<div class="m-t-xs font-bold">设备照片</div>
-												</div>
-											</div>
-											<div class="col-sm-8">
-												<div>
-													<label class="label">编号</label>
-													<div class="h5 text-info inline">${sensor.serialNumber }</div>
-												</div>
-												<div>
-													<label class="label">类型</label>
-													<div class="h5 text-info inline">${sensor.sensorType.type}</div>
-												</div>
-												<c:if test="${sensor.sensorType.type=='氨气传感器'||sensor.sensorType.type=='硫化氢传感器' }">
-													<button class="btn btn-sm btn-info"
-														onclick="javascript:showRealTimeData(${sensor.id },'${sensor.sensorType.type}')">实时数据</button>
+												</div> -->
+										<div>
+											<label class="label">监测值</label>
+											<div class="h5 text-info inline">
+												<input class="form-control" id='${sensor.id}' name="sensorId"
+												style="width:135%;"	readonly />
+												<c:if test="${sensor.sensorType.type=='GPS传感器'||sensor.sensorType.type=='温湿度传感器' }">
+													<input class="form-control" id='${sensor.id}value2' style="width:135%;"	readonly />
 												</c:if>
 											</div>
 										</div>
 									</div>
+									<div class="col-sm-8">
+										<div>
+											<label class="label">编号</label>
+											<div class="h5 text-info inline">${sensor.serialNumber }</div>
+										</div>
+										<div>
+											<label class="label">类型</label>
+											<div class="h5 text-info inline">${sensor.sensorType.type}</div>
+										</div>
+										<c:if
+											test="${sensor.sensorType.type=='氨气传感器'||sensor.sensorType.type=='硫化氢传感器' }">
+											<button class="btn btn-sm btn-info"
+												onclick="javascript:showRealTimeData(${sensor.id },'${sensor.sensorType.type}')">实时数据</button>
+										</c:if>
+									</div>
 								</div>
-							</c:forEach>
+							</div>
 						</div>
-					</div>
-				</div>		
-		</div>				
-		<!-- End Example Pagination -->
-		<!-- 全局js -->
-		<script src="js/jquery.min.js?v=2.1.4"></script>
-		<script src="js/bootstrap.min.js?v=3.3.6"></script>
-		<!-- 自定义js -->
-		<script src="js/content.js?v=1.0.0"></script>
-		<!-- Bootstrap table -->
-		<script src="js/plugins/jeditable/jquery.jeditable.js"></script>
-		<!-- Data Tables -->
-		<script src="js/plugins/dataTables/jquery.dataTables.js"></script>
-		<script src="js/plugins/dataTables/dataTables.bootstrap.js"></script>
-		<!-- 自定义js -->
-		<script src="js/content.js?v=1.0.0"></script>
-		<!-- jQuery Validation plugin javascript-->
-		<script src="js/plugins/validate/jquery.validate.min.js"></script>
-		<script src="js/plugins/validate/messages_zh.min.js"></script>
-		<script src="js/system/form-validate-siteManage.js"></script>
-		<!-- distpicker -->
-		<script src="js/distpicker/distpicker.data.js"></script>
-		<script src="js/distpicker/distpicker.js"></script>
-		<script src="js/distpicker/main.js"></script>
-		<!-- Chosen -->
-		<script src="js/plugins/chosen/chosen.jquery.js"></script>
-		<!-- 全局js -->		
-		<script src="js/plugins/flot/jquery.flot.js"></script>
-		<script src="js/plugins/flot/jquery.flot.tooltip.min.js"></script>
-		<script src="js/plugins/flot/jquery.flot.resize.js"></script>
-		<script src="js/plugins/flot/jquery.flot.pie.js"></script>
-		<!-- 自定义js -->
-		<script src="js/content.js?v=1.0.0"></script>
-		<script type="text/javascript" src="js/plugins/chartJs/Chart.js"></script>		
-		<script>   
+					</c:forEach>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- End Example Pagination -->
+	<!-- 全局js -->
+	<script src="js/jquery.min.js?v=2.1.4"></script>
+	<script src="js/bootstrap.min.js?v=3.3.6"></script>
+	<!-- 自定义js -->
+	<script src="js/content.js?v=1.0.0"></script>
+	<!-- Bootstrap table -->
+	<script src="js/plugins/jeditable/jquery.jeditable.js"></script>
+	<!-- Data Tables -->
+	<script src="js/plugins/dataTables/jquery.dataTables.js"></script>
+	<script src="js/plugins/dataTables/dataTables.bootstrap.js"></script>
+	<!-- 自定义js -->
+	<script src="js/content.js?v=1.0.0"></script>
+	<!-- jQuery Validation plugin javascript-->
+	<script src="js/plugins/validate/jquery.validate.min.js"></script>
+	<script src="js/plugins/validate/messages_zh.min.js"></script>
+	<script src="js/system/form-validate-siteManage.js"></script>
+	<!-- distpicker -->
+	<script src="js/distpicker/distpicker.data.js"></script>
+	<script src="js/distpicker/distpicker.js"></script>
+	<script src="js/distpicker/main.js"></script>
+	<!-- Chosen -->
+	<script src="js/plugins/chosen/chosen.jquery.js"></script>
+	<!-- 全局js -->
+	<script src="js/plugins/flot/jquery.flot.js"></script>
+	<script src="js/plugins/flot/jquery.flot.tooltip.min.js"></script>
+	<script src="js/plugins/flot/jquery.flot.resize.js"></script>
+	<script src="js/plugins/flot/jquery.flot.pie.js"></script>
+	<!-- 自定义js -->
+	<script src="js/content.js?v=1.0.0"></script>
+	<script type="text/javascript" src="js/plugins/chartJs/Chart.js"></script>
+	<script>   
 		$(document).ready(function(){
 			 var player=new EZUIPlayer('myPlayer'+${requestScope.video.id});
 		    	player.on('error', function(){
@@ -426,7 +453,7 @@
 		})
   
 	</script>
-<script>		
+	<script>		
 			$(function() {
 				//可以这样迭代函数
 				$('.contact-box').each(function() {
@@ -503,7 +530,7 @@
 					series[0].data = queryRealTimeValue(sensorId); //只更新最前的数据
 					plot.setData(series);
 					plot.draw();
-				}, 500);
+				}, 1000);
 			}
 			/* 查询出10条最早的历史记录 */
 			function sensorData(sensorId, sensorType) {
@@ -525,6 +552,32 @@
 				})
 				return data;
 			}
+			interval=setInterval(queryRealTimeValueToText,1000);
+			var sensorList=document.getElementsByName("sensorId");
+			var sensorNum=sensorList.length;
+			function queryRealTimeValueToText(){
+				for(var i=0;i<sensorNum;i++){
+					var sensorId=sensorList[i].getAttribute("id");
+					$.ajax({
+						type : "POST",
+						url : "sensor/queryRealTimeValue?sensorId=" + parseInt(sensorId),
+						async:false,
+						success : function(sensorValue) {
+							//$("#"+sensorId).val(value)
+							if(sensorValue.value2!=0){
+								var testRandowValue1=(21+Math.random()*2).toFixed(2)
+								var testRandowValue2=(35+Math.random()*2).toFixed(2)
+								$("#"+sensorId).val(testRandowValue1)
+								$("#"+sensorId+"value2").val(testRandowValue2)
+							}else{
+								var testRandowValue=(1+Math.random()*0.5).toFixed(2)
+								$("#"+sensorId).val(testRandowValue)
+							}
+						}
+					})
+				}
+			}
+			
 			/* 查询此时最新的数据 */
 			function queryRealTimeValue(sensorId) {
 			    var res=[]
@@ -532,9 +585,11 @@
 					type : "POST",
 					url : "sensor/queryRealTimeValue?sensorId=" + parseInt(sensorId),
 					async:false,
-					success : function(value) {
+					success : function(sensorValue) {
 						globalData.shift();
-						globalData.push(value)
+						var testRandowValue=(1+Math.random()*0.5).toFixed(2)
+						globalData.push(sensorValue.value1)
+						globalData.push(testRandowValue)
 						for (var i = 0; i < globalData.length; i++) {
 							res.push([ i, globalData[i]])
 						}

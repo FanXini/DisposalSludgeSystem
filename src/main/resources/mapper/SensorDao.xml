@@ -313,9 +313,9 @@
 		LIMIT 0,10
 	</select>
 
-	<select id="queryRealTimeValueBySensorId" resultType="java.lang.Float">
+	<select id="queryRealTimeValueBySensorId" resultType="factory.entity.SensorValue">
 		SELECT
-		value1
+		value1,value2
 		FROM sensor_value_realtime
 		WHERE sensor_id=#{sensorId}
 	</select>

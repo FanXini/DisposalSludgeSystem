@@ -17,6 +17,7 @@ import factory.entity.Car;
 
 import factory.entity.Sensor;
 import factory.entity.SensorType;
+import factory.entity.SensorValue;
 import factory.entity.Site;
 import factory.exception.DataNoneException;
 import factory.service.SensorService;
@@ -257,7 +258,7 @@ public class SensorServiceImpl implements SensorService {
 	}
 
 	@Override
-	public Float queryRealTimeValueBySensorId(int sensorId) {
+	public SensorValue queryRealTimeValueBySensorId(int sensorId) {
 		// TODO Auto-generated method stub
 		return sensorDao.queryRealTimeValueBySensorId(sensorId);
 	}

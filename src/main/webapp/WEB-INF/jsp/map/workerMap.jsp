@@ -167,7 +167,7 @@ h5 {
 	<div id="selectMenu" class="selectMenu">
 		<input id="nowStatus" value="0" type="hidden" />
 		<button id="updateCarStatusButton" type="button"
-			class="btn btn-info btn-circle btn-xl" onclick="updateCarStatus()">暂无任务</button>
+			class="btn btn-info btn-circle btn-xl" onclick="updateCarStatus()" disabled>暂未分配车辆</button>
 	</div>
 	<div class="bottom_button">
 		<ul class="nav navbar-top-links navbar-right">
@@ -377,7 +377,7 @@ h5 {
 			success : function(carList) {
 				if (jQuery.isEmptyObject(carList)) {
 					map.clearOverlays(); //清除地图上所有覆盖物
-					alert("暂未分配车辆");
+					//alert("暂未分配车辆");
 				} else {
 					showMap(carList[0]);
 				}
