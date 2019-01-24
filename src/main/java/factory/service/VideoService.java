@@ -23,5 +23,5 @@ public interface VideoService {
 	public List<Site> querySiteWhichNotVideo();
 	public Video queryFactoryVideoBySiteId(int siteId);
 	public void editFactoryVideo(Video video);
-	public Video queryVideoBySiteName(String siteName);
+	public Video queryFactoryVideoBySiteName(String license);
 }
