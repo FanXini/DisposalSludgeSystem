@@ -208,7 +208,7 @@ public class VideoController {
 	@ResponseBody
 	public Result editFactoryVideo(@RequestBody Video video) {
 		log.info("调用修改监控信息的方法");
-		log.info(video.getId() + " " + video.getLicense() + " " + video.getSerialNumber());
+		log.info(video.getId() + " " + video.getSiteId() + " " + video.getSerialNumber());
 		try {
 			videoService.editFactoryVideo(video);
 			return Result.SUCCESS;
@@ -222,11 +222,11 @@ public class VideoController {
 			return Result.ERROR;
 		}
 	}
-	@RequestMapping("queryVideoBySiteName")
+	@RequestMapping("queryFactoryVideoBySiteName")
 	@ResponseBody
-	public Video queryVideoBySiteName(@RequestParam("license") String license, Model model) {
-		log.info("调用queryVideoBySiteName");
-		Video video = videoService.queryVideoBySiteName(license);
+	public Video queryFactoryVideoBySiteName(@RequestParam("license") String license, Model model) {
+		log.info("调用queryFactoryVideoBySiteName");
+		Video video = videoService.queryFactoryVideoBySiteName(license);
 		return video;
 	}
 	

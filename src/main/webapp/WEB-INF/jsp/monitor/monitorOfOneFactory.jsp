@@ -133,6 +133,10 @@
   margin:20px auto; width:600px; height:150px;
   padding: 5px;
 }
+#box {
+  margin:20px auto; width:600px; height:150px;
+  padding: 5px;
+}
 </style>
 <script>	
 		/**
@@ -206,7 +210,7 @@
 		    });
 		}		
 		// accessToken会自动失效，需要通过后端请求刷新。详见 https://open.ys7.com/doc/zh/book/index/user.html
-		const ACCESS_TOKEN = "at.dr31pta092dj6h7l54uyc27dbh55n0r7-6ber269c57-01a6v3f-we6zziltc";		
+		const ACCESS_TOKEN = "at.7a9efc6w4apudpcxcz0dfwo9b1cwqkyb-1vwccihfsn-1ema48b-ejz5ohwfa";		
 		/* const DEVICE_SERIAL = "C29134495"; */
 		const CHANNEL_NO = 1;
 		const START_PTZ_URL = "https://open.ys7.com/api/lapp/device/ptz/start";
@@ -304,9 +308,9 @@
 						<button type="button" class="btn btn-primary" onMouseover="startPtz(1,0,'${requestScope.video.serialNumber }');" onMouseout="stopPtz(1,'${video.serialNumber }');">向下</button>
 						<button type="button" class="btn btn-primary" onMouseover="startPtz(2,0,'${requestScope.video.serialNumber }');" onMouseout="stopPtz(2,'${video.serialNumber }');">向左</button>
 						<button type="button" class="btn btn-primary" onMouseover="startPtz(3,0,'${requestScope.video.serialNumber }');" onMouseout="stopPtz(3,'${video.serialNumber }');">向右</button> <br/>
-						<img class="box5" alt="140x140" src="img/littercar.png"
-							width="10%" height="10%" />
-						<p class="box6" style="text-align: center;">${requestScope.video.license}</p>
+						<!-- <img class="box5" alt="140x140" src="img/littercar.png"
+							width="10%" height="10%" /> -->
+						<p class="box6" style="text-align:center;">${video.site.siteName}</p>
 					</div>
 				</div>
 			</div>

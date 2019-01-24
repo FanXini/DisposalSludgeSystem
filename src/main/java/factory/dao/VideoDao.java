@@ -25,5 +25,5 @@ public interface VideoDao {
 	public List<Site> querySiteWhichNotVideo();
 	public Video queryFactoryVideoBySiteId(@Param("siteId") int siteId);
 	public void editFactoryVideo(Video video);
-	public Video queryVideoBySiteName(@Param("license") String license);
+	public Video queryFactoryVideoBySiteName(@Param("license") String license);
 }

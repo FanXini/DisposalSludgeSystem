@@ -118,8 +118,8 @@ public class VideoServiceImpl implements VideoService {
 		videodao.editFactoryVideo(video);	
 	}
 	@Override
-	public Video queryVideoBySiteName(String license) {
-		return videodao.queryVideoBySiteName(license);
+	public Video queryFactoryVideoBySiteName(String license) {
+		return videodao.queryFactoryVideoBySiteName(license);
 	}
 	
 }

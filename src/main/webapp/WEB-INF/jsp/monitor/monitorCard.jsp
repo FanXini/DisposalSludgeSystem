@@ -202,7 +202,7 @@
 		}
 		
 		// accessToken会自动失效，需要通过后端请求刷新。详见 https://open.ys7.com/doc/zh/book/index/user.html
-		const ACCESS_TOKEN = "at.dr31pta092dj6h7l54uyc27dbh55n0r7-6ber269c57-01a6v3f-we6zziltc";
+		const ACCESS_TOKEN = "at.7a9efc6w4apudpcxcz0dfwo9b1cwqkyb-1vwccihfsn-1ema48b-ejz5ohwfa";
 		
 		/* const DEVICE_SERIAL = "C29134495"; */
 		const CHANNEL_NO = 1;
@@ -371,7 +371,7 @@
 										<c:forEach items="${requestScope.videoList }" var="video">
 											<option value=${video.car.license}>${video.car.license}</option>
 										</c:forEach>
-									</select> 					
+								</select> 					
 					</div>			
 					<div class="form-group">
 								<label for="editSerialNumber">序&nbsp;&nbsp;列&nbsp;&nbsp;号</label>
@@ -384,15 +384,18 @@
 										</c:forEach>
 									</select>	 --%>
 					</div>
-							
+					
 					<div class="form-group">
-								<label for="editSerialNumber">工&nbsp;&nbsp;作&nbsp;&nbsp;状&nbsp;&nbsp;态</label> 																	
-									<select class="form-control m-b" name="account" id="editStatus">
-									<option value="-1">请选择监控的工作状态</option>
-									<option value="0">在线</option>
-									<option value="1">离线</option>
-								</select>
-					</div>	
+						<label for="editvideo_RTMPid">RTMP&nbsp;&nbsp;地&nbsp;&nbsp;址</label> <input
+							type="text" placeholder="请输入视频RTMP播放地址" id="editvideoRTMPid"
+							class="form-control m-b control-label">
+					</div>
+					<div class="form-group">
+						<label for="editvideo_HLSid">HLS&nbsp;&nbsp;地&nbsp;&nbsp;址</label> 
+						<input type="text" placeholder="请输入视频RTMP播放地址" id="editvideoHLSid"
+							class="form-control m-b control-label">
+					</div>
+							
 					<div class="form-group" id="editModalContent">
 								
 					</div>								
@@ -480,7 +483,7 @@
 						<button type="button" class="btn btn-primary"onMouseover="startPtz(3,0,'${video.serialNumber }');" onMouseout="stopPtz(3,'${video.serialNumber }');">向右</button> <br/>
 						<img class="box5" alt="140x140" src="img/littercar.png" width="10%" height="10%" />
 						<p class="box6" style="text-align:center;">${video.car.license}</p>
-						<button onclick="editVideo(${video.id},'${video.car.license }','${video.serialNumber }','${video.delStatus}')"
+						<button onclick="editVideo(${video.id},'${video.car.license }','${video.serialNumber }')"
 									class="btn btn-white btn-sm" data-toggle="modal"
 									data-target="#editVideoModal">
 									<span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>编辑
@@ -567,7 +570,7 @@
 						data : JSON.stringify({
 						/* carId:carId, */
 						carId:carId,
-						license:license,
+						/* license:license, */
 						serialNumber:serialNumber,
 						videoRTMPid:videoRTMPid,
 						videoHLSid:videoHLSid,
@@ -578,7 +581,8 @@
 						contentType : "application/json",
 						success : function(data){
 								alert("新增成功")
-								//刷新当前			
+								//刷新当前	
+								window.location.reload();		
 						},
 						error:function(data){
 							alert("新增失败")
@@ -607,6 +611,7 @@
 					alert("删除成功")
 					$('#deleteModal').modal('hide');
 					$("#" + videoId.toString()).remove()
+					window.location.reload();
 				}
 			});
 		});
@@ -623,7 +628,8 @@
 			var videoId = parseInt($("#editId").val());
 			var SerialNumber = $("#editSerialNumber").val()
 			var license = $("#editCarLicense").val()
-			var delStatus = $("#editdelStatus").val()
+			var videoRTMPid = $("#editvideoRTMPid").val();
+			var videoHLSid = $("#editvideoHLSid").val();
 			alert(videoId)
 			alert(SerialNumber)
 			alert(license)
@@ -634,8 +640,9 @@
 				data:JSON.stringify({
 					id:videoId,
 					serialNumber:SerialNumber,
-					license:license,
-					delStatus:delStatus
+					/* license:license, */
+					videoRTMPid:videoRTMPid,
+					videoHLSid:videoHLSid,
 				}),
 				cache:false,
 				dataType : "json",
@@ -643,6 +650,7 @@
 				success : function(data) {
 					alert("修改成功")
 					$('#editVideoModal').modal('hide');
+					window.location.reload();
 				},
 				error:function(data){
 					alert("修改失败")

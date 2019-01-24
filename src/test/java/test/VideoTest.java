@@ -100,10 +100,18 @@ public class VideoTest extends BaseTest {
 			System.out.println(video.getSerialNumber()+" "+video.getSiteId()+" "+video.getLicense());
 		}*/
 		
-		@Test
+	/*	@Test
 		public void queryFactoryVideoBySiteId(){
 			Video video=videoDao.queryFactoryVideoBySiteId(1);
 			System.out.println(video.getSerialNumber()+" "+video.getSiteId()+" "+video.getLicense());
-		}
+		}*/
+	@Test
+	public void editVideo(){
+		Video video=new Video();
+		video.setId(23);
+		video.setSerialNumber("C0012");
+		video.setLicense("Ïæ462342");
+		videoDao.editVideo(video);		
+	}
 		
 }

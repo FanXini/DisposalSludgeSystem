@@ -125,6 +125,10 @@
             top:10%;
             left:-10%;           	
             }
+#box {
+  margin:20px auto; width:600px; height:150px;
+  padding: 5px;
+}
 </style> 
 <script>
 		
@@ -202,7 +206,7 @@
 		}
 		
 		// accessToken会自动失效，需要通过后端请求刷新。详见 https://open.ys7.com/doc/zh/book/index/user.html
-		const ACCESS_TOKEN = "at.dr31pta092dj6h7l54uyc27dbh55n0r7-6ber269c57-01a6v3f-we6zziltc";
+		const ACCESS_TOKEN = "at.7a9efc6w4apudpcxcz0dfwo9b1cwqkyb-1vwccihfsn-1ema48b-ejz5ohwfa";
 		
 		/* const DEVICE_SERIAL = "C29134495"; */
 		const CHANNEL_NO = 1;
@@ -242,6 +246,7 @@
 		 */
 		function startPtz(direction, speed, deviceSerial, accessToken = ACCESS_TOKEN, channelNo = CHANNEL_NO) {
 		    // 要启动，需要先停止
+		   /*  alert(deviceSerial) */
 		    
 		    return stopPtz(direction, deviceSerial)
 		        .then(_ => {
@@ -384,15 +389,17 @@
 										</c:forEach>
 									</select>	 --%>
 					</div>
-							
 					<div class="form-group">
-								<label for="editSerialNumber">工&nbsp;&nbsp;作&nbsp;&nbsp;状&nbsp;&nbsp;态</label> 																	
-									<select class="form-control m-b" name="account" id="editStatus">
-									<option value="-1">请选择监控的工作状态</option>
-									<option value="0">在线</option>
-									<option value="1">离线</option>
-								</select>
-					</div>	
+						<label for="editvideo_RTMPid">RTMP&nbsp;&nbsp;地&nbsp;&nbsp;址</label> <input
+							type="text" placeholder="请输入视频RTMP播放地址" id="editvideoRTMPid"
+								class="form-control m-b control-label">
+					</div>
+					<div class="form-group">
+						<label for="editvideo_HLSid">HLS&nbsp;&nbsp;地&nbsp;&nbsp;址</label> <input
+							type="text" placeholder="请输入视频RTMP播放地址" id="editvideoHLSid"
+							class="form-control m-b control-label">
+					</div>
+							
 					<div class="form-group" id="editModalContent">
 								
 					</div>								
@@ -444,7 +451,7 @@
 						<div>
 							<!-- <input id="queryVideoByCarLicense" type="text" class="form-control"
 								placeholder="请输入车牌号/监控编号,不输入则查询所有车辆"> -->
-								<select class="form-control m-b" name="account" id="queryVideoBySiteName">										
+								<select class="form-control m-b" name="account" id="queryFactoryVideoBySiteName">										
 										<option value="0">--请选择监控所在工厂--</option>
 										<c:forEach items="${requestScope.videoList }" var="video">
 											<option value=${video.site.siteName}>${video.site.siteName}</option>
@@ -478,8 +485,7 @@
 						<button type="button" class="btn btn-primary" onMouseover="startPtz(1,0,'${video.serialNumber }');" onMouseout="stopPtz(1,'${video.serialNumber }');">向下</button>
 						<button type="button" class="btn btn-primary" onMouseover="startPtz(2,0,'${video.serialNumber }');" onMouseout="stopPtz(2,'${video.serialNumber }');">向左</button>
 						<button type="button" class="btn btn-primary"onMouseover="startPtz(3,0,'${video.serialNumber }');" onMouseout="stopPtz(3,'${video.serialNumber }');">向右</button> <br/>
-						<img class="box5" alt="140x140" src="img/littercar.png" width="10%" height="10%" />
-						<p class="box6" style="text-align:center;">${video.car.license}</p>
+						<!-- <img class="box5" alt="140x140" src="img/littercar.png" width="10%" height="10%" /> -->
 						<button onclick="editFactoryVideo(${video.id},'${video.site.siteName }','${video.serialNumber }','${video.delStatus}')"
 									class="btn btn-white btn-sm" data-toggle="modal"
 									data-target="#editVideoModal">
@@ -490,6 +496,9 @@
 								data-target="#deleteModal">
 								<span class="glyphicon glyphicon-trash" aria-hidden="true"></span>删除
 						</button>
+						<br/>
+						<p class="box6" style="text-align:center;">${video.site.siteName}</p>
+						
 					</div>
 				</div>
 			</div>
@@ -567,7 +576,7 @@
 						data : JSON.stringify({
 						/* carId:carId, */
 						siteId:siteId,
-						license:license,
+						/* license:license, */
 						serialNumber:serialNumber,
 						videoRTMPid:videoRTMPid,
 						videoHLSid:videoHLSid,
@@ -578,7 +587,8 @@
 						contentType : "application/json",
 						success : function(data){
 								alert("新增成功")
-								//刷新当前			
+								//刷新当前
+								window.location.reload();			
 						},
 						error:function(data){
 							alert("新增失败")
@@ -607,6 +617,7 @@
 					alert("删除成功")
 					$('#deleteModal').modal('hide');
 					$("#" + videoId.toString()).remove()
+					/* window.location.reload(); */
 				}
 			});
 		});
@@ -622,8 +633,9 @@
 			$("#editSubmit").click(function() {
 			var videoId = parseInt($("#editId").val());
 			var SerialNumber = $("#editSerialNumber").val()
-			var license = $("#editSiteName").val()
-			var delStatus = $("#editdelStatus").val()
+			var license = $("#editSiteName").val()		
+			var videoRTMPid = $("#editvideoRTMPid").val();
+			var videoHLSid = $("#editvideoHLSid").val();
 			alert(videoId)
 			alert(SerialNumber)
 			alert(license)
@@ -634,8 +646,10 @@
 				data:JSON.stringify({
 					id:videoId,
 					serialNumber:SerialNumber,
-					license:license,
-					delStatus:delStatus
+					/* license:license, */
+					videoRTMPid:videoRTMPid,
+					videoHLSid:videoHLSid,
+					
 				}),
 				cache:false,
 				dataType : "json",
@@ -643,6 +657,7 @@
 				success : function(data) {
 					alert("修改成功")
 					$('#editVideoModal').modal('hide');
+					/* window.location.reload(); */
 				},
 				error:function(data){
 					alert("修改失败")
@@ -652,11 +667,11 @@
 		
 		/***************************** 按照工厂名称查询监控************************************* */
 		$("#queryButton").click(function() {
-			var siteName = $("#queryVideoBySiteName").val();
+			var siteName = $("#queryFactoryVideoBySiteName").val();
 			$.ajax({
 				type : "POST",
-				url : "monitor/queryVideoBySiteName",
-				data: "license=" + siteName,
+				url : "monitor/queryFactoryVideoBySiteName",
+				data: "license=" + siteName,				
 				jsonpcallback: function(){
 				},
 				success : function(data) {
