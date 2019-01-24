@@ -54,7 +54,7 @@ public interface SensorDao {
 	
 	public List<Float> queryHistoryDataOfSingleValueBySensorId(@Param("sensorId") int sensorId,@Param("headInfo") char headInfo);
 	
-	public Float queryRealTimeValueBySensorId(@Param("sensorId") int sensorId);
+	public SensorValue queryRealTimeValueBySensorId(@Param("sensorId") int sensorId);
 	
 	//´æ°±ÆøÊý¾Ý
 	public void addAmmniaGasRecord(SingleValueSensorRecord record);

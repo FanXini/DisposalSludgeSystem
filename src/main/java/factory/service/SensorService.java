@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.Param;
 
 import factory.entity.Sensor;
 import factory.entity.SensorType;
+import factory.entity.SensorValue;
 
 public interface SensorService {
 
@@ -32,7 +33,7 @@ public interface SensorService {
 	
 	public List<Float> queryHistoryDataOfSingleValueBySensorId(Map<String, Object> map);
 	
-	public Float queryRealTimeValueBySensorId(int sensorId);
+	public SensorValue queryRealTimeValueBySensorId(int sensorId);
 	
 	public List<Sensor> querySensorsByDriverId(int driverId);
 	

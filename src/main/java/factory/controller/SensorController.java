@@ -19,6 +19,7 @@ import org.springframework.web.servlet.ModelAndView;
 import factory.entity.Car;
 import factory.entity.Sensor;
 import factory.entity.SensorType;
+import factory.entity.SensorValue;
 import factory.entity.Site;
 import factory.enums.Result;
 import factory.exception.DataNoneException;
@@ -148,7 +149,7 @@ public class SensorController {
 	
 	@RequestMapping("queryRealTimeValue")
 	@ResponseBody
-	public Float queryRealTimeValue(@RequestParam("sensorId") int sensorId){
+	public SensorValue queryRealTimeValue(@RequestParam("sensorId") int sensorId){
 		log.info("queryRealTimeValue");
 		return sensorService.queryRealTimeValueBySensorId(sensorId);
 	}
