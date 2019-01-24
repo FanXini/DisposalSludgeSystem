@@ -361,8 +361,8 @@ body {
 																		+ car.license
 																		+ '&locationId=0'
 																		+ '">设备</a></td>' */
-																table += '<td><a href="monitor/queryVideoByDriverId?driverId='
-														 			+ ${sessionScope.user.id }
+																table += '<td><a href="monitor/queryVideoAndSensorByCarId?carId='
+														 			+car.id
 																	+ '">设备</a></td>'
 																		
 																if (car.status == 0) {
@@ -511,8 +511,8 @@ body {
 														+ car.license
 														+ '&locationId=0'
 														+ '">设备</a></td>' */
-												table += '<td><a href="monitor/queryVideoByDriverId?driverId='
-												 	+ ${sessionScope.user.id }
+												table += '<td><a href="monitor/queryVideoAndSensorByCarId?carId='
+												 	+ car.id
 													+ '">设备</a></td>'
 												if (car.status == 0) {
 													table += '<td class="project-status"><span class="label label-inverse">空闲</td>'

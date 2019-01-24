@@ -50,6 +50,19 @@ public class VideoController {
 		return mv; // 返回到staffManage.jsp页面
 	}
 	
+	@RequestMapping("/jumpToFactoryVideo")
+	public ModelAndView queryAllFactoryVideo(ModelAndView mv) {
+		log.info("调用查询视频的方法");
+		List<Video> videos = videoService.queryAllFactoryVideo();
+		List<Site> sites = videoService.querySiteWhichNotVideo();
+		JSONArray siteJson = JSONArray.fromObject(sites);
+		mv.addObject("videoList", videos);// 设置需要返回的值
+		mv.addObject("siteList", sites);
+		mv.setViewName("monitor/factorymonitor"); // 跳转到指定的页面
+		return mv; // 返回到staffManage.jsp页面
+	}	
+	
+	
 	@RequestMapping("queryAllVideo")
 	@ResponseBody
 	public List<Video> queryAllVideo() {
@@ -151,6 +164,70 @@ public class VideoController {
 		mv.setViewName("monitor/monitorOfOneCar");
 		
 		return mv;
+	}
+	
+	@RequestMapping("queryVideoAndSensorByCarId")
+	public ModelAndView queryVideoAndSensorByCarId(@RequestParam ("carId") int carId,ModelAndView mv) {
+		log.info("queryVideoAndSensorByCarId");
+		Video video=videoService.queryVideoByCarId(carId);
+		List<Sensor> sensors = sensorService.querySensorsByCarId(carId);
+		mv.addObject("video",video);
+		mv.addObject("sensorList", sensors);// 设置需要返回的值
+		mv.setViewName("monitor/monitorOfOneCar");
+		return mv;
+	}
+	
+	@RequestMapping("addFactoryVideo")
+	@ResponseBody
+	public Video addFactoryVideo(@RequestBody Video videoInfo) {
+		/*log.info("增加监控");
+			log.info("车牌号："+videoInfo.getCarId()+" 摄像头编号："+videoInfo.getSerialNumber()+" 高清地址："+videoInfo.getVideoHLSid()+" 标清地址："+videoInfo.getVideoRTMPid());*/
+		log.info("增加监控");
+		log.info("站点ID"+videoInfo.getSiteId()+"污泥处理厂名："+videoInfo.getLicense()+" 摄像头编号："+videoInfo.getSerialNumber()+" 高清地址："+videoInfo.getVideoHLSid()+" 标清地址："+videoInfo.getVideoRTMPid());	
+		videoService.addFactoryVideo(videoInfo);
+		return videoInfo;  
+	}
+	
+	@RequestMapping("querySiteWhichNotVideo")
+	@ResponseBody
+	public List<Site> querySiteWhichNotVideo(){
+		log.info("querySiteWhichNotVideo");
+		return videoService.querySiteWhichNotVideo();
+	}
+	
+	@RequestMapping("/queryFactoryVideoBySiteId")
+	public ModelAndView queryFactoryVideoBySiteId(@RequestParam ("siteId") int siteId,ModelAndView mv) {
+		log.info("调用查询视频的方法");
+		log.info(siteId);
+		Video video = videoService.queryFactoryVideoBySiteId(siteId);		
+		mv.addObject("video",video);// 设置需要返回的值		
+		mv.setViewName("monitor/monitorOfOneFactory"); // 跳转到指定的页面
+		return mv; // 返回到staffManage.jsp页面
+	}	
+	@RequestMapping("editFactoryVideo")
+	@ResponseBody
+	public Result editFactoryVideo(@RequestBody Video video) {
+		log.info("调用修改监控信息的方法");
+		log.info(video.getId() + " " + video.getSiteId() + " " + video.getSerialNumber());
+		try {
+			videoService.editFactoryVideo(video);
+			return Result.SUCCESS;
+		} catch (DuplicateKeyException e) {
+			// TODO: handle exception
+			return Result.DUPLICATE;
+		} catch (DataNoneException e) {
+			return Result.INPUT;
+		} catch (Exception e) {
+			// TODO: handle exception
+			return Result.ERROR;
+		}
+	}
+	@RequestMapping("queryFactoryVideoBySiteName")
+	@ResponseBody
+	public Video queryFactoryVideoBySiteName(@RequestParam("license") String license, Model model) {
+		log.info("调用queryFactoryVideoBySiteName");
+		Video video = videoService.queryFactoryVideoBySiteName(license);
+		return video;
 	}
 	
 }

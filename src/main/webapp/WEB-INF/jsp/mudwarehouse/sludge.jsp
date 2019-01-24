@@ -70,10 +70,10 @@
 
 								<div class="col-sm-9">
 									<select class="form-control m-b control-label" id="selectTransCarId">
-										<c:forEach items="${requestScope.assignCarTransportDriverInLeisureStatus }"
+										<%-- <c:forEach items="${requestScope.assignCarTransportDriverInLeisureStatus }"
 											var="transportDriver">
 											<option value="${transportDriver.car.id}">${transportDriver.realname}</option>
-										</c:forEach>
+										</c:forEach> --%>
 									</select>
 								</div>
 							</div>
@@ -322,17 +322,15 @@
 						});
 					}
 				});
-				
-				/* $.ajax({
-					type : "POST",
-					url : "user/queryAssignCarTransportDriverInLeisureStatus",
-					success : function(funcList) {
-						$("#addOutSludgeFuncList").empty();
-						$.each(funcList,function(i,func) {
-							$("#addOutSludgeFuncList").append('<option>'+func.function+'</option>');
+				$.ajax({
+					type : "GET",
+					url : "car/queryCarrierUnassign",
+					success : function(unssignTransCar) {
+						$.each(unssignTransCar,function(i,transCar) {
+							$("#selectTransCarId").append('<option value="'+transCar.id+'">'+transCar.driver.realname+'</option>');
 						});
 					}
-				}); */
+				});
 			});
 			var table_start = '<table id="table" class="footable table-hover table table-stripped toggle-arrow-tiny" data-page-size="7">' +
 				'<thead>' +
@@ -598,7 +596,7 @@
 							}
 							table += '<td>' + (sludge.record.site.siteName==null?"":sludge.record.site.siteName)+ '</td>'
 							table += '<td>' + (sludge.destinationAddress ==null?"":sludge.destinationAddress)+ '</td>'
-							table += '<td class="project-manage">' + (sludge.driver.realname==null?"":sludge.car.driver.realname) + '</td>'
+							table += '<td class="project-manage">' + (sludge.car.driver.realname==null?"":sludge.car.driver.realname) + '</td>'
 							if (sludge.weight == 0) {
 								table += '<td><span class="label label-success">待输入</td>'
 							} else {
@@ -611,21 +609,14 @@
 						}
 							table += '<td>' + (sludge.produceTime ==null?"": sludge.produceTime ) + '</td>'
 							table += '<td class="project-manager">' + (sludge.arrivalTime ==null?"":sludge.arrivalTime )+ '</td>'
-							if (sludge.transcarId != 0) {
-								table += '<td>' + sludge.transcarId + '</td>'
-							} else {
-								table += '<td></td>'
-							}
 							table += '<td>' + (sludge.car.driver.telephone==null?"":sludge.car.driver.telephone) + '</td>'
-							table += '<td>' + ( sludge.car.license ==null?"": sludge.car.license)+ '</td>'
+							table += '<td>' + ( sludge.transcarId ==null?"":sludge.transcarId)+ '</td>'
 							table += '</tr>'
 	
 						})
 						table += table_end
 						$('#tableDiv').append(table)
 						$('.footable').footable();
-	
-	
 					}
 				})
 			})

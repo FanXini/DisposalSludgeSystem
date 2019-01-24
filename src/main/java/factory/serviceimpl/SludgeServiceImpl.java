@@ -171,7 +171,7 @@ public class SludgeServiceImpl implements SludgeService {
 	@Override
 	public List<Sludge> queryAllSludgeOfOneFactory(int siteId) {
 		List<Sludge> sludges = new ArrayList<Sludge>();
-		sludges.addAll(sludgeDao.querySludgeBySiteId(siteId));
+		sludges.addAll(sludgeDao.queryAllSludgeOfOneFactory(siteId));
 		return sludges;
 	}
 

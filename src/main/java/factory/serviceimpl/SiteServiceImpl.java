@@ -75,7 +75,7 @@ public class SiteServiceImpl implements SiteService{
 		site.setTelephone(siteInfo.get("telephone"));
 		site.setLongitude(siteInfo.get("longitude"));
 		site.setLatitude(siteInfo.get("latitude"));
-		site.setDepth(Float.valueOf(siteInfo.get("depth")));
+//		site.setDepth(Float.valueOf(siteInfo.get("depth")));
 		siteDao.addSite(site);
 		return site.getId();
 	}
@@ -112,7 +112,7 @@ public class SiteServiceImpl implements SiteService{
 		site.setTelephone(siteInfo.get("telephone"));
 		site.setLongitude(siteInfo.get("longitude"));
 		site.setLatitude(siteInfo.get("latitude"));
-		site.setDepth(Float.valueOf(siteInfo.get("depth")));
+//		site.setDepth(Float.valueOf(siteInfo.get("depth")));
 		
 		int managerId = Integer.valueOf(siteInfo.get("managerId"));
 		if( managerId != 0)

@@ -201,6 +201,18 @@ public class CarController {
 
 		return result;
 	}
+	/**
+	 * 
+	 *@Description:查询空闲的分配了司机的运输车辆
+	 *@author:fanxin 
+	 *@date:2019年1月22日 上午11:01:29
+	 */
+	@RequestMapping("queryCarrierUnassign")
+	@ResponseBody
+	public List<Car> queryCarrierUnassign(){
+		log.info("queryCarrierUnassign");
+		return carService.queryCarrierUnassign();
+	}
 	
 	@RequestMapping("queryDriverUnassign")
 	@ResponseBody

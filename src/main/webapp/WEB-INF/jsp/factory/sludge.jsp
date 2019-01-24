@@ -274,8 +274,8 @@
 				'<th>目的地</th>' +
 				'<th>污泥运输车司机</th>' +
 				'<th>产生污泥块量</th>' +
-				'<th>操作</th>' +
 				'<th>污泥功能</th>' +
+				'<th>操作</th>' +
 				'<th data-hide="all">污泥产出时间</th>' +
 				'<th data-hide="all">污泥到达时间</th>' +
 				'<th data-hide="all">污泥运输车司机号码</th>' +
@@ -353,20 +353,21 @@
 						}else{
 							table += '<td>' + sludge.weight + '吨</td>'
 						}
-						table += '<td class="project-actions" style="float:left;">' +
-							'<button onclick="javascript:deleteSludge(' + sludge.id + ');" class="btn btn-white btn-sm" data-toggle="modal" data-target="#delSludgeModel"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span>删除 </button>' +
-							'<button onclick="javascript:editSludge(' + sludge.id + ');" class="btn btn-white btn-sm" data-toggle="modal" data-target="#editSludgeModel"><i class="fa fa-pencil"></i> 编辑 </button>' +
-							'</td>'
 						if (sludge.functionId != 0) {
 							table += '<td>' + sludge.sludgeFunction.function + '</td>'
 						} else {
 							table += '<td></td>'
 						}
-						table += '<td>' + (sludge.produceTime==null?"": sludge.produceTime) + '</td>'
+						table += '<td class="project-actions" style="float:left;">' +
+							'<button onclick="javascript:deleteSludge(' + sludge.id + ');" class="btn btn-white btn-sm" data-toggle="modal" data-target="#delSludgeModel"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span>删除 </button>' +
+							'<button onclick="javascript:editSludge(' + sludge.id + ');" class="btn btn-white btn-sm" data-toggle="modal" data-target="#editSludgeModel"><i class="fa fa-pencil"></i> 编辑 </button>' +
+							'</td>'
+						table += '<td>' + (sludge.produceTime ==null?"": sludge.produceTime ) + '</td>'
 						table += '<td class="project-manager">' + (sludge.arrivalTime ==null?"": sludge.arrivalTime ) + '</td>'
 						table += '<td>' + (sludge.car.driver.telephone==null?"":sludge.car.driver.telephone) + '</td>'
-						table += '<td>' + ( sludge.car.license ==null?"": sludge.car.license) + '</td>'
-						table += '</tr>'	
+						table += '<td>' + ( sludge.car.license ==null?"": sludge.car.license)+ '</td>'
+						table += '</tr>'
+	
 					})
 					table += table_end
 					$('#tableDiv').append(table)
@@ -410,15 +411,15 @@
 						}else{
 							table += '<td>' + sludge.weight + '吨</td>'
 						}
-						table += '<td class="project-actions" style="float:left;">' +
-							'<button onclick="javascript:deleteSludge(' + sludge.id + ');" class="btn btn-white btn-sm" data-toggle="modal" data-target="#delSludgeModel"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span>删除 </button>' +
-							'<button onclick="javascript:editSludge(' + sludge.id + ');" class="btn btn-white btn-sm" data-toggle="modal" data-target="#editSludgeModel"><i class="fa fa-pencil"></i> 编辑 </button>' +
-							'</td>'
 						if (sludge.functionId != 0) {
 							table += '<td>' + sludge.sludgeFunction.function + '</td>'
 						} else {
 							table += '<td></td>'
 						}
+						table += '<td class="project-actions" style="float:left;">' +
+							'<button onclick="javascript:deleteSludge(' + sludge.id + ');" class="btn btn-white btn-sm" data-toggle="modal" data-target="#delSludgeModel"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span>删除 </button>' +
+							'<button onclick="javascript:editSludge(' + sludge.id + ');" class="btn btn-white btn-sm" data-toggle="modal" data-target="#editSludgeModel"><i class="fa fa-pencil"></i> 编辑 </button>' +
+							'</td>'
 						table += '<td>' + (sludge.produceTime ==null?"": sludge.produceTime ) + '</td>'
 						table += '<td class="project-manager">' + (sludge.arrivalTime ==null?"": sludge.arrivalTime ) + '</td>'
 						table += '<td>' + (sludge.car.driver.telephone==null?"":sludge.car.driver.telephone) + '</td>'
@@ -450,47 +451,47 @@
 					contentType : "application/json",
 					success : function(sludgeList) {
 						$("#tableDiv").empty()
-					var table = table_start
-					$.each(sludgeList, function(i, sludge) {
-						table += '<tr id="' + sludge.id + '">'
-						if (sludge.status == 0) {
-							table += '<td class="project-status"><span class="label label-inverse">未到达</td>'
-						} else if (sludge.status == 1) {
-							table += '<td class="project-status"><span class="label label-primary">已到达</td>'
-						} else {
-							table += '<td></td>'
-						}
-						if (sludge.rfidString != null) {
-							table += '<td><span>' + sludge.rfidString + '</span></td>'
-						} else {
-							table += '<td class="project-status"><span class="label label-danger">未绑定RFID</td>'
-						}
-						table += '<td>' + (sludge.destinationAddress ==null?"":sludge.destinationAddress) + '</td>'
-						table += '<td class="project-manage">' + (sludge.car.driver.realname==null?"":sludge.car.driver.realname) + '</td>'
-						if(sludge.weight==0){
-							table += '<td><span class="label label-success">待输入</td>'
-						}else{
-							table += '<td>' + sludge.weight + '吨</td>'
-						}
-						table += '<td class="project-actions" style="float:left;">' +
-							'<button onclick="javascript:deleteSludge(' + sludge.id + ');" class="btn btn-white btn-sm" data-toggle="modal" data-target="#delSludgeModel"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span>删除 </button>' +
-							'<button onclick="javascript:editSludge(' + sludge.id + ');" class="btn btn-white btn-sm" data-toggle="modal" data-target="#editSludgeModel"><i class="fa fa-pencil"></i> 编辑 </button>' +
-							'</td>'
-						if (sludge.functionId != 0) {
-							table += '<td>' + sludge.sludgeFunction.function + '</td>'
-						} else {
-							table += '<td></td>'
-						}
-						table += '<td>' + (sludge.produceTime ==null?"": sludge.produceTime ) + '</td>'
-						table += '<td class="project-manager">' + (sludge.arrivalTime ==null?"":sludge.arrivalTime ) + '</td>'
-						table += '<td>' + (sludge.car.driver.telephone==null?"":sludge.car.driver.telephone) + '</td>'
-						table += '<td>' + (sludge.car.license ==null?"": sludge.car.license) + '</td>'
-						table += '</tr>'
-	
-					})
-					table += table_end
-					$('#tableDiv').append(table)
-					$('.footable').footable();
+						var table = table_start
+						$.each(sludgeList, function(i, sludge) {
+							table += '<tr id="' + sludge.id + '">'
+							if (sludge.status == 0) {
+								table += '<td class="project-status"><span class="label label-inverse">未到达</td>'
+							} else if (sludge.status == 1) {
+								table += '<td class="project-status"><span class="label label-primary">已到达</td>'
+							} else {
+								table += '<td></td>'
+							}
+							if (sludge.rfidString != null) {
+								table += '<td><span>' + sludge.rfidString + '</span></td>'
+							} else {
+								table += '<td class="project-status"><span class="label label-danger">未绑定RFID</td>'
+							}
+							table += '<td>' + (sludge.destinationAddress ==null?"":sludge.destinationAddress) + '</td>'
+							table += '<td class="project-manage">' + (sludge.car.driver.realname==null?"":sludge.car.driver.realname) + '</td>'
+							if(sludge.weight==0){
+								table += '<td><span class="label label-success">待输入</td>'
+							}else{
+								table += '<td>' + sludge.weight + '吨</td>'
+							}
+							if (sludge.functionId != 0) {
+								table += '<td>' + sludge.sludgeFunction.function + '</td>'
+							} else {
+								table += '<td></td>'
+							}
+							table += '<td class="project-actions" style="float:left;">' +
+								'<button onclick="javascript:deleteSludge(' + sludge.id + ');" class="btn btn-white btn-sm" data-toggle="modal" data-target="#delSludgeModel"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span>删除 </button>' +
+								'<button onclick="javascript:editSludge(' + sludge.id + ');" class="btn btn-white btn-sm" data-toggle="modal" data-target="#editSludgeModel"><i class="fa fa-pencil"></i> 编辑 </button>' +
+								'</td>'
+							table += '<td>' + (sludge.produceTime ==null?"": sludge.produceTime ) + '</td>'
+							table += '<td class="project-manager">' + (sludge.arrivalTime ==null?"": sludge.arrivalTime ) + '</td>'
+							table += '<td>' + (sludge.car.driver.telephone==null?"":sludge.car.driver.telephone) + '</td>'
+							table += '<td>' + ( sludge.car.license ==null?"": sludge.car.license)+ '</td>'
+							table += '</tr>'
+		
+						})
+						table += table_end
+						$('#tableDiv').append(table)
+						$('.footable').footable();
 	
 					}
 				})
@@ -511,52 +512,47 @@
 					contentType : "application/json",
 					success : function(sludgeList) {
 						$("#tableDiv").empty()
-					var table = table_start
-					$.each(sludgeList, function(i, sludge) {
-						table += '<tr id="' + sludge.id + '">'
-						if (sludge.status == 0) {
-							table += '<td class="project-status"><span class="label label-inverse">未到达</td>'
-						} else if (sludge.status == 1) {
-							table += '<td class="project-status"><span class="label label-primary">已到达</td>'
-						} else {
-							table += '<td></td>'
-						}
-						if (sludge.rfidString != null) {
-							table += '<td><span>' + sludge.rfidString + '</span></td>'
-						} else {
-							table += '<td class="project-status"><span class="label label-danger">未绑定RFID</td>'
-						}
-						table += '<td>' + (sludge.destinationAddress ==null?"":sludge.destinationAddress) + '</td>'
-						table += '<td class="project-manage">' + (sludge.record.car.driver.realname==null?"":sludge.record.car.driver.realname) + '</td>'
-						if(sludge.weight==0){
-							table += '<td><span class="label label-success">待输入</td>'
-						}else{
-							table += '<td>' + sludge.weight + '吨</td>'
-						}
-						table += '<td class="project-actions" style="float:left;">' +
-							'<button onclick="javascript:deleteSludge(' + sludge.id + ');" class="btn btn-white btn-sm" data-toggle="modal" data-target="#delSludgeModel"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span>删除 </button>' +
-							'<button onclick="javascript:editSludge(' + sludge.id + ');" class="btn btn-white btn-sm" data-toggle="modal" data-target="#editSludgeModel"><i class="fa fa-pencil"></i> 编辑 </button>' +
-							'</td>'
-						if (sludge.functionId != 0) {
-							table += '<td>' + sludge.sludgeFunction.function + '</td>'
-						} else {
-							table += '<td></td>'
-						}
-						table += '<td>' + (sludge.produceTime ==null?"": sludge.produceTime ) + '</td>'
-							table += '<td class="project-manager">' + (sludge.arrivalTime ==null?"":sludge.arrivalTime )+ '</td>'
-						if (sludge.transcarId != 0) {
-								table += '<td>' + sludge.transcarId + '</td>'
+						var table = table_start
+						$.each(sludgeList, function(i, sludge) {
+							table += '<tr id="' + sludge.id + '">'
+							if (sludge.status == 0) {
+								table += '<td class="project-status"><span class="label label-inverse">未到达</td>'
+							} else if (sludge.status == 1) {
+								table += '<td class="project-status"><span class="label label-primary">已到达</td>'
 							} else {
 								table += '<td></td>'
-						}
-						table += '<td>' + (sludge.record.car.driver.telephone==null?"":sludge.record.car.driver.telephone) + '</td>'
-						table += '<td>' + ( sludge.record.car.license ==null?"": sludge.record.car.license)+ '</td>'
-						table += '</tr>'
-	
-					})
-					table += table_end
-					$('#tableDiv').append(table)
-					$('.footable').footable();
+							}
+							if (sludge.rfidString != null) {
+								table += '<td><span>' + sludge.rfidString + '</span></td>'
+							} else {
+								table += '<td class="project-status"><span class="label label-danger">未绑定RFID</td>'
+							}
+							table += '<td>' + (sludge.destinationAddress ==null?"":sludge.destinationAddress) + '</td>'
+							table += '<td class="project-manage">' + (sludge.car.driver.realname==null?"":sludge.car.driver.realname) + '</td>'
+							if(sludge.weight==0){
+								table += '<td><span class="label label-success">待输入</td>'
+							}else{
+								table += '<td>' + sludge.weight + '吨</td>'
+							}
+							if (sludge.functionId != 0) {
+								table += '<td>' + sludge.sludgeFunction.function + '</td>'
+							} else {
+								table += '<td></td>'
+							}
+							table += '<td class="project-actions" style="float:left;">' +
+								'<button onclick="javascript:deleteSludge(' + sludge.id + ');" class="btn btn-white btn-sm" data-toggle="modal" data-target="#delSludgeModel"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span>删除 </button>' +
+								'<button onclick="javascript:editSludge(' + sludge.id + ');" class="btn btn-white btn-sm" data-toggle="modal" data-target="#editSludgeModel"><i class="fa fa-pencil"></i> 编辑 </button>' +
+								'</td>'
+							table += '<td>' + (sludge.produceTime ==null?"": sludge.produceTime ) + '</td>'
+							table += '<td class="project-manager">' + (sludge.arrivalTime ==null?"": sludge.arrivalTime ) + '</td>'
+							table += '<td>' + (sludge.car.driver.telephone==null?"":sludge.car.driver.telephone) + '</td>'
+							table += '<td>' + ( sludge.car.license ==null?"": sludge.car.license)+ '</td>'
+							table += '</tr>'
+		
+						})
+						table += table_end
+						$('#tableDiv').append(table)
+						$('.footable').footable();
 	
 					}
 				})

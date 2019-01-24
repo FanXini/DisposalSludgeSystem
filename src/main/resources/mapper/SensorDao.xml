@@ -388,7 +388,13 @@
 	<select id="querySensorsByDriverId" resultMap="sensorMap">
 		select *
 		from sensor,car,user,sensor_type
-		where sensor.car_id = car.id and sensor.type_id=sensor_type.id and car.driver_id=user.id and user.id=#{driverId}
+		where sensor.del_status=0 AND sensor.car_id = car.id and sensor.type_id=sensor_type.id and car.driver_id=user.id and user.id=#{driverId}
+	</select>
+	
+	<select id="querySensorsByCarId" resultMap="sensorMap">
+		select *
+		from sensor,sensor_type
+		where  sensor.del_status=0 AND sensor.car_id = #{carId} and sensor.type_id=sensor_type.id
 	</select>
 
 </mapper>

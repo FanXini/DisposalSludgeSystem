@@ -9,7 +9,7 @@
 <html>
 <head>
 <base href="<%=basePath%>">
-<title>污泥处理车实时监控</title>
+<title>污泥处理厂实时监控</title>
      <meta charset="UTF-8">
 	<meta http-equiv="pragma" content="no-cache">
 	<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1.0" />
@@ -125,6 +125,10 @@
             top:10%;
             left:-10%;           	
             }
+#box {
+  margin:20px auto; width:600px; height:150px;
+  padding: 5px;
+}
 </style> 
 <script>
 		
@@ -242,6 +246,7 @@
 		 */
 		function startPtz(direction, speed, deviceSerial, accessToken = ACCESS_TOKEN, channelNo = CHANNEL_NO) {
 		    // 要启动，需要先停止
+		   /*  alert(deviceSerial) */
 		    
 		    return stopPtz(direction, deviceSerial)
 		        .then(_ => {
@@ -328,11 +333,11 @@
 							</div>
 							
 							<div class="form-group">
-								<label for="license">车&nbsp;&nbsp;牌&nbsp;&nbsp;号</label>
-								<select class="form-control m-b" name="account" id="addCarId">										
-										<option value="0">--请选择车牌号--</option>
-										<c:forEach items="${requestScope.carList }" var="car">
-											<option value=${car.id}>${car.license}</option>
+								<label for="license">工&nbsp;&nbsp;厂&nbsp;&nbsp;名&nbsp;&nbsp;称</label>
+								<select class="form-control m-b" name="account" id="addSiteId">										
+										<option value="0">--请选择工厂--</option>
+										<c:forEach items="${requestScope.siteList }" var="site">
+											<option value=${site.id}>${site.siteName}</option>
 										</c:forEach>
 									</select>
 								<!-- <input type="text" placeholder="请输入车牌号" id="license" class="form-control m-b control-label"> --> 					
@@ -365,13 +370,13 @@
 			</div>			
 				<div class="modal-body">
 					<div class="form-group">
-								<label for="editCarLicense">车&nbsp;&nbsp;牌&nbsp;&nbsp;号</label>
-								<select class="form-control m-b" name="account" id="editCarLicense">										
-										<option value="0">--请选择修改监控的车牌号--</option>
+								<label for="editSiteName">工&nbsp;&nbsp;厂&nbsp;&nbsp;名&nbsp;&nbsp;称</label>
+								<select class="form-control m-b" name="account" id="editSiteName">										
+										<option value="0">--请选择修工厂名--</option>
 										<c:forEach items="${requestScope.videoList }" var="video">
-											<option value=${video.car.license}>${video.car.license}</option>
+											<option value=${video.site.siteName}>${video.site.siteName}</option>
 										</c:forEach>
-								</select> 					
+									</select> 					
 					</div>			
 					<div class="form-group">
 								<label for="editSerialNumber">序&nbsp;&nbsp;列&nbsp;&nbsp;号</label>
@@ -384,15 +389,14 @@
 										</c:forEach>
 									</select>	 --%>
 					</div>
-					
 					<div class="form-group">
 						<label for="editvideo_RTMPid">RTMP&nbsp;&nbsp;地&nbsp;&nbsp;址</label> <input
 							type="text" placeholder="请输入视频RTMP播放地址" id="editvideoRTMPid"
-							class="form-control m-b control-label">
+								class="form-control m-b control-label">
 					</div>
 					<div class="form-group">
-						<label for="editvideo_HLSid">HLS&nbsp;&nbsp;地&nbsp;&nbsp;址</label> 
-						<input type="text" placeholder="请输入视频RTMP播放地址" id="editvideoHLSid"
+						<label for="editvideo_HLSid">HLS&nbsp;&nbsp;地&nbsp;&nbsp;址</label> <input
+							type="text" placeholder="请输入视频RTMP播放地址" id="editvideoHLSid"
 							class="form-control m-b control-label">
 					</div>
 							
@@ -447,10 +451,10 @@
 						<div>
 							<!-- <input id="queryVideoByCarLicense" type="text" class="form-control"
 								placeholder="请输入车牌号/监控编号,不输入则查询所有车辆"> -->
-								<select class="form-control m-b" name="account" id="queryVideoByCarLicense">										
-										<option value="0">--请选择监控所在车牌号--</option>
+								<select class="form-control m-b" name="account" id="queryFactoryVideoBySiteName">										
+										<option value="0">--请选择监控所在工厂--</option>
 										<c:forEach items="${requestScope.videoList }" var="video">
-											<option value=${video.car.license}>${video.car.license}</option>
+											<option value=${video.site.siteName}>${video.site.siteName}</option>
 										</c:forEach>
 									</select> 		
 						</div>
@@ -481,18 +485,20 @@
 						<button type="button" class="btn btn-primary" onMouseover="startPtz(1,0,'${video.serialNumber }');" onMouseout="stopPtz(1,'${video.serialNumber }');">向下</button>
 						<button type="button" class="btn btn-primary" onMouseover="startPtz(2,0,'${video.serialNumber }');" onMouseout="stopPtz(2,'${video.serialNumber }');">向左</button>
 						<button type="button" class="btn btn-primary"onMouseover="startPtz(3,0,'${video.serialNumber }');" onMouseout="stopPtz(3,'${video.serialNumber }');">向右</button> <br/>
-						<img class="box5" alt="140x140" src="img/littercar.png" width="10%" height="10%" />
-						<p class="box6" style="text-align:center;">${video.car.license}</p>
-						<button onclick="editVideo(${video.id},'${video.car.license }','${video.serialNumber }')"
+						<!-- <img class="box5" alt="140x140" src="img/littercar.png" width="10%" height="10%" /> -->
+						<button onclick="editFactoryVideo(${video.id},'${video.site.siteName }','${video.serialNumber }','${video.delStatus}')"
 									class="btn btn-white btn-sm" data-toggle="modal"
 									data-target="#editVideoModal">
 									<span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>编辑
 						</button>
-						<button onclick="deleteVideo(${video.id},'${video.car.license }');"
+						<button onclick="deleteVideo(${video.id},'${video.site.siteName }');"
 								class="btn btn-white btn-sm" data-toggle="modal"
 								data-target="#deleteModal">
 								<span class="glyphicon glyphicon-trash" aria-hidden="true"></span>删除
 						</button>
+						<br/>
+						<p class="box6" style="text-align:center;">${video.site.siteName}</p>
+						
 					</div>
 				</div>
 			</div>
@@ -557,19 +563,19 @@
 		/***************************** 新增摄像头提交************************************* */
 			$("#addVideo").click(function() {
 				/* var carId=$("#carId").val(); */
-				var license=$("#addCarId").find("option:selected").text();
+				var license=$("#addSiteId").find("option:selected").text();
 				alert(license);
-				var carId = parseInt($("#addCarId").val());
+				var siteId = parseInt($("#addSiteId").val());
 				var serialNumber = $("#serialNumber").val();
 				var videoRTMPid = $("#videoRTMPid").val();
 				var videoHLSid = $("#videoHLSid").val();
 				var delStatus = $("#delStatus").val();
 				$.ajax({
 					type : "POST",
-						url :　"monitor/addVideo",
+						url :　"monitor/addFactoryVideo",
 						data : JSON.stringify({
 						/* carId:carId, */
-						carId:carId,
+						siteId:siteId,
 						/* license:license, */
 						serialNumber:serialNumber,
 						videoRTMPid:videoRTMPid,
@@ -581,8 +587,8 @@
 						contentType : "application/json",
 						success : function(data){
 								alert("新增成功")
-								//刷新当前	
-								window.location.reload();		
+								//刷新当前
+								window.location.reload();			
 						},
 						error:function(data){
 							alert("新增失败")
@@ -595,7 +601,7 @@
 	<script>	
 		/***************************** 删除用户按钮************************************* */
 		function deleteVideo(videoId,license) {
-			var delContent = "确定删除"+license+"车上的监控";
+			var delContent = "确定删除"+license+"工厂的监控";
 			$("#delModalContent").html(delContent);
 			$("#delId").val(videoId);
 		}
@@ -616,8 +622,8 @@
 			});
 		});
 		
-	/***************************** 修改监控按钮************************************* */
-		function editVideo(videoId,license,SerialNumber) {
+/***************************** 修改监控按钮************************************* */
+		function editFactoryVideo(videoId,license,SerialNumber) {
 			var editContent = "确定修改"+license+"车上的监控"+SerialNumber;
 			$("#editModalContent").html(editContent);
 			$("#editId").val(videoId);
@@ -627,7 +633,7 @@
 			$("#editSubmit").click(function() {
 			var videoId = parseInt($("#editId").val());
 			var SerialNumber = $("#editSerialNumber").val()
-			var license = $("#editCarLicense").val()
+			var license = $("#editSiteName").val()		
 			var videoRTMPid = $("#editvideoRTMPid").val();
 			var videoHLSid = $("#editvideoHLSid").val();
 			alert(videoId)
@@ -635,7 +641,7 @@
 			alert(license)
 			$.ajax({
 				type : "POST",
-				url : "monitor/editVideo",
+				url : "monitor/editFactoryVideo",
 				/* data: "videoId=" + videoId, */
 				data:JSON.stringify({
 					id:videoId,
@@ -643,6 +649,7 @@
 					/* license:license, */
 					videoRTMPid:videoRTMPid,
 					videoHLSid:videoHLSid,
+					
 				}),
 				cache:false,
 				dataType : "json",
@@ -658,13 +665,13 @@
 			});
 		});	
 		
-		/***************************** 按照车牌号查询监控************************************* */
+		/***************************** 按照工厂名称查询监控************************************* */
 		$("#queryButton").click(function() {
-			var carLicense = $("#queryVideoByCarLicense").val();
+			var siteName = $("#queryFactoryVideoBySiteName").val();
 			$.ajax({
 				type : "POST",
-				url : "monitor/queryVideoByCarLicense",
-				data: "license=" + carLicense,
+				url : "monitor/queryFactoryVideoBySiteName",
+				data: "license=" + siteName,				
 				jsonpcallback: function(){
 				},
 				success : function(data) {

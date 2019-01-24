@@ -108,17 +108,15 @@ public class SludgeController {
 	@RequestMapping("jumpToSludge")
 	public ModelAndView querySludgeFunctionsAndJumpToSludge(ModelAndView mv){
 		log.info("querySludgeFunctionsAndJumpToSludge");
-		List<User> drivers=new ArrayList<User>();
+		List<User> assignCarTransportDriver=new ArrayList<User>();
 		List<Site> sites=new ArrayList<Site>();
-		drivers.addAll(userService.quertAllDriver());
+		assignCarTransportDriver.addAll(userService.queryCarAssignTranSportDriver());
 		sites.addAll(siteService.queryAllSite());
 		List<MinorMudWareHouse> minorMudWareHouses=mudWareHouseService.queryMinorWareHouse();
 		mv.addObject("minorMudWareHouses",minorMudWareHouses);
-		mv.addObject("driverList",drivers);
+		mv.addObject("assignCarTransportDriver",assignCarTransportDriver);
 		mv.addObject("siteList",sites);
-		mv.addObject("assignCarTransportDriverInLeisureStatus",userService.queryCarAssignTranSportDriverInLeisureStatus());
 		mv.setViewName("mudwarehouse/sludge");
-		log.info(minorMudWareHouses.size());
 		return mv;
 	}
 	@RequestMapping("queryAllFunc")

@@ -18,4 +18,12 @@ public interface VideoDao {
 	public List<Video> fuzzyqueryVideoByCarLicense(@Param("license") String license);
 	public Video queryVideoByCarLicense(@Param("license") String license);
 	public Video queryVideoByDriverId(@Param("driverId") int driverId);
+	public Video queryVideoByCarId(@Param("carId") int carId);
+	
+	public List<Video> queryAllFactoryVideo();
+	public void addFactoryVideo(Video videoInfo);
+	public List<Site> querySiteWhichNotVideo();
+	public Video queryFactoryVideoBySiteId(@Param("siteId") int siteId);
+	public void editFactoryVideo(Video video);
+	public Video queryFactoryVideoBySiteName(@Param("license") String license);
 }

@@ -270,4 +270,11 @@ public class SensorServiceImpl implements SensorService {
 		//return sensors;
 	}
 
+	@Override
+	public List<Sensor> querySensorsByCarId(int carId) {
+		List<Sensor> sensors=new ArrayList<>();
+		sensors.addAll(sensorDao.querySensorsByCarId(carId));
+		return sensors;	
+	}
+
 }
