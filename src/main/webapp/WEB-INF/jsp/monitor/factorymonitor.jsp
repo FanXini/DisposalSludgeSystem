@@ -617,7 +617,7 @@
 					alert("删除成功")
 					$('#deleteModal').modal('hide');
 					$("#" + videoId.toString()).remove()
-					/* window.location.reload(); */
+					window.location.reload();
 				}
 			});
 		});
@@ -657,7 +657,7 @@
 				success : function(data) {
 					alert("修改成功")
 					$('#editVideoModal').modal('hide');
-					/* window.location.reload(); */
+					window.location.reload();
 				},
 				error:function(data){
 					alert("修改失败")
