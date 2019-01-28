@@ -172,7 +172,7 @@ h5{
 	<div class="bottom_button" style="left:10%;">
 	<ul class="nav navbar-top-links">
 		<li class="dropdown dropup"><a class="dropdown-toggle count-info" data-toggle="dropdown"
-			href="#" onclick="showSiteTable();"> <i class="fa fa-map-marker" style="color:#EE2C2C"></i> <span id="siteRedNum" class="label label-danger"></span> </a>
+			href="#" onclick="showSiteTable();"> <i class="fa fa-map-marker" style="color:#EE2C2C;width:30px;height:30px;"></i> <span id="siteRedNum" class="label label-danger"></span> </a>
 			<ul class="dropdown-menu dropdown-messages"
 					style="background: rgba(176,196,222,0.8);max-height:300px;width:500px;overflow-y:auto;">
 				<li>
@@ -194,7 +194,7 @@ h5{
 			</ul>
 		</li>
 		<li class="dropdown dropup"><a class="dropdown-toggle count-info" data-toggle="dropdown"
-			href="#" onclick="showTreatmentCarTable();"> <i i class="fa fa-truck"  style="color:#FFD700"></i><span class="label label-warning" id="treatmentCarNum"></span> </a>
+			href="#" onclick="showTreatmentCarTable();"> <i i class="fa fa-truck"  style="color:#FFD700;width:30px;height:30px;"></i><span class="label label-warning" id="treatmentCarNum"></span> </a>
 			<ul class="dropdown-menu dropdown-messages"
 					style="background: rgba(176,196,222,0.8);max-height:300px;width:500px;overflow-y:auto;">
 				<li>
@@ -216,7 +216,7 @@ h5{
 			</ul>
 		</li>
 		<li class="dropdown dropup"><a class="dropdown-toggle count-info" data-toggle="dropdown"
-			href="#" onclick="showCarrierTable();"> <i class="fa fa-truck"  style="color:#4D4D4D"></i> <span class="label label-warning" id="carrierNum">3</span> </a>
+			href="#" onclick="showCarrierTable();"> <i class="fa fa-truck"  style="color:#4D4D4D;width:30px;height:30px;"></i> <span class="label label-warning" id="carrierNum">3</span> </a>
 			<ul class="dropdown-menu dropdown-messages"
 					style="background: rgba(176,196,222,0.8);max-height:300px;width:500px;overflow-y:auto;">
 				<li>
@@ -238,7 +238,7 @@ h5{
 			</ul>
 		</li>
 		<li class="dropdown dropup"><a class="dropdown-toggle count-info" data-toggle="dropdown"
-			href="#" onclick="showWareHouseTable();"><i i class="fa fa-cubes" style="color:#EE2C2C"></i></a>
+			href="#" onclick="showWareHouseTable();"><i i class="fa fa-cubes" style="color:#EE2C2C;width:30px;height:30px;"></i></a>
 			<ul class="dropdown-menu dropdown-messages" style="background: rgba(176,196,222,0.8);max-height:300px;width:500px;overflow-y:auto;">
 				<li>
 					<table class="tablehead" border="0" cellspacing="0" cellpadding="0"
