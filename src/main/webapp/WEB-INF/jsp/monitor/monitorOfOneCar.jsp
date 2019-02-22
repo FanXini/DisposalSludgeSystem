@@ -326,7 +326,9 @@
 			</div>
 		</div>
 		
-		<div class="row">
+		
+	</div>
+	<div class="row">
 		<div class="ibox">
 			<!-- 内容 -->
 			<div class="wrapper wrapper-content animated fadeInRight">
@@ -380,7 +382,6 @@
 				</div>
 			</div>
 		</div>
-	</div>
 	</div>
 	<!--  HistoryDataModel -->
 	<div class="modal inmodal" id="myModal" tabindex="-1" role="dialog"

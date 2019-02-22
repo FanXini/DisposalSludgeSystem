@@ -14,6 +14,8 @@
 		<result property="sensorIdSet" column="sensor_id_set" />
 		<result property="status" column="status" />
 		<result property="siteId" column="site_id" />
+		<result property="cloudDeviceId" column="cloud_device_id"/>
+		<result property="cloudDeviceSerial" column="cloud_device_serial"/>
 		<!-- 车辆类型选择-刘见宇 -->
 		<result property="carType" column="car_type" />
 		<association property="driver" javaType="factory.entity.User">
@@ -34,6 +36,8 @@
 		<result property="status" column="status" />
 		<result property="siteId" column="site_id" />
 		<result property="carType" column="car_type" />
+		<result property="cloudDeviceId" column="cloud_device_id"/>
+		<result property="cloudDeviceSerial" column="cloud_device_serial"/>
 		<association property="driver" javaType="factory.entity.User">
 			<id property="id" column="uid" />
 			<result property="realname" column="realname" />

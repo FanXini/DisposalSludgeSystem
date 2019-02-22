@@ -206,6 +206,7 @@ h5{
 		</li>
 	</ul>
 	</div>
+	<script src="js/car-location.js"></script>
 </body>
 </html>
 <script type="text/javascript">
@@ -402,13 +403,20 @@ h5{
 									{imageSize : new BMap.Size(35, 35)});
 					}
 				if(car.status==1){
-				    carPoint[car.id] = new BMap.Point(car.longitude,car.latitude);
-					carMarker[car.id] = new BMap.Marker(carPoint[car.id],{icon:carIcon});
-					map.addOverlay(carMarker[car.id]);
-					//鼠标悬停动作
-					carMarker[car.id].addEventListener("mouseover",function(){
-						carInfo(car);
-					});
+					var deviceId=car.cloudDeviceId;
+					//更新位置
+					getLocation(car.cloudDeviceId,car.cloudDeviceSerial);
+					var location=locationMap[deviceId];
+					if(location!=null){
+						console.log(location.longitude+" "+location.latitude);
+						carPoint[car.id] = new BMap.Point(location.longitude,location.latitude);
+						carMarker[car.id] = new BMap.Marker(carPoint[car.id],{icon:carIcon});
+						
+						map.addOverlay(carMarker[car.id]);					
+						//鼠标悬停动作
+						carMarker[car.id].addEventListener("mouseover",function(){
+							carInfo(car)});
+					}
 				}
 			});
 		}
@@ -523,7 +531,8 @@ h5{
 		$.each(carList,function(i, car){
 			if(car.status == 1){
 				var pointSite = new BMap.Point(car.site.longitude,car.site.latitude);
-				var carPoint = new BMap.Point(car.longitude,car.latitude);
+				var location=locationMap[car.cloudDeviceId];
+				var carPoint = new BMap.Point(location.longitude,location.latitude);
 				var driving = new BMap.DrivingRoute(map,
 					{onSearchComplete:function(results){
 						var plan=results.getPlan(0);
@@ -560,7 +569,8 @@ h5{
 		$.each(carList,function(i, car){
 			if(car.status == 1){
 				var pointSite = new BMap.Point(car.site.longitude,car.site.latitude);
-				var carPoint = new BMap.Point(car.longitude,car.latitude);
+				var location=locationMap[car.cloudDeviceId];
+				var carPoint = new BMap.Point(location.longitude,location.latitude);
 				var driving = new BMap.DrivingRoute(map,
 					{onSearchComplete:function(results){
 						var plan=results.getPlan(0);

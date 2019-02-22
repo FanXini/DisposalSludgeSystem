@@ -1,27 +1,23 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
-<html>
-<head>
-<meta charset="UTF-8">
-<title>Insert title here</title>
-<script src="js/jquery.min.js?v=2.1.4"></script>
-<script type="text/javascript">
+/**
+ * 
+ */
+var gpsUserId = "";
+var mds = "";
+var locationMap={};
+function createLocation(longitude,latitude) {
+    var o = new Object();
+    o.longitude = longitude;
+    o.latitude = latitude;
+    return o;
+}
 
-	var gpsUserId = "";
-	var mds = "";
-	$(document).ready(function() {
-		$("#test").click(function() {
-			var id = $("#test").val();
-			var location = getLocation("7995e52c-246d-413c-9dfa-52b823927502", "013683137431");
-		});
-	});
-
-	function getLocation(deviceId, serialNumber) {
-		alert(gpsUserId+" "+mds)
+function getLocation(deviceId, serialNumber) {
 		if (gpsUserId == "" || mds == "") {
-			getLocationWithoutMDS(deviceId, serialNumber);
+			var location= getLocationWithoutMDS(deviceId, serialNumber);
 		} else {
-			getLocationWithMDS(deviceId, serialNumber);
+			var location=getLocationWithMDS(deviceId, serialNumber);
 		}
+		//alert(JSON.stringify(locationMap))
 	}
 
 	function getLocationWithoutMDS(deviceId, serialNumber) {
@@ -32,7 +28,6 @@
 			data : "",
 			dataType : "jsonp",
 			success : function(data) {
-				alert(data.id)
 				gpsUserId = data.id;
 				mds = data.mds;
 				$.ajax({
@@ -40,10 +35,12 @@
 					url : "http://api.18gps.net/GetDateServices.asmx/GetDate?method=loadUser&user_id=" + deviceId + "&mds=" + mds,
 					data : "",
 					dataType : "jsonp",
+					async:false,
 					success : function(data2) {
 						if (data2.errorCode == "200") {
 							long_la = data2.data[0].jingdu + "_" + data2.data[0].weidu;
-							alert(long_la);
+							var loc=new createLocation(data2.data[0].jingdu,data2.data[0].weidu);
+							locationMap[deviceId]=loc;
 						} else if (data2.errorCode == 403) {
 							getLocation(deviceId, serialNumber);
 						}
@@ -60,19 +57,15 @@
 			url : "http://api.18gps.net/GetDateServices.asmx/GetDate?method=loadUser&user_id=" + deviceId + "&mds=" + mds,
 			data : "",
 			dataType : "jsonp",
+			async:false,
 			success : function(data2) {
-				if (data2.errorCode == 200) {
-					long_la = data2.data.jingdu + "_" + data2.data.weidu;
-					alert(long_la);
+				if (data2.errorCode == "200") {
+					long_la = data2.data[0].jingdu + "_" + data2.data[0].weidu;
+					var loc=new createLocation(data2.data[0].jingdu,data2.data[0].weidu);
+					locationMap[deviceId]=loc;
 				} else if (data2.errorCode == 403) {
-					getLocationWithoutMDS(deviceId, serialNumber);
+					getLocationWithMDS(deviceId, serialNumber);
 				}
 			}
 		});
 	}
-</script>
-</head>
-<body>
-	<input type="button" id="test" value="test" />
-</body>
-</html>

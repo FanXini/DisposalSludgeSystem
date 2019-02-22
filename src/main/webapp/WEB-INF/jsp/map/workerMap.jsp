@@ -197,6 +197,7 @@ h5 {
 				</ul></li>
 		</ul>
 	</div>
+	<script src="js/car-location.js"></script>
 </body>
 </html>
 <script type="text/javascript">
@@ -445,7 +446,6 @@ h5 {
 					new BMap.Size(100, 70), {
 						imageSize : new BMap.Size(100, 70)
 					});
-
 			sitePoint = new BMap.Point(car.site.longitude, car.site.latitude);
 			siteMarker = new BMap.Marker(sitePoint, {
 				icon : myIcon
@@ -471,15 +471,20 @@ h5 {
 				imageSize : new BMap.Size(35, 35)
 			});
 		}
-		carPoint = new BMap.Point(car.longitude, car.latitude);
-		carMarker = new BMap.Marker(carPoint, {
-			icon : carIcon
-		});
-		map.addOverlay(carMarker);
-		//鼠标悬停动作
-		carMarker.addEventListener("mouseover", function() {
-			carInfo(car);
-		});
+		getLocation(car.cloudDeviceId,car.cloudDeviceSerial);
+		var location=locationMap[car.cloudDeviceId];
+		console.log(location)
+		if(location!=null){
+			carPoint = new BMap.Point(location.longitude, location.latitude);
+			carMarker = new BMap.Marker(carPoint, {
+				icon : carIcon
+			});
+			map.addOverlay(carMarker);
+			//鼠标悬停动作
+			carMarker.addEventListener("mouseover", function() {
+				carInfo(car);
+			});
+		}
 	}
 
 	/***************************** 站点信息框显示************************************* */
