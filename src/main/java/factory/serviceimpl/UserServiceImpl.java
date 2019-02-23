@@ -15,6 +15,7 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -315,6 +316,13 @@ public class UserServiceImpl implements UserService {
 			System.out.println(user.getRealname());
 		}
 		return drivers;
+	}
+
+	@Override
+	
+	public void testTransaction() {
+		userDao.delectUser(1);
+		userDao.queryUserByRealName("test");
 	}
 	
 }

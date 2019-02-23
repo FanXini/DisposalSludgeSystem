@@ -54,7 +54,9 @@ public class RecordController {
 	
 	@Autowired
 	private ThreadPoolTaskExecutor taskExecuter;
-	private static SimpleDateFormat dateFormat=new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+	
+	@Autowired
+	private  SimpleDateFormat dateFormat;
 	
 	private static Log log=LogFactory.getLog(RecordController.class);
 	/**

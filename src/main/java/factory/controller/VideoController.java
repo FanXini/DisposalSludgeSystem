@@ -60,7 +60,14 @@ public class VideoController {
 		mv.addObject("siteList", sites);
 		mv.setViewName("monitor/factorymonitor"); // 跳转到指定的页面
 		return mv; // 返回到staffManage.jsp页面
-	}	
+	}
+	
+	@RequestMapping("/queryAllFactoryVideo")
+	@ResponseBody
+	public List<Video> queryAllFactoryVideoForWX(){
+		List<Video> videos = videoService.queryAllFactoryVideo();
+		return videos;
+	}
 	
 	
 	@RequestMapping("queryAllVideo")

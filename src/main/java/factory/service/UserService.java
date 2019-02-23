@@ -69,5 +69,7 @@ public interface UserService {
 	public List<User> queryUserByRoleId(int roleId);
 	
 	public List<User> queryDriverUnassign();
+	
+	public void testTransaction();
 
 }
