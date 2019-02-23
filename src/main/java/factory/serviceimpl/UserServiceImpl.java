@@ -13,6 +13,7 @@ import factory.service.UserService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,9 +32,11 @@ public class UserServiceImpl implements UserService {
 	private CarDao carDao;
 
 	private static Log log = LogFactory.getLog(UserServiceImpl.class);
-
+	
+	@Cacheable("users")
 	@Override
 	public User queryUserByUsername(String username) {
+		System.out.println("通过数据库查询用户信息");
 		return userDao.queryUserByUsername(username);
 	}
 
@@ -275,7 +278,7 @@ public class UserServiceImpl implements UserService {
 		if (username == null || username.equals("") || password == null || password.equals("")) {
 			throw new DataNoneException("登陆信息不完善");
 		}
-		User loginUser = userDao.queryUserByUsername(username);
+		User loginUser = queryUserByUsername(username);
 		if (loginUser != null) {
 			System.out.println(loginUser.getUsername());
 			if (password.equals(loginUser.getPassword())) {

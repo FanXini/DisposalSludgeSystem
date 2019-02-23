@@ -17,12 +17,12 @@ public class UserTest extends BaseTest{
 	@Autowired
 	private UserService userService;
 	
-	@Test
-	public void hah() {
-		//User user=userService.queryUserByRealName("test");
-		//System.out.println(user);
-		userService.testTransaction();
-	}
+	/*@Test
+	public void TransactionTest() {
+		User user=userService.queryUserByRealName("test");
+		System.out.println(user);
+		//userService.testTransaction();
+	}*/
 	
 	/*@Test
 	public  void test(){

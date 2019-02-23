@@ -184,6 +184,17 @@ public class VideoController {
 		return mv;
 	}
 	
+	@RequestMapping("/queryVideoAndSensorByCarIdfoForWX")
+	@ResponseBody
+	public Map<String, Object> queryVideoAndSensorByCarIdfoForWX(@RequestParam ("carId") int carId){
+		Map<String,Object> requestMap = new HashMap<String,Object>();
+		Video video=videoService.queryVideoByCarId(carId);
+		List<Sensor> sensors = sensorService.querySensorsByCarId(carId);
+		requestMap.put("video", video);
+		requestMap.put("sensorList", sensors);
+		return requestMap;
+	}
+	
 	@RequestMapping("addFactoryVideo")
 	@ResponseBody
 	public Video addFactoryVideo(@RequestBody Video videoInfo) {
