@@ -19,7 +19,7 @@ public class Car implements Serializable{
 	private User driver;
 	private Site site;
 	private int siteId;
-	//Ìí¼Ó³µÁ¾ÎÛÄà´¦ÀíÀàĞÍ-Áõ¼ûÓî
+	//æ·»åŠ è½¦è¾†æ±¡æ³¥å¤„ç†ç±»å‹-åˆ˜è§å®‡
 	private int carType;	
 	private String cloudDeviceId;
 	private String cloudDeviceSerial;

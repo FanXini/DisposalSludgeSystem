@@ -6,11 +6,11 @@ import java.util.concurrent.Callable;
 import factory.dao.CarDao;
 import factory.entity.Car;
 
-//µ÷¶È³µÁ¾µÄÏß³Ì
+//è°ƒåº¦è½¦è¾†çš„çº¿ç¨‹
 public class AssignCarThread implements Callable<List<Car>>{
 
 	private CarDao carDao;
-	private int carType; //0±íÊ¾´¦Àí³µ£¬1±íÊ¾ÔËÊä³µ
+	private int carType; //0è¡¨ç¤ºå¤„ç†è½¦ï¼Œ1è¡¨ç¤ºè¿è¾“è½¦
 	
 	public AssignCarThread() {
 		
@@ -23,27 +23,27 @@ public class AssignCarThread implements Callable<List<Car>>{
 	
 	@Override
 	public List<Car> call() throws Exception {
-		System.out.println("µ÷ÓÃ³µÁ¾µ÷¶ÈËã·¨");
+		System.out.println("è°ƒç”¨è½¦è¾†è°ƒåº¦ç®—æ³•");
 		if(carType==0) {
-			while(true) { //²éÑ¯¿ÕÏĞÎÛÄà´¦Àí³µ
+			while(true) { //æŸ¥è¯¢ç©ºé—²æ±¡æ³¥å¤„ç†è½¦
 				List<Car> treatmentCarUnassign=carDao.queryTreatmentCarUnassign();
 				if(treatmentCarUnassign.size()!=0) {
-					System.out.println("ÓĞ³µ");
+					System.out.println("æœ‰è½¦");
 					return treatmentCarUnassign;
 				}
-				System.out.println("Ã»³µ,5ÃëÔÙ´Îµ÷¶È");
-				Thread.sleep(5000); //5Ãëµ÷¶ÈÒ»´Î
+				System.out.println("æ²¡è½¦,5ç§’å†æ¬¡è°ƒåº¦");
+				Thread.sleep(5000); //5ç§’è°ƒåº¦ä¸€æ¬¡
 			}
 		}
-		else if (carType==1) {  //²éÑ¯¿ÕÏĞÎÛÄàÔËÊä³µ
+		else if (carType==1) {  //æŸ¥è¯¢ç©ºé—²æ±¡æ³¥è¿è¾“è½¦
 			while(true) {
 				List<Car> transportCarUnassign=carDao.queryCarrierUnassign();
 				if(transportCarUnassign.size()!=0) {
-					System.out.println("ÓĞ³µ");
+					System.out.println("æœ‰è½¦");
 					return transportCarUnassign;
 				}
-				System.out.println("Ã»³µ,5ÃëºóÔÙ´Îµ÷¶È");
-				Thread.sleep(5000); //5Ãëµ÷¶ÈÒ»´Î
+				System.out.println("æ²¡è½¦,5ç§’åå†æ¬¡è°ƒåº¦");
+				Thread.sleep(5000); //5ç§’è°ƒåº¦ä¸€æ¬¡
 			}
 		}
 		return null;

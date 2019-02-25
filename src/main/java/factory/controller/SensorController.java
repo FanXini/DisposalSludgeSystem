@@ -42,7 +42,7 @@ public class SensorController {
 
 	@RequestMapping("jumpToDeviceManage")
 	public ModelAndView jumpToDeviceManageJSP(ModelAndView mv) {
-		log.info("µ÷ÓÃjumpToDeviceManageJSP");
+		log.info("è°ƒç”¨jumpToDeviceManageJSP");
 		List<SensorType> sensorTypes = sensorService.queryAllSensorType();
 		List<Car> cars = carService.queryAllCar();
 		List<Site> sites = siteService.queryAllSite();
@@ -74,7 +74,7 @@ public class SensorController {
 	@RequestMapping("addSensor")
 	@ResponseBody
 	public Map<String, Object> addSensor(@RequestBody Map<String, String> sensorInfo) {
-		log.info("µ÷ÓÃÔö¼Ó´«¸ĞÆ÷");
+		log.info("è°ƒç”¨å¢åŠ ä¼ æ„Ÿå™¨");
 		Map<String, Object> result = new HashMap<String, Object>();
 		try {
 			/*for (Map.Entry<String, String> entry : sensorInfo.entrySet()) {
@@ -97,11 +97,11 @@ public class SensorController {
 		return result;
 
 	}
-	//delete²»»á±¨Òì³£
+	//deleteä¸ä¼šæŠ¥å¼‚å¸¸
 	@RequestMapping("deleteSensor")
 	@ResponseBody
 	public Result deleteSensor(@RequestBody Map<String, Integer> deleteSensorInfo) {
-		log.info("µ÷ÓÃdeleteSensor");
+		log.info("è°ƒç”¨deleteSensor");
 		try {
 			sensorService.deleteSensor(deleteSensorInfo);
 			return Result.SUCCESS;
@@ -114,7 +114,7 @@ public class SensorController {
 	@RequestMapping("conditionalQuery")
 	@ResponseBody
 	public List<Sensor> conditionQuery(@RequestBody Map<String, String> condition) {
-		log.info("µ÷ÓÃconditionalQuery");
+		log.info("è°ƒç”¨conditionalQuery");
 		/*for (Map.Entry<String, String> entry : condition.entrySet()) {
 			System.out.println(entry.getKey() + " " + entry.getValue());
 		}*/

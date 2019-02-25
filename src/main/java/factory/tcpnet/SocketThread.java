@@ -19,8 +19,8 @@ import factory.service.SensorService;
 
 /**
  * 
- * @author ·²öÎ
- * @description:ÓÅ»¯°æ±¾
+ * @author å‡¡é‘«
+ * @description:ä¼˜åŒ–ç‰ˆæœ¬
  *
  */
 public class SocketThread implements Runnable {
@@ -30,7 +30,7 @@ public class SocketThread implements Runnable {
 	private SensorDao sensorDao;
 
 	private SimpleDateFormat dateFormat;
-	private static Map<String, Integer> sensorMap;// ÓÃ×÷»º´æ,key=´«¸ĞÆ÷±àºÅ,value=´«¸ĞÆ÷id
+	private static Map<String, Integer> sensorMap;// ç”¨ä½œç¼“å­˜,key=ä¼ æ„Ÿå™¨ç¼–å·,value=ä¼ æ„Ÿå™¨id
 
 	public SocketThread(Socket socket, SensorDao sensorDao) {
 		this.socket = socket;
@@ -45,45 +45,45 @@ public class SocketThread implements Runnable {
 			while (true) {
 				BufferedReader bufr = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 				PrintWriter pout = new PrintWriter(socket.getOutputStream(), true);
-				// ¶ÁÈ¡socketĞÅÏ¢
+				// è¯»å–socketä¿¡æ¯
 				String line = bufr.readLine();
 				String datas[]=line.split(";");
 				for(int i=0;i<datas.length;i++) {
 					char headInfo = datas[i].charAt(0);
-					// Èç¹ûÊÇÓĞĞ§ĞÅÏ¢
+					// å¦‚æœæ˜¯æœ‰æ•ˆä¿¡æ¯
 					if (headInfo == 'S' || headInfo == 'A' || headInfo == 'H' || headInfo == 'G') {
 						System.out.println("From client:" + datas[i]);
-						// Ê±¼ä´Á
+						// æ—¶é—´æˆ³
 						String time = dateFormat.format(new Date());
-						// ´«¸ĞÆ÷ĞÅÏ¢ÊÇÒÔ','·Ö¸ô
+						// ä¼ æ„Ÿå™¨ä¿¡æ¯æ˜¯ä»¥','åˆ†éš”
 						String info[] = datas[i].split(",");
-						// sensorMapÖĞÈç¹û²»´æÔÚÕâ¸ö´«¸ĞÆ÷µÄĞÅÏ¢£¬ÔòÏÈÈ¥Êı¾İ¿âÖĞ²éÑ¯
+						// sensorMapä¸­å¦‚æœä¸å­˜åœ¨è¿™ä¸ªä¼ æ„Ÿå™¨çš„ä¿¡æ¯ï¼Œåˆ™å…ˆå»æ•°æ®åº“ä¸­æŸ¥è¯¢
 						if (!sensorMap.containsKey(info[0])) {
-							Sensor sensor = sensorDao.querySensorIdBySerialNumber(info[0]); // ²éÑ¯
-							if (sensor != null) { // Èç¹û´æÔÚ
-								sensorMap.put(info[0], sensor.getId()); // ¼ÓÈë»º´æ
-							} else { // Èç¹ûÊı¾İ¿âÖĞ¶¼Ã»ÓĞ£¬Ôò²»´¦Àí
-								System.out.println("Êı¾İ¿âÖĞ²»´æÔÚ");
+							Sensor sensor = sensorDao.querySensorIdBySerialNumber(info[0]); // æŸ¥è¯¢
+							if (sensor != null) { // å¦‚æœå­˜åœ¨
+								sensorMap.put(info[0], sensor.getId()); // åŠ å…¥ç¼“å­˜
+							} else { // å¦‚æœæ•°æ®åº“ä¸­éƒ½æ²¡æœ‰ï¼Œåˆ™ä¸å¤„ç†
+								System.out.println("æ•°æ®åº“ä¸­ä¸å­˜åœ¨");
 								continue;
 							}
 						}
-						int sensorId = sensorMap.get(info[0]); // È¡µÃ´«¸ĞÆ÷id
-						// ´´½¨ĞÅÏ¢¶ÔÏó£¬µ¥¸öÊı¾İÀàĞÍ´«¸ĞÆ÷µÄvalue2ÓÃ0Ìî³ä
+						int sensorId = sensorMap.get(info[0]); // å–å¾—ä¼ æ„Ÿå™¨id
+						// åˆ›å»ºä¿¡æ¯å¯¹è±¡ï¼Œå•ä¸ªæ•°æ®ç±»å‹ä¼ æ„Ÿå™¨çš„value2ç”¨0å¡«å……
 						SensorValue sensorValue = new SensorValue(sensorId, time, Double.valueOf(info[1]), 0, headInfo);
-						if (headInfo == 'G' || headInfo == 'H') { // gpsºÍÎÂÊª¶È¶¼ÊÇÓĞÁ½¸öÊı¾İ
+						if (headInfo == 'G' || headInfo == 'H') { // gpså’Œæ¸©æ¹¿åº¦éƒ½æ˜¯æœ‰ä¸¤ä¸ªæ•°æ®
 							sensorValue.setValue2(Double.valueOf(info[2]));
-							if (headInfo == 'G') { // gpsÊı¾İÓĞ×´Ì¬ĞŞ¸Ä¹¦ÄÜ
+							if (headInfo == 'G') { // gpsæ•°æ®æœ‰çŠ¶æ€ä¿®æ”¹åŠŸèƒ½
 								
 							}
 						}
-						//¼ÓÈëµ½´«¸ĞÆ÷¶ÔÓ¦µÄÊı¾İ¿âÖĞ£¬Í¨¹ısensorValueÖĞµÄheadInfoÑ¡Ôñ¶ÔÓ¦µÄsqlÓï¾ä
+						//åŠ å…¥åˆ°ä¼ æ„Ÿå™¨å¯¹åº”çš„æ•°æ®åº“ä¸­ï¼Œé€šè¿‡sensorValueä¸­çš„headInfoé€‰æ‹©å¯¹åº”çš„sqlè¯­å¥
 						sensorDao.addSensorRecord(sensorValue);
-						//¼ÓÈëµ½ÊµÊ±Êı¾İ±íÖĞ
+						//åŠ å…¥åˆ°å®æ—¶æ•°æ®è¡¨ä¸­
 						sensorDao.updateSensorRealTimeValue(sensorValue);
 						pout.println("server receive success");
 					}
 					else {
-						System.out.println("ÎŞĞ§ĞÅÏ¢:"+line);
+						System.out.println("æ— æ•ˆä¿¡æ¯:"+line);
 						pout.println("server receive success");
 					}
 				}

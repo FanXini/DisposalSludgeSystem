@@ -56,7 +56,7 @@ public class SludgeServiceImpl implements SludgeService {
 	@CacheEvict(value="car",allEntries=true)
 	public void addOutSludge(Sludge sludge) {
 		String function = sludge.getSludgeFunction().getFunction();
-		//Ã»ÓĞÕâ¸ö¹¦ÄÜ¾ÍĞÂÔöÒ»¸ö¹¦ÄÜ
+		//æ²¡æœ‰è¿™ä¸ªåŠŸèƒ½å°±æ–°å¢ä¸€ä¸ªåŠŸèƒ½
 		SludgeFunction sludgeFunction = sludgeDao.querySludgeFunctionByFunction(function);
 		if (sludgeFunction != null) {
 			sludge.setFunctionId(sludgeFunction.getId());
@@ -73,10 +73,10 @@ public class SludgeServiceImpl implements SludgeService {
 		if (sludge.getDestinationAddress().equals("none")) {
 			sludge.setRfidString(null);
 		}
-		sludge.setStatus(SludgeStatus.MWHTODESROAD.ordinal()); //4±íÊ¾´ÓÖÇ»Û²Öµ½Ä¿µÄµØµÄ×´Ì¬
+		sludge.setStatus(SludgeStatus.MWHTODESROAD.ordinal()); //4è¡¨ç¤ºä»æ™ºæ…§ä»“åˆ°ç›®çš„åœ°çš„çŠ¶æ€
 		sludge.setProduceTime(format.format(new Date()));
 		sludgeDao.addOutMudWareHouseSludgeRecord(sludge);
-		//ĞŞ¸Ä³µµÄ×´Ì¬
+		//ä¿®æ”¹è½¦çš„çŠ¶æ€
 		carDao.editWorkerCarStatusAndSiteId(sludge.getTranscarId(), CarStatus.ONTHEWAY.ordinal(), 0);
 		
 	}

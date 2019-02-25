@@ -259,11 +259,11 @@ body {
 	<script src="js/content.js?v=1.0.0"></script>
 
 	<!-- Bootstrap table -->
-	<script src="js/plugins/jeditable/jquery.jeditable.js"></script>
+	<script  type='text/javascript' src="js/plugins/jeditable/jquery.jeditable.js" charset='utf-8'></script>
 
 	<!-- Data Tables -->
-	<script src="js/plugins/dataTables/jquery.dataTables.js"></script>
-	<script src="js/plugins/dataTables/dataTables.bootstrap.js"></script>
+	<script src="js/plugins/dataTables/jquery.dataTables.js" charset='utf-8'></script>
+	<script src="js/plugins/dataTables/dataTables.bootstrap.js" charset='utf-8'></script>
 
 	<!-- 自定义js -->
 	<script src="js/content.js?v=1.0.0"></script>

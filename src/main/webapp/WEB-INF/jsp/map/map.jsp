@@ -179,14 +179,14 @@ h5{
 		<li class="dropdown dropup"><a class="dropdown-toggle count-info" data-toggle="dropdown"
 			href="#" onclick="showSiteTable();"> <i class="fa fa-map-marker" style="color:#EE2C2C"></i> <span id="siteRedNum" class="label label-danger"></span> </a>
 			<ul class="dropdown-menu dropdown-messages"
-					style="background: rgba(176,196,222,0.8);max-height:300px;overflow-y:auto;">
+					style="background: rgba(176,196,222,0.8);max-height:300px;width:500px;overflow-y:auto;">
 				<li>
 					<table class="tablehead" border="0" cellspacing="0" cellpadding="0"
 						style="width:100%">
 						<tr>
-							<td style="width:10%;">编号</td>
-							<td style="width:45%;">站点</td>
-							<td style="width:25%;">状态</td>
+							<td style="width:20%;font-size:20px;">编号</td>
+							<td style="width:45%;font-size:20px;">站点</td>
+							<td style="width:25%;font-size:20px;">状态</td>
 						</tr>
 					</table>
 				</li>
@@ -201,14 +201,14 @@ h5{
 		<li class="dropdown dropup"><a class="dropdown-toggle count-info" data-toggle="dropdown"
 			href="#" onclick="showTreatmentCarTable();"> <i i class="fa fa-truck"  style="color:#FFD700"></i><span class="label label-warning" id="treatmentCarNum"></span> </a>
 			<ul class="dropdown-menu dropdown-messages"
-					style="background: rgba(176,196,222,0.8);max-height:300px;overflow-y:auto;">
+					style="background: rgba(176,196,222,0.8);max-height:300px;width:500px;overflow-y:auto;">
 				<li>
 					<table class="tablehead" border="0" cellspacing="0" cellpadding="0"
-						style="width:100%">
+						style="width:100%;">
 						<tr>
-							<td>处理车车牌号</td>
-							<td>目的地</td>
-							<td>状态</td>
+							<td style="width:20%;font-size:20px;">处理车牌号</td>
+							<td style="width:45%;font-size:20px;">目的地</td>
+							<td style="width:25%;font-size:20px;">状态</td>
 						</tr>
 					</table>
 				</li>
@@ -223,14 +223,14 @@ h5{
 		<li class="dropdown dropup"><a class="dropdown-toggle count-info" data-toggle="dropdown"
 			href="#" onclick="showCarrierTable();"> <i class="fa fa-truck"  style="color:#4D4D4D"></i> <span class="label label-warning" id="carrierNum">3</span> </a>
 			<ul class="dropdown-menu dropdown-messages"
-					style="background: rgba(176,196,222,0.8);max-height:300px;overflow-y:auto;">
+					style="background: rgba(176,196,222,0.8);max-height:300px;width:500px;overflow-y:auto;">
 				<li>
 					<table class="tablehead" border="0" cellspacing="0" cellpadding="0"
 						style="width:100%">
 						<tr>
-							<td>运输车车牌号</td>
-							<td>目的地</td>
-							<td>状态</td>
+							<td style="width:20%;font-size:20px;">运输车牌号</td>
+							<td style="width:45%;font-size:20px;">目的地</td>
+							<td style="width:25%;font-size:20px;">状态</td>
 						</tr>
 					</table>
 				</li>
@@ -868,9 +868,9 @@ h5{
 				else
 					status="待处理(已分配处理车"+carNum+"辆)";
 			}				
-			table += '<td style="width:10%;">' + site.serialNumber + '</td>';
-			table += '<td style="width:45%;">' + site.siteName + '</td>';
-			table += '<td style="width:25%;">' + status + '</td>';
+			table += '<td style="width:20%;font-size:15px;">' + site.serialNumber + '</td>';
+			table += '<td style="width:45%;font-size:15px;">' + site.siteName + '</td>';
+			table += '<td style="width:25%;font-size:15px;">' + status + '</td>';
 			table += '</tr>';
 			$("#siteTable").append(table);
 		});
@@ -903,12 +903,12 @@ h5{
 				table='<tr id="'+ car.id +'" style="color:#FFFF00;font-weight: 700;" onmouseover="sel(this)" onmouseout="cle(this)" onclick="showCarInfo('+JSON.stringify(car).replace(/\"/g,"'")+')">';
 				status="返程中";
 			}
-			table += '<td style="width:20%;">' + car.license + '</td>';
+			table += '<td style="width:20%;font-size:15px;">' + car.license + '</td>';
 			if (!jQuery.isEmptyObject(car.site)){
-				table += '<td style="width:45%;">' + car.site.siteName + '</td>';
+				table += '<td style="width:45%;font-size:15px;">' + car.site.siteName + '</td>';
 			}
-			else table += '<td style="width:45%;">' + status + '</td>';
-			table += '<td style="width:25%;">' + status + '</td>';
+			else table += '<td style="width:45%;font-size:15px;">' + status + '</td>';
+			table += '<td style="width:25%;font-size:15px;">' + status + '</td>';
 			table += '</tr>';
 			$("#treatmentCarTable").append(table);
 		});
@@ -946,12 +946,12 @@ h5{
 				table='<tr id="'+ car.id +'" style="color:#FFFF00;font-weight: 700;" onmouseover="sel(this)" onmouseout="cle(this)" onclick="showCarInfo('+JSON.stringify(car).replace(/\"/g,"'")+')">';
 				status="返程中";
 			}
-			table += '<td style="width:20%;">' + car.license + '</td>';
+			table += '<td style="width:20%;font-size:15px;">' + car.license + '</td>';
 			if (!jQuery.isEmptyObject(car.site)){
-				table += '<td style="width:45%;">' + car.site.siteName + '</td>';
+				table += '<td style="width:45%;font-size:15px;">' + car.site.siteName + '</td>';
 			}
-			else table += '<td style="width:45%;">' + status + '</td>';
-			table += '<td style="width:25%;">' + status + '</td>';
+			else table += '<td style="width:45%;font-size:15px;">' + status + '</td>';
+			table += '<td style="width:25%;font-size:15px;">' + status + '</td>';
 			table += '</tr>';
 			$("#carrierTable").append(table);
 		});

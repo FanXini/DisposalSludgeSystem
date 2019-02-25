@@ -40,7 +40,7 @@ public class VideoServiceImpl implements VideoService {
 	public void editVideo(Video video) {
 		// TODO Auto-generated method stub
 		if (video.getSerialNumber().equals("") || video.getSerialNumber() == null) {
-			throw new DataNoneException("没有数据");
+			throw new DataNoneException("娌℃湁鏁版嵁");
 		}
 		videodao.editVideo(video);	
 	}
@@ -113,7 +113,7 @@ public class VideoServiceImpl implements VideoService {
 	public void editFactoryVideo(Video video) {
 		// TODO Auto-generated method stub
 		if (video.getSerialNumber().equals("") || video.getSerialNumber() == null) {
-			throw new DataNoneException("没有数据");
+			throw new DataNoneException("娌℃湁鏁版嵁");
 		}
 		videodao.editFactoryVideo(video);	
 	}

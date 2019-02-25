@@ -6,12 +6,12 @@ import factory.entity.Role_authority;
 public interface Role_authorityService {
 	/**
 	 * 
-	 * @author:Áõ¼ûÓî
-	 * @data:2018Äê6ÔÂ11ÈÕ
-	 * @time:ÏÂÎç21:24:51 
+	 * @author:åˆ˜è§å®‡
+	 * @data:2018å¹´6æœˆ11æ—¥
+	 * @time:ä¸‹åˆ21:24:51 
 	 * @param username
 	 * @return
-	 * @description:²éÑ¯ÓÃ»§µÄrole_id
+	 * @description:æŸ¥è¯¢ç”¨æˆ·çš„role_id
 	 */
 	public List<Integer> queryAllRole_authority(int  role_id);
 }

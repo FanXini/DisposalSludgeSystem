@@ -3,13 +3,13 @@ package factory.util;
 import java.math.BigDecimal;
 
 public class GpsUtil {
-	private final static double EARTH_RADIUS = 6378.137;//µØÇò°ë¾¶  
+	private final static double EARTH_RADIUS = 6378.137;//åœ°çƒåŠå¾„  
 	private static double rad(double d) {  
 	    return d * Math.PI / 180.0;  
 	}  
 	/**  
-	 * ¼ÆËãÁ½µã¼ä¾àÀë  
-	 * @return double ¾àÀë µ¥Î»¹«Àï,¾«È·µ½Ã×  
+	 * è®¡ç®—ä¸¤ç‚¹é—´è·ç¦»  
+	 * @return double è·ç¦» å•ä½å…¬é‡Œ,ç²¾ç¡®åˆ°ç±³  
 	 */  
 	public static double getDistance(double lng1, double lat1, double lng2, double lat2) {  
 	    double radLat1 = rad(lat1);  

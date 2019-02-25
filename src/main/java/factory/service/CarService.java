@@ -52,7 +52,7 @@ public interface CarService {
 	public List<Car> queryCarByCarType(int carType);
 	
 	/**
-	 * ĞŞ¸Ä³µµÄ×´Ì¬ºÍsiteId,Èç¹ûsiteIdÎª0,ÔòÖ»ĞŞ¸ÄcarId
+	 * ä¿®æ”¹è½¦çš„çŠ¶æ€å’ŒsiteId,å¦‚æœsiteIdä¸º0,åˆ™åªä¿®æ”¹carId
 	 * @param carId
 	 * @param status
 	 * @param siteId

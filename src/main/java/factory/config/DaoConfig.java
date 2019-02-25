@@ -42,13 +42,13 @@ public class DaoConfig {
 	@Bean(name="sqlSessionFactory")
 	public SqlSessionFactoryBean getSqlSessionFactoryBean(ComboPooledDataSource jdbcDataSource) throws IOException {
 		SqlSessionFactoryBean factoryBean=new SqlSessionFactoryBean();
-		//注入数据库连接池
+		//娉ㄥ叆鏁版嵁搴撹繛鎺ユ睜
 		factoryBean.setDataSource(jdbcDataSource);
-		//配置MyBaties全局配置文件:mybatis-config.xml
+		//閰嶇疆MyBaties鍏ㄥ眬閰嶇疆鏂囦欢:mybatis-config.xml
 		factoryBean.setConfigLocation(new ClassPathResource("mybatis-config.xml"));
-		//扫描entity使用别名
+		//鎵弿entity浣跨敤鍒悕
 		factoryBean.setTypeAliasesPackage("factory.entity");
-		//扫描sql配置文件:mapper需要的要的xml文件
+		//鎵弿sql閰嶇疆鏂囦欢:mapper闇�瑕佺殑瑕佺殑xml鏂囦欢
 		Resource[] resources=new PathMatchingResourcePatternResolver().getResources("classpath:mapper/*.xml");
 		//factoryBean.setMapperLocations(new ClassPathResource[] {new ClassPathResource("mapper/EventDao.xml"),new ClassPathResource("mapper/ImageDao.xml")});
 		factoryBean.setMapperLocations(resources);
@@ -58,9 +58,9 @@ public class DaoConfig {
 	@Bean
 	public MapperScannerConfigurer getMapperScannerConfigurer(SqlSessionFactoryBean factoryBean) {
 		MapperScannerConfigurer mapperScannerConfigurer=new MapperScannerConfigurer();
-		//注入sqlSessionFactory
+		//娉ㄥ叆sqlSessionFactory
 		mapperScannerConfigurer.setSqlSessionFactoryBeanName("sqlSessionFactory");
-		//给出要扫描的Dao接口
+		//缁欏嚭瑕佹壂鎻忕殑Dao鎺ュ彛
 		mapperScannerConfigurer.setBasePackage("factory.dao");
 		return mapperScannerConfigurer;
 	}

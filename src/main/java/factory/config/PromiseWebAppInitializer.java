@@ -19,7 +19,7 @@ public class PromiseWebAppInitializer extends AbstractAnnotationConfigDispatcher
 
 	@Override
 	protected String[] getServletMappings() {
-		return new String[] {"/"};    //将DispatcherServlet映射�?"/"
+		return new String[] {"/"};    //将DispatcherServlet映射到"/"
 	}
 	
 	@Override

@@ -22,10 +22,10 @@ import factory.dao.SensorDao;
 import factory.service.SensorService;
 import factory.service.UserService;
 /**
- * 配置spring和junit整合，junit启动时加载springIOC容器 spring-test,junit
+ * 閰嶇疆spring鍜宩unit鏁村悎锛宩unit鍚姩鏃跺姞杞絪pringIOC瀹瑰櫒 spring-test,junit
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-// 告诉junit spring配置文件
+// 鍛婅瘔junit spring閰嶇疆鏂囦欢
 @ContextConfiguration({ "classpath:spring/spring-dao.xml", "classpath:spring/spring-service.xml" })
 public class Server  {
 
@@ -39,9 +39,9 @@ public class Server  {
 			@SuppressWarnings("resource")
 			ServerSocket server = new ServerSocket(port);
 			while (true) {
-				System.out.println("等待连接");
+				System.out.println("绛夊緟杩炴帴");
 				Socket socket = server.accept();
-				System.out.println("取得连接" + socket.getInetAddress());
+				System.out.println("鍙栧緱杩炴帴" + socket.getInetAddress());
 				new Thread(new SocketThread(socket, sensorDao)).start();
 			}
 

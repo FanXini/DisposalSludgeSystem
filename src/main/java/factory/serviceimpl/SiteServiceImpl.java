@@ -36,7 +36,7 @@ public class SiteServiceImpl implements SiteService{
 	@Autowired
 	private RecordDao recordDao;
 	/**
-	 * ²éÑ¯ËùÓĞ¹¤³§
+	 * æŸ¥è¯¢æ‰€æœ‰å·¥å‚
 	 */
 	@Override
 	public List<Site> queryAllSite() {
@@ -184,7 +184,7 @@ public class SiteServiceImpl implements SiteService{
 	//@Cacheable(value="site",key="'siteId'+#siteId+'status'+#status")
 	@Override
 	public List<Site> querySiteMapBySiteIdAndStatus(int siteId,int status) {
-		System.out.println("´ÓÊı¾İ¿âÖĞ²éÑ¯site");
+		System.out.println("ä»æ•°æ®åº“ä¸­æŸ¥è¯¢site");
 		return siteDao.querySiteMapBySiteIdAndStatus(siteId,status);
 	}
 

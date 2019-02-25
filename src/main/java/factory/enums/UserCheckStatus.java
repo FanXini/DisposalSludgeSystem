@@ -3,15 +3,15 @@ package factory.enums;
 public enum UserCheckStatus {
 	
 	/**
-	 * ���ʧ�ܣ���Ӧ���ݿ���0״̬
+	 * 审核失败，对应数据库中0状态
 	 */
 	FAILURE,
 	/**
-	 * ���ͨ������Ӧ���ݿ���1״̬
+	 * 审核通过，对应数据库中1状态
 	 */
 	SUCCESS,
 	/**
-	 * �ȴ���ˣ���Ӧ���ݿ���2״̬
+	 * 等待审核，对应数据库中2状态
 	 */
 	
 	WAITINGCHECK

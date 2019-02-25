@@ -2,33 +2,33 @@ package factory.enums;
 
 public enum Result {
 	/**
-	 * INPUT��ʾ�����ύ���ݸ�ʽ����ȷ(Ϊ�ջ����Ͳ�һ��)
+	 * INPUT表示表单提交数据格式不正确(为空或类型不一致)
 	 */
 	INPUT,
 	
 	/**
-	 * SUCCESS��ʾ��������
+	 * SUCCESS表示处理正常
 	 */
 	SUCCESS,
 	/**
-	 * DUPLICATE��ʾDuplicateKeyException�쳣��
+	 * DUPLICATE表示DuplicateKeyException异常，
 	 */
 	DUPLICATE,
 	/**
-	 * ERROR��ʾ����
+	 * ERROR表示出错
 	 */
 	ERROR,
 	
 	/**
-	 * �޸���Ϣ��ͻ
+	 * 修改信息冲突
 	 */
 	CONFLICT,
 	/**
-	 * �û������
+	 * 用户审核中
 	 */
 	AUDING,
 	/**
-	 * ��ֹ��½
+	 * 禁止登陆
 	 */	
 	FORBID;
 	

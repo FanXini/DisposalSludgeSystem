@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping(value="/main")
 public class JspJumps {
 	/**
-	 * @description:跳转到analyse文件夹中的jsp
+	 * @description:璺宠浆鍒癮nalyse鏂囦欢澶逛腑鐨刯sp
 	 */
 	@RequestMapping("analyse/{formName}")
 	public String loginForm(@PathVariable String formName){

@@ -16,7 +16,7 @@ public class RoleServicelmpl implements RoleService{
 	@Override
 	public List<Role> queryAllRole(int id) {
 		/*
-		 * ±éÀúrole±íµÄËùÓĞÄÚÈİ
+		 * éå†roleè¡¨çš„æ‰€æœ‰å†…å®¹
 		 */
 		return roleDao.queryAllRole(id);
 	}

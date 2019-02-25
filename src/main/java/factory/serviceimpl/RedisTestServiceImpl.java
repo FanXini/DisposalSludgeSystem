@@ -16,7 +16,7 @@ public class RedisTestServiceImpl implements RedisTestService {
 	@Cacheable("account")
 	@Override
 	public User getUserInfo(String username) {
-		System.out.println("Í¨¹ıÊı¾İ¿â²éÑ¯");
+		System.out.println("é€šè¿‡æ•°æ®åº“æŸ¥è¯¢");
 		/*int id = (int) ((Math.random() * 9 + 1) * 100000);
 
 		return new User(id, username, 20);*/
@@ -26,13 +26,13 @@ public class RedisTestServiceImpl implements RedisTestService {
 	@CacheEvict("users")
 	@Override
 	public void deleteUser(String username) {
-		System.out.println("É¾³ı" + username);
+		System.out.println("åˆ é™¤" + username);
 	}
 
 	@CachePut(value = "users", key = "#user.getUsername()")
 	@Override
 	public User updateUser(User user) {
-		System.out.println("»ñÈ¡");
+		System.out.println("è·å–");
 
 		return user;
 	}

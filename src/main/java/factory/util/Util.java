@@ -6,7 +6,7 @@ import java.util.List;
 
 public class Util {
 
-	//Ìí¼Ó´«¸ÐÆ÷id
+	//æ·»åŠ ä¼ æ„Ÿå™¨id
 		public static  String  addsensorIdtoSensorSet(String sensorIdSet,int sensorId){
 			if(sensorIdSet==null){
 				sensorIdSet="";

@@ -19,8 +19,8 @@ import factory.service.SensorService;
 
 /**
  * 
- * @author ·²öÎ
- * @description:ºóĞø×ö´úÂëÓÅ»¯
+ * @author å‡¡é‘«
+ * @description:åç»­åšä»£ç ä¼˜åŒ–
  *
  */
 public class SocketThreadOld implements Runnable {
@@ -30,7 +30,7 @@ public class SocketThreadOld implements Runnable {
 	private SensorDao sensorDao;
 
 	private SimpleDateFormat dateFormat;
-	private static Map<String, Integer> sensorMap;//ÓÃ×÷»º´æ,key=´«¸ĞÆ÷±àºÅ,value=´«¸ĞÆ÷id
+	private static Map<String, Integer> sensorMap;//ç”¨ä½œç¼“å­˜,key=ä¼ æ„Ÿå™¨ç¼–å·,value=ä¼ æ„Ÿå™¨id
 
 	public SocketThreadOld(Socket socket, SensorDao sensorDao) {
 		this.socket = socket;
@@ -46,68 +46,68 @@ public class SocketThreadOld implements Runnable {
 				BufferedReader bufr = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 				// System.out.println("Thread: "+Thread.currentThread()+" "+"receive...from.re"
 				// + bufr.toString());
-				// ¶ÁÈ¡¼üÅÌÂ¼ÈëĞÅÏ¢
+				// è¯»å–é”®ç›˜å½•å…¥ä¿¡æ¯
 				// BufferedReader bufIn =
 				// new BufferedReader(new InputStreamReader(System.in));
 
-				// Êä³öÁ÷£¬ÊäÈëµ½SocketÖĞ£¬·¢ËÍ¸øClient
+				// è¾“å‡ºæµï¼Œè¾“å…¥åˆ°Socketä¸­ï¼Œå‘é€ç»™Client
 				PrintWriter pout = new PrintWriter(socket.getOutputStream(), true);
-				// ¶ÁÈ¡socketĞÅÏ¢
+				// è¯»å–socketä¿¡æ¯
 				String line = bufr.readLine();
-				//Ê±¼ä´Á
+				//æ—¶é—´æˆ³
 				String time = dateFormat.format(new Date());
-				//´«¸ĞÆ÷ĞÅÏ¢ÊÇÒÔ,·Ö¸ô
+				//ä¼ æ„Ÿå™¨ä¿¡æ¯æ˜¯ä»¥,åˆ†éš”
 				String info[] = line.split(",");
-				// Èç¹ûÊÇGPS´«¸ĞÆ÷´«À´µÄĞÅÏ¢
+				// å¦‚æœæ˜¯GPSä¼ æ„Ÿå™¨ä¼ æ¥çš„ä¿¡æ¯
 				if (info[0].startsWith("G")) {  
-					if (sensorMap.containsKey(info[0])) {  //Èç¹ûmapÖĞ»º´æÁË´«¸ĞÆ÷µÄĞÅÏ¢
+					if (sensorMap.containsKey(info[0])) {  //å¦‚æœmapä¸­ç¼“å­˜äº†ä¼ æ„Ÿå™¨çš„ä¿¡æ¯
 						sensorDao.addGPSRecord((new DoubleValueSensorRecord(sensorMap.get(info[0]), time,
 								Double.valueOf(info[1]), Double.valueOf(info[2]))));
-					} else {  //Èç¹ûmapÃ»ÓĞ»º´æ´«¸ĞÆ÷µÄĞÅÏ¢£¬ÔòĞèÒªÈ¥Êı¾İ¿âÖĞÏÈ²éÑ¯³ö´«¸ĞÆ÷ĞÅÏ¢
+					} else {  //å¦‚æœmapæ²¡æœ‰ç¼“å­˜ä¼ æ„Ÿå™¨çš„ä¿¡æ¯ï¼Œåˆ™éœ€è¦å»æ•°æ®åº“ä¸­å…ˆæŸ¥è¯¢å‡ºä¼ æ„Ÿå™¨ä¿¡æ¯
 						Sensor GPSSensor = sensorDao.querySensorBySerialNumber(info[0]);
-						if (GPSSensor != null) { // Èç¹û´æÔÚÕâ¸ö´«¸ĞÆ÷
+						if (GPSSensor != null) { // å¦‚æœå­˜åœ¨è¿™ä¸ªä¼ æ„Ÿå™¨
 							sensorMap.put(info[0], GPSSensor.getId());
 							sensorDao.addGPSRecord((new DoubleValueSensorRecord(GPSSensor.getId(), time,
 									Double.valueOf(info[1]), Double.valueOf(info[2]))));
 						}
 					}
-					//ĞŞ¸Ä´«¸ĞÆ÷µÄÊµÊ±Êı¾İ±í sensor_value_realtime
+					//ä¿®æ”¹ä¼ æ„Ÿå™¨çš„å®æ—¶æ•°æ®è¡¨ sensor_value_realtime
 					sensorDao.updateSensorRealTimeValue(new SensorValue(sensorMap.get(info[0]),Double.valueOf(info[1]),Double.valueOf(info[2])));
 				}
-				// Èç¹ûÊÇ°±Æø´«¸ĞÆ÷
+				// å¦‚æœæ˜¯æ°¨æ°”ä¼ æ„Ÿå™¨
 				else if (info[0].startsWith("A")) {
 					if (sensorMap.containsKey(info[0])) {
 						sensorDao.addAmmniaGasRecord(
 								new SingleValueSensorRecord(sensorMap.get(info[0]), time, Double.valueOf(info[1])));
 					} else {
 						Sensor ammoniaGasSensor = sensorDao.querySensorBySerialNumber(info[0]);
-						if (ammoniaGasSensor != null) { // Èç¹û´æÔÚÕâ¸ö´«¸ĞÆ÷
+						if (ammoniaGasSensor != null) { // å¦‚æœå­˜åœ¨è¿™ä¸ªä¼ æ„Ÿå™¨
 							sensorMap.put(info[0], ammoniaGasSensor.getId());
 							sensorDao.addAmmniaGasRecord(new SingleValueSensorRecord(ammoniaGasSensor.getId(), time,
 									Double.valueOf(info[1])));
 						}
 						sensorDao.updateSensorRealTimeValue(new SensorValue(sensorMap.get(info[0]),Double.valueOf(info[1]),0));
 					}
-				} else if (info[0].startsWith("S")) {  //S¿ªÍ·±íÊ¾Áò»¯Çâ´«¸ĞÆ÷
+				} else if (info[0].startsWith("S")) {  //Så¼€å¤´è¡¨ç¤ºç¡«åŒ–æ°¢ä¼ æ„Ÿå™¨
 					if (sensorMap.containsKey(info[0])) {
 						sensorDao.addShydrothionRecord(
 								new SingleValueSensorRecord(sensorMap.get(info[0]), time, Double.valueOf(info[1])));
 					} else {
 						Sensor shydrothionSensor = sensorDao.querySensorBySerialNumber(info[0]);
-						if (shydrothionSensor != null) { // Èç¹û´æÔÚÕâ¸ö´«¸ĞÆ÷
+						if (shydrothionSensor != null) { // å¦‚æœå­˜åœ¨è¿™ä¸ªä¼ æ„Ÿå™¨
 							sensorMap.put(info[0], shydrothionSensor.getId());
 							sensorDao.addShydrothionRecord(new SingleValueSensorRecord(shydrothionSensor.getId(), time,
 									Double.valueOf(info[1])));
 						}
 						sensorDao.updateSensorRealTimeValue(new SensorValue(sensorMap.get(info[0]),Double.valueOf(info[1]),0));
 					}
-				} else if (info[0].startsWith("H")) { //H¿ªÍ·±íÊ¾ÎÂÊª¶È´«¸ĞÆ÷
+				} else if (info[0].startsWith("H")) { //Hå¼€å¤´è¡¨ç¤ºæ¸©æ¹¿åº¦ä¼ æ„Ÿå™¨
 					if (sensorMap.containsKey(info[0])) {
 						sensorDao.addHumitureRecord((new DoubleValueSensorRecord(sensorMap.get(info[0]), time,
 								Double.valueOf(info[1]), Double.valueOf(info[2]))));
 					} else {
 						Sensor humitureSensor = sensorDao.querySensorBySerialNumber(info[0]);
-						if (humitureSensor != null) { // Èç¹û´æÔÚÕâ¸ö´«¸ĞÆ÷
+						if (humitureSensor != null) { // å¦‚æœå­˜åœ¨è¿™ä¸ªä¼ æ„Ÿå™¨
 							sensorMap.put(info[0],humitureSensor.getId());
 							sensorDao.addHumitureRecord((new DoubleValueSensorRecord(humitureSensor.getId(), time,
 									Double.valueOf(info[1]), Double.valueOf(info[2]))));

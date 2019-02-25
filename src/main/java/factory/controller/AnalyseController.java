@@ -27,27 +27,27 @@ public class AnalyseController {
 	@Autowired
 	private SludgeService sludgeService;
 
-	SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");//ÉèÖÃÈÕÆÚ¸ñÊ½
+	SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");//è®¾ç½®æ—¥æœŸæ ¼å¼
 
 	private static Log log=LogFactory.getLog(ChargeController.class);
 	/**
-	 * @description:´ÓsludgeºÍrecord±íÖĞ²éÑ¯ËùÓĞ¼ÇÂ¼
+	 * @description:ä»sludgeå’Œrecordè¡¨ä¸­æŸ¥è¯¢æ‰€æœ‰è®°å½•
 	 */
 
 	@RequestMapping("/jumpToAnalyse")
 	public ModelAndView querySite(ModelAndView mv){
-		log.info("µ÷ÓÃ²éÑ¯¹¤³§µÄ·½·¨");
+		log.info("è°ƒç”¨æŸ¥è¯¢å·¥å‚çš„æ–¹æ³•");
 		List<Site> sites=siteService.queryAllSites();
-		mv.addObject("siteList",sites);//ÉèÖÃĞèÒª·µ»ØµÄÖµ
-		mv.setViewName("analyse/analyse"); //Ìø×ªµ½Ö¸¶¨µÄÒ³Ãæ
+		mv.addObject("siteList",sites);//è®¾ç½®éœ€è¦è¿”å›çš„å€¼
+		mv.setViewName("analyse/analyse"); //è·³è½¬åˆ°æŒ‡å®šçš„é¡µé¢
 
-		return mv; //·µ»Øµ½charge.jspÒ³Ãæ
+		return mv; //è¿”å›åˆ°charge.jspé¡µé¢
 	}
 
 	@RequestMapping("queryAllSludge")
 	@ResponseBody
 	public List<Sludge> queryAllSludge(){
-		log.info("½øÈë²éÑ¯ËùÓĞÎÛÄàµÄ·½·¨");
+		log.info("è¿›å…¥æŸ¥è¯¢æ‰€æœ‰æ±¡æ³¥çš„æ–¹æ³•");
 		List<Sludge> sludges=new ArrayList<Sludge>();
 		sludges.addAll(sludgeService.queryAllSludgeByInOutFlagWithMinorWareHouseId(0, 0));
 		return sludges;
@@ -57,7 +57,7 @@ public class AnalyseController {
 	@RequestMapping("querySludgeByDates")
 	@ResponseBody
 	public List<Sludge> querySludgeByDates(@RequestParam("startDate") String startDate,@RequestParam("endDate") String endDate,@RequestParam("siteId") int siteId){
-		log.info("µ÷ÓÃquerySludgeByDates");
+		log.info("è°ƒç”¨querySludgeByDates");
 		System.out.println("siteid and startDate, endDate are:"+siteId+":"+startDate+","+endDate);
 		if(startDate == null || startDate =="")
 		{
@@ -77,7 +77,7 @@ public class AnalyseController {
 	@RequestMapping("querySludgeBySiteName")
 	@ResponseBody
 	public List<Sludge> querySludgeBySiteName(@RequestParam("siteName") String siteName){
-		log.info("µ÷ÓÃ querySludgeBySiteName");
+		log.info("è°ƒç”¨ querySludgeBySiteName");
 		List<Sludge> sludges=sludgeService.querySludgeBySiteName(siteName);
 		return sludges;
 	}

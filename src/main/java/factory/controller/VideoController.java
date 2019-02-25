@@ -35,28 +35,28 @@ public class VideoController {
 	private static Log log=LogFactory.getLog(VideoController.class);	
 	@RequestMapping("/jumpToVideo")
 	public ModelAndView queryAllVideo(ModelAndView mv) {
-		log.info("µ÷ÓÃ²éÑ¯ÊÓÆµµÄ·½·¨");
+		log.info("è°ƒç”¨æŸ¥è¯¢è§†é¢‘çš„æ–¹æ³•");
 		List<Video> videos = videoService.queryAllVideo();
 		List<Car> cars = videoService.queryCarWhichNotVideo();
 		List<Video> videosWithoutCar=videoService.queryVideoWhichNotCar();
-		mv.addObject("videoList", videos);// ÉèÖÃĞèÒª·µ»ØµÄÖµ
+		mv.addObject("videoList", videos);// è®¾ç½®éœ€è¦è¿”å›çš„å€¼
 		mv.addObject("carList", cars);
 		mv.addObject("videoWithoutCarList", videosWithoutCar);
 		JSONArray carJson = JSONArray.fromObject(cars);
-		mv.setViewName("monitor/monitorCard"); // Ìø×ªµ½Ö¸¶¨µÄÒ³Ãæ
-		return mv; // ·µ»Øµ½staffManage.jspÒ³Ãæ
+		mv.setViewName("monitor/monitorCard"); // è·³è½¬åˆ°æŒ‡å®šçš„é¡µé¢
+		return mv; // è¿”å›åˆ°staffManage.jspé¡µé¢
 	}
 	
 	@RequestMapping("/jumpToFactoryVideo")
 	public ModelAndView queryAllFactoryVideo(ModelAndView mv) {
-		log.info("µ÷ÓÃ²éÑ¯ÊÓÆµµÄ·½·¨");
+		log.info("è°ƒç”¨æŸ¥è¯¢è§†é¢‘çš„æ–¹æ³•");
 		List<Video> videos = videoService.queryAllFactoryVideo();
 		List<Site> sites = videoService.querySiteWhichNotVideo();
 		JSONArray siteJson = JSONArray.fromObject(sites);
-		mv.addObject("videoList", videos);// ÉèÖÃĞèÒª·µ»ØµÄÖµ
+		mv.addObject("videoList", videos);// è®¾ç½®éœ€è¦è¿”å›çš„å€¼
 		mv.addObject("siteList", sites);
-		mv.setViewName("monitor/factorymonitor"); // Ìø×ªµ½Ö¸¶¨µÄÒ³Ãæ
-		return mv; // ·µ»Øµ½staffManage.jspÒ³Ãæ
+		mv.setViewName("monitor/factorymonitor"); // è·³è½¬åˆ°æŒ‡å®šçš„é¡µé¢
+		return mv; // è¿”å›åˆ°staffManage.jspé¡µé¢
 	}
 	
 	@RequestMapping("/queryAllFactoryVideo")
@@ -70,7 +70,7 @@ public class VideoController {
 	@RequestMapping("queryAllVideo")
 	@ResponseBody
 	public List<Video> queryAllVideo() {
-		log.info("µ÷ÓÃqueryAllVideo");
+		log.info("è°ƒç”¨queryAllVideo");
 		List<Video> video=videoService.queryAllVideo();
 		return video;
 	}
@@ -78,10 +78,10 @@ public class VideoController {
 	@RequestMapping("addVideo")
 	@ResponseBody
 	public Video addVideo(@RequestBody Video videoInfo) {
-		/*log.info("Ôö¼Ó¼à¿Ø");
-			log.info("³µÅÆºÅ£º"+videoInfo.getCarId()+" ÉãÏñÍ·±àºÅ£º"+videoInfo.getSerialNumber()+" ¸ßÇåµØÖ·£º"+videoInfo.getVideoHLSid()+" ±êÇåµØÖ·£º"+videoInfo.getVideoRTMPid());*/
-		log.info("Ôö¼Ó¼à¿Ø");
-		log.info("³µÅÆºÅ£º"+videoInfo.getLicense()+" ÉãÏñÍ·±àºÅ£º"+videoInfo.getSerialNumber()+" ¸ßÇåµØÖ·£º"+videoInfo.getVideoHLSid()+" ±êÇåµØÖ·£º"+videoInfo.getVideoRTMPid());	
+		/*log.info("å¢åŠ ç›‘æ§");
+			log.info("è½¦ç‰Œå·ï¼š"+videoInfo.getCarId()+" æ‘„åƒå¤´ç¼–å·ï¼š"+videoInfo.getSerialNumber()+" é«˜æ¸…åœ°å€ï¼š"+videoInfo.getVideoHLSid()+" æ ‡æ¸…åœ°å€ï¼š"+videoInfo.getVideoRTMPid());*/
+		log.info("å¢åŠ ç›‘æ§");
+		log.info("è½¦ç‰Œå·ï¼š"+videoInfo.getLicense()+" æ‘„åƒå¤´ç¼–å·ï¼š"+videoInfo.getSerialNumber()+" é«˜æ¸…åœ°å€ï¼š"+videoInfo.getVideoHLSid()+" æ ‡æ¸…åœ°å€ï¼š"+videoInfo.getVideoRTMPid());	
 		videoService.addVideo(videoInfo);
 		return videoInfo;  
 	}
@@ -89,7 +89,7 @@ public class VideoController {
 	@RequestMapping("deletevideo")
 	@ResponseBody
 	public Result deleteVideo(@RequestParam("videoId") int videoId) {
-		log.info("µ÷ÓÃÉ¾³ıvideo");
+		log.info("è°ƒç”¨åˆ é™¤video");
 		/*Map<String, Result> result = new HashMap<String, Result>();*/
 		try {
 			videoService.deleteVideo(videoId);
@@ -103,7 +103,7 @@ public class VideoController {
 	@RequestMapping("editVideo")
 	@ResponseBody
 	public Result editVideo(@RequestBody Video video) {
-		log.info("µ÷ÓÃĞŞ¸Ä¼à¿ØĞÅÏ¢µÄ·½·¨");
+		log.info("è°ƒç”¨ä¿®æ”¹ç›‘æ§ä¿¡æ¯çš„æ–¹æ³•");
 		log.info(video.getId() + " " + video.getLicense() + " " + video.getSerialNumber());
 		try {
 			videoService.editVideo(video);
@@ -122,7 +122,7 @@ public class VideoController {
 	@RequestMapping("queryVideoByserial_number")
 	@ResponseBody
 	public Video queryVideoByserial_number(@RequestParam("serialNumber") String serialNumber, Model model) {
-		log.info("µ÷ÓÃqueryVideoByserial_number");
+		log.info("è°ƒç”¨queryVideoByserial_number");
 		Video video = videoService.queryVideoByserial_number(serialNumber);
 		return video;
 	}
@@ -143,7 +143,7 @@ public class VideoController {
 	@RequestMapping("fuzzyqueryVideoByCarLicense")
 	@ResponseBody
 	public List <Video> fuzzyqueryVideoByCarLicense(@RequestParam("license") String license, Model model) {
-		log.info("µ÷ÓÃfuzzyqueryVideoByCarLicense");
+		log.info("è°ƒç”¨fuzzyqueryVideoByCarLicense");
 		List<Video> videos = videoService.fuzzyqueryVideoByCarLicense(license);
 		return videos;
 	}
@@ -152,7 +152,7 @@ public class VideoController {
 	@RequestMapping("queryVideoByCarLicense")
 	@ResponseBody
 	public Video queryVideoByCarLicense(@RequestParam("license") String license, Model model) {
-		log.info("µ÷ÓÃqueryVideoByCarLicense");
+		log.info("è°ƒç”¨queryVideoByCarLicense");
 		Video video = videoService.queryVideoByCarLicense(license);
 		return video;
 	}
@@ -164,7 +164,7 @@ public class VideoController {
 		Video video=videoService.queryVideoByDriverId(driverId);
 		List<Sensor> sensors = sensorService.querySensorsByDriverId(driverId);
 		mv.addObject("video",video);
-		mv.addObject("sensorList", sensors);// ÉèÖÃĞèÒª·µ»ØµÄÖµ
+		mv.addObject("sensorList", sensors);// è®¾ç½®éœ€è¦è¿”å›çš„å€¼
 		mv.setViewName("monitor/monitorOfOneCar");
 		
 		return mv;
@@ -176,7 +176,7 @@ public class VideoController {
 		Video video=videoService.queryVideoByCarId(carId);
 		List<Sensor> sensors = sensorService.querySensorsByCarId(carId);
 		mv.addObject("video",video);
-		mv.addObject("sensorList", sensors);// ÉèÖÃĞèÒª·µ»ØµÄÖµ
+		mv.addObject("sensorList", sensors);// è®¾ç½®éœ€è¦è¿”å›çš„å€¼
 		mv.setViewName("monitor/monitorOfOneCar");
 		return mv;
 	}
@@ -195,10 +195,10 @@ public class VideoController {
 	@RequestMapping("addFactoryVideo")
 	@ResponseBody
 	public Video addFactoryVideo(@RequestBody Video videoInfo) {
-		/*log.info("Ôö¼Ó¼à¿Ø");
-			log.info("³µÅÆºÅ£º"+videoInfo.getCarId()+" ÉãÏñÍ·±àºÅ£º"+videoInfo.getSerialNumber()+" ¸ßÇåµØÖ·£º"+videoInfo.getVideoHLSid()+" ±êÇåµØÖ·£º"+videoInfo.getVideoRTMPid());*/
-		log.info("Ôö¼Ó¼à¿Ø");
-		log.info("Õ¾µãID"+videoInfo.getSiteId()+"ÎÛÄà´¦Àí³§Ãû£º"+videoInfo.getLicense()+" ÉãÏñÍ·±àºÅ£º"+videoInfo.getSerialNumber()+" ¸ßÇåµØÖ·£º"+videoInfo.getVideoHLSid()+" ±êÇåµØÖ·£º"+videoInfo.getVideoRTMPid());	
+		/*log.info("å¢åŠ ç›‘æ§");
+			log.info("è½¦ç‰Œå·ï¼š"+videoInfo.getCarId()+" æ‘„åƒå¤´ç¼–å·ï¼š"+videoInfo.getSerialNumber()+" é«˜æ¸…åœ°å€ï¼š"+videoInfo.getVideoHLSid()+" æ ‡æ¸…åœ°å€ï¼š"+videoInfo.getVideoRTMPid());*/
+		log.info("å¢åŠ ç›‘æ§");
+		log.info("ç«™ç‚¹ID"+videoInfo.getSiteId()+"æ±¡æ³¥å¤„ç†å‚åï¼š"+videoInfo.getLicense()+" æ‘„åƒå¤´ç¼–å·ï¼š"+videoInfo.getSerialNumber()+" é«˜æ¸…åœ°å€ï¼š"+videoInfo.getVideoHLSid()+" æ ‡æ¸…åœ°å€ï¼š"+videoInfo.getVideoRTMPid());	
 		videoService.addFactoryVideo(videoInfo);
 		return videoInfo;  
 	}
@@ -212,17 +212,17 @@ public class VideoController {
 	
 	@RequestMapping("/queryFactoryVideoBySiteId")
 	public ModelAndView queryFactoryVideoBySiteId(@RequestParam ("siteId") int siteId,ModelAndView mv) {
-		log.info("µ÷ÓÃ²éÑ¯ÊÓÆµµÄ·½·¨");
+		log.info("è°ƒç”¨æŸ¥è¯¢è§†é¢‘çš„æ–¹æ³•");
 		log.info(siteId);
 		Video video = videoService.queryFactoryVideoBySiteId(siteId);		
-		mv.addObject("video",video);// ÉèÖÃĞèÒª·µ»ØµÄÖµ		
-		mv.setViewName("monitor/monitorOfOneFactory"); // Ìø×ªµ½Ö¸¶¨µÄÒ³Ãæ
-		return mv; // ·µ»Øµ½staffManage.jspÒ³Ãæ
+		mv.addObject("video",video);// è®¾ç½®éœ€è¦è¿”å›çš„å€¼		
+		mv.setViewName("monitor/monitorOfOneFactory"); // è·³è½¬åˆ°æŒ‡å®šçš„é¡µé¢
+		return mv; // è¿”å›åˆ°staffManage.jspé¡µé¢
 	}	
 	@RequestMapping("editFactoryVideo")
 	@ResponseBody
 	public Result editFactoryVideo(@RequestBody Video video) {
-		log.info("µ÷ÓÃĞŞ¸Ä¼à¿ØĞÅÏ¢µÄ·½·¨");
+		log.info("è°ƒç”¨ä¿®æ”¹ç›‘æ§ä¿¡æ¯çš„æ–¹æ³•");
 		log.info(video.getId() + " " + video.getSiteId() + " " + video.getSerialNumber());
 		try {
 			videoService.editFactoryVideo(video);
@@ -240,7 +240,7 @@ public class VideoController {
 	@RequestMapping("queryFactoryVideoBySiteName")
 	@ResponseBody
 	public Video queryFactoryVideoBySiteName(@RequestParam("license") String license, Model model) {
-		log.info("µ÷ÓÃqueryFactoryVideoBySiteName");
+		log.info("è°ƒç”¨queryFactoryVideoBySiteName");
 		Video video = videoService.queryFactoryVideoBySiteName(license);
 		return video;
 	}

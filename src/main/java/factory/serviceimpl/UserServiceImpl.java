@@ -41,7 +41,7 @@ public class UserServiceImpl implements UserService {
 	
 
 	/**
-	 * ×¢²áÓÃ»§
+	 * æ³¨å†Œç”¨æˆ·
 	 */
 	@Override
 	public void registerUser(User user) {
@@ -50,7 +50,7 @@ public class UserServiceImpl implements UserService {
 	}
 
 	/**
-	 * ²éÑ¯ËùÓĞË¾»ú
+	 * æŸ¥è¯¢æ‰€æœ‰å¸æœº
 	 */
 	@Override
 	public List<User> quertAllDriver() {
@@ -59,7 +59,7 @@ public class UserServiceImpl implements UserService {
 	}
 
 	/**
-	 * Í¨¹ıÕæÊµĞÕÃû²éÑ¯ÓÃ»§
+	 * é€šè¿‡çœŸå®å§“åæŸ¥è¯¢ç”¨æˆ·
 	 */
 	@Override
 	public User queryUserByRealName(String realname) {
@@ -88,7 +88,7 @@ public class UserServiceImpl implements UserService {
 		return drivers;
 	}
 
-	// ÅĞ¶ÏÓÃ»§ÊÇ·ñ´æÔÚ
+	// åˆ¤æ–­ç”¨æˆ·æ˜¯å¦å­˜åœ¨
 	public boolean isUserExist(String username) {
 		if (userDao.queryUserByUsername(username) == null) {
 			return false;
@@ -97,7 +97,7 @@ public class UserServiceImpl implements UserService {
 		}
 	}
 
-	// ¸ù¾İÌá¹©µÄÓÃ»§ÃûÄÃÃÜÂë
+	// æ ¹æ®æä¾›çš„ç”¨æˆ·åæ‹¿å¯†ç 
 	public String getPasswordByUsername(String username) {
 		return userDao.queryUserByUsername(username).getPassword();
 	}
@@ -109,7 +109,7 @@ public class UserServiceImpl implements UserService {
 		String originPwd = String.valueOf(userMap.get("originPwd"));
 		String newPwd = String.valueOf(userMap.get("newPwd"));
 		User user = userDao.queryUserByUserId(userId);
-		System.out.print("Ô­Ê¼ÓÃ»§ÃÜÂë" + user.getPassword());
+		System.out.print("åŸå§‹ç”¨æˆ·å¯†ç " + user.getPassword());
 		if (user.getPassword().equals(originPwd)) {
 			user.setPassword(newPwd);
 			userDao.modifyPasswordByUsername(user);
@@ -167,16 +167,16 @@ public class UserServiceImpl implements UserService {
 		int roleId = userInfo.get("roleId");
 		int siteId = userInfo.get("siteId");
 		int carId = userInfo.get("carId");
-		if (roleId == 2) {// ¹¤³§
+		if (roleId == 2) {// å·¥å‚
 			user.setId(userId);
 			user.setSiteId(siteId);
 			userDao.editUserByUserId(user);
-		} else if (roleId == 3) { // Ë¾»ú
+		} else if (roleId == 3) { // å¸æœº
 			if (carId != 0) {
-				carDao.setDriverIdToNUll(userId);//ÏÈ°ÑÖ®Ç°·ÖÅäµÄ³µµÄË¾»úÖÃÎªNULL
+				carDao.setDriverIdToNUll(userId);//å…ˆæŠŠä¹‹å‰åˆ†é…çš„è½¦çš„å¸æœºç½®ä¸ºNULL
 				carDao.updateDriverId(carId, userId);
 			}
-			else{ //Îª0ËµÃ÷²»ÎªË¾»ú·ÖÅä³µÁ¾
+			else{ //ä¸º0è¯´æ˜ä¸ä¸ºå¸æœºåˆ†é…è½¦è¾†
 				carDao.setDriverIdToNUll(userId);
 			}
 		}
@@ -201,7 +201,7 @@ public class UserServiceImpl implements UserService {
 		String username = userInfo.get("username");
 		String password = userInfo.get("password");
 		if (username == null || username.equals("") || password == null || password.equals("")) {
-			throw new DataNoneException("ÓÃ»§±íµ¥ĞÅÏ¢Îª¿Õ£¡");
+			throw new DataNoneException("ç”¨æˆ·è¡¨å•ä¿¡æ¯ä¸ºç©ºï¼");
 		}
 		User user = new User();
 		user.setRealname(userInfo.get("realname"));
@@ -210,7 +210,7 @@ public class UserServiceImpl implements UserService {
 		user.setEmail(userInfo.get("email"));
 		user.setTelephone(userInfo.get("telephone"));
 		user.setRoleId(Integer.valueOf(userInfo.get("roleId")));
-		user.setCheckStatus(1);// ¹ÜÀíÔ±Ôö¼ÓÓÃ»§Ä¬ÈÏÉóºËÍ¨¹ı
+		user.setCheckStatus(1);// ç®¡ç†å‘˜å¢åŠ ç”¨æˆ·é»˜è®¤å®¡æ ¸é€šè¿‡
 		userDao.addUser(user);
 		return user.getId();
 	}
@@ -259,17 +259,17 @@ public class UserServiceImpl implements UserService {
 	public void register(User user) {
 		if (user.getUsername() == null || user.getUsername().length() == 0 || user.getPassword() == null
 				|| user.getPassword().length() == 0) {
-			throw new DataNoneException("×¢²áÓÃ»§ĞÅÏ¢²»È«");
+			throw new DataNoneException("æ³¨å†Œç”¨æˆ·ä¿¡æ¯ä¸å…¨");
 
 		}
 		User recpUser = userDao.queryUserByUsername(user.getUsername());
 		if (recpUser != null) {
-			throw new DuplicateKeyException("ÒÑ¾­±»×¢²á");
+			throw new DuplicateKeyException("å·²ç»è¢«æ³¨å†Œ");
 		} else {
-			if (user.getRoleId() == 3) { // ÉêÇëµÄÊÇË¾»ú
+			if (user.getRoleId() == 3) { // ç”³è¯·çš„æ˜¯å¸æœº
 				user.setSiteId(0);
 			}
-			user.setTelephone(user.getUsername());// ÊÖ»úºÅÂë¾ÍÊÇÓÃ»§Ãû
+			user.setTelephone(user.getUsername());// æ‰‹æœºå·ç å°±æ˜¯ç”¨æˆ·å
 			userDao.registerUser(user);
 		}
 
@@ -282,24 +282,24 @@ public class UserServiceImpl implements UserService {
 		String username = user.getUsername();
 		String password = user.getPassword();
 		if (username == null || username.equals("") || password == null || password.equals("")) {
-			throw new DataNoneException("µÇÂ½ĞÅÏ¢²»ÍêÉÆ");
+			throw new DataNoneException("ç™»é™†ä¿¡æ¯ä¸å®Œå–„");
 		}
 		User loginUser = userDao.queryUserByUsername(username);
 		if (loginUser != null) {
 			System.out.println(loginUser.getUsername());
 			if (password.equals(loginUser.getPassword())) {
 				if (loginUser.getCheckStatus() == 0) {
-					throw new RefuseLoginException("ÉóºË²»Í¨¹ı,½ûÖ¹µÇÂ½£¡");
-				} else if (loginUser.getCheckStatus() == 2) { // ÉóºËÖĞ
-					throw new AuditIngException("ÉóºËÖĞ,Ôİ²»ÄÜµÇÂ½");
+					throw new RefuseLoginException("å®¡æ ¸ä¸é€šè¿‡,ç¦æ­¢ç™»é™†ï¼");
+				} else if (loginUser.getCheckStatus() == 2) { // å®¡æ ¸ä¸­
+					throw new AuditIngException("å®¡æ ¸ä¸­,æš‚ä¸èƒ½ç™»é™†");
 				} else {
 					return loginUser;
 				}
 			} else {
-				throw new LoginInfoErrorException("ÃÜÂë´íÎó");
+				throw new LoginInfoErrorException("å¯†ç é”™è¯¯");
 			}
 		} else {
-			throw new LoginInfoErrorException("ÓÃ»§²»´æÔÚ");
+			throw new LoginInfoErrorException("ç”¨æˆ·ä¸å­˜åœ¨");
 		}
 
 	}

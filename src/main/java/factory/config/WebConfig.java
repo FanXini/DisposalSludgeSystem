@@ -30,22 +30,22 @@ import redis.clients.jedis.JedisPoolConfig;
 @SuppressWarnings("deprecation")
 @Configurable
 @EnableCaching
-/*¿ªÆôÊÂÎñÖ§³Ö µÈÍ¬ÓÚxmlÅäÖÃ·½Ê½µÄ <tx:annotation-driven />*/
+/*å¼€å¯äº‹åŠ¡æ”¯æŒ ç­‰åŒäºxmlé…ç½®æ–¹å¼çš„ <tx:annotation-driven />*/
 @EnableTransactionManagement
-/*Æô¶¯spring mvc¹¦ÄÜ*/
+/*å¯åŠ¨spring mvcåŠŸèƒ½*/
 @EnableWebMvc
-//É¨ÃèÕâcontrollerºÍserviceimplÁ½¸ö°ü
+//æ‰«æè¿™controllerå’Œserviceimplä¸¤ä¸ªåŒ…
 @ComponentScan(basePackageClasses= {UserController.class,UserServiceImpl.class})
 public class WebConfig extends WebMvcConfigurerAdapter{
 	@Bean
-	public ViewResolver viewResolver() { //ÅäÖÃJSPÊÓÍ¼½âÎö
+	public ViewResolver viewResolver() { //é…ç½®JSPè§†å›¾è§£æ
 		InternalResourceViewResolver resolver=new InternalResourceViewResolver();
 		resolver.setPrefix("/WEB-INF/jsp/");
 		resolver.setSuffix(".jsp");
 		resolver.setExposeContextBeansAsAttributes(true);
 		return resolver;
 	}
-	@Override     //ÅäÖÃ¾²Ì¬×ÊÔ´µÄ´¦Àí
+	@Override     //é…ç½®é™æ€èµ„æºçš„å¤„ç†
 	public void configureDefaultServletHandling(DefaultServletHandlerConfigurer configurer) {
 		configurer.enable();
 	}
