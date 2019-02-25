@@ -14,6 +14,8 @@ import javax.servlet.http.HttpSession;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
@@ -49,6 +51,9 @@ public class RecordController {
 	private SiteService siteService;
 	@Autowired
 	private CarService carService;
+	
+	@Autowired
+	private  RedisTemplate<String, Object> redisTemplate;
 	
 	@Autowired
 	private SludgeService sludgeService;
@@ -220,6 +225,7 @@ public class RecordController {
 	@RequestMapping("/insertRecordByAlert")
 	@ResponseBody
 	@Transactional
+	@CacheEvict(value="site",allEntries=true)
 	public String insertRecordByAlert(@RequestBody Record record) {
 		log.info("添加一条记录");
 		log.info(record.getSiteId()+","+record.getPretreatAmount());
@@ -233,7 +239,7 @@ public class RecordController {
 		System.out.println(record.getId());
 		//查询出车的经纬度
 		Site site=siteService.querySiteById(siteId);
-		taskExecuter.submit(new AssignCarForReocrdThread(recordService, carService, sludgeService, record.getId(), site));
+		taskExecuter.submit(new AssignCarForReocrdThread(redisTemplate,recordService, carService, sludgeService, record.getId(), site));
 		return "success";
 	}
 	

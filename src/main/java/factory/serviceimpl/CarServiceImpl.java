@@ -223,9 +223,9 @@ public class CarServiceImpl implements CarService{
 		return car;
 	}
 	@Override
-	//@Cacheable(value="car",key="'siteId'+#siteId+'carType'+#carType+'status'+#status")
+	@Cacheable(value="car",key="'siteId'+#siteId+'carType'+#carType+'status'+#status")
 	public List<Car> queryMapCarBySiteIdAndCarTypeAndStatus(int siteId,int carType,int status) {
-		System.out.println("toDb");
+		System.out.println("queryCarFromDb");
 		List<Car> cars=new ArrayList<Car>();
 		cars.addAll(carDao.queryMapCarBySiteIdAndCarTypeAndStatus(siteId,carType,status));
 		for(Car car:cars){
@@ -258,7 +258,7 @@ public class CarServiceImpl implements CarService{
 
 	@Override
 	@Transactional
-	//@CacheEvict(value= {"car","site"},allEntries=true)
+	@CacheEvict(value= {"car","site"},allEntries=true)
 	public Car updateCarStatusByButton(Map<String, Integer> map) {
 		int driverId=map.get("driverId");
 		int nowStatus=map.get("nowStatus");

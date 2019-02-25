@@ -181,7 +181,7 @@ public class SiteServiceImpl implements SiteService{
 		return recordDao.countRecordOfCarNullBySiteId(siteId);
 	}
 
-	//@Cacheable(value="site",key="'siteId'+#siteId+'status'+#status")
+	@Cacheable(value="site",key="'siteId'+#siteId+'status'+#status")
 	@Override
 	public List<Site> querySiteMapBySiteIdAndStatus(int siteId,int status) {
 		System.out.println("从数据库中查询site");
@@ -189,7 +189,6 @@ public class SiteServiceImpl implements SiteService{
 	}
 
 	@Override
-	//@CacheEvict(value="site",allEntries=true)
 	public void updateSiteStatusById(int siteId,int status) {
 		siteDao.updateSiteStatusById(siteId,status);
 	}

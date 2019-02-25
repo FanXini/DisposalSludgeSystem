@@ -140,7 +140,7 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	//@Cacheable(value="user",key="'allUser'")
+	@Cacheable(value="user",key="'allUser'")
 	public List<User> queryAllUser() {
 		return userDao.queryAllUser();
 	}
@@ -152,14 +152,14 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	//@CacheEvict(value="user",key="'allUser'")
+	@CacheEvict(value="user",key="'allUser'")
 	public void deleteUserByUserId(int userId) {
 		// TODO Auto-generated method stub
 		userDao.deleteUserByUserId(userId);
 	}
 
 	@Override
-	//@CacheEvict(value="user",key="'allUser'")
+	@CacheEvict(value="user",key="'allUser'")
 	public void editUserByUserId(Map<String, Integer> userInfo) {
 		// TODO Auto-generated method stub
 		User user = new User();
@@ -183,19 +183,19 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	//@CacheEvict(value="user",key="'allUser'")
+	@CacheEvict(value="user",key="'allUser'")
 	public void checkUserByUserId(int userId) {
 		userDao.checkUserByUserId(userId);
 	}
 
 	@Override
-	//@CacheEvict(value="user",key="'allUser'")
+	@CacheEvict(value="user",key="'allUser'")
 	public void checkNUserByUserId(int userId) {
 		userDao.checkNUserByUserId(userId);
 	}
 
 	@Override
-	//@CacheEvict(value="user",key="'allUser'")
+	@CacheEvict(value="user",key="'allUser'")
 	public int addUser(Map<String, String> userInfo) {
 		// TODO Auto-generated method stub
 		String username = userInfo.get("username");

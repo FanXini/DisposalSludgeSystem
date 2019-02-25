@@ -1,8 +1,10 @@
 package factory.util;
 import java.util.List;
+import java.util.Set;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.data.redis.core.RedisTemplate;
 
 import factory.entity.Car;
 import factory.entity.Record;
@@ -27,12 +29,15 @@ public class AssignCarForReocrdThread implements Runnable{
 	
 	private Site site;
 	
+	private  RedisTemplate<String, Object> redisTemplate; 
+	
 	private static Log log=LogFactory.getLog(AssignCarForReocrdThread.class);
 	
 	public  AssignCarForReocrdThread() {
 		// 默认构造器
 	}
-	public AssignCarForReocrdThread(RecordService recordService,CarService carService,SludgeService sludgeService,int recordId,Site site) {
+	public AssignCarForReocrdThread(RedisTemplate<String, Object> redisTemplate,RecordService recordService,CarService carService,SludgeService sludgeService,int recordId,Site site) {
+		this.redisTemplate=redisTemplate;
 		this.recordService=recordService;
 		this.carService=carService;
 		this.sludgeService=sludgeService;
@@ -59,6 +64,7 @@ public class AssignCarForReocrdThread implements Runnable{
 				recordService.updateCarId(recordId, disPacherTreatmentCar.getId());
 				//修改车的状态为已分配还未出发,并将car的siteId设置为0
 				carService.editWorkerCarStatusAndSiteId(disPacherTreatmentCar.getId(), CarStatus.NODEPARTURE.ordinal(), site.getId());
+				deleteByPrex("car*");
 				log.info("为"+recordId+"：请求 分配处理车:"+disPacherTreatmentCar.getLicense());
 				break;
 			}
@@ -80,6 +86,7 @@ public class AssignCarForReocrdThread implements Runnable{
 				log.info("为"+recordId+"：请求 分配运输车:"+disPacherCarrier.getLicense());
 				//修改运输车的状态
 				carService.editWorkerCarStatusAndSiteId(disPacherCarrier.getId(), CarStatus.NODEPARTURE.ordinal(), site.getId());
+				deleteByPrex("car*");
 				Sludge sludge=new Sludge();
 				sludge.setRecordId(recordId);
 				//设置sludge的状态为虚拟状态，还未产出
@@ -117,5 +124,14 @@ public class AssignCarForReocrdThread implements Runnable{
 		}
 		return car;
 	}
+	
+	public void deleteByPrex(String prex) {
+        Set<String> keys = redisTemplate.keys(prex);
+        for(String key:keys) {
+        	System.out.println(key);
+        	redisTemplate.delete(key);
+        }
+    }
+
 
 }
