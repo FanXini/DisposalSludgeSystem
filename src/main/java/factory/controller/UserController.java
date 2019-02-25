@@ -10,6 +10,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
+import org.springframework.data.redis.cache.RedisCacheManager;
 import org.springframework.scheduling.config.IntervalTask;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -35,6 +36,7 @@ import factory.service.CarService;
 import factory.service.Role_authorityService;
 import factory.service.SiteService;
 import factory.service.UserService;
+import redis.clients.jedis.JedisPoolConfig;
 
 @Controller
 @RequestMapping("user")
@@ -45,16 +47,10 @@ public class UserController {
 	private UserService service;
 	
 	@Autowired
-	private SiteService siteService;
-	@Autowired
 	private Role_authorityService role_authorityService;
 	
 	@Autowired
 	private CarService carService;
-	
-	public UserController() {
-		System.out.println(siteService);
-	}
 
 	@RequestMapping("private/{formName}")
 	public String loginForm(@PathVariable String formName) {
@@ -215,5 +211,11 @@ public class UserController {
 			System.out.println(user.getRealname());
 		}
 		return driversList;
+	}
+	
+	@RequestMapping("/transactionTest")
+	@ResponseBody
+	public void redisTest() {
+		service.testTransaction();
 	}
 }

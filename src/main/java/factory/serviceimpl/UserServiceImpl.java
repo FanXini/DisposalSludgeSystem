@@ -7,12 +7,14 @@ import factory.exception.AuditIngException;
 import factory.exception.DataNoneException;
 import factory.exception.LoginInfoErrorException;
 import factory.exception.RefuseLoginException;
+import factory.service.RedisTestService;
 import factory.service.UserService;
 
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
@@ -30,15 +32,13 @@ public class UserServiceImpl implements UserService {
 
 	@Autowired
 	private CarDao carDao;
-
 	private static Log log = LogFactory.getLog(UserServiceImpl.class);
-	
-	@Cacheable("users")
+
 	@Override
 	public User queryUserByUsername(String username) {
-		System.out.println("通过数据库查询用户信息");
 		return userDao.queryUserByUsername(username);
 	}
+	
 
 	/**
 	 * 注册用户
@@ -140,6 +140,7 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
+	//@Cacheable(value="user",key="'allUser'")
 	public List<User> queryAllUser() {
 		return userDao.queryAllUser();
 	}
@@ -151,12 +152,14 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
+	//@CacheEvict(value="user",key="'allUser'")
 	public void deleteUserByUserId(int userId) {
 		// TODO Auto-generated method stub
 		userDao.deleteUserByUserId(userId);
 	}
 
 	@Override
+	//@CacheEvict(value="user",key="'allUser'")
 	public void editUserByUserId(Map<String, Integer> userInfo) {
 		// TODO Auto-generated method stub
 		User user = new User();
@@ -180,16 +183,19 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
+	//@CacheEvict(value="user",key="'allUser'")
 	public void checkUserByUserId(int userId) {
 		userDao.checkUserByUserId(userId);
 	}
 
 	@Override
+	//@CacheEvict(value="user",key="'allUser'")
 	public void checkNUserByUserId(int userId) {
 		userDao.checkNUserByUserId(userId);
 	}
 
 	@Override
+	//@CacheEvict(value="user",key="'allUser'")
 	public int addUser(Map<String, String> userInfo) {
 		// TODO Auto-generated method stub
 		String username = userInfo.get("username");
@@ -278,7 +284,7 @@ public class UserServiceImpl implements UserService {
 		if (username == null || username.equals("") || password == null || password.equals("")) {
 			throw new DataNoneException("登陆信息不完善");
 		}
-		User loginUser = queryUserByUsername(username);
+		User loginUser = userDao.queryUserByUsername(username);
 		if (loginUser != null) {
 			System.out.println(loginUser.getUsername());
 			if (password.equals(loginUser.getPassword())) {
@@ -322,7 +328,7 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	
+	@Transactional
 	public void testTransaction() {
 		userDao.delectUser(1);
 		userDao.queryUserByRealName("test");

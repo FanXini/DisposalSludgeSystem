@@ -10,16 +10,16 @@ public class JDBC {
 	
 	public static final String PASSWORD="123456";
 	
-	 /*c3p0è¿æ¥æ± çš„ç§æœ‰å±æ€§ */
-	/*æœ€å¤§è¿æ¥çº¿ç¨‹æ•°*/
+	 /*c3p0Á¬½Ó³ØµÄË½ÓĞÊôĞÔ */
+	/*×î´óÁ¬½ÓÏß³ÌÊı*/
 	public static final int MAXPOOLSIZE=30;
-	/*æœ€å°ä¿æŒè¿æ¥çº¿ç¨‹æ•°*/
+	/*×îĞ¡±£³ÖÁ¬½ÓÏß³ÌÊı*/
 	public static final int MINPOOLSIZE=10;
-	/*å…³é—­è¿æ¥åä¸è‡ªåŠ¨commit*/
+	/*¹Ø±ÕÁ¬½Óºó²»×Ô¶¯commit*/
 	public static final boolean AUTOCOMMITONCLOSE=false;
-	/*è·å–è¿æ¥è¶…æ—¶æ—¶é—´*/
+	/*»ñÈ¡Á¬½Ó³¬Ê±Ê±¼ä*/
 	public static final int CHECKOUTTIMEOUT=10000;
-	/*å½“è·å–è¿æ¥å¤±è´¥é‡è¯•æ¬¡æ•°*/
+	/*µ±»ñÈ¡Á¬½ÓÊ§°ÜÖØÊÔ´ÎÊı*/
 	public static final int ACQUIRERETRYATTEMPTS=2;
 	
 	

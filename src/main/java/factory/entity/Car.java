@@ -1,9 +1,13 @@
 package factory.entity;
 
-import factory.enums.CarStatus;
+import java.io.Serializable;
 
-public class Car {
+public class Car implements Serializable{
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 5854592621921688207L;
 	private int id;
 	private int driverId;
 	private String license;

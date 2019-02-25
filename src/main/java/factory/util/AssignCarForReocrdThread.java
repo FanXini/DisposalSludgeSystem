@@ -62,7 +62,7 @@ public class AssignCarForReocrdThread implements Runnable{
 				log.info("为"+recordId+"：请求 分配处理车:"+disPacherTreatmentCar.getLicense());
 				break;
 			}
-			log.info("暂为空闲处理车,3秒后重新分配");
+			log.info("暂无空闲处理车,3秒后重新分配");
 			try {
 				Thread.sleep(3000);
 			} catch (InterruptedException e) {

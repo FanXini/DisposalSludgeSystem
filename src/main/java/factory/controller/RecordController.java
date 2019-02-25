@@ -16,6 +16,7 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -217,6 +218,7 @@ public class RecordController {
 	
 	@RequestMapping("/insertRecordByAlert")
 	@ResponseBody
+	@Transactional
 	public String insertRecordByAlert(@RequestBody Record record) {
 		log.info("添加一条记录");
 		log.info(record.getSiteId()+","+record.getPretreatAmount());
@@ -230,13 +232,6 @@ public class RecordController {
 		System.out.println(record.getId());
 		//查询出车的经纬度
 		Site site=siteService.querySiteById(siteId);
-		/*double longitute=Double.valueOf(site.getLongitude());
-		double latitute=Double.valueOf(site.getLatitude());
-		//调度处理车
-		Car treatmentCar=carService.assignCar(siteId,longitute,latitute,0);
-		//调度运输车
-		Car transportCar=carService.assignCar(siteId, longitute, latitute, 1);*/
-		//创建一个线程去调度
 		taskExecuter.submit(new AssignCarForReocrdThread(recordService, carService, sludgeService, record.getId(), site));
 		return "success";
 	}

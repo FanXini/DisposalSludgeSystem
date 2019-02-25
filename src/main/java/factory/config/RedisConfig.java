@@ -5,7 +5,6 @@ import java.util.Map;
 
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.cache.RedisCacheManager;
 import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
@@ -13,14 +12,10 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.JdkSerializationRedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
-
-import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPoolConfig;
 
 @Configuration
 @EnableCaching
-//@ComponentScan(basePackageClasses= {RedisUtil.class,UserServiceImpl.class,JumpController.class})
-//@ImportResource("classpath:spring/annotation-driven.xml")
 public class RedisConfig{
 	
 	/*@Bean	

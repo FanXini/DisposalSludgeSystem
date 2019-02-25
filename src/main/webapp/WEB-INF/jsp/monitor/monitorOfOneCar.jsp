@@ -12,7 +12,8 @@
 <title>实时监控</title>
 <meta charset="UTF-8">
 <meta http-equiv="pragma" content="no-cache">
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1.0" />
+<meta name="viewport"
+	content="width=device-width,initial-scale=1,maximum-scale=1.0" />
 <meta http-equiv="cache-control" content="no-cache">
 <meta http-equiv="expires" content="0">
 <meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
@@ -325,63 +326,65 @@
 				</div>
 			</div>
 		</div>
-		
-		
+
+
 	</div>
-	<div class="row">
-		<div class="ibox">
-			<!-- 内容 -->
-			<div class="wrapper wrapper-content animated fadeInRight">
-				<div class="row">
-					<c:forEach items="${requestScope.sensorList}" var="sensor">
-						<div class="col-sm-3">
-							<div class="contact-box">
-								<c:if test="${sensor.status ==0}">
-									<label class="label label-primary pull-right ">正常</label>
-								</c:if>
-								<c:if test="${sensor.status ==1}">
-									<label class="label label-danger pull-right ">异常</label>
-								</c:if>
-								<div class="row">
-									<div class="col-sm-4">
-										<!-- <div class="text-center">
+	<div class="col-sm-12">	
+	<div class="ibox">
+		<!-- 内容 -->
+		<div class="wrapper wrapper-content animated fadeInRight">
+			<div class="row">
+				<c:forEach items="${requestScope.sensorList}" var="sensor">
+					<div class="col-sm-3">
+						<div class="contact-box">
+							<c:if test="${sensor.status ==0}">
+								<label class="label label-primary pull-right ">正常</label>
+							</c:if>
+							<c:if test="${sensor.status ==1}">
+								<label class="label label-danger pull-right ">异常</label>
+							</c:if>
+							<div class="row">
+								<div class="col-sm-4">
+									<!-- <div class="text-center">
 													<img alt="image" class="img-circle m-t-xs img-responsive"
 														src="img/littercar.png">
 													<div class="m-t-xs font-bold">设备照片</div>
 												</div> -->
-										<div>
-											<label class="label">监测值</label>
-											<div class="h5 text-info inline">
-												<input class="form-control" id='${sensor.id}' name="sensorId"
-												style="width:135%;"	readonly />
-												<c:if test="${sensor.sensorType.type=='GPS传感器'||sensor.sensorType.type=='温湿度传感器' }">
-													<input class="form-control" id='${sensor.id}value2' style="width:135%;"	readonly />
-												</c:if>
-											</div>
+									<div>
+										<label class="label">监测值</label>
+										<div class="h5 text-info inline">
+											<input class="form-control" id='${sensor.id}' name="sensorId"
+												style="width: 135%;" readonly />
+											<c:if
+												test="${sensor.sensorType.type=='GPS传感器'||sensor.sensorType.type=='温湿度传感器' }">
+												<input class="form-control" id='${sensor.id}value2'
+													style="width: 135%;" readonly />
+											</c:if>
 										</div>
 									</div>
-									<div class="col-sm-8">
-										<div>
-											<label class="label">编号</label>
-											<div class="h5 text-info inline">${sensor.serialNumber }</div>
-										</div>
-										<div>
-											<label class="label">类型</label>
-											<div class="h5 text-info inline">${sensor.sensorType.type}</div>
-										</div>
-										<c:if
-											test="${sensor.sensorType.type=='氨气传感器'||sensor.sensorType.type=='硫化氢传感器' }">
-											<button class="btn btn-sm btn-info"
-												onclick="javascript:showRealTimeData(${sensor.id },'${sensor.sensorType.type}')">实时数据</button>
-										</c:if>
+								</div>
+								<div class="col-sm-8">
+									<div>
+										<label class="label">编号</label>
+										<div class="h5 text-info inline">${sensor.serialNumber }</div>
 									</div>
+									<div>
+										<label class="label">类型</label>
+										<div class="h5 text-info inline">${sensor.sensorType.type}</div>
+									</div>
+									<c:if
+										test="${sensor.sensorType.type=='氨气传感器'||sensor.sensorType.type=='硫化氢传感器' }">
+										<button class="btn btn-sm btn-info"
+											onclick="javascript:showRealTimeData(${sensor.id },'${sensor.sensorType.type}')">实时数据</button>
+									</c:if>
 								</div>
 							</div>
 						</div>
-					</c:forEach>
-				</div>
+					</div>
+				</c:forEach>
 			</div>
 		</div>
+	</div>
 	</div>
 	<!--  HistoryDataModel -->
 	<div class="modal inmodal" id="myModal" tabindex="-1" role="dialog"
@@ -408,7 +411,7 @@
 			</div>
 		</div>
 	</div>
-	
+
 	<!-- End Example Pagination -->
 	<!-- 全局js -->
 	<script src="js/jquery.min.js?v=2.1.4"></script>

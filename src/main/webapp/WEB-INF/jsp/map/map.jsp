@@ -130,13 +130,17 @@ h5{
 	border-top: 1px solid #ccc ;
 }
 .infowindow .txt {
-	font-size:12px;
+	font-size:15px;
 	vertical-align: 30%;
 }
 .carlist{
 	margin:2px 2px 2px 2px;
 	text-align:center;
 }
+.infoSize{
+	font-size:15px;
+}
+
 
 </style>
 </head>
@@ -202,7 +206,7 @@ h5{
 					<table class="tablehead" border="0" cellspacing="0" cellpadding="0"
 						style="width:100%">
 						<tr>
-							<td>车牌号</td>
+							<td>处理车车牌号</td>
 							<td>目的地</td>
 							<td>状态</td>
 						</tr>
@@ -224,7 +228,7 @@ h5{
 					<table class="tablehead" border="0" cellspacing="0" cellpadding="0"
 						style="width:100%">
 						<tr>
-							<td>车牌号</td>
+							<td>运输车车牌号</td>
 							<td>目的地</td>
 							<td>状态</td>
 						</tr>
@@ -601,7 +605,6 @@ h5{
 		carMarker=[];
 		carInfoWindow=[];
 		showNum();
-		showWareHouse();
 		if(selectType==2||selectType==-1){
 			siteList = queryMapSite(-1,selectStatus);
 			if(!jQuery.isEmptyObject(siteList)){
@@ -680,38 +683,41 @@ h5{
 	function wareHouseInfo(){
 		var opts = {width : 130, }// 信息窗口宽度
 		minorWareHouseList = queryWareHouse();
-		var lid = '<div class="carlist"><h5>'+wareHouseName+'</h5><ul class="list-unstyled" style="font-size:11px;color:#777;"';
+		var lid = '<div class="carlist"><a class="infoSize" href='+"mudWareHouse/jumpTomudwarehouse"+'>'+wareHouseName+'</a><ul class="list-unstyled infoSize" style="color:#777;"';
 		$.each(minorWareHouseList,function(i, minorWareHouse){
-			lid += '<li>'+minorWareHouse.serialNumber+'号仓:'+minorWareHouse.remainCapacity+'/'+minorWareHouse.capacity+'</li>';
+			lid += '<li class="infoSize">'+minorWareHouse.serialNumber+'号仓:'+minorWareHouse.remainCapacity+'/'+minorWareHouse.capacity+'</li>';
 		});
 		lid += '</ul>' + '</div>';
 		if(leisureTreatmentCarNum > 0){
 			var treatmentCarList = queryMapCar(-1,carType["TREATMENT"],carStatus["LEISURE"]);
-			lid += '<div class="infowindow"><span class="line"></span><span class="txt" style="color:#0000FF;">'+treatmentCarList.length+'辆空闲处理车</span><span class="line"></span></div><div class="carlist">';
+			lid += '<div class="infowindow"></span><span class="txt" style="color:#0000FF;">'+treatmentCarList.length+'辆空闲处理车</span></span></div><div class="carlist">';
 			lid += '<ul class="list-inline" style="font-size:11px;color:#777;">' ;
 			$.each(treatmentCarList,function(i, treatmentCar) {
-				lid += '<li style="color:#0000FF; font:bold;">'+treatmentCar.license+'</li>';
+				lid += '<li style="color:#0000FF; font:bold;"><a class="infoSize" href="monitor/queryVideoByDriverId?driverId='+treatmentCar.driverId+'">'+treatmentCar.license+'</a></li>';
 			});
 			lid += "</ul></div>"
 		}
-		if(leisureCarrierNum > 0){
+		if(leisureCarrierNum > 0){ /* 横线</span><span class="line"> */
 			var carrierList = queryMapCar(-1,carType["CARRIER"],carStatus["LEISURE"]);
-			lid += '<div class="infowindow"><span class="line"></span><span class="txt" style="color:#B22222;">'+carrierList.length+'辆空闲运输车</span><span class="line"></span></div><div class="carlist">';
+			lid += '<div class="infowindow"><span class="txt" style="color:#B22222;">'+carrierList.length+'辆空闲运输车</span></div><div class="carlist">';
 			lid += '<ul class="list-inline" style="font-size:11px;color:#777;">';
 			$.each(carrierList,function(i, carrier) {
-				lid += '<li style="color:#B22222">'+carrier.license+'</li>';
+				/* lid += '<li style="color:#B22222"><a class="infoSize" href="monitor/queryVideoByDriverId?driverId='+carrier.driverId+'">'+carrier.license+'</a></li>'; */
+				lid += '<li class="infoSize" style="color:#B22222">'+carrier.license+'</li>';
 			});
 			lid += "</ul></div>"
 		}
 		if((nodepartureTreatmentCarNum+nodepartureCarrierNum) > 0){
 			var nodepartureCarList = queryMapCar(-1,carType["ALL"],carStatus["NODEPARTURE"]);
-			lid += '<div class="infowindow"><span class="line"></span><span class="txt">'+nodepartureCarList.length+'辆待出发</span><span class="line"></span></div><div class="carlist">';
+			lid += '<div class="infowindow"><span class="txt" style="color:	#FF3030;">'+nodepartureCarList.length+'辆待出发</span></div><div class="carlist">';
 			lid += '<ul class="list-inline" style="font-size:11px;color:#777;">';
 			$.each(nodepartureCarList,function(i, nodepartureCar) {
 				if(nodepartureCar.carType == carType["TREATMENT"]){
-					lid += '<li style="color:#0000FF;">'+nodepartureCar.license+'</li>';
+					lid += '<li style="color:#0000FF;"><a class="infoSize" href="monitor/queryVideoByDriverId?driverId='+nodepartureCar.driverId+'">'+nodepartureCar.license+'(处)</a></li>';
+					
 				}else{
-					lid += '<li style="color:#B22222;">'+nodepartureCar.license+'</li>';
+					//lid += '<li style="color:#B22222;"><a class="infoSize" href="monitor/queryVideoByDriverId?driverId='+nodepartureCar.driverId+'">'+nodepartureCar.license+'(运)</a></li>';
+					lid += '<li class="infoSize" style="color:#B22222;">'+nodepartureCar.license+'(运)</li>';
 					}
 			});
 			lid += "</ul></div>"
@@ -741,43 +747,44 @@ h5{
 			else
 				status="待处理(已分配处理车"+carNum+"辆)";
 			}
-		var lid = '<div class="carlist"><h5>'+site.siteName+'</h5><ul class="list-unstyled" style="font-size:11px;color:#777;">';
+		var lid = '<div class="carlist"><a class="infoSize" href="monitor/queryFactoryVideoBySiteId?siteId='+site.id+'">'+site.siteName+'</a><ul class="list-unstyled" style="font-size:11px;color:#777;">';
 		if(site.status=="1"){
 			var rate = queryRateOfProcess(site.id);
 			if(rate == -1){
-				lid += '<li>处理进度：<span style="color: #1874CD; font-weight: bold;">数据异常</span></li>';	
+				lid += '<li class="infoSize">处理进度：<span style="color: #1874CD; font-weight: bold;">数据异常</span></li>';	
 				}else{
 				//处理进度
 				rate = 100*rate;
-				lid += '<li>处理进度：<span style="color: #1874CD; font-weight: bold;">'+rate.toFixed(2)+'%</span></li>';
+				lid += '<li class="infoSize">处理进度：<span style="color: #1874CD; font-weight: bold;">'+rate.toFixed(2)+'%</span></li>';
 			}
 		}else if(site.status=="2"){
 			var value = queryPretreatAmount(site.id);
 			if(value == -1){
-				lid += '<li>预处理量：<span style="color: #1874CD; font-weight: bold;">数据异常</span></li>';	
+				lid += '<li class="infoSize">预处理量：<span style="color: #1874CD; font-weight: bold;">数据异常</span></li>';	
 				}else if(value == 0){
-					lid += '<li>预处理量：<span style="color: #1874CD; font-weight: bold;">未设置</span></li>';
+					lid += '<li class="infoSize">预处理量：<span style="color: #1874CD; font-weight: bold;">未设置</span></li>';
 				}else{
 					//预处理量
-					lid += '<li>预处理量：<span style="color: #1874CD; font-weight: bold;">'+value+'</span></li>';
+					lid += '<li class="infoSize">预处理量：<span style="color: #1874CD; font-weight: bold;">'+value+'</span></li>';
 				}
 		}
-		lid += '<li>Tel:'+site.telephone+'</li>';
-		lid += '<li style="color:#FF4500;">状态:'+status+'</li>';
+		lid += '<li class="infoSize">Tel:'+site.telephone+'</li>';
+		lid += '<li class="infoSize" style="color:#FF4500;">状态:'+status+'</li>';
 		lid += '</ul>' + '</div>';
 		if(currentTreatmentCarList.length != 0){
 			lid += '<div class="infowindow"><span class="line"></span><span class="txt" style="color:#0000FF;">'+currentTreatmentCarList.length+'辆车处理中</span><span class="line"></span></div><div class="carlist">';
 			lid += '<ul class="list-inline" style="font-size:11px;color:#0000FF;"';
 			$.each(currentTreatmentCarList,function(i, treatmentCar) {
-				lid += '<li><a href="monitor/queryVideoByDriverId?driverId='+treatmentCar.driverId+'" style="color: #0000FF;">'+treatmentCar.license+'</a></li>';
+				lid += '<li><a class="infoSize" href="monitor/queryVideoByDriverId?driverId='+treatmentCar.driverId+'" style="color: #0000FF;">'+treatmentCar.license+'</a></li>';
 			});
 			lid += "</ul></div>"
 		}
 		if(currentCarrierList.length != 0){
-			lid += '<div class="infowindow"><span class="line"></span><span class="txt" style="color:#B22222;">'+currentCarrierList.length+'辆车正在装箱</span><span class="line"></span></div><div class="carlist">';
+			lid += '<div class="infowindow"></span><span class="txt" style="color:#B22222;">'+currentCarrierList.length+'辆车正在装箱</span></div><div class="carlist">';
 			lid += '<ul class="list-inline" style="font-size:11px;color:#B22222;"';
 			$.each(currentCarrierList,function(i, carrier) {
-				lid += '<li>'+carrier.license+'</li>';
+				//lid += '<li><a class="infoSize" href="monitor/queryVideoByDriverId?driverId='+carrier.driverId+'" style="color: #0000FF;">'+carrier.license+'</a></li>';
+				lid += '<li><span class="infoSize">'+carrier.license+'</span></li>';
 			});
 			lid += "</ul></div>"
 		}
@@ -788,27 +795,33 @@ h5{
 	/***************************** 车辆信息框显示************************************* */
 	function carInfo(car){
 		var opts = {width : 230,} // 信息窗口宽度
-		if(car.status==4)
-			var lid = '<div><h5><a href="monitor/queryVideoByDriverId?driverId='+car.driverId+'">'+car.license+'(返程中)</a></h5><table style="font-size:12px;">';
+		if(car.status==4){
+			if(car.carType==0){
+				var lid = '<div><h5 h5 class="infoSize"><a href="monitor/queryVideoByDriverId?driverId='+car.driverId+'">'+car.license+'-处(返程中)</a></h5><table style="font-size:12px;">';
+			}
+			else{
+				var lid = '<div><h5 class="infoSize">'+car.license+'-运(返程中)</h5><table style="font-size:12px;">';
+			}
+		}
 		else if(car.status==1 && (car.siteId == null || car.siteId == ''))
-			var lid = '<div><h5>'+car.license+'(运输中)</h5><table style="font-size:12px;">';
+			var lid = '<div><h5 class="infoSize">'+car.license+'(运输中)</h5><table style="font-size:12px;">';
 		else if (car.carType == 1)
-			var lid = '<div><h5>'+car.license+'</h5><table style="font-size:12px;">';
+			var lid = '<div><h5 class="infoSize">'+car.license+'(运)</h5><table style="font-size:12px;">';
 		else
-			var lid = '<div><h5><a href="monitor/queryVideoByDriverId?driverId='+car.driverId+'">'+car.license+'</a></h5><table style="font-size:12px;">';
+			var lid = '<div><h5><a class="infoSize" href="monitor/queryVideoByDriverId?driverId='+car.driverId+'">'+car.license+'(处)</a></h5><table style="font-size:12px;">';
 								
-		lid	+= '<tr><td style="width:40%;text-align: left;">司机：</td><td style="text-align: left;">'+car.driver.realname+'</td>'
+		lid	+= '<tr><td class="infoSize" style="width:40%;text-align: left;">司机：</td><td class="infoSize" style="text-align: left;">'+car.driver.realname+'</td>'
 			+ '</tr>'
 			+ '<tr>'
-			+ '<td style="width:40%;text-align: left;">Tel:</td><td style="text-align: left;">'+car.driver.telephone+'</td>'
+			+ '<td class="infoSize" style="width:40%;text-align: left;">Tel:</td><td class="infoSize" style="text-align: left;">'+car.driver.telephone+'</td>'
 			+ '</tr>';
 		if(car.status==1 && car.siteId != null && car.siteId != ''){
 			var pointSite = new BMap.Point(car.site.longitude,car.site.latitude);
 			var driving = new BMap.DrivingRoute(map,
 				{onSearchComplete:function(results){
 					var plan=results.getPlan(0);
-					lid += '<tr style="color:#FF4500;"><td style="width:40%;text-align: left;">目的地:</td><td style="text-align: left;">'+car.site.siteName+'</td></tr>';
-					lid += '<tr><td style="width:40%;text-align: left;">预计到达:</td><td style="text-align: left;">'+plan.getDuration(true)+'</td></tr>';
+					lid += '<tr style="color:#FF4500;"><td class="infoSize" style="width:40%;text-align: left;">目的地:</td><td class="infoSize" style="text-align: left;">'+car.site.siteName+'</td></tr>';
+					lid += '<tr><td class="infoSize" style="width:40%;text-align: left;">预计到达:</td><td class="infoSize" style="text-align: left;">'+plan.getDuration(true)+'</td></tr>';
 					lid += '</table>' + '</div>';
 					carInfoWindow[car.id] = new BMap.InfoWindow(lid,opts); // 创建信息窗口对象 
 					map.openInfoWindow(carInfoWindow[car.id], carPoint[car.id]);
@@ -888,7 +901,7 @@ h5{
 			}
 			else if (car.status== "4"){
 				table='<tr id="'+ car.id +'" style="color:#FFFF00;font-weight: 700;" onmouseover="sel(this)" onmouseout="cle(this)" onclick="showCarInfo('+JSON.stringify(car).replace(/\"/g,"'")+')">';
-				status="返程";
+				status="返程中";
 			}
 			table += '<td style="width:20%;">' + car.license + '</td>';
 			if (!jQuery.isEmptyObject(car.site)){
@@ -928,6 +941,10 @@ h5{
 			else if (car.status== "3"){
 				table='<tr id="'+ car.id +'" onmouseover="sel(this)" onmouseout="cle(this)" onclick="wareHouseInfo();">';
 				status="已派单";
+			}
+			else if (car.status== "4"){
+				table='<tr id="'+ car.id +'" style="color:#FFFF00;font-weight: 700;" onmouseover="sel(this)" onmouseout="cle(this)" onclick="showCarInfo('+JSON.stringify(car).replace(/\"/g,"'")+')">';
+				status="返程中";
 			}
 			table += '<td style="width:20%;">' + car.license + '</td>';
 			if (!jQuery.isEmptyObject(car.site)){

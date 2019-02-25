@@ -97,6 +97,13 @@
 			<version>${spring.version}</version>
 		</dependency>
 
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-instrument</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+
+
 		<!-- 2)Spring DAO层 -->
 		<dependency>
 			<groupId>org.springframework</groupId>
@@ -139,6 +146,8 @@
 			<artifactId>spring-aspects</artifactId>
 			<version>${spring.version}</version>
 		</dependency>
+
+
 
 		<!-- 6)spring security -->
 		<dependency>
@@ -273,15 +282,16 @@
 	<build>
 		<finalName>DisposalSludgeSystem</finalName>
 		<plugins>
-			<plugin>  
-            <groupId>org.apache.maven.plugins</groupId>  
-            <artifactId>maven-compiler-plugin</artifactId>  
-            <version>2.3.2</version>  
-                <configuration>  
-                       <source>1.8</source>  
-                    <target>1.8</target>  
-                </configuration>  
-        </plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>2.3.2</version>
+				<configuration>
+					<source>1.8</source>
+					<target>1.8</target>
+					  <encoding>gbk</encoding>
+				</configuration>
+			</plugin>
 		</plugins>
 	</build>
 </project>

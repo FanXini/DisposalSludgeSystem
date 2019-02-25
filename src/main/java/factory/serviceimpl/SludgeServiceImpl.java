@@ -9,7 +9,10 @@ import factory.enums.CarStatus;
 import factory.enums.SludgeStatus;
 import factory.service.SludgeService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -49,6 +52,8 @@ public class SludgeServiceImpl implements SludgeService {
 		
 	}
 	@Override
+	@Transactional
+	@CacheEvict(value="car",allEntries=true)
 	public void addOutSludge(Sludge sludge) {
 		String function = sludge.getSludgeFunction().getFunction();
 		//没有这个功能就新增一个功能
@@ -228,6 +233,7 @@ public class SludgeServiceImpl implements SludgeService {
 		return sludges;
 	}
 	@Override
+	@Transactional
 	public void insertSludgeByDriver(Sludge sludge) {
 		if (sludge.getSludgeFunction() != null) {
 			String function = sludge.getSludgeFunction().getFunction();

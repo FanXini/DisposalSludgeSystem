@@ -1,10 +1,15 @@
 package factory.entity;
 
+import java.io.Serializable;
 import java.util.List;
 
 
-public class Site {
+public class Site implements Serializable{
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 6926013883469901016L;
 	private int id;
 	private String siteName;
 	private String serialNumber;

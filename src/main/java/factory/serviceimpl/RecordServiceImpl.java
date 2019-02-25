@@ -6,6 +6,7 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import factory.dao.CarDao;
@@ -131,6 +132,7 @@ public class RecordServiceImpl implements RecordService{
 		return records;
 	}
 	@Override
+	@Transactional
 	public String editRecord(Map<String, Integer> map) {
 		// TODO Auto-generated method stubCar car=carService.queryCarByDriverId(jsonMap.get("driverId"));
 		int recordId=map.get("recordId");

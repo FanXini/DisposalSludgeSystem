@@ -9,6 +9,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 
@@ -179,17 +181,16 @@ public class SiteServiceImpl implements SiteService{
 		return recordDao.countRecordOfCarNullBySiteId(siteId);
 	}
 
+	//@Cacheable(value="site",key="'siteId'+#siteId+'status'+#status")
 	@Override
 	public List<Site> querySiteMapBySiteIdAndStatus(int siteId,int status) {
-		// TODO Auto-generated method stub
+		System.out.println("从数据库中查询site");
 		return siteDao.querySiteMapBySiteIdAndStatus(siteId,status);
 	}
 
 	@Override
+	//@CacheEvict(value="site",allEntries=true)
 	public void updateSiteStatusById(int siteId,int status) {
 		siteDao.updateSiteStatusById(siteId,status);
 	}
-	
-	
-
 }

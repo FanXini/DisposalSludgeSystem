@@ -1,10 +1,7 @@
 package factory.serviceimpl;
 
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -12,8 +9,11 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import factory.dao.CarDao;
 import factory.dao.RecordDao;
@@ -223,8 +223,9 @@ public class CarServiceImpl implements CarService{
 		return car;
 	}
 	@Override
+	//@Cacheable(value="car",key="'siteId'+#siteId+'carType'+#carType+'status'+#status")
 	public List<Car> queryMapCarBySiteIdAndCarTypeAndStatus(int siteId,int carType,int status) {
-		// TODO Auto-generated method stub
+		System.out.println("toDb");
 		List<Car> cars=new ArrayList<Car>();
 		cars.addAll(carDao.queryMapCarBySiteIdAndCarTypeAndStatus(siteId,carType,status));
 		for(Car car:cars){
@@ -256,6 +257,8 @@ public class CarServiceImpl implements CarService{
 	}
 
 	@Override
+	@Transactional
+	//@CacheEvict(value= {"car","site"},allEntries=true)
 	public Car updateCarStatusByButton(Map<String, Integer> map) {
 		int driverId=map.get("driverId");
 		int nowStatus=map.get("nowStatus");
