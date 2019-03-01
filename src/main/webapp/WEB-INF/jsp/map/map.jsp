@@ -4,7 +4,7 @@ String path = request.getContextPath();
 String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
 %>
 
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
 <base href="<%=basePath%>">
@@ -714,8 +714,8 @@ h5{
 			}
 		}
 	}
-	var longitute=parseFloat(114.349081);
-	var latitude=parseFloat(22.732652);
+	/* var longitute=parseFloat(114.349081);
+	var latitude=parseFloat(22.732652); */
 	function showCarInRoad(){
 		if(roadCarListOld.length!=0){
 			console.log("clearCarMark")
@@ -729,8 +729,8 @@ h5{
 		var roadCarList=queryCarInRoad();
 		console.log(roadCarList);
 		if(!jQuery.isEmptyObject(roadCarList)){
-			longitute-=0.004;
-			latitude-=0.004;
+			/* longitute-=0.004;
+			latitude-=0.004; */
 			$.each(roadCarList,function(i, car) {
 				console.log(car)
 				if(car.carType == 0){
@@ -745,7 +745,7 @@ h5{
 				getLocation(car.cloudDeviceId,car.cloudDeviceSerial);
 				var location=locationMap[deviceId];
 				if(location!=null){
-					carPoint[car.id] = new BMap.Point(longitute,latitude);
+					carPoint[car.id] = new BMap.Point(location.longitute,location.latitude);
 					carMarker[car.id] = new BMap.Marker(carPoint[car.id],{icon:carIcon});
 					map.addOverlay(carMarker[car.id]);					
 					//鼠标悬停动作
