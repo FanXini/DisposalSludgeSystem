@@ -221,6 +221,7 @@ public class VideoController {
 	}
 	
 	@RequestMapping("/queryFactoryVideoBySiteIdforWX")
+	@ResponseBody
 	public Video queryFactoryVideoBySiteIdforWX(@RequestParam ("siteId") int siteId) {
 		log.info("调用查询视频的方法");
 		log.info(siteId);
