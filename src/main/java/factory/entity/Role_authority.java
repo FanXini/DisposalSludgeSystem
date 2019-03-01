@@ -1,7 +1,13 @@
 package factory.entity;
 
-public class Role_authority {
-    private Integer id;
+import java.io.Serializable;
+
+public class Role_authority implements Serializable{
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 8468851375095286931L;
+	private Integer id;
 	private Integer role_id;
 	private Integer authority_id;
 	
@@ -25,7 +31,7 @@ public class Role_authority {
 	public void setAuthority_id(Integer authority_id){
 		this.authority_id = authority_id;
 	}
-	/*//´æ·ÅÈ¨ÏÞ¹ØÁª±íµÄÊý¾Ý
+	/*//ï¿½ï¿½ï¿½È¨ï¿½Þ¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	public String toString(){
 		return "Role_authority [id=" + id + ", role_id=" + role_id + ", authority_id=" + authority_id + "]";
 	}*/

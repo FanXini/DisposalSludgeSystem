@@ -745,7 +745,8 @@ h5{
 				getLocation(car.cloudDeviceId,car.cloudDeviceSerial);
 				var location=locationMap[deviceId];
 				if(location!=null){
-					carPoint[car.id] = new BMap.Point(location.longitute,location.latitude);
+					console.log(location)
+					carPoint[car.id] = new BMap.Point(location.longitude,location.latitude);
 					carMarker[car.id] = new BMap.Marker(carPoint[car.id],{icon:carIcon});
 					map.addOverlay(carMarker[car.id]);					
 					//鼠标悬停动作

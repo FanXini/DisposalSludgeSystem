@@ -1,7 +1,13 @@
 package factory.entity;
 
-public class MainMudWareHouse {
+import java.io.Serializable;
+
+public class MainMudWareHouse implements Serializable{
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1731182395643875699L;
 	private int id;
 	private String wareHouseName;
 	private double longitude;
