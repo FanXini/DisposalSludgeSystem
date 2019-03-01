@@ -4,11 +4,11 @@ public class JDBC {
 	
 	public static final String DRIVERCLASS="com.mysql.jdbc.Driver";
 	
-	public static final String URL="jdbc:mysql://iot.hnu.edu.cn/disposalsludgesystem?useUnicode=true&characterEncoding=utf8";
+	public static final String URL="jdbc:mysql://kaihuoguodian.xin/disposalsludgesystem?useUnicode=true&characterEncoding=utf8";
 	
-	public static final String USERNAME="root";
+	public static final String USERNAME="fanxin";
 	
-	public static final String PASSWORD="teamluo123";
+	public static final String PASSWORD="123456";
 	
 	 /*c3p0连接池的私有属性 */
 	/*最大连接线程数*/

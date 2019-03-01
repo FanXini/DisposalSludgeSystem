@@ -47,6 +47,8 @@ public interface CarService {
 	
 	public List<Car> queryMapCarBySiteIdAndCarTypeAndStatus(int siteId,int carType,int status);
 	
+	public List<Car> queryCarInRoad();
+	
 	public List<Car> querycarWithoutVideo();
 	
 	public List<Car> queryCarByCarType(int carType);
