@@ -281,6 +281,16 @@ public class CarController {
 		}
 	}
 	
+	@RequestMapping("queryCarInRoad")
+	@ResponseBody
+	public List<Car> queryCarInRoad(){
+		try {
+			return carService.queryCarInRoad();
+		} catch (Exception e) {
+			return null;
+		}
+	}
+	
 	@RequestMapping("queryCarByCarType")
 	@ResponseBody 
 	List<Car> queryCarByCarType(@RequestParam("carType") int carType){

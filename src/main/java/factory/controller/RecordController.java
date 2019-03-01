@@ -225,7 +225,7 @@ public class RecordController {
 	@RequestMapping("/insertRecordByAlert")
 	@ResponseBody
 	@Transactional
-	@CacheEvict(value="site",allEntries=true)
+	//@CacheEvict(value="site",allEntries=true)
 	public String insertRecordByAlert(@RequestBody Record record) {
 		log.info("添加一条记录");
 		log.info(record.getSiteId()+","+record.getPretreatAmount());

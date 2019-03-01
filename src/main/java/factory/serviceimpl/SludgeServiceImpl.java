@@ -53,7 +53,7 @@ public class SludgeServiceImpl implements SludgeService {
 	}
 	@Override
 	@Transactional
-	@CacheEvict(value="car",allEntries=true)
+	//@CacheEvict(value="car",allEntries=true)
 	public void addOutSludge(Sludge sludge) {
 		String function = sludge.getSludgeFunction().getFunction();
 		//没有这个功能就新增一个功能

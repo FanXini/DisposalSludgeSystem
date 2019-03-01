@@ -32,7 +32,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <link href="css/animate.css" rel="stylesheet">
 <link href="css/style.css?v=4.1.0" rel="stylesheet">
 <script src="https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script>
-<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=5TmZTw10oplDe4ZehEM6UjnY6rDgocd8"></script>
+<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=5TmZTw10oplDe4ZehEM6UjnY6rDgocd8&s=1"></script>
 
 <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
@@ -355,6 +355,8 @@ h5{
 	var wareHousePoint;
 	var wareHouseMarker;
 	var wareHouseInfoWindow;
+	var siteListOld=new Array();
+	var roadCarListOld=new Array()
 	var siteMarker = new Array();
 	var sitePoint = new Array();
 	var siteInfoWindow = new Array();
@@ -368,9 +370,11 @@ h5{
 	var leisureCarrierNum = 0;
 	var nodepartureTreatmentCarNum = 0;
 	var nodepartureCarrierNum = 0;
+	showWareHouse();
+	showCarInRoad();
 	showMap(-1,-1);
-	
 	var interval=setInterval("showMap(-1,-1)",5000);
+	var carInterval=setInterval("showCarInRoad()",2000);
 	
   	//setInterval("showMap()",3000);  //定时刷新map
   	//setInterval("showNum()",3000);  //定时刷新空闲车辆及待处理站点数量
@@ -378,7 +382,15 @@ h5{
   	/***************************** 类型联动************************************* */
   	$("#typeSelect").change(function(){
   		var ts = $("#typeSelect").val();
+  		if(ts==-1){
+  			location.reload()
+  		}	
+  		map.clearOverlays();
   		clearInterval(interval);
+  		clearInterval(carInterval);
+  		siteListOld=[];//清空site历史记录
+  		carPoint=[];// 清空car标记点
+		carMarker=[];
 		showMap(ts,-1);
 		interval=setInterval("showMap("+ts+",-1)",5000);
   		if(ts == 2)
@@ -409,6 +421,10 @@ h5{
   	});
     /***************************** 状态选择************************************* */
   	$("#statusSelect").change(function(){
+  		map.clearOverlays(); //清空所有覆盖物
+  		siteListOld=[];//清空site历史数据
+  		carPoint=[];// 清空car标记点
+		carMarker=[];
   		var typeS = $("#typeSelect").val();
   		var statusS = $("#statusSelect").val();
 		clearInterval(interval);
@@ -417,6 +433,10 @@ h5{
   	});
   	/***************************** 输入框精确查找************************************* */
   	$("#querysubmit").click(function(){
+  		map.clearOverlays(); //清空所有覆盖物
+  		siteListOld=[];//清空site历史数据
+  		carPoint=[];// 清空car标记点
+		carMarker=[];
   		var queryStr=$("#queryStr").val();
   		var typeS =$("#typeSelect").val();
   		var statusS = $("#statusSelect").val();
@@ -538,6 +558,19 @@ h5{
   		});
   		return value;
   	}
+	
+  	function queryCarInRoad(){
+		var carList;
+		$.ajax({
+			type : "GET",
+			url : "car/queryCarInRoad",
+			async : false,
+			success : function(list) {
+				carList = list;
+			}
+		});
+		return carList;
+	}
   		
   	/***************************** 查询车辆************************************* */
 	function queryMapCar(siteId,carType,status){
@@ -576,12 +609,12 @@ h5{
   			success : function(list) {
   				mainWareHouse = list[0];
   				wareHouseName = mainWareHouse.wareHouseName;
-  				var carrierImg = '';
+  				/* var carrierImg = '';
   				var treatmentImg = '';
   				if((leisureCarrierNum + nodepartureCarrierNum) > 0) carrierImg = 'C';
-  				if((leisureTreatmentCarNum + nodepartureTreatmentCarNum) > 0) treatmentImg = 'T';
+  				if((leisureTreatmentCarNum + nodepartureTreatmentCarNum) > 0) treatmentImg = 'T'; */
   				
-  				myIcon = new BMap.Icon("img/warehouse"+carrierImg+treatmentImg+".png", new BMap.Size(90, 75), {
+  				myIcon = new BMap.Icon("img/warehouseCT.png", new BMap.Size(90, 75), {
 					imageSize : new BMap.Size(90, 75)});
   				wareHousePoint = new BMap.Point(mainWareHouse.longitude,mainWareHouse.latitude);
   				wareHouseMarker = new BMap.Marker(wareHousePoint,{icon:myIcon});
@@ -596,53 +629,57 @@ h5{
   	
 	/***************************** 显示标注************************************* */
 	function showMap(selectType,selectStatus) {
-		map.clearOverlays(); //清除地图上所有覆盖物
-		showWareHouse();
-		sitePoint=[];
+		//map.clearOverlays(); //清除地图上所有覆盖物
+		//showWareHouse();
+		/* sitePoint=[];
 		siteMarker=[];
 		siteInfoWindow=[];
 		carPoint=[];
 		carMarker=[];
-		carInfoWindow=[];
+		carInfoWindow=[]; */
 		showNum();
-		if(selectType==2||selectType==-1){
-			siteList = queryMapSite(-1,selectStatus);
-			if(!jQuery.isEmptyObject(siteList)){
-				var myIcon;
-				$.each(siteList,function(i, site) {
-					var carrierImg = '';
-					var treatmentImg = '';
-					if(queryMapCar(site.id,carType["CARRIER"],carStatus["ARRIVAL"]).length>0){
-						carrierImg = 'C';
-					}
-					if(site.status == siteStatus["PROCESSING"] && queryMapCar(site.id,carType["TREATMENT"],carStatus["ARRIVAL"]).length>0){
-						treatmentImg = 'T'
-					}
-					if(carrierImg == 'C' || treatmentImg == 'T'){
-						myIcon = new BMap.Icon("img/factory"+site.status+carrierImg+treatmentImg+".png", new BMap.Size(100, 50), {
-							imageSize : new BMap.Size(100, 50)});
-					}else{
+		if(selectType==-1||selectType==2){
+			siteList = queryMapSite(-1,selectStatus);  //查询出所有的站点信息
+			if(siteListOld.length==0){
+				if(!jQuery.isEmptyObject(siteList)){
+					var myIcon;
+					$.each(siteList,function(i, site) {
 						myIcon = new BMap.Icon("img/factory"+site.status+".png", new BMap.Size(100, 70), {
 								imageSize : new BMap.Size(100, 70)});
-					}
-					sitePoint[site.id] = new BMap.Point(site.longitude,site.latitude);
-					siteMarker[site.id] = new BMap.Marker(sitePoint[site.id],{icon:myIcon});
-					
-					map.addOverlay(siteMarker[site.id]);
-					/* if(site.status=="2"){
-						siteMarker[site.id].setAnimation(BMAP_ANIMATION_BOUNCE);
-					} */
-					siteMarker[site.id].addEventListener("mouseover",function(){
-						siteInfo(site)});
-				});
+						sitePoint[site.id] = new BMap.Point(site.longitude,site.latitude);
+						siteMarker[site.id] = new BMap.Marker(sitePoint[site.id],{icon:myIcon});
+						
+						map.addOverlay(siteMarker[site.id]);
+						/* if(site.status=="2"){
+							siteMarker[site.id].setAnimation(BMAP_ANIMATION_BOUNCE);
+						} */
+						siteMarker[site.id].addEventListener("mouseover",function(){
+							siteInfo(site)});
+					});
+				}
 			}
+			else{
+				$.each(siteList,function(i,site){
+					if(site.status!=siteListOld[i].status){  //状态改变了
+						var myIcon = new BMap.Icon("img/factory"+site.status+".png", new BMap.Size(100, 70), {
+							imageSize : new BMap.Size(100, 70)});
+						sitePoint[site.id] = new BMap.Point(site.longitude,site.latitude);
+						siteMarker[site.id] = new BMap.Marker(sitePoint[site.id],{icon:myIcon});
+						map.addOverlay(siteMarker[site.id]);
+						siteMarker[site.id].addEventListener("mouseover",function(){
+							siteInfo(site)});
+					}
+				})
+			}
+			siteListOld=siteList;	
+			
 		}
-		if(selectType != 2){
+		if(selectType != 2 && selectType!=-1){ //查询车辆信息
 			var carList;
 			//状态为运输中查询时，status依然为1
 			if(selectType == 1 && selectStatus == 4){
 				carList=queryMapCar(-1,selectType,1);
-			}else{
+			}else{ 
 				carList=queryMapCar(-1,selectType,selectStatus);
 			}
 			if(!jQuery.isEmptyObject(carList)){
@@ -665,7 +702,6 @@ h5{
 								console.log(location.longitude+" "+location.latitude);
 								carPoint[car.id] = new BMap.Point(location.longitude,location.latitude);
 								carMarker[car.id] = new BMap.Marker(carPoint[car.id],{icon:carIcon});
-								
 								map.addOverlay(carMarker[car.id]);					
 								//鼠标悬停动作
 								carMarker[car.id].addEventListener("mouseover",function(){
@@ -677,6 +713,48 @@ h5{
 				});
 			}
 		}
+	}
+	var longitute=parseFloat(114.349081);
+	var latitude=parseFloat(22.732652);
+	function showCarInRoad(){
+		if(roadCarListOld.length!=0){
+			console.log("clearCarMark")
+			$.each(roadCarListOld,function(i, car) {
+				map.removeOverlay(carMarker[car.id]);
+			})
+		}
+		carPoint=[]; //清空
+		carMarker=[]; //清空
+		map.addOverlay(carMarker)
+		var roadCarList=queryCarInRoad();
+		console.log(roadCarList);
+		if(!jQuery.isEmptyObject(roadCarList)){
+			longitute-=0.004;
+			latitude-=0.004;
+			$.each(roadCarList,function(i, car) {
+				console.log(car)
+				if(car.carType == 0){
+					var carIcon = new BMap.Icon("img/car.png", new BMap.Size(35, 24), 
+						         {imageSize : new BMap.Size(35, 24)});
+				}else{
+					var carIcon = new BMap.Icon("img/transportCar.png", new BMap.Size(35, 35), 
+								{imageSize : new BMap.Size(35, 35)});
+				}
+				var deviceId=car.cloudDeviceId;
+				//更新位置
+				getLocation(car.cloudDeviceId,car.cloudDeviceSerial);
+				var location=locationMap[deviceId];
+				if(location!=null){
+					carPoint[car.id] = new BMap.Point(longitute,latitude);
+					carMarker[car.id] = new BMap.Marker(carPoint[car.id],{icon:carIcon});
+					map.addOverlay(carMarker[car.id]);					
+					//鼠标悬停动作
+					carMarker[car.id].addEventListener("mouseover",function(){
+					carInfo(car)});
+				}			
+			});
+		}
+		roadCarListOld=roadCarList;
 	}
 	
 	/***************************** 泥仓信息框显示************************************* */
