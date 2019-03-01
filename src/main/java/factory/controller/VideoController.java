@@ -226,7 +226,7 @@ public class VideoController {
 		log.info("调用查询视频的方法");
 		log.info(siteId);
 		Video video = videoService.queryFactoryVideoBySiteId(siteId);				
-		return video; 
+		return video;
 	}
 	
 	@RequestMapping("editFactoryVideo")
