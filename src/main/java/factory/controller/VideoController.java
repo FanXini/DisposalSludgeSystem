@@ -218,7 +218,16 @@ public class VideoController {
 		mv.addObject("video",video);// 设置需要返回的值		
 		mv.setViewName("monitor/monitorOfOneFactory"); // 跳转到指定的页面
 		return mv; // 返回到staffManage.jsp页面
-	}	
+	}
+	
+	@RequestMapping("/queryFactoryVideoBySiteIdforWX")
+	public Video queryFactoryVideoBySiteIdforWX(@RequestParam ("siteId") int siteId) {
+		log.info("调用查询视频的方法");
+		log.info(siteId);
+		Video video = videoService.queryFactoryVideoBySiteId(siteId);				
+		return video; 
+	}
+	
 	@RequestMapping("editFactoryVideo")
 	@ResponseBody
 	public Result editFactoryVideo(@RequestBody Video video) {

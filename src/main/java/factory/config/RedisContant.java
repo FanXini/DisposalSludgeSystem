@@ -1,7 +1,7 @@
 package factory.config;
 
 public class RedisContant {
-	public static final String host="127.0.0.1";
+	public static final String host="119.23.29.190";
 	
 	public static final int port=6379;
 	
