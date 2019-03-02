@@ -260,6 +260,11 @@ public class SiteController {
 		List<Site> sites=siteService.querySiteMapBySiteIdAndStatus(siteId,status);
 		log.info(sites.toString());
 		return sites;
-
+	}
+	
+	@RequestMapping("querySiteStatus")
+	@ResponseBody
+	public List<Site> querySiteStatus(){
+		return siteService.querySiteStatus();
 	}
 }

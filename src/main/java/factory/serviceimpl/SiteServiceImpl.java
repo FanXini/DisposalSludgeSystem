@@ -192,4 +192,11 @@ public class SiteServiceImpl implements SiteService{
 	public void updateSiteStatusById(int siteId,int status) {
 		siteDao.updateSiteStatusById(siteId,status);
 	}
+
+	@Override
+	public List<Site> querySiteStatus() {
+		List<Site> sites=new ArrayList<>();
+		sites.addAll(siteDao.querySiteStatus());
+		return sites;
+	}
 }
