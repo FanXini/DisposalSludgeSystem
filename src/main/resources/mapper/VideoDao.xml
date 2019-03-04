@@ -63,7 +63,9 @@
 		from video,car
 		where video.car_id = car.id
 		and video.site_id=-1
-		and video.del_status=0 
+		and video.del_status=0
+		
+		order by video.car_Id
 	</select>
 	
 	<select id="queryCarWhichNotVideo" resultType="factory.entity.Car">
@@ -103,7 +105,7 @@
 	
 	<select id="queryVideoByCarId" resultType="factory.entity.Video">
 		select *
-		from video
+		from video,car,site
 		where video.car_id = #{carId} AND video.del_status=0 
 	</select>
 	
