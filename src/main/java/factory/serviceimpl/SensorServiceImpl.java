@@ -8,7 +8,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
+import org.springframework.transaction.annotation.Transactional;
 
 import factory.dao.CarDao;
 import factory.dao.SensorDao;
@@ -66,11 +66,13 @@ public class SensorServiceImpl implements SensorService {
 	 * 添加传感器
 	 */
 	@Override
+	@Transactional
 	public int addSensor(Map<String, String> sensorInfo) {
 		// TODO Auto-generated method stub
 		// place是车牌号或者工厂名
 		String sensorSerialNumber = sensorInfo.get("sensorSerialNumber");
 		String sensorType = sensorInfo.get("sensorType");
+		String GPSID="";
 		String place = sensorInfo.get("place");
 		String placeSelect = sensorInfo.get("placeSelect");
 		if (sensorSerialNumber == null || sensorSerialNumber.equals("") || sensorType == null || sensorType.equals("")
@@ -88,6 +90,10 @@ public class SensorServiceImpl implements SensorService {
 			sensorDao.addSensor(sensor);
 			String newSensorIdSet = Util.addsensorIdtoSensorSet(car.getSensorIdSet(), sensor.getId());
 			carDao.updateSenserIdSet(car.getId(), newSensorIdSet);
+			if("GPS传感器".equals(sensorType)) {
+				GPSID=sensorInfo.get("GPSID");
+				carDao.setCarGPSDeviceId(car.getId(), GPSID);
+			}
 		}
 		// 如果是工厂上的传感器
 		else {
@@ -100,7 +106,9 @@ public class SensorServiceImpl implements SensorService {
 			siteDao.updateSetIdSet(site.getId(), newSensorIdSet);
 		}
 		// 获取到sensor的id
-		sensorDao.addSensorValue(sensor.getId());
+		if(!("GPS传感器".equals(sensorType))) {
+			sensorDao.addSensorValue(sensor.getId());
+		}
 		return sensor.getId();
 
 	}
@@ -252,6 +260,13 @@ public class SensorServiceImpl implements SensorService {
 			headInfo='A';
 		}else if(sensorType.equals("硫化氢传感器")) {
 			headInfo='S';
+		}else if(sensorType.equals("超声波传感器")) {
+			headInfo='U';
+		}else if(sensorType.equals("液位传感器")) {
+			headInfo='L';
+		}
+		else if(sensorType.equals("温湿度传感器")) {
+			headInfo='H';
 		}
 		historyDatas.addAll(sensorDao.queryHistoryDataOfSingleValueBySensorId(sensorId, headInfo));
 		return historyDatas;		

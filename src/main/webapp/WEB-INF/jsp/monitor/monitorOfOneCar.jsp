@@ -338,10 +338,10 @@
 					<div class="col-sm-3">
 						<div class="contact-box">
 							<c:if test="${sensor.status ==0}">
-								<label class="label label-primary pull-right ">正常</label>
+								<label id="${sensor.id}Status" class="label label-primary pull-right">正常</label>
 							</c:if>
 							<c:if test="${sensor.status ==1}">
-								<label class="label label-danger pull-right ">异常</label>
+								<label id="${sensor.id}Status" class="label label-danger pull-right ">异常</label>
 							</c:if>
 							<div class="row">
 								<div class="col-sm-4">
@@ -353,7 +353,7 @@
 									<div>
 										<label class="label">监测值</label>
 										<div class="h5 text-info inline">
-											<input class="form-control" id='${sensor.id}' name="sensorId"
+											<input class="form-control" id='${sensor.id}' name="sensorId" alt='${sensor.sensorType.type}'
 												style="width: 135%;" readonly />
 											<c:if
 												test="${sensor.sensorType.type=='GPS传感器'||sensor.sensorType.type=='温湿度传感器' }">
@@ -373,7 +373,7 @@
 										<div class="h5 text-info inline">${sensor.sensorType.type}</div>
 									</div>
 									<c:if
-										test="${sensor.sensorType.type=='氨气传感器'||sensor.sensorType.type=='硫化氢传感器' }">
+										test="${sensor.sensorType.type=='氨气传感器'||sensor.sensorType.type=='硫化氢传感器'||sensor.sensorType.type=='超声波传感器'||sensor.sensorType.type=='液位传感器' }">
 										<button class="btn btn-sm btn-info"
 											onclick="javascript:showRealTimeData(${sensor.id },'${sensor.sensorType.type}')">实时数据</button>
 									</c:if>
@@ -511,6 +511,23 @@
 				}		
 			var globalData = null;
 			var interval=null;
+			var carId=${requestScope.carId};
+			var carStatus;
+			var historyData={};
+			setInterval(function(){
+				$.ajax({
+					type:"GET",
+					url:"car/queryCarStatusById",
+					data : "id="+carId,
+					async : false,
+					//dataType : "json",
+					success:function(status){
+						carStatus=status;
+					}
+					
+				}) 
+				
+			},1000)
 			function showRealTimeData(sensorId, sensorType) {
 				var container = $("#flot-line-chart-moving");
 				globalData = sensorData(sensorId, sensorType)
@@ -557,27 +574,49 @@
 				})
 				return data;
 			}
-			interval=setInterval(queryRealTimeValueToText,1000);
+			var updateInputValue=setInterval(queryRealTimeValueToText,1000);
 			var sensorList=document.getElementsByName("sensorId");
 			var sensorNum=sensorList.length;
 			function queryRealTimeValueToText(){
 				for(var i=0;i<sensorNum;i++){
 					var sensorId=sensorList[i].getAttribute("id");
+					var sensorType=sensorList[i].getAttribute("alt");
 					$.ajax({
 						type : "POST",
 						url : "sensor/queryRealTimeValue?sensorId=" + parseInt(sensorId),
 						async:false,
 						success : function(sensorValue) {
-							//$("#"+sensorId).val(value)
-							if(sensorValue.value2!=0){
-								var testRandowValue1=(21+Math.random()*2).toFixed(2)
-								var testRandowValue2=(35+Math.random()*2).toFixed(2)
-								$("#"+sensorId).val(testRandowValue1)
-								$("#"+sensorId+"value2").val(testRandowValue2)
+							if(historyData[sensorId]==null){
+								historyData[sensorId]={};
 							}else{
-								var testRandowValue=(1+Math.random()*0.5).toFixed(2)
-								$("#"+sensorId).val(testRandowValue)
+								if(sensorType=="超声波传感器"){
+									console.log(carStatus);
+									var diff=parseFloat(sensorValue.value1)-parseFloat(historyData[sensorId].value1);
+									if((carStatus==0||carStatus==3)&&diff>10){
+										console.log("异常");
+										$("#"+sensorId+"Status").attr("class","label label-danger pull-right ");
+										$("#"+sensorId+"Status").html('异常')
+									}
+									if(carStatus==1||carStatus==2&&carStatus==4){
+										if(sensorValue.value1>500){
+											$("#"+sensorId+"Status").attr("class","label label-danger pull-right ");
+											$("#"+sensorId+"Status").html('请添加')
+										}
+									}
+									
+									
+								}
+								
 							}
+							//$("#"+sensorId).val(value)
+							$("#"+sensorId).val(sensorValue.value1)
+							if(sensorValue.value2!=0){
+								historyData[sensorId].value2=sensorValue.value2;
+								$("#"+sensorId+"value2").val(sensorValue.value2)
+								/* var testRandowValue1=(21+Math.random()*2).toFixed(2)
+								var testRandowValue2=(35+Math.random()*2).toFixed(2) */
+							}
+							historyData[sensorId].value1=sensorValue.value1;
 						}
 					})
 				}
@@ -592,9 +631,9 @@
 					async:false,
 					success : function(sensorValue) {
 						globalData.shift();
-						var testRandowValue=(1+Math.random()*0.5).toFixed(2)
+						//var testRandowValue=(1+Math.random()*0.5).toFixed(2)
 						globalData.push(sensorValue.value1)
-						globalData.push(testRandowValue)
+						//globalData.push(testRandowValue)
 						for (var i = 0; i < globalData.length; i++) {
 							res.push([ i, globalData[i]])
 						}

@@ -317,5 +317,10 @@ public class CarController {
 			return null;
 		}
 	}
+	@RequestMapping("queryCarStatusById")
+	@ResponseBody
+	public Integer queryCarStatusById(@RequestParam("id")int id) {
+		return carService.queryCarStatusById(id);
+	}
 	
 }

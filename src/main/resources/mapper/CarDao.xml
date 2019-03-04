@@ -350,5 +350,29 @@
 		where #{sensorId} IN
 		CONCAT('(',sensor_id_set,')')
 	</select>
+	
+	<select id="queryCarDeviceIdInCloud" resultType="factory.entity.Car">
+		SELECT id,cloud_device_id
+		FROM car
+		WHERE del_status=0 AND cloud_device_id is not null AND cloud_device_id!=''
+	</select>
+	
+	<update id="updateCarLocation">
+		UPDATE car
+		SET longitude=#{longitude},latitude=#{latitude}
+		WHERE id=#{id}
+	</update>
+	
+	<update id="setCarGPSDeviceId">
+		UPDATE car
+		SET cloud_device_id=#{cloudDeviceId}
+		WHERE id=#{id}
+	</update>
+	
+	<select id="queryCarStatusById" resultType="java.lang.Integer">
+		SELECT status
+		FROM car
+		WHERE id=#{id}
+	</select>
 
 </mapper>

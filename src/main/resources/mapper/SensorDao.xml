@@ -297,6 +297,15 @@
 			<when test="headInfo=='S'">
 				FROM shydrothion_record
 			</when>
+			<when test="headInfo=='U'">
+				FROM ultrasonic_record
+			</when>
+			<when test="headInfo=='L'">
+				FROM liquid_record
+			</when>
+			<when test="headInfo=='H'">
+				FROM humiture_record
+			</when>
 		</choose>
 		Where sensor_id=#{sensorId}
 		ORDER BY
@@ -351,11 +360,11 @@
 
 	<insert id="addSensorRecord" parameterType="factory.entity.SensorValue">
 		<choose>
-			<when test="headInfo=='G'">
+<!-- 			<when test="headInfo=='G'">
 				INSERT INTO gps_record
 				(sensor_id,time,longitude,latitude)
 				VALUES(#{sensorId},#{time},#{value1},#{value2})
-			</when>
+			</when> -->
 			<when test="headInfo=='H'">
 				INSERT INTO
 				humiture_record

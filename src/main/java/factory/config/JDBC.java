@@ -4,7 +4,7 @@ public class JDBC {
 	
 	public static final String DRIVERCLASS="com.mysql.jdbc.Driver";
 	
-	public static final String URL="jdbc:mysql://kaihuoguodian.xin/disposalsludgesystem?useUnicode=true&characterEncoding=utf8";
+	public static final String URL="jdbc:mysql://119.23.29.190/disposalsludgesystem?useUnicode=true&characterEncoding=utf8";
 	
 	public static final String USERNAME="fanxin";
 	

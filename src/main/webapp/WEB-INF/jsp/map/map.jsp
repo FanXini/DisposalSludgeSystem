@@ -203,12 +203,13 @@ h5{
 			<ul class="dropdown-menu dropdown-messages"
 					style="background: rgba(176,196,222,0.8);max-height:300px;width:500px;overflow-y:auto;">
 				<li>
+				<span style="font-weight:900;font-size:23px;text-align:center;display:block">处理车</span>
 					<table class="tablehead" border="0" cellspacing="0" cellpadding="0"
 						style="width:100%;">
 						<tr>
-							<td style="width:20%;font-size:20px;">处理车牌号</td>
-							<td style="width:45%;font-size:20px;">目的地</td>
-							<td style="width:25%;font-size:20px;">状态</td>
+							<td style="width:30%;font-size:20px;">车牌号</td>
+							<td style="width:40%;font-size:20px;">目的地</td>
+							<td style="width:30%;font-size:20px;">状态</td>
 						</tr>
 					</table>
 				</li>
@@ -225,12 +226,13 @@ h5{
 			<ul class="dropdown-menu dropdown-messages"
 					style="background: rgba(176,196,222,0.8);max-height:300px;width:500px;overflow-y:auto;">
 				<li>
+				<span style="font-weight:900;font-size:23px;text-align:center;display:block">运输车</span>
 					<table class="tablehead" border="0" cellspacing="0" cellpadding="0"
 						style="width:100%">
 						<tr>
-							<td style="width:20%;font-size:20px;">运输车牌号</td>
-							<td style="width:45%;font-size:20px;">目的地</td>
-							<td style="width:25%;font-size:20px;">状态</td>
+							<td style="width:30%;font-size:20px;">车牌号</td>
+							<td style="width:40%;font-size:20px;">目的地</td>
+							<td style="width:30%;font-size:20px;">状态</td>
 						</tr>
 					</table>
 				</li>
@@ -249,10 +251,10 @@ h5{
 					<table class="tablehead" border="0" cellspacing="0" cellpadding="0"
 						style="width:100%">
 						<tr>
-							<td>子仓</td>
-							<td>存储量</td>
-							<td>剩余容量</td>
-							<td>总容量</td>
+							<td style="width:20%;font-size:20px;">子仓</td>
+							<td style="width:20%;font-size:20px;">存储量</td>
+							<td style="width:40%;font-size:20px;">剩余容量</td>
+							<td style="width:20%;font-size:20px;">总容量</td>
 						</tr>
 					</table>
 				</li>
@@ -620,7 +622,7 @@ h5{
   				wareHouseMarker = new BMap.Marker(wareHousePoint,{icon:myIcon});
 				
 				map.addOverlay(wareHouseMarker);
-				wareHouseMarker.addEventListener("mouseover",function(){
+				wareHouseMarker.addEventListener("click",function(){
 					wareHouseInfo()
 				});
   			}
@@ -644,7 +646,11 @@ h5{
 				if(!jQuery.isEmptyObject(siteList)){
 					var myIcon;
 					$.each(siteList,function(i, site) {
-						myIcon = new BMap.Icon("img/factory"+site.status+".png", new BMap.Size(100, 70), {
+						var pngName=site.status;
+						if(site.status==1){
+							pngName+="T";
+						}
+						myIcon = new BMap.Icon("img/factory"+pngName+".png", new BMap.Size(100, 70), {
 								imageSize : new BMap.Size(100, 70)});
 						sitePoint[site.id] = new BMap.Point(site.longitude,site.latitude);
 						siteMarker[site.id] = new BMap.Marker(sitePoint[site.id],{icon:myIcon});
@@ -653,7 +659,7 @@ h5{
 						/* if(site.status=="2"){
 							siteMarker[site.id].setAnimation(BMAP_ANIMATION_BOUNCE);
 						} */
-						siteMarker[site.id].addEventListener("mouseover",function(){
+						siteMarker[site.id].addEventListener("click",function(){
 							siteInfo(site)});
 					});
 				}
@@ -661,12 +667,17 @@ h5{
 			else{
 				$.each(siteList,function(i,site){
 					if(site.status!=siteListOld[i].status){  //状态改变了
-						var myIcon = new BMap.Icon("img/factory"+site.status+".png", new BMap.Size(100, 70), {
+						var pngName=site.status;
+						if(site.status==1){
+							pngName+="T";
+						}
+						
+						var myIcon = new BMap.Icon("img/factory"+pngName+".png", new BMap.Size(100, 70), {
 							imageSize : new BMap.Size(100, 70)});
 						sitePoint[site.id] = new BMap.Point(site.longitude,site.latitude);
 						siteMarker[site.id] = new BMap.Marker(sitePoint[site.id],{icon:myIcon});
 						map.addOverlay(siteMarker[site.id]);
-						siteMarker[site.id].addEventListener("mouseover",function(){
+						siteMarker[site.id].addEventListener("click",function(){
 							siteInfo(site)});
 					}
 				})
@@ -741,8 +752,14 @@ h5{
 								{imageSize : new BMap.Size(35, 35)});
 				}
 				var deviceId=car.cloudDeviceId;
+				carPoint[car.id] = new BMap.Point(car.longitude,car.latitude);
+				carMarker[car.id] = new BMap.Marker(carPoint[car.id],{icon:carIcon});
+				map.addOverlay(carMarker[car.id]);					
+				//鼠标悬停动作
+				carMarker[car.id].addEventListener("mouseover",function(){
+				carInfo(car)});
 				//更新位置
-				getLocation(car.cloudDeviceId,car.cloudDeviceSerial);
+				/* getLocation(car.cloudDeviceId,car.cloudDeviceSerial);
 				var location=locationMap[deviceId];
 				if(location!=null){
 					console.log(location)
@@ -752,7 +769,7 @@ h5{
 					//鼠标悬停动作
 					carMarker[car.id].addEventListener("mouseover",function(){
 					carInfo(car)});
-				}			
+				} */			
 			});
 		}
 		roadCarListOld=roadCarList;
@@ -772,7 +789,7 @@ h5{
 			lid += '<div class="infowindow"></span><span class="txt" style="color:#0000FF;">'+treatmentCarList.length+'辆空闲处理车</span></span></div><div class="carlist">';
 			lid += '<ul class="list-inline" style="font-size:11px;color:#777;">' ;
 			$.each(treatmentCarList,function(i, treatmentCar) {
-				lid += '<li style="color:#0000FF; font:bold;"><a class="infoSize" href="monitor/queryVideoByDriverId?driverId='+treatmentCar.driverId+'">'+treatmentCar.license+'</a></li>';
+				lid += '<li style="color:#0000FF; font:bold;"><a class="infoSize" href="monitor/queryVideoAndSensorByCarId?carId='+treatmentCar.id+'">'+treatmentCar.license+'</a></li>';
 			});
 			lid += "</ul></div>"
 		}
@@ -781,7 +798,7 @@ h5{
 			lid += '<div class="infowindow"><span class="txt" style="color:#B22222;">'+carrierList.length+'辆空闲运输车</span></div><div class="carlist">';
 			lid += '<ul class="list-inline" style="font-size:11px;color:#777;">';
 			$.each(carrierList,function(i, carrier) {
-				/* lid += '<li style="color:#B22222"><a class="infoSize" href="monitor/queryVideoByDriverId?driverId='+carrier.driverId+'">'+carrier.license+'</a></li>'; */
+				/* lid += '<li style="color:#B22222"><a class="infoSize" href="monitor/queryVideoAndSensorByCarId?driverId='+carrier.driverId+'">'+carrier.license+'</a></li>'; */
 				lid += '<li class="infoSize" style="color:#B22222">'+carrier.license+'</li>';
 			});
 			lid += "</ul></div>"
@@ -792,10 +809,10 @@ h5{
 			lid += '<ul class="list-inline" style="font-size:11px;color:#777;">';
 			$.each(nodepartureCarList,function(i, nodepartureCar) {
 				if(nodepartureCar.carType == carType["TREATMENT"]){
-					lid += '<li style="color:#0000FF;"><a class="infoSize" href="monitor/queryVideoByDriverId?driverId='+nodepartureCar.driverId+'">'+nodepartureCar.license+'(处)</a></li>';
+					lid += '<li style="color:#0000FF;"><a class="infoSize" href="monitor/queryVideoAndSensorByCarId?carId='+nodepartureCar.id+'">'+nodepartureCar.license+'(处)</a></li>';
 					
 				}else{
-					//lid += '<li style="color:#B22222;"><a class="infoSize" href="monitor/queryVideoByDriverId?driverId='+nodepartureCar.driverId+'">'+nodepartureCar.license+'(运)</a></li>';
+					//lid += '<li style="color:#B22222;"><a class="infoSize" href="monitor/queryVideoAndSensorByCarId?driverId='+nodepartureCar.driverId+'">'+nodepartureCar.license+'(运)</a></li>';
 					lid += '<li class="infoSize" style="color:#B22222;">'+nodepartureCar.license+'(运)</li>';
 					}
 			});
@@ -854,7 +871,7 @@ h5{
 			lid += '<div class="infowindow"><span class="line"></span><span class="txt" style="color:#0000FF;">'+currentTreatmentCarList.length+'辆车处理中</span><span class="line"></span></div><div class="carlist">';
 			lid += '<ul class="list-inline" style="font-size:11px;color:#0000FF;"';
 			$.each(currentTreatmentCarList,function(i, treatmentCar) {
-				lid += '<li><a class="infoSize" href="monitor/queryVideoByDriverId?driverId='+treatmentCar.driverId+'" style="color: #0000FF;">'+treatmentCar.license+'</a></li>';
+				lid += '<li><a class="infoSize" href="monitor/queryVideoAndSensorByCarId?carId='+treatmentCar.id+'" style="color: #0000FF;">'+treatmentCar.license+'</a></li>';
 			});
 			lid += "</ul></div>"
 		}
@@ -862,7 +879,7 @@ h5{
 			lid += '<div class="infowindow"></span><span class="txt" style="color:#B22222;">'+currentCarrierList.length+'辆车正在装箱</span></div><div class="carlist">';
 			lid += '<ul class="list-inline" style="font-size:11px;color:#B22222;"';
 			$.each(currentCarrierList,function(i, carrier) {
-				//lid += '<li><a class="infoSize" href="monitor/queryVideoByDriverId?driverId='+carrier.driverId+'" style="color: #0000FF;">'+carrier.license+'</a></li>';
+				//lid += '<li><a class="infoSize" href="monitor/queryVideoAndSensorByCarId?driverId='+carrier.driverId+'" style="color: #0000FF;">'+carrier.license+'</a></li>';
 				lid += '<li><span class="infoSize">'+carrier.license+'</span></li>';
 			});
 			lid += "</ul></div>"
@@ -876,7 +893,7 @@ h5{
 		var opts = {width : 230,} // 信息窗口宽度
 		if(car.status==4){
 			if(car.carType==0){
-				var lid = '<div><h5 h5 class="infoSize"><a href="monitor/queryVideoByDriverId?driverId='+car.driverId+'">'+car.license+'-处(返程中)</a></h5><table style="font-size:12px;">';
+				var lid = '<div><h5 h5 class="infoSize"><a href="monitor/queryVideoAndSensorByCarId?carId='+car.id+'">'+car.license+'-处(返程中)</a></h5><table style="font-size:12px;">';
 			}
 			else{
 				var lid = '<div><h5 class="infoSize">'+car.license+'-运(返程中)</h5><table style="font-size:12px;">';
@@ -887,7 +904,7 @@ h5{
 		else if (car.carType == 1)
 			var lid = '<div><h5 class="infoSize">'+car.license+'(运)</h5><table style="font-size:12px;">';
 		else
-			var lid = '<div><h5><a class="infoSize" href="monitor/queryVideoByDriverId?driverId='+car.driverId+'">'+car.license+'(处)</a></h5><table style="font-size:12px;">';
+			var lid = '<div><h5><a class="infoSize" href="monitor/queryVideoAndSensorByCarId?carId='+car.id+'">'+car.license+'(处)</a></h5><table style="font-size:12px;">';
 								
 		lid	+= '<tr><td class="infoSize" style="width:40%;text-align: left;">司机：</td><td class="infoSize" style="text-align: left;">'+car.driver.realname+'</td>'
 			+ '</tr>'
@@ -982,12 +999,12 @@ h5{
 				table='<tr id="'+ car.id +'" style="color:#FFFF00;font-weight: 700;" onmouseover="sel(this)" onmouseout="cle(this)" onclick="showCarInfo('+JSON.stringify(car).replace(/\"/g,"'")+')">';
 				status="返程中";
 			}
-			table += '<td style="width:20%;font-size:15px;">' + car.license + '</td>';
+			table += '<td style="width:30%;font-size:15px;">' + car.license + '</td>';
 			if (!jQuery.isEmptyObject(car.site)){
-				table += '<td style="width:45%;font-size:15px;">' + car.site.siteName + '</td>';
+				table += '<td style="width:40%;font-size:15px;">' + car.site.siteName + '</td>';
 			}
-			else table += '<td style="width:45%;font-size:15px;">' + status + '</td>';
-			table += '<td style="width:25%;font-size:15px;">' + status + '</td>';
+			else table += '<td style="width:40%;font-size:15px;">' + status + '</td>';
+			table += '<td style="width:30%;font-size:15px;">' + status + '</td>';
 			table += '</tr>';
 			$("#treatmentCarTable").append(table);
 		});
@@ -1025,12 +1042,12 @@ h5{
 				table='<tr id="'+ car.id +'" style="color:#FFFF00;font-weight: 700;" onmouseover="sel(this)" onmouseout="cle(this)" onclick="showCarInfo('+JSON.stringify(car).replace(/\"/g,"'")+')">';
 				status="返程中";
 			}
-			table += '<td style="width:20%;font-size:15px;">' + car.license + '</td>';
+			table += '<td style="width:30%;font-size:15px;">' + car.license + '</td>';
 			if (!jQuery.isEmptyObject(car.site)){
-				table += '<td style="width:45%;font-size:15px;">' + car.site.siteName + '</td>';
+				table += '<td style="width:40%;font-size:15px;">' + car.site.siteName + '</td>';
 			}
-			else table += '<td style="width:45%;font-size:15px;">' + status + '</td>';
-			table += '<td style="width:25%;font-size:15px;">' + status + '</td>';
+			else table += '<td style="width:40%;font-size:15px;">' + status + '</td>';
+			table += '<td style="width:30%;font-size:15px;">' + status + '</td>';
 			table += '</tr>';
 			$("#carrierTable").append(table);
 		});
@@ -1044,10 +1061,10 @@ h5{
 		minorWareHouseList = queryWareHouse();
 		$.each(minorWareHouseList,function(i, minorWareHouse){
 			table='<tr id="'+ minorWareHouse.id +'" onmouseover="sel(this)" onmouseout="cle(this)")">';
-			table += '<td>' + minorWareHouse.serialNumber + '号仓</td>';
-			table += '<td>' + minorWareHouse.moistrueDegree*100 + '%</td>';
-			table += '<td>' + minorWareHouse.remainCapacity + '</td>';
-			table += '<td>' + minorWareHouse.capacity + '</td>';
+			table += '<td style="font-size:15px;">' + minorWareHouse.serialNumber + '号仓</td>';
+			table += '<td style="font-size:15px;">' + minorWareHouse.moistrueDegree*100 + '%</td>';
+			table += '<td style="font-size:15px;">' + minorWareHouse.remainCapacity + '</td>';
+			table += '<td style="font-size:15px;">' + minorWareHouse.capacity + '</td>';
 			table += '</tr>';
 			$("#wareHouseTable").append(table);
 		});

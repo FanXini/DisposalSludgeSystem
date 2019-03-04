@@ -363,5 +363,10 @@ public class CarServiceImpl implements CarService{
 		roadCars.addAll(carDao.queryCarInRoad());
 		return roadCars;
 	}
+
+	@Override
+	public Integer queryCarStatusById(int id) {
+		return carDao.queryCarStatusById(id);
+	}
 	
 }

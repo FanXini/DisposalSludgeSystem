@@ -24,6 +24,7 @@ import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
 import factory.controller.UserController;
 import factory.serviceimpl.UserServiceImpl;
+import factory.tcpnet.Server;
 import redis.clients.jedis.JedisPoolConfig;
 
 
@@ -35,7 +36,7 @@ import redis.clients.jedis.JedisPoolConfig;
 /*启动spring mvc功能*/
 @EnableWebMvc
 //扫描这controller和serviceimpl两个包
-@ComponentScan(basePackageClasses= {UserController.class,UserServiceImpl.class})
+@ComponentScan(basePackageClasses= {UserController.class,UserServiceImpl.class,Server.class})
 public class WebConfig extends WebMvcConfigurerAdapter{
 	@Bean
 	public ViewResolver viewResolver() { //配置JSP视图解析
