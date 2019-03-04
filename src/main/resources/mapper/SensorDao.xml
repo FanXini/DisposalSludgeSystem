@@ -300,7 +300,7 @@
 			<when test="headInfo=='U'">
 				FROM ultrasonic_record
 			</when>
-			<when test="headInfo=='L'">
+			<when test="headInfo=='W'">
 				FROM liquid_record
 			</when>
 			<when test="headInfo=='H'">
@@ -389,7 +389,7 @@
 				(sensor_id,time,value)
 				VALUES(#{sensorId},#{time},#{value1})
 			</when>
-			<when test="headInfo=='L'">
+			<when test="headInfo=='W'">
 				INSERT INTO
 				liquid_record
 				(sensor_id,time,value)

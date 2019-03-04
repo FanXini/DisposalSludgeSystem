@@ -246,7 +246,7 @@
 	}
 
 	// accessToken会自动失效，需要通过后端请求刷新。详见 https://open.ys7.com/doc/zh/book/index/user.html
-	const ACCESS_TOKEN = "at.7a9efc6w4apudpcxcz0dfwo9b1cwqkyb-1vwccihfsn-1ema48b-ejz5ohwfa";
+	const ACCESS_TOKEN = "at.91ee13eg46rs5lepb3xbm1ih8sgn4byr-9rh4ualj21-1kgvk4a-19vobpkjf";
 
 	/* const DEVICE_SERIAL = "C29134495"; */
 	const CHANNEL_NO = 1;
@@ -535,7 +535,7 @@
 				<div class="videodiv" id="${video.id}">
 					<div class="col-sm-6">
 					<p align="center">											
-									<video width="500px" height="300px" id='myPlayer${video.id}' name="play" poster="" controls playsInline webkit-playsinline autoplay>
+									<video width="500px" height="300px" id='myPlayer${video.id}' name="play" poster="" controls playsInline webkit-playsinline >
 										<source src="${video.videoRTMPid}" type=" " /> <source src="${video.videoHLSid}" type="application/x-mpegURL" />
 									</video>
 					</p>

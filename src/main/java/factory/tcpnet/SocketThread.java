@@ -52,7 +52,7 @@ public class SocketThread implements Runnable {
 					for(int i=0;i<datas.length;i++) {
 						char headInfo = datas[i].charAt(0);
 						// 如果是有效信息
-						if (headInfo == 'S' || headInfo == 'A' || headInfo == 'H' || headInfo=='U'||headInfo=='L') {
+						if (headInfo == 'S' || headInfo == 'A' || headInfo == 'H' || headInfo=='U'||headInfo=='W') {
 							System.out.println("From client:" + datas[i]);
 							// 时间戳
 							String time = dateFormat.format(new Date());

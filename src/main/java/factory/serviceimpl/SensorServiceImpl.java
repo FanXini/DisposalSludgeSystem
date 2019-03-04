@@ -263,7 +263,7 @@ public class SensorServiceImpl implements SensorService {
 		}else if(sensorType.equals("超声波传感器")) {
 			headInfo='U';
 		}else if(sensorType.equals("液位传感器")) {
-			headInfo='L';
+			headInfo='W';
 		}
 		else if(sensorType.equals("温湿度传感器")) {
 			headInfo='H';
