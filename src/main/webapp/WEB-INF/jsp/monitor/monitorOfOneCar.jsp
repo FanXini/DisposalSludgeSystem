@@ -295,44 +295,45 @@
 	<script src="https://open.ys7.com/sdk/js/1.3/ezuikit.js"></script>
 	<!-- 摄像头-->
 	<!-- Example Pagination -->
-	<div id="box" class="container-fluid">
-		<div class="row clearfix video">
-			<div class="col-md-12 column">
-				<div class="" id="${requestScope.video.id}">
-					<div>
-						<video class="box5" id='myPlayer${requestScope.video.id}'
-							name="play" poster="" controls playsInline webkit-playsinline
-							autoplay> <source src="${requestScope.video.videoRTMPid}"
-							type=" " /> <source src="${requestScope.video.videoHLSid}"
-							type="application/x-mpegURL" /> </video>
-					</div>
-					<div class="divlicense">
-						<button type="button" class="btn btn-primary"
-							onMouseover="startPtz(0,0,'${requestScope.video.serialNumber }');"
-							onMouseout="stopPtz(0,'${video.serialNumber }');">向上</button>
-						<button type="button" class="btn btn-primary"
-							onMouseover="startPtz(1,0,'${requestScope.video.serialNumber }');"
-							onMouseout="stopPtz(1,'${video.serialNumber }');">向下</button>
-						<button type="button" class="btn btn-primary"
-							onMouseover="startPtz(2,0,'${requestScope.video.serialNumber }');"
-							onMouseout="stopPtz(2,'${video.serialNumber }');">向左</button>
-						<button type="button" class="btn btn-primary"
-							onMouseover="startPtz(3,0,'${requestScope.video.serialNumber }');"
-							onMouseout="stopPtz(3,'${video.serialNumber }');">向右</button>
-						<br /> <img class="box5" alt="140x140" src="img/littercar.png"
-							width="10%" height="10%" />
-						<p class="box6" style="text-align: center;">${video.car.license}</p>
-					</div>
-				</div>
-			</div>
-		</div>
 
-
-	</div>
 	<div class="col-sm-12">	
 	<div class="ibox">
 		<!-- 内容 -->
 		<div class="wrapper wrapper-content animated fadeInRight">
+			<div class="row">
+					<div id="box" class="container-fluid">
+					<div class="row clearfix video">
+						<div class="col-md-12 column">
+							<div class="" id="${requestScope.video.id}">
+								<div>
+									<video class="box5" id='myPlayer${requestScope.video.id}'
+										name="play" poster="" controls playsInline webkit-playsinline
+										autoplay> <source src="${requestScope.video.videoRTMPid}"
+										type=" " /> <source src="${requestScope.video.videoHLSid}"
+										type="application/x-mpegURL" /> </video>
+								</div>
+								<div class="divlicense">
+									<button type="button" class="btn btn-primary"
+										onMouseover="startPtz(0,0,'${requestScope.video.serialNumber }');"
+										onMouseout="stopPtz(0,'${video.serialNumber }');">向上</button>
+									<button type="button" class="btn btn-primary"
+										onMouseover="startPtz(1,0,'${requestScope.video.serialNumber }');"
+										onMouseout="stopPtz(1,'${video.serialNumber }');">向下</button>
+									<button type="button" class="btn btn-primary"
+										onMouseover="startPtz(2,0,'${requestScope.video.serialNumber }');"
+										onMouseout="stopPtz(2,'${video.serialNumber }');">向左</button>
+									<button type="button" class="btn btn-primary"
+										onMouseover="startPtz(3,0,'${requestScope.video.serialNumber }');"
+										onMouseout="stopPtz(3,'${video.serialNumber }');">向右</button>
+									<br /> <img class="box5" alt="140x140" src="img/littercar.png"
+										width="10%" height="10%" />
+									<p class="box6" style="text-align: center;">${video.car.license}</p>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
 			<div class="row">
 				<c:forEach items="${requestScope.sensorList}" var="sensor">
 					<div class="col-sm-3">
@@ -345,15 +346,11 @@
 							</c:if>
 							<div class="row">
 								<div class="col-sm-4">
-									<!-- <div class="text-center">
-													<img alt="image" class="img-circle m-t-xs img-responsive"
-														src="img/littercar.png">
-													<div class="m-t-xs font-bold">设备照片</div>
-												</div> -->
 									<div>
 										<label class="label">监测值</label>
 										<div class="h5 text-info inline">
-											<input class="form-control" id='${sensor.id}' name="sensorId" alt='${sensor.sensorType.type}'
+											<input type="hidden" id='${sensor.id}' name="sensorId" alt='${sensor.sensorType.type}' />
+											<input class="form-control" id='${sensor.id}value1' name="sensorId" alt='${sensor.sensorType.type}'
 												style="width: 135%;" readonly />
 											<c:if
 												test="${sensor.sensorType.type=='GPS传感器'||sensor.sensorType.type=='温湿度传感器' }">
@@ -590,26 +587,50 @@
 								historyData[sensorId]={};
 							}else{
 								if(sensorType=="超声波传感器"){
-									console.log(carStatus);
 									var diff=parseFloat(sensorValue.value1)-parseFloat(historyData[sensorId].value1);
 									if((carStatus==0||carStatus==3)&&diff>10){
 										console.log("异常");
 										$("#"+sensorId+"Status").attr("class","label label-danger pull-right ");
 										$("#"+sensorId+"Status").html('异常')
 									}
-									if(carStatus==1||carStatus==2&&carStatus==4){
+									if(carStatus==1||carStatus==2||carStatus==4){
 										if(sensorValue.value1>500){
 											$("#"+sensorId+"Status").attr("class","label label-danger pull-right ");
 											$("#"+sensorId+"Status").html('请添加')
 										}
-									}
-									
-									
-								}
-								
+									}							
+								}						
 							}
-							//$("#"+sensorId).val(value)
-							$("#"+sensorId).val(sensorValue.value1)
+							if(sensorType=="温湿度传感器"){
+								if(sensorValue.value1<=40&&sensorValue.value2>=30&&sensorValue.value2<=80){
+									$("#"+sensorId+"Status").attr("class","label label-primary pull-right ");
+									$("#"+sensorId+"Status").html('正常');
+								}else{
+									$("#"+sensorId+"Status").attr("class","label label-primary pull-right ");
+									$("#"+sensorId+"Status").html('异常');
+								}
+							}
+							if(sensorType=="氨气传感器"){
+								console.log(sensorValue.value1)
+								if(sensorValue.value1>=0 && sensorValue.value1<=8){
+									$("#"+sensorId+"Status").attr("class","label label-primary pull-right ");
+									$("#"+sensorId+"Status").html('正常');
+								}else{
+									$("#"+sensorId+"Status").attr("class","label label-danger pull-right ");
+									$("#"+sensorId+"Status").html('异常');
+								}
+							}
+							if(sensorType=="硫化氢传感器"){
+								if(sensorValue.value1>=0 &&sensorValue.value1<=10){
+									$("#"+sensorId+"Status").attr("class","label label-primary pull-right ");
+									$("#"+sensorId+"Status").html('正常');
+								}else{
+									$("#"+sensorId+"Status").attr("class","label label-danger pull-right ");
+									$("#"+sensorId+"Status").html('异常');
+								}
+							}
+							console.log(sensorValue.value1)
+							$("#"+sensorId+"value1").val(sensorValue.value1)
 							if(sensorValue.value2!=0){
 								historyData[sensorId].value2=sensorValue.value2;
 								$("#"+sensorId+"value2").val(sensorValue.value2)

@@ -1,5 +1,6 @@
 package factory.controller;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import org.apache.commons.logging.Log;
@@ -36,11 +37,21 @@ public class VideoController {
 	@RequestMapping("/jumpToVideo")
 	public ModelAndView queryAllVideo(ModelAndView mv) {
 		log.info("调用查询视频的方法");
+		Map<String,List<Sensor>> map = new  LinkedHashMap<String,List<Sensor>>();		
 		List<Video> videos = videoService.queryAllVideo();
 		List<Car> cars = videoService.queryCarWhichNotVideo();
 		List<Video> videosWithoutCar=videoService.queryVideoWhichNotCar();
+		for(Video v : videos ){
+			int carID = v.getCarId();
+			String s = Integer.toString(carID);
+			//获取传感数据byCarId
+			List<Sensor> sensors = sensorService.querySensorsByCarId(carID);
+			map.put(s,sensors);
+			
+		}
 		mv.addObject("videoList", videos);// 设置需要返回的值
 		mv.addObject("carList", cars);
+		mv.addObject("sensorMap", map);// 设置需要返回的值
 		mv.addObject("videoWithoutCarList", videosWithoutCar);
 		JSONArray carJson = JSONArray.fromObject(cars);
 		mv.setViewName("monitor/monitorCard"); // 跳转到指定的页面

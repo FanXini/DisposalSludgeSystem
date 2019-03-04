@@ -1,7 +1,7 @@
 package factory.config;
 
 public class RedisContant {
-	public static final String host="127.0.0.1";
+	public static final String host="iot.hnu.edu.cn";
 	
 	public static final int port=6379;
 	
