@@ -1,6 +1,12 @@
 package factory.entity;
 
-public class Charge {
+import java.io.Serializable;
+
+public class Charge implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -5539906155934912134L;
 	private int id;
 	private String productTime;
 	private float weight;

@@ -1,13 +1,19 @@
 package factory.entity;
 
-public class SensorValue {
+import java.io.Serializable;
 
+public class SensorValue implements Serializable{
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -4552482725944455990L;
 	private int id;
 	private int sensorId;
 	private String time;
 	private double value1;
 	private double value2;
-	private char headInfo; // ╠Ю╨ем╥пео╒
+	private char headInfo; // О©╫О©╫О©╫м╥О©╫О©╫о╒
 
 	public SensorValue() {
 

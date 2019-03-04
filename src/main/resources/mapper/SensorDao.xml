@@ -374,6 +374,18 @@
 				(sensor_id,time,value)
 				VALUES(#{sensorId},#{time},#{value1})
 			</when>
+			<when test="headInfo=='U'">
+				INSERT INTO
+				ultrasonic_record
+				(sensor_id,time,value)
+				VALUES(#{sensorId},#{time},#{value1})
+			</when>
+			<when test="headInfo=='L'">
+				INSERT INTO
+				liquid_record
+				(sensor_id,time,value)
+				VALUES(#{sensorId},#{time},#{value1})
+			</when>
 		</choose>
 	</insert>
 

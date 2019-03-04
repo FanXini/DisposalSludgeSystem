@@ -19,50 +19,56 @@ public class DaoConfig {
 
 	@Bean
 	public ComboPooledDataSource getComboPooledDataSource() throws PropertyVetoException {
-		ComboPooledDataSource pool=new ComboPooledDataSource();
+		ComboPooledDataSource pool = new ComboPooledDataSource();
 		pool.setDriverClass(JDBC.DRIVERCLASS);
 		pool.setJdbcUrl(JDBC.URL);
 		pool.setUser(JDBC.USERNAME);
 		pool.setPassword(JDBC.PASSWORD);
 		pool.setMaxPoolSize(JDBC.MAXPOOLSIZE);
 		pool.setMinPoolSize(JDBC.MINPOOLSIZE);
+		// 最大空闲时间,1800秒内未使用则连接被丢弃。若为0则永不丢弃。Default: 0
+		pool.setMaxIdleTime(JDBC.MAXIDLETIME);
+		pool.setAcquireIncrement(JDBC.ACQUIREINCREMENT);
+		pool.setMaxStatements(JDBC.MAXSTATEMENTS);
+		pool.setInitialPoolSize(JDBC.INITIALPOOLSIZE);
 		pool.setAutoCommitOnClose(JDBC.AUTOCOMMITONCLOSE);
 		pool.setCheckoutTimeout(JDBC.CHECKOUTTIMEOUT);
 		pool.setAcquireRetryAttempts(JDBC.ACQUIRERETRYATTEMPTS);
 		return pool;
 	}
-	
+
 	@Bean
 	public DataSourceTransactionManager getTransactionManager(ComboPooledDataSource jdbcDataSource) {
-		DataSourceTransactionManager dataSourceTransactionManager=new DataSourceTransactionManager();
+		DataSourceTransactionManager dataSourceTransactionManager = new DataSourceTransactionManager();
 		dataSourceTransactionManager.setDataSource(jdbcDataSource);
 		return dataSourceTransactionManager;
 	}
-	
-	@Bean(name="sqlSessionFactory")
+
+	@Bean(name = "sqlSessionFactory")
 	public SqlSessionFactoryBean getSqlSessionFactoryBean(ComboPooledDataSource jdbcDataSource) throws IOException {
-		SqlSessionFactoryBean factoryBean=new SqlSessionFactoryBean();
-		//注入数据库连接池
+		SqlSessionFactoryBean factoryBean = new SqlSessionFactoryBean();
+		// 注入数据库连接池
 		factoryBean.setDataSource(jdbcDataSource);
-		//配置MyBaties全局配置文件:mybatis-config.xml
+		// 配置MyBaties全局配置文件:mybatis-config.xml
 		factoryBean.setConfigLocation(new ClassPathResource("mybatis-config.xml"));
-		//扫描entity使用别名
+		// 扫描entity使用别名
 		factoryBean.setTypeAliasesPackage("factory.entity");
-		//扫描sql配置文件:mapper需要的要的xml文件
-		Resource[] resources=new PathMatchingResourcePatternResolver().getResources("classpath:mapper/*.xml");
-		//factoryBean.setMapperLocations(new ClassPathResource[] {new ClassPathResource("mapper/EventDao.xml"),new ClassPathResource("mapper/ImageDao.xml")});
+		// 扫描sql配置文件:mapper需要的要的xml文件
+		Resource[] resources = new PathMatchingResourcePatternResolver().getResources("classpath:mapper/*.xml");
+		// factoryBean.setMapperLocations(new ClassPathResource[] {new
+		// ClassPathResource("mapper/EventDao.xml"),new
+		// ClassPathResource("mapper/ImageDao.xml")});
 		factoryBean.setMapperLocations(resources);
 		return factoryBean;
 	}
-	
+
 	@Bean
 	public MapperScannerConfigurer getMapperScannerConfigurer(SqlSessionFactoryBean factoryBean) {
-		MapperScannerConfigurer mapperScannerConfigurer=new MapperScannerConfigurer();
-		//注入sqlSessionFactory
+		MapperScannerConfigurer mapperScannerConfigurer = new MapperScannerConfigurer();
+		// 注入sqlSessionFactory
 		mapperScannerConfigurer.setSqlSessionFactoryBeanName("sqlSessionFactory");
-		//给出要扫描的Dao接口
+		// 给出要扫描的Dao接口
 		mapperScannerConfigurer.setBasePackage("factory.dao");
 		return mapperScannerConfigurer;
 	}
 }
-

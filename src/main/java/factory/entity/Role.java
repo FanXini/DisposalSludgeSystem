@@ -1,6 +1,12 @@
 package factory.entity;
 
-public class Role {
+import java.io.Serializable;
+
+public class Role implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 8457745129137222914L;
 	private Integer id;
 	private String role_name;
 	private String description;

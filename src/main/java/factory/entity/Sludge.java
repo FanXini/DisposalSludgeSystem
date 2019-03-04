@@ -1,7 +1,13 @@
 package factory.entity;
 
-public class Sludge {
+import java.io.Serializable;
 
+public class Sludge implements Serializable{
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -6192198481895077268L;
 	private int id;
 	private int recordId;
 	private int functionId;
