@@ -86,8 +86,8 @@ body {
 						<div class="form-group">
 							<div>
 								<label for="Groupname" class="col-sm-3 control-label">车牌号：</label>
-								<input type="hidden" id="editCarId">
-								<input type="hidden" id="editCarType">
+								<input type="hidden" id="editCarId"> <input
+									type="hidden" id="editCarType">
 								<div class="col-sm-9">
 									<input type="text" class="form-control m-b control-label"
 										id="editCarLicense" placeholder="请输入车牌号">
@@ -259,11 +259,14 @@ body {
 	<script src="js/content.js?v=1.0.0"></script>
 
 	<!-- Bootstrap table -->
-	<script  type='text/javascript' src="js/plugins/jeditable/jquery.jeditable.js" charset='utf-8'></script>
+	<script type='text/javascript'
+		src="js/plugins/jeditable/jquery.jeditable.js" charset='utf-8'></script>
 
 	<!-- Data Tables -->
-	<script src="js/plugins/dataTables/jquery.dataTables.js" charset='utf-8'></script>
-	<script src="js/plugins/dataTables/dataTables.bootstrap.js" charset='utf-8'></script>
+	<script src="js/plugins/dataTables/jquery.dataTables.js"
+		charset='utf-8'></script>
+	<script src="js/plugins/dataTables/dataTables.bootstrap.js"
+		charset='utf-8'></script>
 
 	<!-- 自定义js -->
 	<script src="js/content.js?v=1.0.0"></script>
@@ -289,14 +292,16 @@ body {
 		var table_end = '</tbody>' + '<tfoot>' + '</tfoot>' + '</table>'
 
 		$("#editCarModal").on('shown.bs.modal', function() {
-			var carType=parseInt($("#editCarType").val())
+			var carType = parseInt($("#editCarType").val())
 			$.ajax({
 				type : "POST",
 				url : "user/queryNoCarAssignedDriverList",
 				success : function(driverList) {
 					$("#editDriverId").empty();
-					var option1 = new Option('--暂不分配--', '0')
+					var option1 = new Option('--不改动司机--', '-1')
+					var option2 = new Option('--暂不分配--', '0')
 					$("#editDriverId")[0].options.add(option1);
+					$("#editDriverId")[0].options.add(option2);
 					$.each(driverList, function(i, driver) {
 						var option = new Option(driver.realname, driver.id);
 						option.setAttribute("name", driver.telephone);
@@ -366,66 +371,72 @@ body {
 																		+ car.id
 																		+ '">设备</a></td>'
 
-																		if (car.status == 0) {
-																			table += '<td class="project-status"><span class="label label-inverse">空闲</td>'
-																			table += '<td>'
-																					+ '<button onclick="javascript:deleteCar('
-																					+ car.id
-																					+ ');" class="btn btn-white btn-sm" data-toggle="modal" data-target="#delcfmOverhaul"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span>删除 </button>'
-																					+ '<button onclick="javascript:editCar('
-																					+ car.id
-																					+ ','
-																					+ car.carType
-																					+ ');" class="btn btn-white btn-sm" data-toggle="modal" data-target="#editCarModal"><i class="fa fa-pencil"></i> 编辑 </button>'
-																					+ '</td>'
-																		} else if (car.status == 1) {
-																			table += '<td class="project-status"><span class="label label-primary">在途中</td>'
-																			table += '<td>'
-																					+ '<button onclick="javascript:deleteCar('
-																					+ car.id
-																					+ ');" class="btn btn-white btn-sm" data-toggle="modal" data-target="#delcfmOverhaul"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span>删除 </button>'
-																					+ '<button class="btn btn-white btn-sm"  disabled="disabled"><i class="fa fa-pencil"></i> 编辑 </button>'
-																					+ '</td>'
-																		} else if (car.status == 2) {
-																			table += '<td class="project-status"><span class="label label-success">已到达</td>'
-																			table += '<td>'
-																					+ '<button onclick="javascript:deleteCar('
-																					+ car.id
-																					+ ');" class="btn btn-white btn-sm" data-toggle="modal" data-target="#delcfmOverhaul"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span>删除 </button>'
-																					+ '<button class="btn btn-white btn-sm"  disabled="disabled"><i class="fa fa-pencil"></i> 编辑 </button>'
-																					+ '</td>'
-																		} else if (car.status == 3) {
-																			table += '<td class="project-status"><span class="label label-danger">已派单</td>'
-																			table += '<td>'
-																					+ '<button onclick="javascript:deleteCar('
-																					+ car.id
-																					+ ');" class="btn btn-white btn-sm" data-toggle="modal" data-target="#delcfmOverhaul"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span>删除 </button>'
-																					+ '<button onclick="javascript:editCar('
-																					+ car.id+','+car.carType
-																					+ ');" class="btn btn-white btn-sm" data-toggle="modal" data-target="#editCarModal"><i class="fa fa-pencil"></i> 编辑 </button>'
-																					+ '</td>'
+																if (car.status == 0) {
+																	table += '<td class="project-status"><span class="label label-inverse">空闲</td>'
+																	table += '<td>'
+																			+ '<button onclick="javascript:deleteCar('
+																			+ car.id
+																			+ ');" class="btn btn-white btn-sm" data-toggle="modal" data-target="#delcfmOverhaul"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span>删除 </button>'
+																			+ '<button onclick="javascript:editCar('
+																			+ car.id
+																			+ ','
+																			+ car.carType
+																			+ ');" class="btn btn-white btn-sm" data-toggle="modal" data-target="#editCarModal"><i class="fa fa-pencil"></i> 编辑 </button>'
+																			+ '</td>'
+																} else if (car.status == 1) {
+																	table += '<td class="project-status"><span class="label label-primary">在途中</td>'
+																	table += '<td>'
+																			+ '<button onclick="javascript:deleteCar('
+																			+ car.id
+																			+ ');" class="btn btn-white btn-sm" data-toggle="modal" data-target="#delcfmOverhaul"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span>删除 </button>'
+																			+ '<button class="btn btn-white btn-sm"  disabled="disabled"><i class="fa fa-pencil"></i> 编辑 </button>'
+																			+ '</td>'
+																} else if (car.status == 2) {
+																	table += '<td class="project-status"><span class="label label-success">已到达</td>'
+																	table += '<td>'
+																			+ '<button onclick="javascript:deleteCar('
+																			+ car.id
+																			+ ');" class="btn btn-white btn-sm" data-toggle="modal" data-target="#delcfmOverhaul"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span>删除 </button>'
+																			+ '<button class="btn btn-white btn-sm"  disabled="disabled"><i class="fa fa-pencil"></i> 编辑 </button>'
+																			+ '</td>'
+																} else if (car.status == 3) {
+																	table += '<td class="project-status"><span class="label label-danger">已派单</td>'
+																	table += '<td>'
+																			+ '<button onclick="javascript:deleteCar('
+																			+ car.id
+																			+ ');" class="btn btn-white btn-sm" data-toggle="modal" data-target="#delcfmOverhaul"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span>删除 </button>'
+																			+ '<button onclick="javascript:editCar('
+																			+ car.id
+																			+ ','
+																			+ car.carType
+																			+ ');" class="btn btn-white btn-sm" data-toggle="modal" data-target="#editCarModal"><i class="fa fa-pencil"></i> 编辑 </button>'
+																			+ '</td>'
 
-																		} else if (car.status == 4) {
-																			table += '<td class="project-status"><span class="label label-info">返程中</td>'
-																			table += '<td>'
-																					+ '<button onclick="javascript:deleteCar('
-																					+ car.id
-																					+ ');" class="btn btn-white btn-sm" data-toggle="modal" data-target="#delcfmOverhaul"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span>删除 </button>'
-																					+ '<button onclick="javascript:editCar('
-																					+ car.id+','+car.carType
-																					+ ');" class="btn btn-white btn-sm" data-toggle="modal" data-target="#editCarModal"><i class="fa fa-pencil"></i> 编辑 </button>'
-																					+ '</td>'
-																		} else {
-																			table += '<td></td>'
-																			table += '<td>'
-																					+ '<button onclick="javascript:deleteCar('
-																					+ car.id
-																					+ ');" class="btn btn-white btn-sm" data-toggle="modal" data-target="#delcfmOverhaul"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span>删除 </button>'
-																					+ '<button onclick="javascript:editCar('
-																					+ car.id+','+car.carType
-																					+ ');" class="btn btn-white btn-sm" data-toggle="modal" data-target="#editCarModal"><i class="fa fa-pencil"></i> 编辑 </button>'
-																					+ '</td>'
-																		}
+																} else if (car.status == 4) {
+																	table += '<td class="project-status"><span class="label label-info">返程中</td>'
+																	table += '<td>'
+																			+ '<button onclick="javascript:deleteCar('
+																			+ car.id
+																			+ ');" class="btn btn-white btn-sm" data-toggle="modal" data-target="#delcfmOverhaul"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span>删除 </button>'
+																			+ '<button onclick="javascript:editCar('
+																			+ car.id
+																			+ ','
+																			+ car.carType
+																			+ ');" class="btn btn-white btn-sm" data-toggle="modal" data-target="#editCarModal"><i class="fa fa-pencil"></i> 编辑 </button>'
+																			+ '</td>'
+																} else {
+																	table += '<td></td>'
+																	table += '<td>'
+																			+ '<button onclick="javascript:deleteCar('
+																			+ car.id
+																			+ ');" class="btn btn-white btn-sm" data-toggle="modal" data-target="#delcfmOverhaul"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span>删除 </button>'
+																			+ '<button onclick="javascript:editCar('
+																			+ car.id
+																			+ ','
+																			+ car.carType
+																			+ ');" class="btn btn-white btn-sm" data-toggle="modal" data-target="#editCarModal"><i class="fa fa-pencil"></i> 编辑 </button>'
+																			+ '</td>'
+																}
 																table += '</tr>'
 															})
 											table += table_end
@@ -552,7 +563,9 @@ body {
 															+ car.id
 															+ ');" class="btn btn-white btn-sm" data-toggle="modal" data-target="#delcfmOverhaul"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span>删除 </button>'
 															+ '<button onclick="javascript:editCar('
-															+ car.id+','+car.carType
+															+ car.id
+															+ ','
+															+ car.carType
 															+ ');" class="btn btn-white btn-sm" data-toggle="modal" data-target="#editCarModal"><i class="fa fa-pencil"></i> 编辑 </button>'
 															+ '</td>'
 
@@ -563,7 +576,9 @@ body {
 															+ car.id
 															+ ');" class="btn btn-white btn-sm" data-toggle="modal" data-target="#delcfmOverhaul"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span>删除 </button>'
 															+ '<button onclick="javascript:editCar('
-															+ car.id+','+car.carType
+															+ car.id
+															+ ','
+															+ car.carType
 															+ ');" class="btn btn-white btn-sm" data-toggle="modal" data-target="#editCarModal"><i class="fa fa-pencil"></i> 编辑 </button>'
 															+ '</td>'
 												} else {
@@ -573,7 +588,9 @@ body {
 															+ car.id
 															+ ');" class="btn btn-white btn-sm" data-toggle="modal" data-target="#delcfmOverhaul"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span>删除 </button>'
 															+ '<button onclick="javascript:editCar('
-															+ car.id+','+car.carType
+															+ car.id
+															+ ','
+															+ car.carType
 															+ ');" class="btn btn-white btn-sm" data-toggle="modal" data-target="#editCarModal"><i class="fa fa-pencil"></i> 编辑 </button>'
 															+ '</td>'
 												}
@@ -616,12 +633,17 @@ body {
 							var brand = $("#addCarBrand").val()
 							//获取车辆类型的值addCartype-刘见宇
 							var carType = parseInt($("#addCartype").val())
-							alert(carType)
+							var carTypeString = '';
+							if (carType == 0) {
+								carTypeString = '污泥处理车';
+							} else {
+								carTypeString = '污泥运输车';
+							}
+							alert(carTypeString);
 							var Brand = brand
 							var driverId = parseInt($("#addDriverId").val())
 							var options = $("#addDriverId option:selected");
 							var driverName = options.text();
-							//刘
 							var telephone = options.attr("name");
 							if (telephone == null) {
 								telephone = ''
@@ -644,9 +666,8 @@ body {
 												license : license,
 												brand : brand,
 												driverId : driverId,
-											//刘见宇
-											//carType : carType
-											//********
+											    carType : carType
+
 											}),
 											dataType : "json",
 											contentType : "application/json",
@@ -660,10 +681,20 @@ body {
 															+ '</td>'
 													tr += '<td>' + Brand
 															+ '</td>'
+													tr += '<td>'
+															+ carTypeString
+															+ '</td>'
 													tr += '<td>' + driverName
 															+ '</td>'
-													tr += '<td>' + telephone
-															+ '</td>'
+													if (telephone != 'null') {
+														tr += '<td>'
+																+ telephone
+																+ '</td>'
+													} else {
+														tr += '<td>' + ''
+																+ '</td>'
+													}
+
 													tr += '<td><a href="sensor/deviceDetail?id='
 															+ carId
 															+ '&location='
@@ -749,9 +780,14 @@ body {
 												license)
 										editCar.children("td").eq(1)
 												.text(Brand)
-										editCar.children("td").eq(2).text('')
 										editCar.children("td").eq(3).text('')
+										editCar.children("td").eq(4).text('')
 
+									} else if (driverId == -1) {
+										editCar.children("td").eq(0).text(
+												license)
+										editCar.children("td").eq(1)
+												.text(Brand)
 									} else {
 										var oriRealName = editCar
 												.children("td").eq(2).text()
@@ -761,10 +797,17 @@ body {
 												license)
 										editCar.children("td").eq(1)
 												.text(Brand)
-										editCar.children("td").eq(2).text(
-												driverName)
 										editCar.children("td").eq(3).text(
-												telephone)
+												driverName)
+										if (telephone != 'null'
+												&& telephone != '') {
+											editCar.children("td").eq(4).text(
+													telephone)
+										} else {
+											editCar.children("td").eq(4).text(
+													'')
+										}
+
 									}
 									$('#editCarModal').modal('hide')
 								} else if (result == "DUPLICATE") {
@@ -838,66 +881,72 @@ body {
 																		+ car.license
 																		+ '&locationId=0'
 																		+ '">设备</a></td>'
-																		if (car.status == 0) {
-																			table += '<td class="project-status"><span class="label label-inverse">空闲</td>'
-																			table += '<td>'
-																					+ '<button onclick="javascript:deleteCar('
-																					+ car.id
-																					+ ');" class="btn btn-white btn-sm" data-toggle="modal" data-target="#delcfmOverhaul"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span>删除 </button>'
-																					+ '<button onclick="javascript:editCar('
-																					+ car.id
-																					+ ','
-																					+ car.carType
-																					+ ');" class="btn btn-white btn-sm" data-toggle="modal" data-target="#editCarModal"><i class="fa fa-pencil"></i> 编辑 </button>'
-																					+ '</td>'
-																		} else if (car.status == 1) {
-																			table += '<td class="project-status"><span class="label label-primary">在途中</td>'
-																			table += '<td>'
-																					+ '<button onclick="javascript:deleteCar('
-																					+ car.id
-																					+ ');" class="btn btn-white btn-sm" data-toggle="modal" data-target="#delcfmOverhaul"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span>删除 </button>'
-																					+ '<button class="btn btn-white btn-sm"  disabled="disabled"><i class="fa fa-pencil"></i> 编辑 </button>'
-																					+ '</td>'
-																		} else if (car.status == 2) {
-																			table += '<td class="project-status"><span class="label label-success">已到达</td>'
-																			table += '<td>'
-																					+ '<button onclick="javascript:deleteCar('
-																					+ car.id
-																					+ ');" class="btn btn-white btn-sm" data-toggle="modal" data-target="#delcfmOverhaul"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span>删除 </button>'
-																					+ '<button class="btn btn-white btn-sm"  disabled="disabled"><i class="fa fa-pencil"></i> 编辑 </button>'
-																					+ '</td>'
-																		} else if (car.status == 3) {
-																			table += '<td class="project-status"><span class="label label-danger">已派单</td>'
-																			table += '<td>'
-																					+ '<button onclick="javascript:deleteCar('
-																					+ car.id
-																					+ ');" class="btn btn-white btn-sm" data-toggle="modal" data-target="#delcfmOverhaul"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span>删除 </button>'
-																					+ '<button onclick="javascript:editCar('
-																					+ car.id+','+car.carType
-																					+ ');" class="btn btn-white btn-sm" data-toggle="modal" data-target="#editCarModal"><i class="fa fa-pencil"></i> 编辑 </button>'
-																					+ '</td>'
+																if (car.status == 0) {
+																	table += '<td class="project-status"><span class="label label-inverse">空闲</td>'
+																	table += '<td>'
+																			+ '<button onclick="javascript:deleteCar('
+																			+ car.id
+																			+ ');" class="btn btn-white btn-sm" data-toggle="modal" data-target="#delcfmOverhaul"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span>删除 </button>'
+																			+ '<button onclick="javascript:editCar('
+																			+ car.id
+																			+ ','
+																			+ car.carType
+																			+ ');" class="btn btn-white btn-sm" data-toggle="modal" data-target="#editCarModal"><i class="fa fa-pencil"></i> 编辑 </button>'
+																			+ '</td>'
+																} else if (car.status == 1) {
+																	table += '<td class="project-status"><span class="label label-primary">在途中</td>'
+																	table += '<td>'
+																			+ '<button onclick="javascript:deleteCar('
+																			+ car.id
+																			+ ');" class="btn btn-white btn-sm" data-toggle="modal" data-target="#delcfmOverhaul"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span>删除 </button>'
+																			+ '<button class="btn btn-white btn-sm"  disabled="disabled"><i class="fa fa-pencil"></i> 编辑 </button>'
+																			+ '</td>'
+																} else if (car.status == 2) {
+																	table += '<td class="project-status"><span class="label label-success">已到达</td>'
+																	table += '<td>'
+																			+ '<button onclick="javascript:deleteCar('
+																			+ car.id
+																			+ ');" class="btn btn-white btn-sm" data-toggle="modal" data-target="#delcfmOverhaul"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span>删除 </button>'
+																			+ '<button class="btn btn-white btn-sm"  disabled="disabled"><i class="fa fa-pencil"></i> 编辑 </button>'
+																			+ '</td>'
+																} else if (car.status == 3) {
+																	table += '<td class="project-status"><span class="label label-danger">已派单</td>'
+																	table += '<td>'
+																			+ '<button onclick="javascript:deleteCar('
+																			+ car.id
+																			+ ');" class="btn btn-white btn-sm" data-toggle="modal" data-target="#delcfmOverhaul"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span>删除 </button>'
+																			+ '<button onclick="javascript:editCar('
+																			+ car.id
+																			+ ','
+																			+ car.carType
+																			+ ');" class="btn btn-white btn-sm" data-toggle="modal" data-target="#editCarModal"><i class="fa fa-pencil"></i> 编辑 </button>'
+																			+ '</td>'
 
-																		} else if (car.status == 4) {
-																			table += '<td class="project-status"><span class="label label-info">返程中</td>'
-																			table += '<td>'
-																					+ '<button onclick="javascript:deleteCar('
-																					+ car.id
-																					+ ');" class="btn btn-white btn-sm" data-toggle="modal" data-target="#delcfmOverhaul"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span>删除 </button>'
-																					+ '<button onclick="javascript:editCar('
-																					+ car.id+','+car.carType
-																					+ ');" class="btn btn-white btn-sm" data-toggle="modal" data-target="#editCarModal"><i class="fa fa-pencil"></i> 编辑 </button>'
-																					+ '</td>'
-																		} else {
-																			table += '<td></td>'
-																			table += '<td>'
-																					+ '<button onclick="javascript:deleteCar('
-																					+ car.id
-																					+ ');" class="btn btn-white btn-sm" data-toggle="modal" data-target="#delcfmOverhaul"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span>删除 </button>'
-																					+ '<button onclick="javascript:editCar('
-																					+ car.id+','+car.carType
-																					+ ');" class="btn btn-white btn-sm" data-toggle="modal" data-target="#editCarModal"><i class="fa fa-pencil"></i> 编辑 </button>'
-																					+ '</td>'
-																		}
+																} else if (car.status == 4) {
+																	table += '<td class="project-status"><span class="label label-info">返程中</td>'
+																	table += '<td>'
+																			+ '<button onclick="javascript:deleteCar('
+																			+ car.id
+																			+ ');" class="btn btn-white btn-sm" data-toggle="modal" data-target="#delcfmOverhaul"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span>删除 </button>'
+																			+ '<button onclick="javascript:editCar('
+																			+ car.id
+																			+ ','
+																			+ car.carType
+																			+ ');" class="btn btn-white btn-sm" data-toggle="modal" data-target="#editCarModal"><i class="fa fa-pencil"></i> 编辑 </button>'
+																			+ '</td>'
+																} else {
+																	table += '<td></td>'
+																	table += '<td>'
+																			+ '<button onclick="javascript:deleteCar('
+																			+ car.id
+																			+ ');" class="btn btn-white btn-sm" data-toggle="modal" data-target="#delcfmOverhaul"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span>删除 </button>'
+																			+ '<button onclick="javascript:editCar('
+																			+ car.id
+																			+ ','
+																			+ car.carType
+																			+ ');" class="btn btn-white btn-sm" data-toggle="modal" data-target="#editCarModal"><i class="fa fa-pencil"></i> 编辑 </button>'
+																			+ '</td>'
+																}
 																table += '</tr>'
 															})
 											table += table_end

@@ -248,8 +248,22 @@
 	}
 
 	// accessToken会自动失效，需要通过后端请求刷新。详见 https://open.ys7.com/doc/zh/book/index/user.html
-	const ACCESS_TOKEN = "at.91ee13eg46rs5lepb3xbm1ih8sgn4byr-9rh4ualj21-1kgvk4a-19vobpkjf";
-
+	const ACCESS_TOKEN = "at.7vyqnxx4dc9xyra93bqxm90pbb82autv-5mljjkln0k-0hugok7-xlsvhlxd9";
+	/* $.ajax({
+		type:'POST',
+		url:"https://open.ys7.com/api/lapp/token/get",
+		//?appkey=db5f7ae9b48c430491eb921a776e4844&appSecret=2f3ee69a08cdb92566154ee837195adf
+		data:JSON.stringify({
+			appkey:"db5f7ae9b48c430491eb921a776e4844&appSecret",
+			appSecret:"2f3ee69a08cdb92566154ee837195adf"
+		}),
+		//data:"appkey=db5f7ae9b48c430491eb921a776e4844&appSecret=2f3ee69a08cdb92566154ee837195adf",
+		json:"jsonp",
+		success:function(data){
+			alert(data.code)
+		}
+		
+	}) */
 	/* const DEVICE_SERIAL = "C29134495"; */
 	const CHANNEL_NO = 1;
 	const START_PTZ_URL = "https://open.ys7.com/api/lapp/device/ptz/start";
@@ -1002,7 +1016,7 @@
 										$("#"+sensorId+"Status").html('异常')
 									}
 									
-									if(sensorValue.value1<10){
+									if(sensorValue.value1<25){
 										$("#"+sensorId+"Status").attr("class","label label-danger pull-right ");
 										$("#"+sensorId+"Status").html('请添加干化剂')
 									}		

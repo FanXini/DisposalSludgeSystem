@@ -96,8 +96,8 @@ public class GetCarlocation implements InitializingBean,ServletConfigAware{
 			URL url = new URL(urlOrigin);
 			conn = (HttpURLConnection) url.openConnection();
 			conn.setUseCaches(false);
-			conn.setConnectTimeout(30000);
-			conn.setReadTimeout(30000);
+			conn.setConnectTimeout(3000000);
+			conn.setReadTimeout(3000000);
 			conn.setInstanceFollowRedirects(false);
 			conn.connect();
 

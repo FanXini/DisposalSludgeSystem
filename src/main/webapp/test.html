@@ -35,7 +35,7 @@
 				alert(data.id)
 				gpsUserId = data.id;
 				mds = data.mds;
-				alert(mds)
+				alert("mds="+mds)
 				$.ajax({
 					type : "GET",
 					url : "http://api.18gps.net/GetDateServices.asmx/GetDate?method=loadUser&user_id=" + deviceId + "&mds=" + mds,

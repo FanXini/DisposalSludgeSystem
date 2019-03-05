@@ -125,10 +125,10 @@ public class CarServiceImpl implements CarService{
 		if(car.getBrand().equals("none")){
 			car.setBrand(null);
 		}
-		if(car.getDriverId()==-1){
+		/*if(car.getDriverId()==-1){
 			User driver=userDao.queryUserByRealName(car.getDriver().getRealname());
 			car.setDriverId(driver.getId());
-		}
+		}*/
 		carDao.editCar(car);	
 	}
 	@Override

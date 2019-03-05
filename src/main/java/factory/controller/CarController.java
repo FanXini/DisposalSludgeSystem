@@ -128,6 +128,7 @@ public class CarController {
 			return Result.INPUT;
 		} catch (Exception e) {
 			// TODO: handle exception
+			e.printStackTrace();
 			return Result.ERROR;
 		}
 	}

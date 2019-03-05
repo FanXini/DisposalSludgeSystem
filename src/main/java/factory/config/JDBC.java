@@ -6,7 +6,7 @@ public class JDBC {
 	
 	public static final String URL="jdbc:mysql://119.23.29.190/disposalsludgesystem?useUnicode=true&characterEncoding=utf8";
 	
-	public static final String USERNAME="fanxin";
+	public static final String USERNAME="root";
 	
 	public static final String PASSWORD="123456";
 	
