@@ -34,9 +34,9 @@ public class RootConfig {
 	public ThreadPoolTaskExecutor getTastExecutor() {
 		ThreadPoolTaskExecutor taskExecutor=new ThreadPoolTaskExecutor();
 		taskExecutor.setCorePoolSize(10);
-		taskExecutor.setKeepAliveSeconds(200);
+		taskExecutor.setKeepAliveSeconds(1);
 		taskExecutor.setMaxPoolSize(100);
-		taskExecutor.setQueueCapacity(20);
+		taskExecutor.setQueueCapacity(200);
 		taskExecutor.setRejectedExecutionHandler(new ThreadPoolExecutor.CallerRunsPolicy());
 		return taskExecutor;
 	}

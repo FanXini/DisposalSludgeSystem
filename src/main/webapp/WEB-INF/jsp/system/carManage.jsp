@@ -288,12 +288,8 @@ body {
 				+ '</thead>' + '<tbody>'
 		var table_end = '</tbody>' + '<tfoot>' + '</tfoot>' + '</table>'
 
-		function setCarType() {
-			alert("haha")
-		}
 		$("#editCarModal").on('shown.bs.modal', function() {
 			var carType=parseInt($("#editCarType").val())
-			alert(carType+" haha")
 			$.ajax({
 				type : "POST",
 				url : "user/queryNoCarAssignedDriverList",

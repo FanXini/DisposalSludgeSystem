@@ -296,68 +296,77 @@
 	<!-- 摄像头-->
 	<!-- Example Pagination -->
 
-	<div class="col-sm-12">	
-	<div class="ibox">
-		<!-- 内容 -->
-		<div class="wrapper wrapper-content animated fadeInRight">
-			<div class="row">
+	<div class="col-sm-12">
+		<div class="ibox">
+			<!-- 内容 -->
+			<div class="wrapper wrapper-content animated fadeInRight">
+				<div class="row">
 					<div id="box" class="container-fluid">
-					<div class="row clearfix video">
-						<div class="col-md-12 column">
-							<div class="" id="${requestScope.video.id}">
-								<div>
-									<video class="box5" id='myPlayer${requestScope.video.id}'
-										name="play" poster="" controls playsInline webkit-playsinline
-										autoplay> <source src="${requestScope.video.videoRTMPid}"
-										type=" " /> <source src="${requestScope.video.videoHLSid}"
-										type="application/x-mpegURL" /> </video>
-								</div>
-								<div class="divlicense">
-									<button type="button" class="btn btn-primary"
-										onMouseover="startPtz(0,0,'${requestScope.video.serialNumber }');"
-										onMouseout="stopPtz(0,'${video.serialNumber }');">向上</button>
-									<button type="button" class="btn btn-primary"
-										onMouseover="startPtz(1,0,'${requestScope.video.serialNumber }');"
-										onMouseout="stopPtz(1,'${video.serialNumber }');">向下</button>
-									<button type="button" class="btn btn-primary"
-										onMouseover="startPtz(2,0,'${requestScope.video.serialNumber }');"
-										onMouseout="stopPtz(2,'${video.serialNumber }');">向左</button>
-									<button type="button" class="btn btn-primary"
-										onMouseover="startPtz(3,0,'${requestScope.video.serialNumber }');"
-										onMouseout="stopPtz(3,'${video.serialNumber }');">向右</button>
-									<br /> <img class="box5" alt="140x140" src="img/littercar.png"
-										width="10%" height="10%" />
-									<p class="box6" style="text-align: center;">${video.car.license}</p>
+						<div class="row clearfix video">
+							<div class="col-md-12 column">
+								<div class="" id="${requestScope.video.id}">
+									<div>
+										<video class="box5" id='myPlayer${requestScope.video.id}'
+											name="play" poster="" controls playsInline webkit-playsinline
+											autoplay> <source
+											src="${requestScope.video.videoRTMPid}" type=" " /> <source
+											src="${requestScope.video.videoHLSid}"
+											type="application/x-mpegURL" /> </video>
+									</div>
+									<div class="divlicense">
+										<button type="button" class="btn btn-primary"
+											onMouseover="startPtz(0,0,'${requestScope.video.serialNumber }');"
+											onMouseout="stopPtz(0,'${video.serialNumber }');">向上</button>
+										<button type="button" class="btn btn-primary"
+											onMouseover="startPtz(1,0,'${requestScope.video.serialNumber }');"
+											onMouseout="stopPtz(1,'${video.serialNumber }');">向下</button>
+										<button type="button" class="btn btn-primary"
+											onMouseover="startPtz(2,0,'${requestScope.video.serialNumber }');"
+											onMouseout="stopPtz(2,'${video.serialNumber }');">向左</button>
+										<button type="button" class="btn btn-primary"
+											onMouseover="startPtz(3,0,'${requestScope.video.serialNumber }');"
+											onMouseout="stopPtz(3,'${video.serialNumber }');">向右</button>
+										<br /> <img class="box5" alt="140x140"
+											src="img/littercar.png" width="10%" height="10%" />
+										<p class="box6" style="text-align: center;">${video.car.license}</p>
+										<c:if test="${video.car.status==1 }">
+											<span class="text-center block"
+												style="font-size: 20px; font-weight: 900;"><mark>去往--${video.site.siteName}--途中</mark></span>
+										</c:if>
+										<c:if test="${video.car.status==2 }">
+											<span class="text-center block"
+												style="font-size: 20px; font-weight: 900;"><mark>在--${video.site.siteName}--</mark></span>
+										</c:if>
+									</div>
 								</div>
 							</div>
 						</div>
 					</div>
 				</div>
-			</div>
-			<div class="row">
-				<c:forEach items="${requestScope.sensorList}" var="sensor">
-					<div class="col-sm-3">
-						<div class="contact-box">
-							<c:if test="${sensor.status ==0}">
-								<label id="${sensor.id}Status" class="label label-primary pull-right">正常</label>
-							</c:if>
-							<c:if test="${sensor.status ==1}">
-								<label id="${sensor.id}Status" class="label label-danger pull-right ">异常</label>
-							</c:if>
-							<div class="row">
+				<div class="row">
+					<c:forEach items="${requestScope.sensorList}" var="sensor">
+						<div class="col-sm-4">
+							<div class="contact-box">
+								<c:if test="${sensor.status ==0}">
+									<label id="${sensor.id}Status"
+										class="label label-primary pull-right">正常</label>
+								</c:if>
+								<c:if test="${sensor.status ==1}">
+									<label id="${sensor.id}Status"
+										class="label label-danger pull-right ">异常</label>
+								</c:if>
 								<div class="col-sm-4">
-									<div>
-										<label class="label">监测值</label>
-										<div class="h5 text-info inline">
-											<input type="hidden" id='${sensor.id}' name="sensorId" alt='${sensor.sensorType.type}' />
-											<input class="form-control" id='${sensor.id}value1' name="sensorId" alt='${sensor.sensorType.type}'
+									<label class="label">监测值</label>
+									<div class="h5 text-info inline">
+										<input type="hidden" id='${sensor.id}' name="sensorId"
+											alt='${sensor.sensorType.type}' /> <input
+											class="form-control" id='${sensor.id}value1'
+											style="width: 135%;" readonly />
+										<c:if
+											test="${sensor.sensorType.type=='GPS传感器'||sensor.sensorType.type=='温湿度传感器' }">
+											<input class="form-control" id='${sensor.id}value2'
 												style="width: 135%;" readonly />
-											<c:if
-												test="${sensor.sensorType.type=='GPS传感器'||sensor.sensorType.type=='温湿度传感器' }">
-												<input class="form-control" id='${sensor.id}value2'
-													style="width: 135%;" readonly />
-											</c:if>
-										</div>
+										</c:if>
 									</div>
 								</div>
 								<div class="col-sm-8">
@@ -369,19 +378,19 @@
 										<label class="label">类型</label>
 										<div class="h5 text-info inline">${sensor.sensorType.type}</div>
 									</div>
-									<c:if
-										test="${sensor.sensorType.type=='氨气传感器'||sensor.sensorType.type=='硫化氢传感器'||sensor.sensorType.type=='超声波传感器'||sensor.sensorType.type=='液位传感器' }">
-										<button class="btn btn-sm btn-info"
-											onclick="javascript:showRealTimeData(${sensor.id },'${sensor.sensorType.type}')">实时数据</button>
-									</c:if>
+									<%-- <c:if
+										test="${sensor.sensorType.type=='氨气传感器'||sensor.sensorType.type=='硫化氢传感器'||sensor.sensorType.type=='超声波传感器'||sensor.sensorType.type=='液位传感器' }"> --%>
+									<button class="btn btn-sm btn-info"
+										onclick="javascript:showRealTimeData(${sensor.id },'${sensor.sensorType.type}')">实时数据</button>
+									<%-- </c:if> --%>
 								</div>
+								<div class="clearfix"></div>
 							</div>
 						</div>
-					</div>
-				</c:forEach>
+					</c:forEach>
+				</div>
 			</div>
 		</div>
-	</div>
 	</div>
 	<!--  HistoryDataModel -->
 	<div class="modal inmodal" id="myModal" tabindex="-1" role="dialog"
@@ -571,7 +580,7 @@
 				})
 				return data;
 			}
-			var updateInputValue=setInterval(queryRealTimeValueToText,1000);
+			var updateInputValue=setInterval(queryRealTimeValueToText,2000);
 			var sensorList=document.getElementsByName("sensorId");
 			var sensorNum=sensorList.length;
 			function queryRealTimeValueToText(){
@@ -593,20 +602,32 @@
 										$("#"+sensorId+"Status").attr("class","label label-danger pull-right ");
 										$("#"+sensorId+"Status").html('异常')
 									}
-									if(carStatus==1||carStatus==2||carStatus==4){
-										if(sensorValue.value1>500){
-											$("#"+sensorId+"Status").attr("class","label label-danger pull-right ");
-											$("#"+sensorId+"Status").html('请添加')
-										}
-									}							
-								}						
+									
+									if(sensorValue.value1>500){
+										$("#"+sensorId+"Status").attr("class","label label-danger pull-right ");
+										$("#"+sensorId+"Status").html('请添加干化剂')
+									}										
+								}
+								else if(sensorType=="液位传感器"){
+									var diff=parseFloat(sensorValue.value1)-parseFloat(historyData[sensorId].value1);
+									if((carStatus==0||carStatus==3)&&Math.abs(diff)>5){
+										console.log("异常");
+										$("#"+sensorId+"Status").attr("class","label label-danger pull-right ");
+										$("#"+sensorId+"Status").html('异常')
+									}
+									
+									if(sensorValue.value1<10){
+										$("#"+sensorId+"Status").attr("class","label label-danger pull-right ");
+										$("#"+sensorId+"Status").html('请添加干化剂')
+									}		
+								}
 							}
 							if(sensorType=="温湿度传感器"){
 								if(sensorValue.value1<=40&&sensorValue.value2>=30&&sensorValue.value2<=80){
 									$("#"+sensorId+"Status").attr("class","label label-primary pull-right ");
 									$("#"+sensorId+"Status").html('正常');
 								}else{
-									$("#"+sensorId+"Status").attr("class","label label-primary pull-right ");
+									$("#"+sensorId+"Status").attr("class","label label-danger pull-right ");
 									$("#"+sensorId+"Status").html('异常');
 								}
 							}

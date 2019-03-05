@@ -21,7 +21,7 @@ import factory.dao.CarDao;
 import factory.entity.Car;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
-//@Component
+@Component
 public class GetCarlocation implements InitializingBean,ServletConfigAware{
 	private static String mds = "";
 	private static String loginUrl = "http://api.18gps.net/GetDateServices.asmx/loginSystem?LoginName=teamluo123456&LoginPassword=123456&LoginType=ENTERPRISE&language=cn&ISMD5=0&timeZone=+08&apply=WEB";
@@ -57,7 +57,7 @@ public class GetCarlocation implements InitializingBean,ServletConfigAware{
 							carDao.updateCarLocation(car.getId(), longidude,latitude);
 						}
 					} catch (IOException e) {
-						System.out.println("更新GPS");
+						System.out.println("更新GPS失败");
 						e.printStackTrace();
 					}
 				}

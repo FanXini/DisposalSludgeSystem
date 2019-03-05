@@ -341,7 +341,8 @@ h5{
 	var map = new BMap.Map("allmap");
 	window.map = map;
 	//var point = new BMap.Point(112.971916, 28.197967);//长沙
-	var point = new BMap.Point(114.126588,22.608209);//深圳
+	var point = new BMap.Point(113.83040,22.77615);//深圳
+	//22.7761577466,113.8304040020
 
 	map.addControl(new BMap.NavigationControl()); // 添加平移缩放控件
 	map.addControl(new BMap.ScaleControl()); // 添加比例尺控件
@@ -375,7 +376,7 @@ h5{
 	showWareHouse();
 	showCarInRoad();
 	showMap(-1,-1);
-	var interval=setInterval("showMap(-1,-1)",5000);
+	var interval=setInterval("showMap(-1,-1)",10000);
 	var carInterval=setInterval("showCarInRoad()",2000);
 	
   	//setInterval("showMap()",3000);  //定时刷新map

@@ -289,21 +289,25 @@
 	</select>
 
 	<select id="queryHistoryDataOfSingleValueBySensorId" resultType="java.lang.Float">
-		SELECT value
 		<choose>
 			<when test="headInfo=='A'">
+				SELECT value
 				FROM ammnia_gas_record
 			</when>
 			<when test="headInfo=='S'">
+				SELECT value
 				FROM shydrothion_record
 			</when>
 			<when test="headInfo=='U'">
+				SELECT value
 				FROM ultrasonic_record
 			</when>
 			<when test="headInfo=='W'">
+				SELECT value
 				FROM liquid_record
 			</when>
 			<when test="headInfo=='H'">
+				SELECT temperature_value
 				FROM humiture_record
 			</when>
 		</choose>
