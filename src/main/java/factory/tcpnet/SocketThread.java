@@ -1,5 +1,7 @@
 package factory.tcpnet;
 
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.log;
+
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
@@ -9,6 +11,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+
+import org.apache.log4j.Logger;
 
 import factory.dao.SensorDao;
 import factory.entity.DoubleValueSensorRecord;
@@ -24,6 +28,8 @@ import factory.service.SensorService;
  *
  */
 public class SocketThread implements Runnable {
+	
+	private static Logger logger=Logger.getLogger(SocketThread.class);
 
 	private Socket socket;
 
@@ -53,7 +59,7 @@ public class SocketThread implements Runnable {
 						char headInfo = datas[i].charAt(0);
 						// 如果是有效信息
 						if (headInfo == 'S' || headInfo == 'A' || headInfo == 'H' || headInfo=='U'||headInfo=='W') {
-							System.out.println("From client:" + datas[i]);
+							logger.info("From client:" + datas[i]);
 							// 时间戳
 							String time = dateFormat.format(new Date());
 							// 传感器信息是以','分隔
@@ -64,32 +70,43 @@ public class SocketThread implements Runnable {
 								if (sensor != null) { // 如果存在
 									sensorMap.put(info[0], sensor.getId()); // 加入缓存
 								} else { // 如果数据库中都没有，则不处理
-									System.out.println("数据库中不存在");
+									logger.info("数据库中不存在");
+									pout.println("database not exist");
 									continue;
 								}
 							}
+							
 							int sensorId = sensorMap.get(info[0]); // 取得传感器id
-							// 创建信息对象，单个数据类型传感器的value2用0填充
-							SensorValue sensorValue = new SensorValue(sensorId, time, Double.valueOf(info[1]), 0, headInfo);
+							Double value1=Double.valueOf(info[1]);
+							double value2=0;
+							SensorValue sensorValue = new SensorValue(sensorId, time,value1, value2, headInfo);
 							if (headInfo == 'H') { // gps和温湿度都是有两个数据
 								sensorValue.setValue2(Double.valueOf(info[2]));
+								value2=Double.valueOf(info[2]);
 							}
-							//加入到传感器对应的数据库中，通过sensorValue中的headInfo选择对应的sql语句
-							sensorDao.addSensorRecord(sensorValue);
+							if(headInfo=='U'||headInfo=='W'
+									|| (headInfo=='H'&&(value1>30||value2>80||value2<30))
+									||(headInfo=='A'&&value1>8)
+							        ||(headInfo=='S'&&value1>10)) {
+								//加入到传感器对应的数据库中，通过sensorValue中的headInfo选择对应的sql语句
+								sensorDao.addSensorRecord(sensorValue);			
+							}
 							//加入到实时数据表中
 							sensorDao.updateSensorRealTimeValue(sensorValue);
 							pout.println("server receive success");
 						}
 						else {
-							System.out.println("无效信息:"+line);
-							pout.println("server receive success");
+							logger.info("无效信息:"+line);
+							pout.println("invalid msg");
 						}
 					}
 					
 				}
 				else {
-					System.out.println("无效信息:"+line);
-					pout.println("server receive success");
+					logger.info("无效信息:"+line);
+					pout.println("invalid msg");
+					socket.close();
+					break;
 				}				
 			}
 		} catch (Exception e) {

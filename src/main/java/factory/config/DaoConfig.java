@@ -34,6 +34,9 @@ public class DaoConfig {
 		pool.setAutoCommitOnClose(JDBC.AUTOCOMMITONCLOSE);
 		pool.setCheckoutTimeout(JDBC.CHECKOUTTIMEOUT);
 		pool.setAcquireRetryAttempts(JDBC.ACQUIRERETRYATTEMPTS);
+		pool.setPreferredTestQuery("SELECT 1");
+		pool.setIdleConnectionTestPeriod(18000);
+		pool.setTestConnectionOnCheckout(true);
 		return pool;
 	}
 

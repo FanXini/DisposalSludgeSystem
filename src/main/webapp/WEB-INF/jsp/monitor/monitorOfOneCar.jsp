@@ -623,7 +623,7 @@
 								}
 							}
 							if(sensorType=="温湿度传感器"){
-								if(sensorValue.value1<=40&&sensorValue.value2>=30&&sensorValue.value2<=80){
+								if(sensorValue.value1<=30&&sensorValue.value2>=30&&sensorValue.value2<=80){
 									$("#"+sensorId+"Status").attr("class","label label-primary pull-right ");
 									$("#"+sensorId+"Status").html('正常');
 								}else{

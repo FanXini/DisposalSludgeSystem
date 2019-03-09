@@ -53,7 +53,6 @@ public class VideoController {
 		mv.addObject("carList", cars);
 		mv.addObject("sensorMap", map);// 设置需要返回的值
 		mv.addObject("videoWithoutCarList", videosWithoutCar);
-		JSONArray carJson = JSONArray.fromObject(cars);
 		mv.setViewName("monitor/monitorCard"); // 跳转到指定的页面
 		return mv; // 返回到staffManage.jsp页面
 	}

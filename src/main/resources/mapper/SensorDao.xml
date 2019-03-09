@@ -405,7 +405,7 @@
 	<update id="updateSensorRealTimeValue" parameterType="factory.entity.SensorValue">
 		update
 		sensor_value_realtime
-		SET value1=#{value1},value2=#{value2}
+		SET time=#{time},value1=#{value1},value2=#{value2}
 		where
 		sensor_id=#{sensorId}
 	</update>

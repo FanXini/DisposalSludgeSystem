@@ -8,6 +8,7 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.data.redis.cache.RedisCacheManager;
@@ -42,7 +43,7 @@ import redis.clients.jedis.JedisPoolConfig;
 @RequestMapping("user")
 @SessionAttributes("user")
 public class UserController {
-	private static Log log = LogFactory.getLog(UserController.class);
+	private static Logger log=Logger.getLogger(UserController.class);
 	@Autowired
 	private UserService service;
 	
@@ -73,25 +74,25 @@ public class UserController {
 			System.out.println(queryUser.getUsername());
 			if (loginPassword.equals(queryUser.getPassword())) {
 				if(queryUser.getCheckStatus()==0){
-					map.put("result", "notverify"); //ÉóºËÎ´Í¨¹ý
+					map.put("result", "notverify"); //ï¿½ï¿½ï¿½Î´Í¨ï¿½ï¿½
 					return map;
-				}else if(queryUser.getCheckStatus()==2){ //ÉóºËÖÐ
+				}else if(queryUser.getCheckStatus()==2){ //ï¿½ï¿½ï¿½ï¿½ï¿½
 					map.put("result", "verifying");
 					return map;
 				}else {
-					model.addAttribute("user",queryUser); //ÉóºËÍ¨¹ý
+					model.addAttribute("user",queryUser); //ï¿½ï¿½ï¿½Í¨ï¿½ï¿½
 					map.put("result", "success");
 					map.put("roleId", String.valueOf(queryUser.getRoleId()));
 					return map;
 				}				
 			} else {
 				map.put("result", "error");
-				log.info("ÃÜÂë´íÎó");
+				log.info("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½");
 				return map;
 			}
 		} else {
 			map.put("result", "none");
-			log.info("ÓÃ»§Ãû²»´æÔÚ");
+			log.info("ï¿½Ã»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½");
 			return map;
 		}
 
@@ -99,6 +100,7 @@ public class UserController {
 	@RequestMapping(value = "/loginValidator")
 	@ResponseBody 
 	public Result checkLogin(@RequestBody User user,HttpSession session,Model model){
+		log.info("loginValidator");
 		try {
 			User loginUser=service.loginValidation(user);
 			model.addAttribute("user",loginUser);
@@ -107,7 +109,6 @@ public class UserController {
 			for(Integer auth:roleAutho) {
 				authString+="au"+auth.toString()+"th#";
 			}
-			System.out.println(authString);
 			session.setAttribute("authos", authString);
 			return Result.SUCCESS;
 		} catch (RefuseLoginException e) {
@@ -122,7 +123,7 @@ public class UserController {
 		}
 		
 	}
-		//mian.jspÒ³Ãæ»ñÈ¡roleAuthoµÄÖµ
+		//mian.jspÒ³ï¿½ï¿½ï¿½È¡roleAuthoï¿½ï¿½Öµ
 	@RequestMapping("queryAuthosAndJumpToMain")
 	public ModelAndView queryAuthosAndJumpToMain(@RequestParam("roleId") int roleId, ModelAndView mv) {
 		return mv;
@@ -132,7 +133,7 @@ public class UserController {
 	@RequestMapping("/register")
 	@ResponseBody
 	public Result register(@RequestBody User user) {
-		log.info("×¢²áÓÃ»§");
+		log.info("register");
 		log.info(user.getUsername()+" "+user.getPassword()+" "+user.getRoleId()+" "+user.getSiteId());
 		try {
 			service.register(user);
@@ -154,51 +155,35 @@ public class UserController {
 	}
 	
 	
-	//×¢Ïú
 	@RequestMapping("outLogin")
 	@ResponseBody
     public String outLogin(HttpSession session){
-        //Í¨¹ýsession.invalidata()·½·¨À´×¢Ïúµ±Ç°µÄsession
         session.invalidate();
         return "login";
     }
 	
-	//ÐÞ¸ÄÃÜÂë
 		@RequestMapping("modifyPwd") 
 		@ResponseBody
 	    public Map<String, String> modifyPassword(@RequestBody Map<String, Object> userMap) {  
-			log.info("µ÷ÓÃmodifyPwd");
-			for(Map.Entry<String, Object> entry:userMap.entrySet()){
-				System.out.println(entry.getKey()+"  "+entry.getValue());
-			}
 			Map<String, String> result=new HashMap<String, String>();
 			result.putAll(service.modifyPasswordByUsername(userMap));
 			return result;
 	    }  
 		
-	//ÐÞ¸ÄÓÃ»§ÐÅÏ¢
 	@RequestMapping("modifyUserInfo")
 	@ResponseBody
 	public User modifyUserInfo(@RequestBody User user,Model model){
-		log.info("µ÷ÓÃmodifyUserIfno");		
+		log.info("modifyUserIfno");		
 		service.updateUserInfo(user);
 		model.addAttribute("user",user);
 		return user;
 	}
 
-	/**
-	 * @description:²éÑ¯ËùÓÐµÄË¾»ú
-	public List<User> queryAllDriver() {
-		return service.quertAllDriver();
-	}
-	
-	/**
-	 * @description:²éÑ¯ËùÓÐ¹¤³§ÈËÔ±
-	 */
+
 	@RequestMapping("/manager")
 	@ResponseBody
 	public List<User> queryAllManager() {
-		log.info("²éÑ¯ËùÓÐ¹¤³§ÈËÔ±");
+		log.info("queryAllManager");
 		return service.queryAllManager();
 	}
 	
@@ -206,10 +191,6 @@ public class UserController {
 	@ResponseBody
 	public List<User> NoCarAssignedDriverList(){
 		List<User> driversList=carService.queryNoCarAssignedDriver();
-		System.out.println(driversList.size());
-		for(User user:driversList){
-			System.out.println(user.getRealname());
-		}
 		return driversList;
 	}
 	
