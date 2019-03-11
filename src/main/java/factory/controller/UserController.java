@@ -123,6 +123,32 @@ public class UserController {
 		}
 		
 	}
+	
+	@RequestMapping(value = "/loginValidatorForWx")
+	@ResponseBody 
+	public Map<String, Object> checkLogin(@RequestBody User user){
+		Map<String, Object> result=new HashMap<>();
+		log.info("loginValidator");
+		try {
+			User loginUser=service.loginValidation(user);
+			result.put("result", "SUCCESS");
+			result.put("user", loginUser);
+			List<Integer> roleAutho = role_authorityService.queryAllRole_authority(loginUser.getRoleId());
+			result.put("roleList", roleAutho);
+			return result;
+		} catch (RefuseLoginException e) {
+			// TODO: handle exception
+			result.put("result", "FORBID");
+			return result;
+		}catch (AuditIngException e) {
+			result.put("result", "AUDING");
+			return result;
+		}catch (LoginInfoErrorException e) {
+			result.put("result", "ERROR");
+			return result;
+		}
+		
+	}
 		//mian.jspҳ���ȡroleAutho��ֵ
 	@RequestMapping("queryAuthosAndJumpToMain")
 	public ModelAndView queryAuthosAndJumpToMain(@RequestParam("roleId") int roleId, ModelAndView mv) {
