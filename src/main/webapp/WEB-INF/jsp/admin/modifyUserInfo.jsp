@@ -127,7 +127,7 @@ html,body {
 					<table width="93%" border="0" cellspacing="0" cellpadding="0">
 						<tr>
 							<td style="font-size:15px; padding:10px;"><label
-								for="lastname" class="col-sm-12 control-label">登陆账号</label></td>
+								for="lastname" class="col-sm-12 control-label">登录账号</label></td>
 							<td><input type="text" class="form-control" id="username"
 								name="user.userName" value="${sessionScope.user.username}"
 								readonly="readonly"></td>

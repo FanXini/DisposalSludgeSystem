@@ -12,8 +12,7 @@
 <title>实时监控</title>
 <meta charset="UTF-8">
 <meta http-equiv="pragma" content="no-cache">
-<meta name="viewport"
-	content="width=device-width,initial-scale=1,maximum-scale=1.0" />
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1.0" />
 <meta http-equiv="cache-control" content="no-cache">
 <meta http-equiv="expires" content="0">
 <meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
@@ -326,33 +325,10 @@
 				</div>
 			</div>
 		</div>
+		
+		
 	</div>
-	<!--  HistoryDataModel -->
-	<div class="modal inmodal" id="myModal" tabindex="-1" role="dialog"
-		aria-hidden="true">
-		<div class="modal-dialog">
-			<div class="modal-content animated bounceInRight">
-				<div class="col-sm-12">
-					<div class="ibox float-e-margins">
-						<div class="ibox-title">
-							<h5>监测中</h5>
-							<div class="ibox-tools">
-								<a class="close-link" id="clearInterval"> <i
-									class="fa fa-times"></i>
-								</a>
-							</div>
-						</div>
-						<div class="ibox-content">
-							<div class="flot-chart">
-								<div class="flot-chart-content" id="flot-line-chart-moving"></div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-	<div class="col-sm-12">
+	<div class="row">
 		<div class="ibox">
 			<!-- 内容 -->
 			<div class="wrapper wrapper-content animated fadeInRight">
@@ -407,6 +383,32 @@
 			</div>
 		</div>
 	</div>
+	<!--  HistoryDataModel -->
+	<div class="modal inmodal" id="myModal" tabindex="-1" role="dialog"
+		aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content animated bounceInRight">
+				<div class="col-sm-12">
+					<div class="ibox float-e-margins">
+						<div class="ibox-title">
+							<h5>监测中</h5>
+							<div class="ibox-tools">
+								<a class="close-link" id="clearInterval"> <i
+									class="fa fa-times"></i>
+								</a>
+							</div>
+						</div>
+						<div class="ibox-content">
+							<div class="flot-chart">
+								<div class="flot-chart-content" id="flot-line-chart-moving"></div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	
 	<!-- End Example Pagination -->
 	<!-- 全局js -->
 	<script src="js/jquery.min.js?v=2.1.4"></script>

@@ -176,7 +176,7 @@
 		        xhr.setRequestHeader('content-type', 'application/x-www-form-urlencoded');
 		        xhr.send(null);
 		    });
-		};
+		}
 		
 		/**
 		 * post请求
@@ -233,7 +233,7 @@
 		
 		/**
 		/**
-		 * 启动云台
+		 * 
 		 * @param {int} direction 方向，必须：0-上，1-下，2-左，3-右，4-左上，5-左下，6-右上，7-右下，8-放大，9-缩小，10-近焦距，11-远焦距
 		 * @param {*} speed 云台速度，必须：0-慢，1-适中，2-快
 		 * @param {string} accessToken 访问Token，必须

@@ -60,7 +60,14 @@ public class VideoController {
 		mv.addObject("siteList", sites);
 		mv.setViewName("monitor/factorymonitor"); // 跳转到指定的页面
 		return mv; // 返回到staffManage.jsp页面
-	}	
+	}
+	
+	@RequestMapping("/queryAllFactoryVideo")
+	@ResponseBody
+	public List<Video> queryAllFactoryVideoForWX(){
+		List<Video> videos = videoService.queryAllFactoryVideo();
+		return videos;
+	}
 	
 	
 	@RequestMapping("queryAllVideo")
@@ -175,6 +182,17 @@ public class VideoController {
 		mv.addObject("sensorList", sensors);// 设置需要返回的值
 		mv.setViewName("monitor/monitorOfOneCar");
 		return mv;
+	}
+	
+	@RequestMapping("/queryVideoAndSensorByCarIdfoForWX")
+	@ResponseBody
+	public Map<String, Object> queryVideoAndSensorByCarIdfoForWX(@RequestParam ("carId") int carId){
+		Map<String,Object> requestMap = new HashMap<String,Object>();
+		Video video=videoService.queryVideoByCarId(carId);
+		List<Sensor> sensors = sensorService.querySensorsByCarId(carId);
+		requestMap.put("video", video);
+		requestMap.put("sensorList", sensors);
+		return requestMap;
 	}
 	
 	@RequestMapping("addFactoryVideo")

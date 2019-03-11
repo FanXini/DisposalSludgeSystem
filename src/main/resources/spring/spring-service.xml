@@ -10,8 +10,8 @@
 	http://www.springframework.org/schema/tx
 	http://www.springframework.org/schema/tx/spring-tx.xsd">
     
-            <!--      自动扫描teamLuo.fan.service包中带注解的类 -->
-	<context:component-scan base-package="factory.service"/>
+            <!--      自动扫描teamLuo.fan.serviceimpl包中带注解的类 -->
+	<context:component-scan base-package="factory.serviceimpl"/>
 	
 	
 	

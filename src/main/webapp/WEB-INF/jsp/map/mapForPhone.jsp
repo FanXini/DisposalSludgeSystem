@@ -137,7 +137,6 @@ h5{
 	margin:2px 2px 2px 2px;
 	text-align:center;
 }
-
 </style>
 </head>
 
@@ -170,19 +169,19 @@ h5{
 				</tr>
 			</table>
 	</div>
-	<div class="bottom_button">
-	<ul class="nav navbar-top-links navbar-right">
+	<div class="bottom_button" style="left:10%;">
+	<ul class="nav navbar-top-links">
 		<li class="dropdown dropup"><a class="dropdown-toggle count-info" data-toggle="dropdown"
-			href="#" onclick="showSiteTable();"> <i class="fa fa-map-marker" style="color:#EE2C2C"></i> <span id="siteRedNum" class="label label-danger"></span> </a>
+			href="#" onclick="showSiteTable();"> <i class="fa fa-map-marker" style="color:#EE2C2C;width:30px;height:30px;"></i> <span id="siteRedNum" class="label label-danger"></span> </a>
 			<ul class="dropdown-menu dropdown-messages"
-					style="background: rgba(176,196,222,0.8);max-height:300px;overflow-y:auto;">
+					style="background: rgba(176,196,222,0.8);max-height:300px;width:500px;overflow-y:auto;">
 				<li>
 					<table class="tablehead" border="0" cellspacing="0" cellpadding="0"
 						style="width:100%">
 						<tr>
-							<td style="width:10%;">编号</td>
-							<td style="width:45%;">站点</td>
-							<td style="width:25%;">状态</td>
+							<td style="width:20%;font-size:20px;">编号</td>
+							<td style="width:45%;font-size:20px;">站点</td>
+							<td style="width:25%;font-size:20px;">状态</td>
 						</tr>
 					</table>
 				</li>
@@ -195,16 +194,16 @@ h5{
 			</ul>
 		</li>
 		<li class="dropdown dropup"><a class="dropdown-toggle count-info" data-toggle="dropdown"
-			href="#" onclick="showTreatmentCarTable();"> <i i class="fa fa-truck"  style="color:#FFD700"></i><span class="label label-warning" id="treatmentCarNum"></span> </a>
+			href="#" onclick="showTreatmentCarTable();"> <i i class="fa fa-truck"  style="color:#FFD700;width:30px;height:30px;"></i><span class="label label-warning" id="treatmentCarNum"></span> </a>
 			<ul class="dropdown-menu dropdown-messages"
-					style="background: rgba(176,196,222,0.8);max-height:300px;overflow-y:auto;">
+					style="background: rgba(176,196,222,0.8);max-height:300px;width:500px;overflow-y:auto;">
 				<li>
 					<table class="tablehead" border="0" cellspacing="0" cellpadding="0"
-						style="width:100%">
+						style="width:100%;">
 						<tr>
-							<td>车牌号</td>
-							<td>目的地</td>
-							<td>状态</td>
+							<td style="width:20%;font-size:20px;">车牌号</td>
+							<td style="width:45%;font-size:20px;">目的地</td>
+							<td style="width:25%;font-size:20px;">状态</td>
 						</tr>
 					</table>
 				</li>
@@ -217,16 +216,16 @@ h5{
 			</ul>
 		</li>
 		<li class="dropdown dropup"><a class="dropdown-toggle count-info" data-toggle="dropdown"
-			href="#" onclick="showCarrierTable();"> <i class="fa fa-truck"  style="color:#4D4D4D"></i> <span class="label label-warning" id="carrierNum">3</span> </a>
+			href="#" onclick="showCarrierTable();"> <i class="fa fa-truck"  style="color:#4D4D4D;width:30px;height:30px;"></i> <span class="label label-warning" id="carrierNum">3</span> </a>
 			<ul class="dropdown-menu dropdown-messages"
-					style="background: rgba(176,196,222,0.8);max-height:300px;overflow-y:auto;">
+					style="background: rgba(176,196,222,0.8);max-height:300px;width:500px;overflow-y:auto;">
 				<li>
 					<table class="tablehead" border="0" cellspacing="0" cellpadding="0"
 						style="width:100%">
 						<tr>
-							<td>车牌号</td>
-							<td>目的地</td>
-							<td>状态</td>
+							<td style="width:20%;font-size:20px;">车牌号</td>
+							<td style="width:45%;font-size:20px;">目的地</td>
+							<td style="width:25%;font-size:20px;">状态</td>
 						</tr>
 					</table>
 				</li>
@@ -239,16 +238,16 @@ h5{
 			</ul>
 		</li>
 		<li class="dropdown dropup"><a class="dropdown-toggle count-info" data-toggle="dropdown"
-			href="#" onclick="showWareHouseTable();"><i i class="fa fa-cubes" style="color:#EE2C2C"></i></a>
-			<ul class="dropdown-menu dropdown-messages" style="background: rgba(176,196,222,0.8);max-height:300px;overflow-y:auto;">
+			href="#" onclick="showWareHouseTable();"><i i class="fa fa-cubes" style="color:#EE2C2C;width:30px;height:30px;"></i></a>
+			<ul class="dropdown-menu dropdown-messages" style="background: rgba(176,196,222,0.8);max-height:300px;width:500px;overflow-y:auto;">
 				<li>
 					<table class="tablehead" border="0" cellspacing="0" cellpadding="0"
 						style="width:100%">
 						<tr>
-							<td>子仓</td>
-							<td>存储量</td>
-							<td>剩余容量</td>
-							<td>总容量</td>
+							<td style="font-size:20px;">子仓</td>
+							<td style="font-size:20px;">存储量</td>
+							<td style="font-size:20px;">剩余容量</td>
+							<td style="font-size:20px;">总容量</td>
 						</tr>
 					</table>
 				</li>
@@ -327,10 +326,8 @@ h5{
 			</div>
 		</div>
 	</div>
-	<script src="js/car-location.js"></script>
 </body>
 </html>
-
 <script type="text/javascript">
 	var map = new BMap.Map("allmap");
 	window.map = map;
@@ -654,21 +651,15 @@ h5{
 								var carIcon = new BMap.Icon("img/transportCar.png", new BMap.Size(35, 35), 
 												{imageSize : new BMap.Size(35, 35)});
 							}
-							var deviceId=car.cloudDeviceId;
-							//更新位置
-							getLocation(car.cloudDeviceId,car.cloudDeviceSerial);
-							var location=locationMap[deviceId];
-							if(location!=null){
-								console.log(location.longitude+" "+location.latitude);
-								carPoint[car.id] = new BMap.Point(location.longitude,location.latitude);
-								carMarker[car.id] = new BMap.Marker(carPoint[car.id],{icon:carIcon});
-								
-								map.addOverlay(carMarker[car.id]);					
-								//鼠标悬停动作
-								carMarker[car.id].addEventListener("mouseover",function(){
-									carInfo(car)});
-							}
-						
+	
+							carPoint[car.id] = new BMap.Point(car.longitude,car.latitude);
+							carMarker[car.id] = new BMap.Marker(carPoint[car.id],{icon:carIcon});
+							
+							map.addOverlay(carMarker[car.id]);
+							
+							//鼠标悬停动作
+							carMarker[car.id].addEventListener("mouseover",function(){
+								carInfo(car)});
 						}
 					}
 				});
@@ -855,9 +846,9 @@ h5{
 				else
 					status="待处理(已分配处理车"+carNum+"辆)";
 			}				
-			table += '<td style="width:10%;">' + site.serialNumber + '</td>';
-			table += '<td style="width:45%;">' + site.siteName + '</td>';
-			table += '<td style="width:25%;">' + status + '</td>';
+			table += '<td style="width:20%;font-size:15px;">' + site.serialNumber + '</td>';
+			table += '<td style="width:45%;font-size:15px;">' + site.siteName + '</td>';
+			table += '<td style="width:25%;font-size:15px;">' + status + '</td>';
 			table += '</tr>';
 			$("#siteTable").append(table);
 		});
@@ -871,7 +862,7 @@ h5{
 		$.each(carList,function(i, car){
 			var status;
 			if (car.status== "0"){
-				table='<tr id="'+ car.id +'" style="color:#FF0000;font-weight: 700;" onmouseover="sel(this)" onmouseout="cle(this)" onclick="wareHouseInfo();">';
+				table='<tr id="'+ car.id +'" style="color:#FF0000;font-weight: 700;" onmouseover="sel(this)" onmouseout="cle(this)" onclick="showCarInfo('+JSON.stringify(car).replace(/\"/g,"'")+')">';
 				status="空闲";
 			}
 			else if (car.status== "1"){
@@ -879,23 +870,23 @@ h5{
 				status="在途中";
 			}
 			else if (car.status== "2"){
-				table='<tr id="'+ car.id +'" onmouseover="sel(this)" onmouseout="cle(this)" onclick="showSiteInfo('+JSON.stringify(car.site).replace(/\"/g,"'")+')">';
+				table='<tr id="'+ car.id +'" onmouseover="sel(this)" onmouseout="cle(this)" onclick="showCarInfo('+JSON.stringify(car).replace(/\"/g,"'")+')">';
 				status="正在处理";
 			}
 			else if (car.status== "3"){
-				table='<tr id="'+ car.id +'" onmouseover="sel(this)" onmouseout="cle(this)" onclick="wareHouseInfo();">';
+				table='<tr id="'+ car.id +'" onmouseover="sel(this)" onmouseout="cle(this)" onclick="showCarInfo('+JSON.stringify(car).replace(/\"/g,"'")+')">';
 				status="已派单";
 			}
 			else if (car.status== "4"){
 				table='<tr id="'+ car.id +'" style="color:#FFFF00;font-weight: 700;" onmouseover="sel(this)" onmouseout="cle(this)" onclick="showCarInfo('+JSON.stringify(car).replace(/\"/g,"'")+')">';
 				status="返程";
 			}
-			table += '<td style="width:20%;">' + car.license + '</td>';
+			table += '<td style="width:20%;font-size:15px;">' + car.license + '</td>';
 			if (!jQuery.isEmptyObject(car.site)){
-				table += '<td style="width:45%;">' + car.site.siteName + '</td>';
+				table += '<td style="width:45%;font-size:15px;">' + car.site.siteName + '</td>';
 			}
-			else table += '<td style="width:45%;">' + status + '</td>';
-			table += '<td style="width:25%;">' + status + '</td>';
+			else table += '<td style="width:45%;font-size:15px;">' + status + '</td>';
+			table += '<td style="width:25%;font-size:15px;">' + status + '</td>';
 			table += '</tr>';
 			$("#treatmentCarTable").append(table);
 		});
@@ -909,7 +900,7 @@ h5{
 		$.each(carList,function(i, car){
 			var status;
 			if (car.status== "0"){
-				table='<tr id="'+ car.id +'" style="color:#FF0000;font-weight: 700;" onmouseover="sel(this)" onmouseout="cle(this)" onclick="wareHouseInfo();">';
+				table='<tr id="'+ car.id +'" style="color:#FF0000;font-weight: 700;" onmouseover="sel(this)" onmouseout="cle(this)" onclick="showCarInfo('+JSON.stringify(car).replace(/\"/g,"'")+')">';
 				status="空闲";
 			}
 			else if (car.status== "1"){
@@ -922,19 +913,19 @@ h5{
 				}
 			}
 			else if (car.status== "2"){
-				table='<tr id="'+ car.id +'" onmouseover="sel(this)" onmouseout="cle(this)" onclick="showSiteInfo('+JSON.stringify(car.site).replace(/\"/g,"'")+')">';
+				table='<tr id="'+ car.id +'" onmouseover="sel(this)" onmouseout="cle(this)" onclick="showCarInfo('+JSON.stringify(car).replace(/\"/g,"'")+')">';
 				status="正在装\卸箱";
 			}
 			else if (car.status== "3"){
-				table='<tr id="'+ car.id +'" onmouseover="sel(this)" onmouseout="cle(this)" onclick="wareHouseInfo();">';
+				table='<tr id="'+ car.id +'" onmouseover="sel(this)" onmouseout="cle(this)" onclick="showCarInfo('+JSON.stringify(car).replace(/\"/g,"'")+')">';
 				status="已派单";
 			}
-			table += '<td style="width:20%;">' + car.license + '</td>';
+			table += '<td style="width:20%;font-size:15px;">' + car.license + '</td>';
 			if (!jQuery.isEmptyObject(car.site)){
-				table += '<td style="width:45%;">' + car.site.siteName + '</td>';
+				table += '<td style="width:45%;font-size:15px;">' + car.site.siteName + '</td>';
 			}
-			else table += '<td style="width:45%;">' + status + '</td>';
-			table += '<td style="width:25%;">' + status + '</td>';
+			else table += '<td style="width:45%;font-size:15px;">' + status + '</td>';
+			table += '<td style="width:25%;font-size:15px;">' + status + '</td>';
 			table += '</tr>';
 			$("#carrierTable").append(table);
 		});
@@ -948,10 +939,10 @@ h5{
 		minorWareHouseList = queryWareHouse();
 		$.each(minorWareHouseList,function(i, minorWareHouse){
 			table='<tr id="'+ minorWareHouse.id +'" onmouseover="sel(this)" onmouseout="cle(this)")">';
-			table += '<td>' + minorWareHouse.serialNumber + '号仓</td>';
-			table += '<td>' + minorWareHouse.moistrueDegree*100 + '%</td>';
-			table += '<td>' + minorWareHouse.remainCapacity + '</td>';
-			table += '<td>' + minorWareHouse.capacity + '</td>';
+			table += '<td style="font-size:15px;">' + minorWareHouse.serialNumber + '号仓</td>';
+			table += '<td style="font-size:15px;">' + minorWareHouse.moistrueDegree*100 + '%</td>';
+			table += '<td style="font-size:15px;">' + minorWareHouse.remainCapacity + '</td>';
+			table += '<td style="font-size:15px;">' + minorWareHouse.capacity + '</td>';
 			table += '</tr>';
 			$("#wareHouseTable").append(table);
 		});
@@ -962,11 +953,14 @@ h5{
 		clearInterval(interval);
 		showMap(-1,-1);
 		siteInfo(site);
+		//跳转到工厂的监控页面
+		window.location.href='monitor/queryFactoryVideoBySiteId?siteId='+site.id;
 	}
 	function showCarInfo(car){
 		clearInterval(interval);
 		showMap(-1,-1);
 		carInfo(car);
+		window.location.href='monitor/queryVideoAndSensorByCarId?carId='+ car.id
 	}
 	
 	function sel(obj){

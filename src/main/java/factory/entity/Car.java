@@ -16,7 +16,9 @@ public class Car {
 	private Site site;
 	private int siteId;
 	//添加车辆污泥处理类型-刘见宇
-	private int carType;
+	private int carType;	
+	private String cloudDeviceId;
+	private String cloudDeviceSerial;
 	
 	public Car() {
 		
@@ -111,6 +113,22 @@ public class Car {
 	 */
 	public void setSite(Site site) {
 		this.site = site;
+	}
+
+	public String getCloudDeviceId() {
+		return cloudDeviceId;
+	}
+
+	public void setCloudDeviceId(String cloudDeviceId) {
+		this.cloudDeviceId = cloudDeviceId;
+	}
+
+	public String getCloudDeviceSerial() {
+		return cloudDeviceSerial;
+	}
+
+	public void setCloudDeviceSerial(String cloudDeviceSerial) {
+		this.cloudDeviceSerial = cloudDeviceSerial;
 	}
 	
 }
