@@ -75,6 +75,7 @@ public class SludgeServiceImpl implements SludgeService {
 		}
 		sludge.setStatus(SludgeStatus.MWHTODESROAD.ordinal()); //4表示从智慧仓到目的地的状态
 		sludge.setProduceTime(format.format(new Date()));
+		sludge.setTranscarId(sludge.getTranscarId());
 		sludgeDao.addOutMudWareHouseSludgeRecord(sludge);
 		//修改车的状态
 		carDao.editWorkerCarStatusAndSiteId(sludge.getTranscarId(), CarStatus.ONTHEWAY.ordinal(), 0);
