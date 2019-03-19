@@ -82,6 +82,13 @@ public class RecordController {
 		return mv;
 	}
 	
+	@RequestMapping("queryassignCarTreatDriver")
+	@ResponseBody
+	public List<User> queryassignCarTreatDriver(){
+		log.info("调用queryassignCarTreatDriver");
+		return userService.queryCarAssignTreatDriver();
+	}
+	
 	@RequestMapping("queryAllRecord")
 	@ResponseBody
 	public List<Record> queryAllRecord(){
