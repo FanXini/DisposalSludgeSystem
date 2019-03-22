@@ -703,7 +703,7 @@
 					type : "POST",
 					url : "sludge/addOutSludge",
 					data : JSON.stringify({
-						transCarId:transCarId,
+						transcarId:transCarId,
 						minorMudWareHouseId:mudWareHouseId,
 						rfidString : RFID,
 						destinationAddress : desAddr,
@@ -714,7 +714,6 @@
 					contentType : "application/json",
 					success : function(result) {
 						if(result=="SUCCESS"){
-						
 						alert("添加成功")
 						$("#addOutSludgeRecord").modal('hide')	
 						}

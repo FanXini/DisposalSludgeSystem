@@ -19,6 +19,7 @@
 		<association property="site" javaType="factory.entity.Site">
 			<id property="id" column="id" />
 			<result property="siteName" column="site_name" />
+			<result property="telephone" column="telephone" />
 		</association>
 	</resultMap>
 	
