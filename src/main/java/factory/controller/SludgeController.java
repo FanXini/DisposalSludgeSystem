@@ -113,6 +113,21 @@ public class SludgeController {
 		mv.setViewName("mudwarehouse/sludge");
 		return mv;
 	}
+	
+	/*@RequestMapping("queryAllSite")
+	@ResponseBody
+	public List<Site> queryAllSite(){
+		log.info("queryAllSite");
+		return siteService.queryAllSite();
+	}*/
+	
+	@RequestMapping("assignCarTransportDriver")
+	@ResponseBody
+	public List<User> queryassignCarTransportDriver(){
+		log.info("assignCarTransportDriver");
+		return userService.queryCarAssignTranSportDriver();
+	}
+	
 	@RequestMapping("queryAllFunc")
 	@ResponseBody
 	public List<SludgeFunction> queryAllFunc(){
