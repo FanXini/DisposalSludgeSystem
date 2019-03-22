@@ -29,6 +29,7 @@ import org.springframework.web.servlet.ModelAndView;
 import factory.entity.Record;
 import factory.entity.Site;
 import factory.entity.User;
+import factory.enums.CarStatus;
 import factory.enums.RecordStatus;
 import factory.enums.Result;
 import factory.enums.SiteStatus;
@@ -238,8 +239,8 @@ public class RecordController {
 		siteService.updateSiteStatusById(siteId, SiteStatus.WATINGPROCESS.ordinal());
 		System.out.println(record.getId());
 		//查询出车的经纬度
-		Site site=siteService.querySiteById(siteId);
-		taskExecuter.submit(new AssignCarForReocrdThread(redisTemplate,recordService, carService, sludgeService, record.getId(), site));
+		//Site site=siteService.querySiteById(siteId);
+		//taskExecuter.submit(new AssignCarForReocrdThread(redisTemplate,recordService, carService, sludgeService, record.getId(), site));
 		return "success";
 	}
 	
@@ -290,14 +291,19 @@ public class RecordController {
 			return null;
 		}
 	}
-	
+	@Transactional
 	@RequestMapping("editRecordCarIdBySiteId")
 	@ResponseBody
-	public Map<String,String> editRecordCarIdBySiteId(@RequestParam("siteId") int siteId,@RequestParam("carId") int carId){
+	public Map<String,String> editRecordCarIdBySiteId(@RequestParam("siteId") int siteId,@RequestParam("carId") int carId,@RequestParam("transcarId") int transcarId){
 		log.info("调用editRecordBySiteId");
 		Map<String, String> result=new HashMap<String, String>();
 		try {
-			recordService.editRecordCarIdBySiteId(siteId,carId);
+			if(carId!=-1) {
+				recordService.editRecordCarIdBySiteId(siteId,carId);
+			}
+			if(transcarId!=-1) {
+				carService.editWorkerCarStatusAndSiteId(transcarId, CarStatus.NODEPARTURE.ordinal(), siteId);
+			}
 			result.put("result", "success");
 		}catch (Exception e) {
 			// TODO: handle exception

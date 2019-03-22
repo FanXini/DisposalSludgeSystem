@@ -228,6 +228,13 @@ public class CarController {
 		}
 	}
 	
+	@RequestMapping("queryTreatmentCarUnassign")
+	@ResponseBody
+	public List<Car> queryTreatmentCarUnassign(){
+		log.info("queryTreatmentCarUnassign");
+		return carService.queryTreatmentCarUnassign();
+	}
+	
 	/**
 	 * @description:为站点分配运输车辆（根据最短直线距离）
 	 */
