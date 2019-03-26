@@ -79,9 +79,9 @@ public class SludgeController {
 		
 		@RequestMapping("querysludgebydriverIdAndStatus")
 		@ResponseBody
-		public Sludge querysludgebydriverIdAndStatus(@RequestParam("driverId") int driverId){
+		public List<Sludge> querysludgebydriverIdAndStatus(@RequestParam("driverId") int driverId,@RequestParam("status") String status){
 			log.info("querysludgebydriverIdAndStatus");
-			Sludge sludge = sludgeService.querysludgebydriverIdAndStatus(driverId);
+			List<Sludge> sludge = sludgeService.querysludgebydriverIdAndStatus(driverId,status);
 			return sludge;
 		}
 		

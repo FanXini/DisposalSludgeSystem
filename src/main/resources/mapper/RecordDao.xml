@@ -80,6 +80,28 @@
 		ORDER BY
 		record.allocation_time DESC
 	</select>
+	
+	<select id="queryRecordByDriverIdAndStatus" resultMap="RecordMap">
+		SELECT
+		record.*,car.id,car.driver_id,car.license,car.brand,user.id,user.realname,user.telephone,site.id,site.site_name,site.serial_number,site.address,site.telephone
+		telephoneOfSite
+		FROM record LEFT JOIN site ON record.site_id=site.id
+		LEFT JOIN car ON
+		record.car_id=car.id LEFT JOIN `user` ON
+		car.driver_id=`user`.id
+		WHERE record.del_status=0 AND
+		car.driver_id=#{driverId} AND 
+		<choose>
+			<when test="flag==0">
+				record.status=#{status}
+			</when>
+			<otherwise>
+				record.status!=#{status}
+			</otherwise>
+		</choose>
+		ORDER BY
+		record.allocation_time DESC
+	</select>
 
 	<select id="queryRecordByDate" resultMap="RecordMap">
 		SELECT

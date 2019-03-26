@@ -455,7 +455,11 @@
 		ON sludge.function_id=sludge_function.id
 		WHERE
 		sludge.del_status=0 AND
-		user.id=#{driverId} AND sludge.status=6
+		user.id=#{driverId} AND 
+
+		sludge.status IN ${status}
+
+
 		ORDER BY
 		sludge.produce_time DESC
 	</select>

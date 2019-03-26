@@ -72,7 +72,7 @@ public interface SludgeDao {
 
 	public void insertSludgeByDriver(Sludge sludge);
 
-	public Sludge querysludgebydriverIdAndStatus(@Param("driverId") int driverId);
+	public List<Sludge> querysludgebydriverIdAndStatus(@Param("driverId") int driverId,@Param("status") String status);
 
 	public List<Sludge> fussyQuerysludgebyTransDriver(@Param("condition") String condition,
 			@Param("driverId") int driverId);

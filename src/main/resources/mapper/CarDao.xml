@@ -255,7 +255,7 @@
 
 	<select id="queryWorkerMapCar" resultMap="carDriverSiteMap">
 		SELECT
-		car.*,car.*,user.id uid,site.id sid,site.site_name,site.latitude
+		car.*,user.id uid,site.id sid,site.site_name,site.latitude
 		slatitude,site.longitude
 		slongitude,site.status sstatus,site.telephone
 		stelephone,user.realname,user.telephone
@@ -305,7 +305,8 @@
 		FROM car LEFT JOIN user
 		ON
 		car.driver_id=user.id
-		WHERE car.del_status=0 AND car.status=0
+		WHERE car.del_status=0 AND (car.status=0
+		OR car.status=4)
 		AND car.car_type=1 AND car.driver_id IS NOT NULL
 	</select>
 	

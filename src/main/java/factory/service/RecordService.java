@@ -13,6 +13,8 @@ public interface RecordService {
 	
 	public List<Record> queryRecordByDriverId(int driverId);
 	
+	public List<Record> queryRecordByDriverIdAndStatus(int driverId,int status,int flag);
+	
 	public List<Record> queryRecordByDate(String startDate,String endDate);
 	
 	public void updateCarId(int recordId,int carId);

@@ -4,9 +4,9 @@ public class JDBC {
 	
 	public static final String DRIVERCLASS="com.mysql.jdbc.Driver";
 	
-	public static final String URL="jdbc:mysql://localhost/disposalsludgesystem?useUnicode=true&characterEncoding=utf8";
+	public static final String URL="jdbc:mysql://localhost/disposalsludgesystemtest?useUnicode=true&characterEncoding=utf8";
 	
-	public static final String USERNAME="root";
+	public static final String USERNAME="fanxin";
 	
 	public static final String PASSWORD="123456";
 	

@@ -215,5 +215,9 @@ public class RecordServiceImpl implements RecordService{
 		recordDao.updateRecordStatusById(recordId, status);
 		siteDao.updateSiteStatusById(siteId, status);
 	}
+	@Override
+	public List<Record> queryRecordByDriverIdAndStatus(int driverId, int status,int flag) {
+		return recordDao.queryRecordByDriverIdAndStatus(driverId, status,flag);
+	}
 
 }

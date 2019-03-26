@@ -123,6 +123,15 @@ public class RecordController {
 		return records;
 	}
 	
+	@RequestMapping("queryRecordByDriverIdAndStatus")
+	@ResponseBody
+	public List<Record> queryRecordByDriverIdAndStatus(@RequestParam("driverId") int driverId,@RequestParam("status") int status,@RequestParam("flag") int flag){
+		log.info("调用queryRecordByDriverIdAndStatus");
+		List<Record> records=new ArrayList<Record>();
+		records.addAll(recordService.queryRecordByDriverIdAndStatus(driverId, status, flag));
+		return records;
+	}
+	
 	@RequestMapping("queryRecordByDate")
 	@ResponseBody
 	public List<Record> queryRecordByDate(@RequestParam("startDate") String startDate,@RequestParam("endDate") String endDate){
@@ -246,8 +255,8 @@ public class RecordController {
 		siteService.updateSiteStatusById(siteId, SiteStatus.WATINGPROCESS.ordinal());
 		System.out.println(record.getId());
 		//查询出车的经纬度
-		//Site site=siteService.querySiteById(siteId);
-		//taskExecuter.submit(new AssignCarForReocrdThread(redisTemplate,recordService, carService, sludgeService, record.getId(), site));
+		Site site=siteService.querySiteById(siteId);
+		taskExecuter.submit(new AssignCarForReocrdThread(redisTemplate,recordService, carService, sludgeService, record.getId(), site));
 		return "success";
 	}
 	

@@ -254,10 +254,10 @@ public class SludgeServiceImpl implements SludgeService {
 		sludgeDao.insertSludgeByDriver(sludge);
 	}
 	@Override
-	public Sludge querysludgebydriverIdAndStatus(int driverId) {
+	public List<Sludge> querysludgebydriverIdAndStatus(int driverId,String status) {
 		// TODO Auto-generated method stub	
-		Sludge sludge = sludgeDao.querysludgebydriverIdAndStatus(driverId);
-		return sludge;
+		List<Sludge> sludges = sludgeDao.querysludgebydriverIdAndStatus(driverId,status);
+		return sludges;
 	}
 	@Override
 	public List<Sludge> fussyQuerysludgebyTransDriver(String condition,int driverId) {
