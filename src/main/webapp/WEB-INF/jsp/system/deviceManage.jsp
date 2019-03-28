@@ -112,12 +112,20 @@ body {
 								<label for="Groupname" class="col-sm-3 control-label">类型：</label>
 								<div class="col-sm-9">
 									<select id="sensorType_select" class="form-control m-b"
-										name="account">
+										name="account" onchange="hideGPSIDDIVInput()">
 										<c:forEach items="${requestScope.sensorTypeList }"
 											var="sensorType">
 											<option>${sensorType.type}</option>
 										</c:forEach>
 									</select>
+								</div>
+							</div>
+						</div>
+						<div class="form-group" id="GPSIDDIV">
+							<div>
+								<label for="Groupname" class="col-sm-3 control-label">GPS 设备ID</label>
+								<div class="col-sm-9">
+									<input id="GPSID" class="form-control m-b"/>
 								</div>
 							</div>
 						</div>
@@ -130,7 +138,7 @@ body {
 										onchange="set_city(this, document.getElementById('place'));">
 										<option value="null">--请选择 --</option>
 										<option value="site">工厂</option>
-										<option value="slugeCar">污泥处理车</option>
+										<option value="slugeCar">车辆</option>
 									</select>
 								</div>
 
@@ -176,7 +184,7 @@ body {
 								onchange="set_city(this, document.getElementById('query_place'));">
 								<option value="none">--请选择设备位置--</option>
 								<option value="site">工厂</option>
-								<option value="slugeCar">污泥处理车</option>
+								<option value="slugeCar">车辆</option>
 							</select>
 						</div>
 
@@ -316,6 +324,17 @@ body {
 			}
 	
 		}
+			
+		function hideGPSIDDIVInput(){
+			var text=$("#sensorType_select option:selected").text()
+			if(text=="GPS传感器"){
+				$("#GPSIDDIV").show();
+			}
+			else{
+				$("#GPSIDDIV").hide();
+			}
+			
+		}
 		/***************************** 查询所有传感器************************************* */
 		$.ajax({
 			type : "POST",
@@ -387,8 +406,27 @@ body {
 		$("#addSensorButton").click(function() {
 			var sensorSerialNumber = $("#sensorSerialNumber").val()
 			var sensorType = $("#sensorType_select").val()
+			var GPSID=$("#GPSID").val();
 			var placeSelect = $("#place_select").val()
 			var place = $("#place").val()
+			var sensorInfo;
+			if(sensorType=="GPS传感器"){
+				sensorInfo=JSON.stringify({
+					sensorSerialNumber : sensorSerialNumber,
+					sensorType : sensorType,
+					GPSID:GPSID,
+					placeSelect : placeSelect,
+					place : place
+				})
+			}
+			else{
+				sensorInfo=JSON.stringify({
+					sensorSerialNumber : sensorSerialNumber,
+					sensorType : sensorType,
+					placeSelect : placeSelect,
+					place : place
+				})
+			}
 			if (sensorSerialNumber == "" || placeSelect == "null" || place == "null") {
 				alert("设备信息不完善")
 			} else if(!(/^[A-Z][0-9]{5}$/.test(sensorSerialNumber))){
@@ -397,12 +435,7 @@ body {
 				$.ajax({
 					type : "POST",
 					url : "sensor/addSensor",
-					data : JSON.stringify({
-						sensorSerialNumber : sensorSerialNumber,
-						sensorType : sensorType,
-						placeSelect : placeSelect,
-						place : place
-					}),
+					data : sensorInfo,
 					dataType : "json",
 					contentType : "application/json",
 					success : function(data) {

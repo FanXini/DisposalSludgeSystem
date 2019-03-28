@@ -6,6 +6,7 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import factory.dao.CarDao;
@@ -29,7 +30,7 @@ public class RecordServiceImpl implements RecordService{
 	private CarDao carDao;
 	
 	/**
-	 * ²éÑ¯ËùÓĞµÄ´¦Àí¼ÇÂ¼
+	 * æŸ¥è¯¢æ‰€æœ‰çš„å¤„ç†è®°å½•
 	 */
 	@Override
 	public List<Record> queryAllRecord() {
@@ -37,7 +38,7 @@ public class RecordServiceImpl implements RecordService{
 		return recordDao.queryAllRecord();
 	}
 	/**
-	 * Í¨¹ı¹¤³§ÃûÀ´²éÑ¯´¦Àí¼ÇÂ¼
+	 * é€šè¿‡å·¥å‚åæ¥æŸ¥è¯¢å¤„ç†è®°å½•
 	 */
 	@Override
 	public List<Record> queryRecordBySiteId(int siteId) {
@@ -45,7 +46,15 @@ public class RecordServiceImpl implements RecordService{
 		return recordDao.queryRecordBySiteId(siteId);
 	}
 	/**
-	 * Í¨¹ı´¦ÀíÈË(Ë¾»ú)À´²éÑ¯´¦Àí¼ÇÂ¼
+	 * é€šè¿‡å¤„ç†è®°å½•idåæ¥æŸ¥è¯¢å¤„ç†è®°å½•
+	 */
+	@Override
+	public List<Record> queryRecordByRecordId(int recordId) {
+		// TODO Auto-generated method stub
+		return recordDao.queryRecordByRecordId(recordId);
+	}
+	/**
+	 * é€šè¿‡å¤„ç†äºº(å¸æœº)æ¥æŸ¥è¯¢å¤„ç†è®°å½•
 	 */
 	@Override
 	public List<Record> queryRecordByDriverId(int driverId) {
@@ -54,7 +63,7 @@ public class RecordServiceImpl implements RecordService{
 	}
 
 	/**
-	 * Í¨¹ıÈÕÆÚ²éÑ¯´¦Àí¼ÇÂ¼
+	 * é€šè¿‡æ—¥æœŸæŸ¥è¯¢å¤„ç†è®°å½•
 	 */
 	@Override
 	public List<Record> queryRecordByDate(String startDate, String endDate) {
@@ -62,7 +71,7 @@ public class RecordServiceImpl implements RecordService{
 		return recordDao.queryRecordByDate(startDate, endDate);
 	}
 	/**
-	 * ĞŞ¸Ä´¦ÀíÈË
+	 * ä¿®æ”¹å¤„ç†äºº
 	 */
 	@Override
 	public void updateCarId(int recordId, int carId) {
@@ -72,7 +81,7 @@ public class RecordServiceImpl implements RecordService{
 	}
 	
 	/**
-	 * É¾³ı¼ÇÂ¼
+	 * åˆ é™¤è®°å½•
 	 */
 	@Override
 	public void deleteRecord(int recordId) {
@@ -131,26 +140,27 @@ public class RecordServiceImpl implements RecordService{
 		return records;
 	}
 	@Override
+	@Transactional
 	public String editRecord(Map<String, Integer> map) {
 		// TODO Auto-generated method stubCar car=carService.queryCarByDriverId(jsonMap.get("driverId"));
 		int recordId=map.get("recordId");
 		int driverId=map.get("driverId");
 		int siteId=map.get("siteId");
-		Car queryCar=carDao.queryCarByRecordId(recordId);//²éÑ¯recordÊÇ·ñÒÑ¾­·ÖÅäÁË´¦ÀíÈË(³µ)
-		if(queryCar==null){ //Î´·ÖÅäË¾»ú
+		Car queryCar=carDao.queryCarByRecordId(recordId);//æŸ¥è¯¢recordæ˜¯å¦å·²ç»åˆ†é…äº†å¤„ç†äºº(è½¦)
+		if(queryCar==null){ //æœªåˆ†é…å¸æœº
 			Car car=carDao.queryCarByDriverId(driverId);
 			recordDao.updateCarId(recordId, car.getId());
-			//car.status --0±íÊ¾¿ÕÏĞ£¬1±íÊ¾ÔÚÍ¾ÖĞ£¬2µ½´ï£¬3ÒÑÅÉµ¥£¨Î´³ö·¢£©£¬4·µ³Ì£¨´¦ÀíÍê£©
+			//car.status --0è¡¨ç¤ºç©ºé—²ï¼Œ1è¡¨ç¤ºåœ¨é€”ä¸­ï¼Œ2åˆ°è¾¾ï¼Œ3å·²æ´¾å•ï¼ˆæœªå‡ºå‘ï¼‰ï¼Œ4è¿”ç¨‹ï¼ˆå¤„ç†å®Œï¼‰
 			carDao.editWorkerCarStatusAndSiteId(car.getId(), 3, siteId); 
 			return car.getLicense();
 		}
-		else{//·ÖÅäÁËË¾»ú
+		else{//åˆ†é…äº†å¸æœº
 			if(queryCar.getStatus()==1||queryCar.getStatus()==2||queryCar.getStatus()==4){
-				throw new AllocateCarForRecordConflict("ÎŞ·¨¸ü¸Ä");
+				throw new AllocateCarForRecordConflict("æ— æ³•æ›´æ”¹");
 			}
-			else{//0-¿ÕÏĞ×´Ì¬ºÍ3ÒÑÅÉµ¥×´Ì¬-¿ÉÒÔĞŞ¸Ä
-				//Òª°ÑÖ®Ç°·ÖÅäµÄcar×´Ì¬¸Ä»ØÀ´
-				carDao.editWorkerCarStatusAndSiteId(queryCar.getId(),0,0);//sqlÅĞ¶ÏÈç¹ûsiteIdÊÇ0£¬Ôò¸³Öµsite_id=NULL
+			else{//0-ç©ºé—²çŠ¶æ€å’Œ3å·²æ´¾å•çŠ¶æ€-å¯ä»¥ä¿®æ”¹
+				//è¦æŠŠä¹‹å‰åˆ†é…çš„carçŠ¶æ€æ”¹å›æ¥
+				carDao.editWorkerCarStatusAndSiteId(queryCar.getId(),0,0);//sqlåˆ¤æ–­å¦‚æœsiteIdæ˜¯0ï¼Œåˆ™èµ‹å€¼site_id=NULL
 				Car newCar=carDao.queryCarByDriverId(driverId);
 				recordDao.updateCarId(recordId, newCar.getId());
 				carDao.editWorkerCarStatusAndSiteId(newCar.getId(), 3, siteId);
@@ -185,7 +195,7 @@ public class RecordServiceImpl implements RecordService{
 		if(record.getPretreatAmount() != 0 ){
 			double rate = record.getSludgesWeight()/record.getPretreatAmount();
 			if(rate < 0 || rate > 1){
-				//Êı¾İÒì³£·µ»Ø-1
+				//æ•°æ®å¼‚å¸¸è¿”å›-1
 				return -1;
 			}else{
 				return rate;
@@ -201,7 +211,7 @@ public class RecordServiceImpl implements RecordService{
 		System.out.println(value);
 		
 		if(value < 0){
-			//Êı¾İÒì³£·µ»Ø-1
+			//æ•°æ®å¼‚å¸¸è¿”å›-1
 			return -1;
 		}else{
 			return value;

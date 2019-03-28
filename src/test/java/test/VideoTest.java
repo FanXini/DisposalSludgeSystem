@@ -18,7 +18,6 @@ public class VideoTest extends BaseTest {
 	private List<Video> videoList;
 	private List<Car> carList;
 	private List<Site> siteList;
-	/**É¾³ý¼à¿Ø**/
 /*	@Test
 	public void addVideo(){
 		Video video=new Video();
@@ -30,12 +29,12 @@ public class VideoTest extends BaseTest {
 		video.setVideoHLSid("http://hls.open.ys7.com/openlive/c5fca4a038634347a5b856ad89ebc35b.hd.m3u8");
 		video.setDelStatus(0);
 		videoDao.addVideo(video);
-		System.out.println("ÐÂÔö³É¹¦");
+		System.out.println("ï¿½ï¿½ï¿½ï¿½ï¿½É¹ï¿½");
 	}*/
 	/*@Test
 	public void deleteVideo( ){		
 		videoDao.deleteVideo(15);
-		System.out.println("É¾³ý³É¹¦");
+		System.out.println("É¾ï¿½ï¿½ï¿½É¹ï¿½");
 	}
 	*/
 	/*@Test
@@ -43,7 +42,7 @@ public class VideoTest extends BaseTest {
 		Video video=new Video();
 		video.setId(23);
 		video.setSerialNumber("C0012");
-		video.setLicense("Ïæ462342");
+		video.setLicense("ï¿½ï¿½462342");
 		videoDao.editVideo(video);		
 	}*/
 	
@@ -86,17 +85,17 @@ public class VideoTest extends BaseTest {
 	public void addFactoryVideo(){
 		Video video=new Video();
 		video.setSiteId(55);
-		video.setLicense("±õºÓÎÛË®´¦Àí³§");
+		video.setLicense("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ë®ï¿½ï¿½ï¿½ï¿½");
 		video.setSerialNumber("C29134497");
 		video.setVideoRTMPid("rtmp://rtmp.open.ys7.com/openlive/c5fca4a038634347a5b856ad89ebc35b.hd");
 		video.setVideoHLSid("http://hls.open.ys7.com/openlive/c5fca4a038634347a5b856ad89ebc35b.hd.m3u8");
 		video.setDelStatus(0);
 		videoDao.addFactoryVideo(video);
-		System.out.println("ÐÂÔö³É¹¦");
+		System.out.println("ï¿½ï¿½ï¿½ï¿½ï¿½É¹ï¿½");
 	}*/
 		/*@Test
 		public void queryVideoBySiteName(){
-			Video video=videoDao.queryVideoBySiteName("ºþÄÏ´óÑ§");
+			Video video=videoDao.queryVideoBySiteName("ï¿½ï¿½ï¿½Ï´ï¿½Ñ§");
 			System.out.println(video.getSerialNumber()+" "+video.getSiteId()+" "+video.getLicense());
 		}*/
 		
@@ -110,7 +109,7 @@ public class VideoTest extends BaseTest {
 		Video video=new Video();
 		video.setId(23);
 		video.setSerialNumber("C0012");
-		video.setLicense("Ïæ462342");
+		video.setLicense("ï¿½ï¿½462342");
 		videoDao.editVideo(video);		
 	}
 		

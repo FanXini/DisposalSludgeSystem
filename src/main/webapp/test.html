@@ -16,7 +16,7 @@
 	});
 
 	function getLocation(deviceId, serialNumber) {
-		alert(gpsUserId+" "+mds)
+		//alert(gpsUserId+" "+mds)
 		if (gpsUserId == "" || mds == "") {
 			getLocationWithoutMDS(deviceId, serialNumber);
 		} else {
@@ -35,6 +35,7 @@
 				alert(data.id)
 				gpsUserId = data.id;
 				mds = data.mds;
+				alert("mds="+mds)
 				$.ajax({
 					type : "GET",
 					url : "http://api.18gps.net/GetDateServices.asmx/GetDate?method=loadUser&user_id=" + deviceId + "&mds=" + mds,
@@ -55,17 +56,18 @@
 	}
 
 	function getLocationWithMDS(deviceId, serialNumber) {
+		alert(mds)
 		$.ajax({
 			type : "GET",
 			url : "http://api.18gps.net/GetDateServices.asmx/GetDate?method=loadUser&user_id=" + deviceId + "&mds=" + mds,
 			data : "",
 			dataType : "jsonp",
 			success : function(data2) {
-				if (data2.errorCode == 200) {
-					long_la = data2.data.jingdu + "_" + data2.data.weidu;
+				if (data2.errorCode == "200") {
+					long_la = data2.data[0].jingdu + "_" + data2.data[0].weidu;
 					alert(long_la);
 				} else if (data2.errorCode == 403) {
-					getLocationWithoutMDS(deviceId, serialNumber);
+					getLocation(deviceId, serialNumber);
 				}
 			}
 		});

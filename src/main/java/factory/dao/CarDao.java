@@ -58,12 +58,22 @@ public interface CarDao {
 	public List<Car> queryCarrierUnassign();
 	
 	public List<Car> queryMapCarBySiteIdAndCarTypeAndStatus(@Param("siteId") int siteId,@Param("carType") int carType,@Param("status") int status);
+	
+	public List<Car> queryCarInRoad();
   
 	public List<Car> querycarWithoutVideo();
 	
 	public List<Car> queryCarByCarType(@Param("carType") int carType);
 	
 	public Car queryCarIdBySensorId(@Param("sensorId") int sensorId);
+	
+	public List<Car> queryCarDeviceIdInCloud();
+	
+	public void updateCarLocation(@Param("id") int id,@Param("longitude") double longitude,@Param("latitude")double latitude);
+	
+	public void setCarGPSDeviceId(@Param("id") int id,@Param("cloudDeviceId") String cloudDeviceId);
+	
+	public Integer queryCarStatusById(@Param("id") int id);
 
 }
 

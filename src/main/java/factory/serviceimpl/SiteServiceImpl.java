@@ -9,6 +9,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 
@@ -34,7 +36,7 @@ public class SiteServiceImpl implements SiteService{
 	@Autowired
 	private RecordDao recordDao;
 	/**
-	 * ²éÑ¯ËùÓĞ¹¤³§
+	 * æŸ¥è¯¢æ‰€æœ‰å·¥å‚
 	 */
 	@Override
 	public List<Site> queryAllSite() {
@@ -179,9 +181,10 @@ public class SiteServiceImpl implements SiteService{
 		return recordDao.countRecordOfCarNullBySiteId(siteId);
 	}
 
+	//@Cacheable(value="site",key="'siteId'+#siteId+'status'+#status")
 	@Override
 	public List<Site> querySiteMapBySiteIdAndStatus(int siteId,int status) {
-		// TODO Auto-generated method stub
+		System.out.println("ä»æ•°æ®åº“ä¸­æŸ¥è¯¢site");
 		return siteDao.querySiteMapBySiteIdAndStatus(siteId,status);
 	}
 
@@ -189,7 +192,11 @@ public class SiteServiceImpl implements SiteService{
 	public void updateSiteStatusById(int siteId,int status) {
 		siteDao.updateSiteStatusById(siteId,status);
 	}
-	
-	
 
+	@Override
+	public List<Site> querySiteStatus() {
+		List<Site> sites=new ArrayList<>();
+		sites.addAll(siteDao.querySiteStatus());
+		return sites;
+	}
 }

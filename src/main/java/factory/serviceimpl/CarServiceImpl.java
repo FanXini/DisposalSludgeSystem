@@ -1,10 +1,7 @@
 package factory.serviceimpl;
 
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -12,8 +9,11 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import factory.dao.CarDao;
 import factory.dao.RecordDao;
@@ -108,7 +108,7 @@ public class CarServiceImpl implements CarService{
 	public int addCar(Car car) {
 		// TODO Auto-generated method stub
 		if (car.getLicense().equals("") || car.getLicense() == null) {
-			throw new DataNoneException("Ã»ÓĞÊı¾İ");
+			throw new DataNoneException("æ²¡æœ‰æ•°æ®");
 		}
 		else if(car.getBrand().equals("none")){
 			car.setBrand(null);
@@ -120,15 +120,15 @@ public class CarServiceImpl implements CarService{
 	public void editCar(Car car) {
 		// TODO Auto-generated method stub
 		if (car.getLicense().equals("") || car.getLicense() == null) {
-			throw new DataNoneException("Ã»ÓĞÊı¾İ");
+			throw new DataNoneException("æ²¡æœ‰æ•°æ®");
 		}
 		if(car.getBrand().equals("none")){
 			car.setBrand(null);
 		}
-		if(car.getDriverId()==-1){
+		/*if(car.getDriverId()==-1){
 			User driver=userDao.queryUserByRealName(car.getDriver().getRealname());
 			car.setDriverId(driver.getId());
-		}
+		}*/
 		carDao.editCar(car);	
 	}
 	@Override
@@ -223,8 +223,9 @@ public class CarServiceImpl implements CarService{
 		return car;
 	}
 	@Override
+	//@Cacheable(value="car",key="'siteId'+#siteId+'carType'+#carType+'status'+#status")
 	public List<Car> queryMapCarBySiteIdAndCarTypeAndStatus(int siteId,int carType,int status) {
-		// TODO Auto-generated method stub
+		System.out.println("queryCarFromDb");
 		List<Car> cars=new ArrayList<Car>();
 		cars.addAll(carDao.queryMapCarBySiteIdAndCarTypeAndStatus(siteId,carType,status));
 		for(Car car:cars){
@@ -256,6 +257,8 @@ public class CarServiceImpl implements CarService{
 	}
 
 	@Override
+	@Transactional
+	//@CacheEvict(value= {"car","site"},allEntries=true)
 	public Car updateCarStatusByButton(Map<String, Integer> map) {
 		int driverId=map.get("driverId");
 		int nowStatus=map.get("nowStatus");
@@ -264,47 +267,47 @@ public class CarServiceImpl implements CarService{
 		int carType=car.getCarType();
 		int carId=car.getId();
 		int siteId=car.getSiteId();
-		if(nowStatus!=carStatusInDB || nowStatus==CarStatus.LEISURE.ordinal()) {//ÊÇÓÉÒ³Ãæ´¥·¢¶ø²»ÊÇ°´Å¥´¥·¢
+		if(nowStatus!=carStatusInDB || nowStatus==CarStatus.LEISURE.ordinal()) {//æ˜¯ç”±é¡µé¢è§¦å‘è€Œä¸æ˜¯æŒ‰é’®è§¦å‘
 			return new Car(carStatusInDB, carType,siteId);
 		}
 		else {
-			if(nowStatus==carStatusInDB) { //×´Ì¬Ò»ÖÂ
-				//Èç¹û³µÄ¿Ç°µÄ×´Ì¬ÊÇÒÑ·ÖÅäÈÎÎñ,µ«»¹Î´³ö·¢
-				//Ë¾»ú´¥·¢°´Å¥±íÊ¾¿ªÊ¼³ö·¢
+			if(nowStatus==carStatusInDB) { //çŠ¶æ€ä¸€è‡´
+				//å¦‚æœè½¦ç›®å‰çš„çŠ¶æ€æ˜¯å·²åˆ†é…ä»»åŠ¡,ä½†è¿˜æœªå‡ºå‘
+				//å¸æœºè§¦å‘æŒ‰é’®è¡¨ç¤ºå¼€å§‹å‡ºå‘
 				if(nowStatus==CarStatus.NODEPARTURE.ordinal()) {
-					//ĞŞ¸Ä³ÉÔÚÍ¾ÖĞ
+					//ä¿®æ”¹æˆåœ¨é€”ä¸­
 					carDao.editWorkerCarStatus(driverId, CarStatus.ONTHEWAY.ordinal());
 					return new Car(CarStatus.ONTHEWAY.ordinal(), carType,siteId);
 				}
-				//Èç¹û³µÄ¿Ç°µÄ×´Ì¬ÊÇÔÚÍ¾ÖĞ
-				//Ë¾»ú´¥·¢°´Å¥±íÊ¾ÒÑµ½´ï
+				//å¦‚æœè½¦ç›®å‰çš„çŠ¶æ€æ˜¯åœ¨é€”ä¸­
+				//å¸æœºè§¦å‘æŒ‰é’®è¡¨ç¤ºå·²åˆ°è¾¾
 				else if(nowStatus==CarStatus.ONTHEWAY.ordinal()) {
-					//ĞŞ¸Ä³ÉÒÑµ½´ï
+					//ä¿®æ”¹æˆå·²åˆ°è¾¾
 					carDao.editWorkerCarStatus(driverId, CarStatus.ARRIVAL.ordinal());
-					if(carType==0) {  //Èç¹ûÊÇ´¦Àí³µµ½´ï,ÒªĞŞ¸ÄrecordºÍsiteµÄ×´Ì¬Îª´¦ÀíÖĞ,²¢ÉèÖÃrecord¿ªÊ¼Ê±¼ä
-						//²éÑ¯ÏÖÔÚ´¦ÀíµÄÊÇÄÄ¸öÈÎÎñ
+					if(carType==0) {  //å¦‚æœæ˜¯å¤„ç†è½¦åˆ°è¾¾,è¦ä¿®æ”¹recordå’Œsiteçš„çŠ¶æ€ä¸ºå¤„ç†ä¸­,å¹¶è®¾ç½®recordå¼€å§‹æ—¶é—´
+						//æŸ¥è¯¢ç°åœ¨å¤„ç†çš„æ˜¯å“ªä¸ªä»»åŠ¡
 						Record treatmentRecord=recordDao.queryRecordByCarIdAndStatus(car.getId(), RecordStatus.WATINGPROCESS.ordinal());
-						//ĞŞ¸ÄrecordµÄ×´Ì¬Îª´¦ÀíÖĞ,²¢ÇÒÉèÖÃÈÎÎñ¿ªÊ¼Ê±¼ä,0±íÊ¾´æµÄÊÇÈÎÎñ¿ªÊ¼Ê±¼ä
+						//ä¿®æ”¹recordçš„çŠ¶æ€ä¸ºå¤„ç†ä¸­,å¹¶ä¸”è®¾ç½®ä»»åŠ¡å¼€å§‹æ—¶é—´,0è¡¨ç¤ºå­˜çš„æ˜¯ä»»åŠ¡å¼€å§‹æ—¶é—´
 						recordDao.UpdateRecordStatusAndTimeById(treatmentRecord.getId(), RecordStatus.PROCESSING.ordinal(), dataFormat.format(new Date()), 0);
-						//ĞŞ¸ÄsiteµÄ×´Ì¬Îª´¦ÀíÖĞ
+						//ä¿®æ”¹siteçš„çŠ¶æ€ä¸ºå¤„ç†ä¸­
 						siteDao.updateSiteStatusById(treatmentRecord.getSiteId(), SiteStatus.PROCESSING.ordinal());
 						
 					}
-					else if(carType==1) { //Èç¹ûÊÇÎÛÄà³µ£¬ÒªÅĞ¶ÏÊÇµ½´ïÎÛÄà³§£¬»¹ÊÇµ½´ïÄ¿µÄµØ
-						if(car.getSiteId()==0) {  //ÎÛÄàµ½´ïÄ¿µÄµØ
-							//²éÑ¯µ±Ç°ÔËÊäµÄµÄÎÛÄà
+					else if(carType==1) { //å¦‚æœæ˜¯æ±¡æ³¥è½¦ï¼Œè¦åˆ¤æ–­æ˜¯åˆ°è¾¾æ±¡æ³¥å‚ï¼Œè¿˜æ˜¯åˆ°è¾¾ç›®çš„åœ°
+						if(car.getSiteId()==0) {  //æ±¡æ³¥åˆ°è¾¾ç›®çš„åœ°
+							//æŸ¥è¯¢å½“å‰è¿è¾“çš„çš„æ±¡æ³¥
 							Sludge processingSludge=sludgeDao.queryProcessingSludgeByCarIdAndStatus(carId);
 							String arrivalTime=dataFormat.format(new Date());
 							int sludgeStatus=0;
-							//Èç¹ûÊÇ²ú³öµØµ½Äà²ÖÂ·ÉÏ£»
+							//å¦‚æœæ˜¯äº§å‡ºåœ°åˆ°æ³¥ä»“è·¯ä¸Šï¼›
 							if(processingSludge.getStatus()==SludgeStatus.FACTORYTOMWHRAOD.ordinal()) {
 								sludgeStatus=SludgeStatus.STOREINMWH.ordinal();
 							}
-							//Èç¹ûÊÇ²ú³öµØµ½Ä¿µÄµØÂ·ÉÏ£»
+							//å¦‚æœæ˜¯äº§å‡ºåœ°åˆ°ç›®çš„åœ°è·¯ä¸Šï¼›
 							else if (processingSludge.getStatus()==SludgeStatus.FACTORYTODESROAD.ordinal()){
 								sludgeStatus=SludgeStatus.ARRIVEDESFROMFACTORY.ordinal();
 							}
-							//Èç¹ûÊÇÄà²ÖµØµ½Äà²ÖÂ·ÉÏ£»
+							//å¦‚æœæ˜¯æ³¥ä»“åœ°åˆ°æ³¥ä»“è·¯ä¸Šï¼›
 							else if (processingSludge.getStatus()==SludgeStatus.MWHTODESROAD.ordinal()){
 								sludgeStatus=SludgeStatus.ARRIVEDESFROMMWH.ordinal();
 							}
@@ -313,33 +316,33 @@ public class CarServiceImpl implements CarService{
 					}
 					return new Car(CarStatus.ARRIVAL.ordinal(), carType,siteId);
 				}
-				//Èç¹û³µÄ¿Ç°µÄ×´Ì¬ÊÇÒÑµ½´ï
-				//Ë¾»ú´¥·¢°´Å¥±íÊ¾µ½µ×´¦ÀíÈÎÎñÍê³É »òÕßÊÇ  ÔËÊäÈÎÎñ¿ªÊ¼/½áÊøÁË
+				//å¦‚æœè½¦ç›®å‰çš„çŠ¶æ€æ˜¯å·²åˆ°è¾¾
+				//å¸æœºè§¦å‘æŒ‰é’®è¡¨ç¤ºåˆ°åº•å¤„ç†ä»»åŠ¡å®Œæˆ æˆ–è€…æ˜¯  è¿è¾“ä»»åŠ¡å¼€å§‹/ç»“æŸäº†
 				else if(nowStatus==CarStatus.ARRIVAL.ordinal()) {
-					if(carType==0) {  //Èç¹ûÊÇ´¦Àí³µ
-						// ĞŞ¸ÄÎª³µµÄ×´Ì¬·µ³Ì×´Ì¬,ĞŞ¸ÄsiteÎªnull
+					if(carType==0) {  //å¦‚æœæ˜¯å¤„ç†è½¦
+						// ä¿®æ”¹ä¸ºè½¦çš„çŠ¶æ€è¿”ç¨‹çŠ¶æ€,ä¿®æ”¹siteä¸ºnull
 						carDao.editWorkerCarStatusAndSiteId(carId, CarStatus.GETBACK.ordinal(),0); 
-						//²éÑ¯ÏÖÔÚ´¦ÀíµÄÊÇÄÄ¸öÈÎÎñ
+						//æŸ¥è¯¢ç°åœ¨å¤„ç†çš„æ˜¯å“ªä¸ªä»»åŠ¡
 						Record treatmentRecord=recordDao.queryRecordByCarIdAndStatus(car.getId(), RecordStatus.PROCESSING.ordinal());
-						//ĞŞ¸ÄrecordµÄ×´Ì¬Îª´¦ÀíÍê³É
+						//ä¿®æ”¹recordçš„çŠ¶æ€ä¸ºå¤„ç†å®Œæˆ
 						recordDao.UpdateRecordStatusAndTimeById(treatmentRecord.getId(), RecordStatus.ACCOMPLISH.ordinal(), dataFormat.format(new Date()), 1);
-						//ĞŞ¸ÄsiteµÄ×´Ì¬ÎªÕı³£
+						//ä¿®æ”¹siteçš„çŠ¶æ€ä¸ºæ­£å¸¸
 						siteDao.updateSiteStatusById(treatmentRecord.getSiteId(), SiteStatus.NORMAL.ordinal());
 						return new Car(CarStatus.GETBACK.ordinal(),carType,0);
 					}
-					else if(carType==1) {//Èç¹ûÊÇÔËÊä³µ
-						if(siteId!=0) { //¿ªÊ¼½«ÎÛÄàÔËÊäµ½Ä¿µÄµØ,¹¤³§ÖÃÎª0
+					else if(carType==1) {//å¦‚æœæ˜¯è¿è¾“è½¦
+						if(siteId!=0) { //å¼€å§‹å°†æ±¡æ³¥è¿è¾“åˆ°ç›®çš„åœ°,å·¥å‚ç½®ä¸º0
 							carDao.editWorkerCarStatusAndSiteId(carId, CarStatus.ONTHEWAY.ordinal(),0);
 							return new Car(CarStatus.ONTHEWAY.ordinal(),carType,0);
 						}
-						else {  //ËÍµ½ÁËÄ¿µÄµØ,·µ³Ì
+						else {  //é€åˆ°äº†ç›®çš„åœ°,è¿”ç¨‹
 							carDao.editWorkerCarStatus(driverId, CarStatus.GETBACK.ordinal());
 							return new Car(CarStatus.GETBACK.ordinal(),carType,siteId);
 						}
 					}
 				}
-				//Èç¹û´¦Àí³µÄ¿Ç°µÄ×´Ì¬·µ³Ì
-				//Ë¾»ú´¥·¢°´Å¥±íÊ¾µ½´ï²Ö¿âÁË
+				//å¦‚æœå¤„ç†è½¦ç›®å‰çš„çŠ¶æ€è¿”ç¨‹
+				//å¸æœºè§¦å‘æŒ‰é’®è¡¨ç¤ºåˆ°è¾¾ä»“åº“äº†
 				else if(nowStatus==CarStatus.GETBACK.ordinal()) {
 					carDao.editWorkerCarStatus(driverId, CarStatus.LEISURE.ordinal());
 					return new Car(CarStatus.LEISURE.ordinal(),carType,siteId);
@@ -352,6 +355,18 @@ public class CarServiceImpl implements CarService{
 	@Override
 	public Car flushCarStatus(int driverId) {
 		return carDao.queryCarByDriverId(driverId);
+	}
+
+	@Override
+	public List<Car> queryCarInRoad() {
+		List<Car> roadCars=new ArrayList<>();
+		roadCars.addAll(carDao.queryCarInRoad());
+		return roadCars;
+	}
+
+	@Override
+	public Integer queryCarStatusById(int id) {
+		return carDao.queryCarStatusById(id);
 	}
 	
 }

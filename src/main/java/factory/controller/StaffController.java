@@ -35,19 +35,19 @@ public class StaffController {
 
 	@RequestMapping("/jumpToStaff")
 	public ModelAndView queryAllStaff(ModelAndView mv) {
-		log.info("µ÷ÓÃ²éÑ¯ÈËÔ±µÄ·½·¨");
+		log.info("è°ƒç”¨æŸ¥è¯¢äººå‘˜çš„æ–¹æ³•");
 		List<User> users = userService.queryAllUser();
 		List<Site> sites= siteService.queryAllSite();
-		mv.addObject("userList", users);// ÉèÖÃĞèÒª·µ»ØµÄÖµ
-		mv.addObject("siteList", sites);// ÉèÖÃĞèÒª·µ»ØµÄÖµ
-		mv.setViewName("system/staffManageCardStyle"); // Ìø×ªµ½Ö¸¶¨µÄÒ³Ãæ
-		return mv; // ·µ»Øµ½staffManage.jspÒ³Ãæ
+		mv.addObject("userList", users);// è®¾ç½®éœ€è¦è¿”å›çš„å€¼
+		mv.addObject("siteList", sites);// è®¾ç½®éœ€è¦è¿”å›çš„å€¼
+		mv.setViewName("system/staffManageCardStyle"); // è·³è½¬åˆ°æŒ‡å®šçš„é¡µé¢
+		return mv; // è¿”å›åˆ°staffManage.jspé¡µé¢
 	}
 
 	@RequestMapping("queryAllUser")
 	@ResponseBody
 	public List<User> queryAllUser() {
-		log.info("µ÷ÓÃqueryAllUser");
+		log.info("è°ƒç”¨queryAllUser");
 		List<User> user = userService.queryAllUser();
 		return user;
 	}
@@ -55,7 +55,7 @@ public class StaffController {
 	@RequestMapping("fuzzyQueryUser")
 	@ResponseBody
 	public List<User> fuzzyQueryUser(@RequestParam("queryStr") String queryStr) {
-		log.info("µ÷ÓÃ fuzzyQueryUser:" + queryStr);
+		log.info("è°ƒç”¨ fuzzyQueryUser:" + queryStr);
 		List<User> user = userService.fuzzyQueryUser(queryStr);
 		return user;
 	}
@@ -63,14 +63,14 @@ public class StaffController {
 	@RequestMapping("queryUserByCheckStatus")
 	@ResponseBody
 	public List<User> queryUserByCheckStatus(@RequestParam("checkStatus") int checkStatus) {
-		log.info("µ÷ÓÃ queryUserByCheckStatus:" + checkStatus);
+		log.info("è°ƒç”¨ queryUserByCheckStatus:" + checkStatus);
 		return userService.queryUserByCheckStutas(checkStatus);
 	}
 	
 	@RequestMapping("queryUserByRoleId")
 	@ResponseBody
 	public List<User> queryUserByRoleId(@RequestParam("roleId") int roleId) {
-		log.info("µ÷ÓÃ queryUserByRoleId:" + roleId);
+		log.info("è°ƒç”¨ queryUserByRoleId:" + roleId);
 		List<User> users=userService.queryUserByRoleId(roleId);
 		for(User user:users) {
 			System.out.println(user.getUsername()+" "+user.getRoleId());
@@ -81,7 +81,7 @@ public class StaffController {
 	@RequestMapping("queryUserByUserName")
 	@ResponseBody
 	public User queryUserByUsername(@RequestParam("username") String username, Model model) {
-		log.info("µ÷ÓÃ queryUserByUserName");
+		log.info("è°ƒç”¨ queryUserByUserName");
 		User user = userService.queryUserByUsername(username);
 		return user;
 	}
@@ -89,7 +89,7 @@ public class StaffController {
 	@RequestMapping("queryUserByRealName")
 	@ResponseBody
 	public User queryUserByRealName(@RequestParam("realname") String realname, Model model) {
-		log.info("µ÷ÓÃ queryUserByRealName");
+		log.info("è°ƒç”¨ queryUserByRealName");
 		User user = userService.queryUserByUsername(realname);
 		return user;
 	}
@@ -97,7 +97,7 @@ public class StaffController {
 	@RequestMapping("deleteUserByUserId")
 	@ResponseBody
 	public void deleteUserByUserId(@RequestParam("userId") int userId) {
-		log.info("É¾³ıÓÃ»§id=" + userId + "µÄÓÃ»§¼ÇÂ¼");
+		log.info("åˆ é™¤ç”¨æˆ·id=" + userId + "çš„ç”¨æˆ·è®°å½•");
 		userService.deleteUserByUserId(userId);
 	}
 
@@ -106,9 +106,9 @@ public class StaffController {
 	public Map<String, String> editUserByUserId(@RequestBody Map<String, Integer> userInfo) {
 		Map<String, String> result = new HashMap<String, String>();
 		try {
-			log.info("ĞŞ¸ÄÓÃ»§ĞÅÏ¢" + userInfo.toString());
+			log.info("ä¿®æ”¹ç”¨æˆ·ä¿¡æ¯" + userInfo.toString());
 			userService.editUserByUserId(userInfo);
-			log.info("ĞŞ¸ÄÓÃ»§ĞÅÏ¢³É¹¦");
+			log.info("ä¿®æ”¹ç”¨æˆ·ä¿¡æ¯æˆåŠŸ");
 			result.put("result", "success");
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -120,14 +120,14 @@ public class StaffController {
 	@RequestMapping("checkUserByUserId")
 	@ResponseBody
 	public void checkUserByUserId(@RequestParam("userId") int userId) {
-		log.info("ÉóºËÍ¨¹ıÓÃ»§µÄid=" + userId);
+		log.info("å®¡æ ¸é€šè¿‡ç”¨æˆ·çš„id=" + userId);
 		userService.checkUserByUserId(userId);
 	}
 
 	@RequestMapping("checkNUserByUserId")
 	@ResponseBody
 	public void checkNUserByUserId(@RequestParam("userId") int userId) {
-		log.info("ÉóºË²»Í¨¹ıÓÃ»§µÄid=" + userId);
+		log.info("å®¡æ ¸ä¸é€šè¿‡ç”¨æˆ·çš„id=" + userId);
 		userService.checkNUserByUserId(userId);
 	}
 
@@ -136,7 +136,7 @@ public class StaffController {
 	public Map<String, Object> addUser(@RequestBody Map<String, String> userInfo) {
 		Map<String, Object> result = new HashMap<String, Object>();
 		try {
-			log.info("Ôö¼ÓÓÃ»§ĞÅÏ¢" + userInfo.toString());
+			log.info("å¢åŠ ç”¨æˆ·ä¿¡æ¯" + userInfo.toString());
 			int userId = userService.addUser(userInfo);
 			result.put("id", userId);
 			result.put("result", Result.SUCCESS);

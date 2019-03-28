@@ -289,13 +289,26 @@
 	</select>
 
 	<select id="queryHistoryDataOfSingleValueBySensorId" resultType="java.lang.Float">
-		SELECT value
 		<choose>
 			<when test="headInfo=='A'">
+				SELECT value
 				FROM ammnia_gas_record
 			</when>
 			<when test="headInfo=='S'">
+				SELECT value
 				FROM shydrothion_record
+			</when>
+			<when test="headInfo=='U'">
+				SELECT value
+				FROM ultrasonic_record
+			</when>
+			<when test="headInfo=='W'">
+				SELECT value
+				FROM liquid_record
+			</when>
+			<when test="headInfo=='H'">
+				SELECT temperature_value
+				FROM humiture_record
 			</when>
 		</choose>
 		Where sensor_id=#{sensorId}
@@ -351,11 +364,11 @@
 
 	<insert id="addSensorRecord" parameterType="factory.entity.SensorValue">
 		<choose>
-			<when test="headInfo=='G'">
+<!-- 			<when test="headInfo=='G'">
 				INSERT INTO gps_record
 				(sensor_id,time,longitude,latitude)
 				VALUES(#{sensorId},#{time},#{value1},#{value2})
-			</when>
+			</when> -->
 			<when test="headInfo=='H'">
 				INSERT INTO
 				humiture_record
@@ -374,13 +387,25 @@
 				(sensor_id,time,value)
 				VALUES(#{sensorId},#{time},#{value1})
 			</when>
+			<when test="headInfo=='U'">
+				INSERT INTO
+				ultrasonic_record
+				(sensor_id,time,value)
+				VALUES(#{sensorId},#{time},#{value1})
+			</when>
+			<when test="headInfo=='W'">
+				INSERT INTO
+				liquid_record
+				(sensor_id,time,value)
+				VALUES(#{sensorId},#{time},#{value1})
+			</when>
 		</choose>
 	</insert>
 
 	<update id="updateSensorRealTimeValue" parameterType="factory.entity.SensorValue">
 		update
 		sensor_value_realtime
-		SET value1=#{value1},value2=#{value2}
+		SET time=#{time},value1=#{value1},value2=#{value2}
 		where
 		sensor_id=#{sensorId}
 	</update>

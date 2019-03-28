@@ -3,24 +3,24 @@ package factory.enums;
 public enum CarStatus {
 
 	/**
-	 * ����״̬����Ӧ���ݿ��е�0״̬
+	 * 空闲状态，对应数据库中的0状态
 	 */
 	LEISURE,
 	/**
-	 * ��;�У���Ӧ���ݿ��е�1״̬
+	 * 在途中，对应数据库中的1状态
 	 */
 	ONTHEWAY,
 	/**
-	 * �ѵ����Ӧ���ݿ��е�2״̬
+	 * 已到达，对应数据库中的2状态
 	 */
 	
 	ARRIVAL,
 	/**
-	 * ���ɵ���δ��������Ӧ���ݿ��е�3״̬
+	 * 已派单，未出发，对应数据库中的3状态
 	 */
 	NODEPARTURE,
 	/**
-	 * ���̣���Ӧ���ݿ��е�4״̬
+	 * 返程，对应数据库中的4状态
 	 */	
 	GETBACK
 	

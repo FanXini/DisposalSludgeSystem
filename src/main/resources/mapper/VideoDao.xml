@@ -13,6 +13,7 @@
 		<result property="delStatus" column="del_status"></result>
 		<association property="car" javaType="factory.entity.Car">
 			<id property="id" column="id" />
+			<result property="status" column="status"/>
 			<result property="license" column="license" />
 		</association>
 		<association property="site" javaType="factory.entity.Site">
@@ -59,11 +60,11 @@
 		where del_status=0 and id=#{id}
 	</select>
 	<select id="queryAllVideo" resultMap="VideoDaoMap">
-		select *
-		from video,car
-		where video.car_id = car.id
-		and video.site_id=-1
-		and video.del_status=0 
+		select video.*,car.license,car.status,site.site_name
+		from video LEFT JOIN car on video.car_id=car.id LEFT JOIN site ON site.id=car.site_id
+		where video.site_id=-1
+		and video.del_status=0		
+		order by video.car_Id
 	</select>
 	
 	<select id="queryCarWhichNotVideo" resultType="factory.entity.Car">
@@ -101,9 +102,9 @@
 		and video.del_status=0 
 	</select>
 	
-	<select id="queryVideoByCarId" resultType="factory.entity.Video">
-		select *
-		from video
+	<select id="queryVideoByCarId" resultMap="VideoDaoMap">
+		select video.*,car.license,car.status,site.site_name
+		from video LEFT JOIN car on video.car_id=car.id LEFT JOIN site ON site.id=car.site_id
 		where video.car_id = #{carId} AND video.del_status=0 
 	</select>
 	

@@ -13,6 +13,8 @@ public interface RecordDao {
 	
 	public List<Record> queryRecordBySiteId(@Param("siteId")int siteId);
 	
+	public List<Record> queryRecordByRecordId(@Param("recordId")int recordId);
+	
 	public List<Record> queryRecordByDriverId(@Param("driverId")int driverId);
 	
 	public List<Record> queryRecordByDate(@Param("startDate") String startDate,@Param("endDate") String endDate);

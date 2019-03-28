@@ -12,10 +12,10 @@ public interface SludgeService {
 
 	public List<Sludge> queryAllSludgeByInOutFlagWithMinorWareHouseId(int inOutflag, int minorWareHouseId);
 
-	// 添加从智慧泥仓运出的污泥记录
+	// 娣诲姞浠庢櫤鎱ф偿浠撹繍鍑虹殑姹℃偿璁板綍
 	public void addOutSludge(Sludge sludge);
 
-	// 为运输车司机分配的时候添加一条sluge
+	// 涓鸿繍杈撹溅鍙告満鍒嗛厤鐨勬椂鍊欐坊鍔犱竴鏉luge
 	public void addSludge(Sludge sludge);
 
 	public void deleteSludge(int sludgeId);

@@ -1,8 +1,10 @@
 package factory.util;
 import java.util.List;
+import java.util.Set;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.data.redis.core.RedisTemplate;
 
 import factory.entity.Car;
 import factory.entity.Record;
@@ -27,12 +29,15 @@ public class AssignCarForReocrdThread implements Runnable{
 	
 	private Site site;
 	
+	private  RedisTemplate<String, Object> redisTemplate; 
+	
 	private static Log log=LogFactory.getLog(AssignCarForReocrdThread.class);
 	
 	public  AssignCarForReocrdThread() {
-		// Ä¬ÈÏ¹¹ÔìÆ÷
+		// é»˜è®¤æ„é€ å™¨
 	}
-	public AssignCarForReocrdThread(RecordService recordService,CarService carService,SludgeService sludgeService,int recordId,Site site) {
+	public AssignCarForReocrdThread(RedisTemplate<String, Object> redisTemplate,RecordService recordService,CarService carService,SludgeService sludgeService,int recordId,Site site) {
+		this.redisTemplate=redisTemplate;
 		this.recordService=recordService;
 		this.carService=carService;
 		this.sludgeService=sludgeService;
@@ -42,27 +47,28 @@ public class AssignCarForReocrdThread implements Runnable{
 
 	@Override
 	public void run() {
-		//ÏÈ·ÖÅä´¦Àí³µ
+		//å…ˆåˆ†é…å¤„ç†è½¦
 		assinTreatmentCar();
-		//ÔÙ·ÖÅäÔËÊä³µ
+		//å†åˆ†é…è¿è¾“è½¦
 		assignCarrier();
 		
 	}
 	
-	public  void assinTreatmentCar() { //Èç¹ûÁ½¸öÊÂ¼şÍ¬Ê±·ÖÅä¸øÕâ¸öË¾»úÔõÃ´°ì£¿
+	public  void assinTreatmentCar() { //å¦‚æœä¸¤ä¸ªäº‹ä»¶åŒæ—¶åˆ†é…ç»™è¿™ä¸ªå¸æœºæ€ä¹ˆåŠï¼Ÿ
 		while(true) {
 			List<Car> unAssinTreatmentCar=carService.queryTreatmentCarUnassign();
-			if(unAssinTreatmentCar.size()!=0) { //Èç¹û´æÔÚ¿ÕÏĞµÄ´¦Àí³µ
-				//Ñ¡Ôñ×î½üµÄ´¦Àí³µ
+			if(unAssinTreatmentCar.size()!=0) { //å¦‚æœå­˜åœ¨ç©ºé—²çš„å¤„ç†è½¦
+				//é€‰æ‹©æœ€è¿‘çš„å¤„ç†è½¦
 				Car disPacherTreatmentCar=selectMinDistanceCar(unAssinTreatmentCar);
-				//½«·ÖÅä³µid´æµ½record¼ÇÂ¼ÖĞ
+				//å°†åˆ†é…è½¦idå­˜åˆ°recordè®°å½•ä¸­
 				recordService.updateCarId(recordId, disPacherTreatmentCar.getId());
-				//ĞŞ¸Ä³µµÄ×´Ì¬ÎªÒÑ·ÖÅä»¹Î´³ö·¢,²¢½«carµÄsiteIdÉèÖÃÎª0
+				//ä¿®æ”¹è½¦çš„çŠ¶æ€ä¸ºå·²åˆ†é…è¿˜æœªå‡ºå‘,å¹¶å°†carçš„siteIdè®¾ç½®ä¸º0
 				carService.editWorkerCarStatusAndSiteId(disPacherTreatmentCar.getId(), CarStatus.NODEPARTURE.ordinal(), site.getId());
-				log.info("Îª"+recordId+"£ºÇëÇó ·ÖÅä´¦Àí³µ:"+disPacherTreatmentCar.getLicense());
+				deleteByPrex("car*");
+				log.info("ä¸º"+recordId+"ï¼šè¯·æ±‚ åˆ†é…å¤„ç†è½¦:"+disPacherTreatmentCar.getLicense());
 				break;
 			}
-			log.info("ÔİÎª¿ÕÏĞ´¦Àí³µ,3ÃëºóÖØĞÂ·ÖÅä");
+			log.info("æš‚æ— ç©ºé—²å¤„ç†è½¦,3ç§’åé‡æ–°åˆ†é…");
 			try {
 				Thread.sleep(3000);
 			} catch (InterruptedException e) {
@@ -75,20 +81,21 @@ public class AssignCarForReocrdThread implements Runnable{
 	public void assignCarrier(){
 		while(true) {
 			List<Car> unAssignCarrier=carService.queryCarrierUnassign();
-			if(unAssignCarrier.size()!=0) { //Èç¹û´æÔÚ¿ÕÏĞµÄÔËÊä³µ
+			if(unAssignCarrier.size()!=0) { //å¦‚æœå­˜åœ¨ç©ºé—²çš„è¿è¾“è½¦
 				Car disPacherCarrier=selectMinDistanceCar(unAssignCarrier);
-				log.info("Îª"+recordId+"£ºÇëÇó ·ÖÅäÔËÊä³µ:"+disPacherCarrier.getLicense());
-				//ĞŞ¸ÄÔËÊä³µµÄ×´Ì¬
+				log.info("ä¸º"+recordId+"ï¼šè¯·æ±‚ åˆ†é…è¿è¾“è½¦:"+disPacherCarrier.getLicense());
+				//ä¿®æ”¹è¿è¾“è½¦çš„çŠ¶æ€
 				carService.editWorkerCarStatusAndSiteId(disPacherCarrier.getId(), CarStatus.NODEPARTURE.ordinal(), site.getId());
+				deleteByPrex("car*");
 				Sludge sludge=new Sludge();
 				sludge.setRecordId(recordId);
-				//ÉèÖÃsludgeµÄ×´Ì¬ÎªĞéÄâ×´Ì¬£¬»¹Î´²ú³ö
+				//è®¾ç½®sludgeçš„çŠ¶æ€ä¸ºè™šæ‹ŸçŠ¶æ€ï¼Œè¿˜æœªäº§å‡º
 				sludge.setStatus(SludgeStatus.VIRTUAL.ordinal());
 				sludge.setTranscarId(disPacherCarrier.getId());
 				sludgeService.addSludge(sludge);
 				break;
 			}
-			log.info("ÔİÎª¿ÕÏĞÔËÊä³µ,3ÃëºóÖØĞÂ·ÖÅä");
+			log.info("æš‚ä¸ºç©ºé—²è¿è¾“è½¦,3ç§’åé‡æ–°åˆ†é…");
 			try {
 				Thread.sleep(3000);
 			} catch (InterruptedException e) {
@@ -101,7 +108,7 @@ public class AssignCarForReocrdThread implements Runnable{
 	/**
 	 * 
 	 * @param cars
-	 * ¸ù¾İ¾àÀëÑ¡Ôñ×î½üµÄ³µÁ¾
+	 * æ ¹æ®è·ç¦»é€‰æ‹©æœ€è¿‘çš„è½¦è¾†
 	 * @return
 	 */
 	public Car selectMinDistanceCar(List<Car> cars) {
@@ -117,5 +124,14 @@ public class AssignCarForReocrdThread implements Runnable{
 		}
 		return car;
 	}
+	
+	public void deleteByPrex(String prex) {
+        Set<String> keys = redisTemplate.keys(prex);
+        for(String key:keys) {
+        	System.out.println(key);
+        	redisTemplate.delete(key);
+        }
+    }
+
 
 }

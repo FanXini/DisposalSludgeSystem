@@ -1,7 +1,12 @@
 package factory.entity;
 
+import java.io.Serializable;
 
-public class User {
+public class User implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -4502035549211885144L;
 	private int id;
 	private int roleId;
 	private int siteId;
@@ -16,6 +21,14 @@ public class User {
 	private Role role;
 	private Site site;
 	private Car car;
+	public User() {
+		
+	}
+	public User(int id,String username,int roleId) {
+		this.id=id;
+		this.username=username;
+		this.roleId=roleId;
+	}
 	public Car getCar() {
 		return car;
 	}

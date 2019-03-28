@@ -8,7 +8,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
+import org.springframework.transaction.annotation.Transactional;
 
 import factory.dao.CarDao;
 import factory.dao.SensorDao;
@@ -38,7 +38,7 @@ public class SensorServiceImpl implements SensorService {
 	private Log log = LogFactory.getLog(SensorServiceImpl.class);
 
 	/**
-	 * ²éÑ¯ËùÓĞµÄ´«¸ĞÆ÷ÀàĞÍ
+	 * æŸ¥è¯¢æ‰€æœ‰çš„ä¼ æ„Ÿå™¨ç±»å‹
 	 */
 	@Override
 	public List<SensorType> queryAllSensorType() {
@@ -49,7 +49,7 @@ public class SensorServiceImpl implements SensorService {
 	}
 
 	/**
-	 * ²éÑ¯·ÅÖÃÔÚ³µÉÏµÄ´«¸ĞÆ÷
+	 * æŸ¥è¯¢æ”¾ç½®åœ¨è½¦ä¸Šçš„ä¼ æ„Ÿå™¨
 	 */
 	@Override
 	public List<Sensor> queryAllSensor() {
@@ -63,24 +63,26 @@ public class SensorServiceImpl implements SensorService {
 	}
 
 	/**
-	 * Ìí¼Ó´«¸ĞÆ÷
+	 * æ·»åŠ ä¼ æ„Ÿå™¨
 	 */
 	@Override
+	@Transactional
 	public int addSensor(Map<String, String> sensorInfo) {
 		// TODO Auto-generated method stub
-		// placeÊÇ³µÅÆºÅ»òÕß¹¤³§Ãû
+		// placeæ˜¯è½¦ç‰Œå·æˆ–è€…å·¥å‚å
 		String sensorSerialNumber = sensorInfo.get("sensorSerialNumber");
 		String sensorType = sensorInfo.get("sensorType");
+		String GPSID="";
 		String place = sensorInfo.get("place");
 		String placeSelect = sensorInfo.get("placeSelect");
 		if (sensorSerialNumber == null || sensorSerialNumber.equals("") || sensorType == null || sensorType.equals("")
 				|| place == null || place.equals("") || placeSelect == null || placeSelect.equals("")) {
-			throw new DataNoneException("form data is empty£¡");
+			throw new DataNoneException("form data is emptyï¼");
 		}
 		Sensor sensor = new Sensor();
 		sensor.setSerialNumber(sensorSerialNumber);
 		sensor.setTypeId(querySensorTypeByType(sensorType).getId());
-		// Èç¹ûÊÇ³µÉÏµÄ´«¸ĞÆ÷
+		// å¦‚æœæ˜¯è½¦ä¸Šçš„ä¼ æ„Ÿå™¨
 		if (placeSelect.equals("slugeCar")) {
 			Car car = carDao.queryCarByLicense(place);
 			sensor.setCarId(car.getId());
@@ -88,8 +90,12 @@ public class SensorServiceImpl implements SensorService {
 			sensorDao.addSensor(sensor);
 			String newSensorIdSet = Util.addsensorIdtoSensorSet(car.getSensorIdSet(), sensor.getId());
 			carDao.updateSenserIdSet(car.getId(), newSensorIdSet);
+			if("GPSä¼ æ„Ÿå™¨".equals(sensorType)) {
+				GPSID=sensorInfo.get("GPSID");
+				carDao.setCarGPSDeviceId(car.getId(), GPSID);
+			}
 		}
-		// Èç¹ûÊÇ¹¤³§ÉÏµÄ´«¸ĞÆ÷
+		// å¦‚æœæ˜¯å·¥å‚ä¸Šçš„ä¼ æ„Ÿå™¨
 		else {
 			log.info(place);
 			Site site = siteDao.querySiteBySiteName(place);
@@ -99,14 +105,16 @@ public class SensorServiceImpl implements SensorService {
 			String newSensorIdSet = Util.addsensorIdtoSensorSet(site.getSensorIdSet(), sensor.getId());
 			siteDao.updateSetIdSet(site.getId(), newSensorIdSet);
 		}
-		// »ñÈ¡µ½sensorµÄid
-		sensorDao.addSensorValue(sensor.getId());
+		// è·å–åˆ°sensorçš„id
+		if(!("GPSä¼ æ„Ÿå™¨".equals(sensorType))) {
+			sensorDao.addSensorValue(sensor.getId());
+		}
 		return sensor.getId();
 
 	}
 
 	/**
-	 * Í¨¹ı´«¸ĞÆ÷ÀàĞÍ²éÑ¯´«¸ĞÆ÷ĞÅÏ¢
+	 * é€šè¿‡ä¼ æ„Ÿå™¨ç±»å‹æŸ¥è¯¢ä¼ æ„Ÿå™¨ä¿¡æ¯
 	 */
 	@Override
 	public SensorType querySensorTypeByType(String type) {
@@ -119,7 +127,7 @@ public class SensorServiceImpl implements SensorService {
 		int sensorId = deleteSensorInfo.get("sensorId");
 		Sensor sensor = sensorDao.querySensorById(sensorId);
 		sensorDao.delectSensor(sensorId);
-		if (sensor.getCarId() != -1 && sensor.getSiteId() == -1) { // ÔÚ³µÉÏ
+		if (sensor.getCarId() != -1 && sensor.getSiteId() == -1) { // åœ¨è½¦ä¸Š
 			Car car = carDao.queryCarById(sensor.getCarId());
 			String newSensorIdSet = Util.deleteSensorIdOfSensorIdSet(car.getSensorIdSet(), sensor.getId());
 			carDao.updateSenserIdSet(car.getId(), newSensorIdSet);
@@ -128,11 +136,11 @@ public class SensorServiceImpl implements SensorService {
 			String newSensorSetId = Util.deleteSensorIdOfSensorIdSet(site.getSensorIdSet(), sensor.getId());
 			siteDao.updateSetIdSet(site.getId(), newSensorSetId);
 		}
-		// É¾³ı
+		// åˆ é™¤
 	}
 
 	/**
-	 * °´ÕÕÌõ¼ş²éÑ¯´«¸ĞÆ÷
+	 * æŒ‰ç…§æ¡ä»¶æŸ¥è¯¢ä¼ æ„Ÿå™¨
 	 */
 	@Override
 	public List<Sensor> conditionQuery(Map<String, String> condition) {
@@ -144,10 +152,10 @@ public class SensorServiceImpl implements SensorService {
 		String place = condition.get("place");
 		int status = Integer.parseInt(condition.get("status"));
 		log.info(serialNumber + " " + typeId + " " + place + " " + status);
-		if (!serialNumber.equals("none")) { // ÓÅÏÈ²éÑ¯±àºÅ
+		if (!serialNumber.equals("none")) { // ä¼˜å…ˆæŸ¥è¯¢ç¼–å·
 			Sensor querySensor = sensorDao.querySensorBySerialNumber(serialNumber);
 			if (querySensor != null) {
-				if (querySensor.getCarId() == -1) { // ËµÃ÷ÔÚSiteÉÏ
+				if (querySensor.getCarId() == -1) { // è¯´æ˜åœ¨Siteä¸Š
 					querySensor = sensorDao.querySensorOfSiteBySerialNumber(serialNumber);
 				} else if (querySensor.getSiteId() == -1) {
 					querySensor = sensorDao.querySensorOfCarBySerialNumber(serialNumber);
@@ -158,7 +166,7 @@ public class SensorServiceImpl implements SensorService {
 		} else {
 			sensor.setTypeId(typeId);
 			sensor.setStatus(status);
-			if (!place.equals("none")) { // ËµÃ÷Ñ¡ÁËÎ»ÖÃ
+			if (!place.equals("none")) { // è¯´æ˜é€‰äº†ä½ç½®
 				if (placeSelect.equals("site")) {
 					int siteId = siteDao.querySiteBySiteName(place).getId();
 					sensor.setSiteId(siteId);
@@ -170,10 +178,10 @@ public class SensorServiceImpl implements SensorService {
 				}
 				sensors.addAll(sensorDao.querySensorOfCarOrSite(sensor));
 
-			} else if (!placeSelect.equals("none")) {// ËµÃ÷Ö»Ñ¡ÁË¹¤³§/ÎÛÄà³Ø£¬Ã»ÓĞ¾ßÌåµ½Ï¸½Ú
+			} else if (!placeSelect.equals("none")) {// è¯´æ˜åªé€‰äº†å·¥å‚/æ±¡æ³¥æ± ï¼Œæ²¡æœ‰å…·ä½“åˆ°ç»†èŠ‚
 				sensor.setPlaceSelect(placeSelect);
 				sensors = sensorDao.querySensorByCarsOrSites(sensor);
-			} else { // ËµÃ÷Ö»Ñ¡ÁË ÀàĞÍºÍ×´Ì¬
+			} else { // è¯´æ˜åªé€‰äº† ç±»å‹å’ŒçŠ¶æ€
 				List<Sensor> carSensors = sensorDao.querySensorOfCarByTypeOrStatus(sensor);
 				List<Sensor> siteSensors = sensorDao.querySensorOfSiteByTypeOrStatus(sensor);
 				sensors.addAll(carSensors);
@@ -184,7 +192,7 @@ public class SensorServiceImpl implements SensorService {
 	}
 
 	/**
-	 * °´ÕÕidSet²éÑ¯´«¸ĞÆ÷
+	 * æŒ‰ç…§idSetæŸ¥è¯¢ä¼ æ„Ÿå™¨
 	 */
 	@Override
 	public List<Sensor> querySensorTypeByIdSet(String idSet) {
@@ -209,8 +217,8 @@ public class SensorServiceImpl implements SensorService {
 	@Override
 	public List<Sensor> querySensorDetail(int id, int locationId) {
 		List<Sensor> sensors = new ArrayList<Sensor>();
-		if (locationId == 0) { //Èç¹ûÊÇ0,Ôò²éÑ¯µÄÊÇ³µÉÏµÄ´«¸ĞÆ÷
-			// ²éÑ¯µ½´«¸ĞÆ÷¼¯ºÏ
+		if (locationId == 0) { //å¦‚æœæ˜¯0,åˆ™æŸ¥è¯¢çš„æ˜¯è½¦ä¸Šçš„ä¼ æ„Ÿå™¨
+			// æŸ¥è¯¢åˆ°ä¼ æ„Ÿå™¨é›†åˆ
 			String sensorIdSet = carDao.querySensorIdSetByCarId(id);
 			if (sensorIdSet == null||sensorIdSet=="") {
 				return sensors;
@@ -219,7 +227,7 @@ public class SensorServiceImpl implements SensorService {
 			log.info(sensorIdSet);
 			sensors.addAll(sensorDao.querySensorBySensorIdSet(sensorIdSet));
 
-		} else if (locationId == 1) { //Èç¹ûÊÇ1Ôò²éÑ¯µÄÊÇ¹¤³§ÖĞµÄ´«¸ĞÆ÷
+		} else if (locationId == 1) { //å¦‚æœæ˜¯1åˆ™æŸ¥è¯¢çš„æ˜¯å·¥å‚ä¸­çš„ä¼ æ„Ÿå™¨
 			String sensorIdSet = siteDao.querySensorIdSetBySiteId(id);
 			log.info(sensorIdSet);
 			if (sensorIdSet == null||sensorIdSet=="") {
@@ -236,7 +244,7 @@ public class SensorServiceImpl implements SensorService {
 		int sensorId=(int) map.get("sensorId");
 		List<Float> historyDatas=new ArrayList<Float>();
 		String sensorType=(String) map.get("sensorType");
-		if(sensorType.equals("³¬Éù²¨´«¸ĞÆ÷")){
+		if(sensorType.equals("è¶…å£°æ³¢ä¼ æ„Ÿå™¨")){
 			historyDatas.addAll(sensorDao.queryHistoryDataOfUltrasonicBySensorId(sensorId));
 		}
 		return historyDatas;		
@@ -248,10 +256,17 @@ public class SensorServiceImpl implements SensorService {
 		List<Float> historyDatas=new ArrayList<Float>();
 		char headInfo = 0;
 		String sensorType=(String) map.get("sensorType");
-		if(sensorType.equals("°±Æø´«¸ĞÆ÷")){
+		if(sensorType.equals("æ°¨æ°”ä¼ æ„Ÿå™¨")){
 			headInfo='A';
-		}else if(sensorType.equals("Áò»¯Çâ´«¸ĞÆ÷")) {
+		}else if(sensorType.equals("ç¡«åŒ–æ°¢ä¼ æ„Ÿå™¨")) {
 			headInfo='S';
+		}else if(sensorType.equals("è¶…å£°æ³¢ä¼ æ„Ÿå™¨")) {
+			headInfo='U';
+		}else if(sensorType.equals("æ¶²ä½ä¼ æ„Ÿå™¨")) {
+			headInfo='W';
+		}
+		else if(sensorType.equals("æ¸©æ¹¿åº¦ä¼ æ„Ÿå™¨")) {
+			headInfo='H';
 		}
 		historyDatas.addAll(sensorDao.queryHistoryDataOfSingleValueBySensorId(sensorId, headInfo));
 		return historyDatas;		

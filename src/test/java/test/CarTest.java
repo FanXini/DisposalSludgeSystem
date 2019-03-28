@@ -19,7 +19,7 @@ public class CarTest extends BaseTest{
 	
 	@Test	
 	public void diaodu() {
-		System.out.println(carDao.queryCarIdBySensorId(23).getId());
+		System.out.println(carDao.queryCarDeviceIdInCloud().get(0).getCloudDeviceId());
 	}
 	/*@Test
 	public void test(){
@@ -42,12 +42,12 @@ public class CarTest extends BaseTest{
 	
 	/*@Test
 	public  void fuzzyQueryCar(){
-		List<Car> carWithDriver=carDao.fuzzyQueryCarWithDriver("ÏæA");
+		List<Car> carWithDriver=carDao.fuzzyQueryCarWithDriver("ï¿½ï¿½A");
 		for(Car car:carWithDriver){
 			System.out.println(car.getLicense()+"  "+car.getDriver().getRealname());
 		}
 		
-		List<Car> carWithNoDriver=carDao.fuzzyQueryCarWithNoDriver("ÏæA");
+		List<Car> carWithNoDriver=carDao.fuzzyQueryCarWithNoDriver("ï¿½ï¿½A");
 		for(Car car:carWithNoDriver){
 			System.out.println(car.getLicense());
 		}
@@ -68,7 +68,7 @@ public class CarTest extends BaseTest{
 	
 	/*@Test
 	public void queryCarByLicense(){
-		Car car=carDao.queryCarByLicense("ÏæA56723");
+		Car car=carDao.queryCarByLicense("ï¿½ï¿½A56723");
 		System.out.println(carList.size());
 		
 	}

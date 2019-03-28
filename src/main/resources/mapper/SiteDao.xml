@@ -188,4 +188,11 @@
         </where>
         ORDER BY site.status DESC;
 	</select>
+	
+	<select id="querySiteStatus" resultType="factory.entity.Site">
+		SELECT id,status
+		FROM site
+		WHERE del_status=0
+		ORDER BY status DESC;
+	</select>
 </mapper>

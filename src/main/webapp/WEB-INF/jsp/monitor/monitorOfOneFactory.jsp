@@ -210,7 +210,7 @@
 		    });
 		}		
 		// accessToken会自动失效，需要通过后端请求刷新。详见 https://open.ys7.com/doc/zh/book/index/user.html
-		const ACCESS_TOKEN = "at.7a9efc6w4apudpcxcz0dfwo9b1cwqkyb-1vwccihfsn-1ema48b-ejz5ohwfa";		
+		const ACCESS_TOKEN = "at.7vyqnxx4dc9xyra93bqxm90pbb82autv-5mljjkln0k-0hugok7-xlsvhlxd9";		
 		/* const DEVICE_SERIAL = "C29134495"; */
 		const CHANNEL_NO = 1;
 		const START_PTZ_URL = "https://open.ys7.com/api/lapp/device/ptz/start";

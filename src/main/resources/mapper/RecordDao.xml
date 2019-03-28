@@ -65,6 +65,22 @@
 		record.site_id=#{siteId}
 		ORDER BY record.allocation_time DESC
 	</select>
+	
+	<select id="queryRecordByRecordId" resultMap="RecordMap">
+		SELECT
+		record.*,sludge.id,sludge.weight,car.id,car.driver_id,car.license,car.brand,car.status
+		carStatus,user.id,user.realname,user.telephone,site.id,site.site_name,site.serial_number,site.address,site.telephone
+		telephoneOfSite,site.telephone telephoneOfSite
+		FROM record LEFT JOIN
+		site ON record.site_id=site.id LEFT JOIN record_treatmentcar ON 
+		record.id=record_treatmentcar.record_id  LEFT JOIN car ON
+		record_treatmentcar.treatmentcar_id=car.id
+		LEFT JOIN `user` ON car.driver_id=`user`.id LEFT JOIN sludge ON
+		sludge.record_id=record.id 
+		WHERE record.del_status=0 AND
+		record.id=#{recordId}
+		ORDER BY record.allocation_time DESC
+	</select>
 
 	<select id="queryRecordByDriverId" resultMap="RecordMap">
 		SELECT

@@ -14,8 +14,8 @@
 		<result property="sensorIdSet" column="sensor_id_set" />
 		<result property="status" column="status" />
 		<result property="siteId" column="site_id" />
-		<result property="cloudDeviceId" column="cloud_device_id"/>
-		<result property="cloudDeviceSerial" column="cloud_device_serial"/>
+		<result property="cloudDeviceId" column="cloud_device_id" />
+		<result property="cloudDeviceSerial" column="cloud_device_serial" />
 		<!-- 车辆类型选择-刘见宇 -->
 		<result property="carType" column="car_type" />
 		<association property="driver" javaType="factory.entity.User">
@@ -36,8 +36,8 @@
 		<result property="status" column="status" />
 		<result property="siteId" column="site_id" />
 		<result property="carType" column="car_type" />
-		<result property="cloudDeviceId" column="cloud_device_id"/>
-		<result property="cloudDeviceSerial" column="cloud_device_serial"/>
+		<result property="cloudDeviceId" column="cloud_device_id" />
+		<result property="cloudDeviceSerial" column="cloud_device_serial" />
 		<association property="driver" javaType="factory.entity.User">
 			<id property="id" column="uid" />
 			<result property="realname" column="realname" />
@@ -49,7 +49,7 @@
 			<result property="latitude" column="slatitude" />
 			<result property="longitude" column="slongitude" />
 			<result property="telephone" column="stelephone" />
-		    <result property="status" column="sstatus" />
+			<result property="status" column="sstatus" />
 		</association>
 	</resultMap>
 
@@ -106,12 +106,11 @@
 		record.id=#{recordId}
 	</select>
 
-	<update id="deleteCar">
-		UPDATE car
-		SET del_status=1
+	<delete id="deleteCar">
+		DELETE FROM car
 		WHERE del_status=0 AND
 		id=#{carId}
-	</update>
+	</delete>
 
 	<insert id="addCar" parameterType="factory.entity.Car"
 		useGeneratedKeys="true" keyProperty="id">
@@ -120,7 +119,7 @@
 		(license,brand,driver_id,car_type)
 		<choose>
 			<when test="driverId==0">
-				VALUES(#{license},#{brand},NULL,car_type)
+				VALUES(#{license},#{brand},NULL,#{carType})
 			</when>
 			<otherwise>
 				VALUES(#{license},#{brand},#{driverId},#{carType})
@@ -135,6 +134,9 @@
 		<choose>
 			<when test="driverId==0">
 				license=#{license},brand=#{brand},driver_id=null
+			</when>
+			<when test="driverId==-1">
+				license=#{license},brand=#{brand}
 			</when>
 			<otherwise>
 				license=#{license},brand=#{brand},driver_id=#{driverId}
@@ -234,13 +236,16 @@
 
 	<select id="queryMapCar" resultMap="carDriverSiteMap">
 		SELECT
-		car.*,user.id uid,site.id sid,site.site_name,site.latitude slatitude,site.longitude
-		slongitude,site.status sstatus,site.telephone stelephone,user.realname,user.telephone
+		car.*,user.id
+		uid,site.id sid,site.site_name,site.latitude slatitude,site.longitude
+		slongitude,site.status sstatus,site.telephone
+		stelephone,user.realname,user.telephone
 		FROM car LEFT JOIN user ON
 		car.driver_id=user.id
 		LEFT JOIN site ON car.site_id=site.id
 		WHERE
-		car.del_status=0 AND car.car_type = #{carType} AND car.driver_id IS NOT NULL
+		car.del_status=0 AND car.car_type = #{carType} AND car.driver_id IS
+		NOT NULL
 		AND (car.license like CONCAT('%',#{queryStr},'%') or
 		site.site_name like CONCAT('%',#{queryStr},'%')
 		or user.realname like
@@ -249,12 +254,17 @@
 	</select>
 
 	<select id="queryWorkerMapCar" resultMap="carDriverSiteMap">
-		SELECT car.*,car.*,user.id uid,site.id sid,site.site_name,site.latitude slatitude,site.longitude
-		slongitude,site.status sstatus,site.telephone stelephone,user.realname,user.telephone
-		FROM car LEFT JOIN user ON car.driver_id=user.id
+		SELECT
+		car.*,car.*,user.id uid,site.id sid,site.site_name,site.latitude
+		slatitude,site.longitude
+		slongitude,site.status sstatus,site.telephone
+		stelephone,user.realname,user.telephone
+		FROM car LEFT JOIN user ON
+		car.driver_id=user.id
 		LEFT JOIN site ON
 		car.site_id=site.id
-		WHERE car.del_status=0 AND car.driver_id=#{userId}
+		WHERE
+		car.del_status=0 AND car.driver_id=#{userId}
 	</select>
 
 	<update id="editWorkerCarStatus">
@@ -281,47 +291,90 @@
 	<select id="queryTreatmentCarUnassign" resultMap="carMap">
 		SELECT
 		car.*,user.id,user.realname,user.telephone
-		FROM car LEFT JOIN user
+		FROM car LEFT JOIN
+		user
 		ON car.driver_id=user.id
-		WHERE car.del_status=0 AND (car.status=0 OR car.status=4)  <!-- 返程和空闲状态的运输车都能被调度 -->
+		WHERE car.del_status=0 AND (car.status=0
+		OR car.status=4)  <!-- 返程和空闲状态的运输车都能被调度 -->
 		AND car.car_type=0 AND car.driver_id IS NOT NULL
 	</select>
-	
+
 	<select id="queryCarrierUnassign" resultMap="carMap">
 		SELECT
 		car.*,user.id,user.realname,user.telephone
 		FROM car LEFT JOIN user
-		ON car.driver_id=user.id
-		WHERE car.del_status=0 AND car.status=0 
+		ON
+		car.driver_id=user.id
+		WHERE car.del_status=0 AND car.status=0
 		AND car.car_type=1 AND car.driver_id IS NOT NULL
 	</select>
-	
+
 	<select id="queryMapCarBySiteIdAndCarTypeAndStatus" resultMap="carDriverSiteMap">
 		SELECT
-		car.*,user.id uid,site.id sid,site.site_name,site.latitude slatitude,site.longitude
-		slongitude,site.status sstatus,site.telephone stelephone,user.realname,user.telephone
+		car.*,user.id uid,site.id sid,site.site_name,site.latitude
+		slatitude,site.longitude
+		slongitude,site.status sstatus,site.telephone
+		stelephone,user.realname,user.telephone
 		FROM car LEFT JOIN user ON
 		car.driver_id=user.id
 		LEFT JOIN site ON car.site_id=site.id
 		<where>
-            car.del_status=0 AND car.driver_id IS NOT NULL
-            <if test="siteId != -1">
-                AND car.site_id=#{siteId}
-            </if>
-            <if test="carType != -1">
-                AND car.car_type=#{carType}
-            </if>
-            <if test="status != -1">
-                AND car.status=#{status}
-            </if>
-        </where>
-        ORDER BY car.status
+			car.del_status=0 AND car.driver_id IS NOT NULL
+			<if test="siteId != -1">
+				AND car.site_id=#{siteId}
+			</if>
+			<if test="carType != -1">
+				AND car.car_type=#{carType}
+			</if>
+			<if test="status != -1">
+				AND car.status=#{status}
+			</if>
+		</where>
+		ORDER BY car.status
 	</select>
-	
+
+	<select id="queryCarInRoad" resultMap="carDriverSiteMap">
+		SELECT
+		car.*,user.id uid,site.id sid,site.site_name,site.latitude
+		slatitude,site.longitude
+		slongitude,site.status sstatus,site.telephone
+		stelephone,user.realname,user.telephone
+		FROM car LEFT JOIN user ON
+		car.driver_id=user.id
+		LEFT JOIN site ON car.site_id=site.id
+		WHERE car.status=1 OR car.status=4
+		ORDER BY car.status
+	</select>
+
 	<select id="queryCarIdBySensorId">
 		select id
 		from car
-		where #{sensorId} IN CONCAT('(',sensor_id_set,')')
+		where #{sensorId} IN
+		CONCAT('(',sensor_id_set,')')
 	</select>
 	
+	<select id="queryCarDeviceIdInCloud" resultType="factory.entity.Car">
+		SELECT id,cloud_device_id
+		FROM car
+		WHERE del_status=0 AND cloud_device_id is not null AND cloud_device_id!=''
+	</select>
+	
+	<update id="updateCarLocation">
+		UPDATE car
+		SET longitude=#{longitude},latitude=#{latitude}
+		WHERE id=#{id}
+	</update>
+	
+	<update id="setCarGPSDeviceId">
+		UPDATE car
+		SET cloud_device_id=#{cloudDeviceId}
+		WHERE id=#{id}
+	</update>
+	
+	<select id="queryCarStatusById" resultType="java.lang.Integer">
+		SELECT status
+		FROM car
+		WHERE id=#{id}
+	</select>
+
 </mapper>

@@ -1,5 +1,12 @@
 package factory.entity;
-public class Video {
+
+import java.io.Serializable;
+
+public class Video implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -3528609198445731027L;
 	private int id;
 	private int carId;
 	private int siteId;

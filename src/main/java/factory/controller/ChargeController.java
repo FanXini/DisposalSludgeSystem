@@ -25,31 +25,31 @@ public class ChargeController {
 	@Autowired
 	private ChargeService chargeService;
 
-	SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");//ÉèÖÃÈÕÆÚ¸ñÊ½
+	SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");//è®¾ç½®æ—¥æœŸæ ¼å¼
 
 	private static Log log=LogFactory.getLog(ChargeController.class);
 	/**
-	 * @description:´ÓsludgeºÍrecord±íÖĞ²éÑ¯ËùÓĞ¼ÇÂ¼
+	 * @description:ä»sludgeå’Œrecordè¡¨ä¸­æŸ¥è¯¢æ‰€æœ‰è®°å½•
 	 */
 
 	@RequestMapping("/jumpToCharge")
 	public ModelAndView querySite(ModelAndView mv){
-		log.info("µ÷ÓÃ²éÑ¯¹¤³§µÄ·½·¨");
+		log.info("è°ƒç”¨æŸ¥è¯¢å·¥å‚çš„æ–¹æ³•");
 		List<Site> sites=siteService.queryAllSites();
-		mv.addObject("siteList",sites);//ÉèÖÃĞèÒª·µ»ØµÄÖµ
-		mv.setViewName("charge/charge"); //Ìø×ªµ½Ö¸¶¨µÄÒ³Ãæ
+		mv.addObject("siteList",sites);//è®¾ç½®éœ€è¦è¿”å›çš„å€¼
+		mv.setViewName("charge/charge"); //è·³è½¬åˆ°æŒ‡å®šçš„é¡µé¢
 //		for(int i=0;i<sites.size();i++)
 //		{
 //			System.out.println("the site is:"+sites.get(i).getSiteName());
 //		}
 
-		return mv; //·µ»Øµ½charge.jspÒ³Ãæ
+		return mv; //è¿”å›åˆ°charge.jspé¡µé¢
 	}
 
 	@RequestMapping("queryAllCharge")
 	@ResponseBody
 	public List<Charge> queryAllCharge(){
-		log.info("µ÷ÓÃqueryAllCharge");
+		log.info("è°ƒç”¨queryAllCharge");
 		List<Charge> charge=chargeService.queryAllCharge();
 		return charge;
 	}
@@ -57,7 +57,7 @@ public class ChargeController {
 	@RequestMapping("queryChargeBySiteName")
 	@ResponseBody
 	public  List<Charge> queryChargeBySiteName(@RequestParam("siteName") String siteName,Model model){
-		log.info("µ÷ÓÃqueryChargeBySiteName");
+		log.info("è°ƒç”¨queryChargeBySiteName");
 		List<Charge> charge=chargeService.queryChargeBySiteName(siteName);
 		return charge;
 	}
@@ -65,7 +65,7 @@ public class ChargeController {
 	@RequestMapping("queryChargeByDate")
 	@ResponseBody
 	public List<Charge> queryChargeByDate(@RequestParam("startDate") String startDate,@RequestParam("endDate") String endDate){
-		log.info("µ÷ÓÃqueryChargeByDate");
+		log.info("è°ƒç”¨queryChargeByDate");
 		if(startDate == null || startDate =="")
 		{
 			startDate = df.format(new Date())+" 00:00:00";

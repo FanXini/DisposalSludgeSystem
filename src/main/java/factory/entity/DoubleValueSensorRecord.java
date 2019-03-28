@@ -1,6 +1,12 @@
 package factory.entity;
 
-public class DoubleValueSensorRecord {
+import java.io.Serializable;
+
+public class DoubleValueSensorRecord implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -2359387260679321533L;
 	private int id;
 	private int sensorId;	
 	private String time;

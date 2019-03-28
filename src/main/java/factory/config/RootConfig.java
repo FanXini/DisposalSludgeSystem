@@ -33,10 +33,10 @@ public class RootConfig {
 	@Bean
 	public ThreadPoolTaskExecutor getTastExecutor() {
 		ThreadPoolTaskExecutor taskExecutor=new ThreadPoolTaskExecutor();
-		taskExecutor.setCorePoolSize(5);
-		taskExecutor.setKeepAliveSeconds(200);
-		taskExecutor.setMaxPoolSize(10);
-		taskExecutor.setQueueCapacity(20);
+		taskExecutor.setCorePoolSize(10);
+		taskExecutor.setKeepAliveSeconds(1);
+		taskExecutor.setMaxPoolSize(100);
+		taskExecutor.setQueueCapacity(200);
 		taskExecutor.setRejectedExecutionHandler(new ThreadPoolExecutor.CallerRunsPolicy());
 		return taskExecutor;
 	}

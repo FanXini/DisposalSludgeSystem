@@ -2,15 +2,15 @@ package factory.enums;
 
 public enum SiteStatus {
 	/**
-	 * ����״̬����Ӧ���ݿ���0״̬
+	 * 正常状态，对应数据库中0状态
 	 */
 	NORMAL,
 	/**
-	 * ������,��Ӧ���ݿ��е�1״̬
+	 * 处理中,对应数据库中的1状态
 	 */
 	PROCESSING,
 	/**
-	 * �ȴ�����,��Ӧ���ݿ��е�2״̬
+	 * 等待处理,对应数据库中的2状态
 	 */
 	WATINGPROCESS
 	

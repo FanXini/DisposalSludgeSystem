@@ -1,7 +1,13 @@
 package factory.entity;
 
-public class SingleValueSensorRecord {
+import java.io.Serializable;
 
+public class SingleValueSensorRecord implements Serializable{
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 4441886439921531726L;
 	private int id;
 	private int sensorId;
 	private String time;

@@ -383,7 +383,7 @@ body {
 									<span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>编辑
 								</button>
 							</c:if>
-							<button onclick="deleteUser(${user.id},'${user.telephone }');"
+							<button onclick="deleteUser(${user.id},'${user.realname }');"
 								class="btn btn-white btn-sm" data-toggle="modal"
 								data-target="#delModal">
 								<span class="glyphicon glyphicon-trash" aria-hidden="true"></span>删除
@@ -847,8 +847,8 @@ body {
 		})
 	
 		/***************************** 删除用户按钮************************************* */
-		function deleteUser(userId, telephone) {
-			var delContent = "确定删除用户：" + telephone + "?";
+		function deleteUser(userId, realname) {
+			var delContent = "确定删除用户：" + realname + "?";
 			$("#delModalContent").html(delContent);
 			$("#delId").val(userId);
 		}

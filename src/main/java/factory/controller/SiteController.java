@@ -38,11 +38,11 @@ public class SiteController {
 	private static Log log=LogFactory.getLog(SiteController.class);
 	
 	/**
-	 * @description:´Ósite±íÖĞ²éÑ¯ËùÓĞÕ¾µã
+	 * @description:ä»siteè¡¨ä¸­æŸ¥è¯¢æ‰€æœ‰ç«™ç‚¹
 	 */
 	@RequestMapping("/jumpToSite")
 	public ModelAndView querySite(ModelAndView mv){
-		log.info("²éÑ¯Õ¾µã");
+		log.info("æŸ¥è¯¢ç«™ç‚¹");
 		List<Site> sites=siteService.queryAllSite();
 		for(Site site:sites){
 			if(site.getSensorIdSet()!=null&&site.getSensorIdSet()!="")
@@ -62,7 +62,7 @@ public class SiteController {
 	@RequestMapping("queryAllSite")
 	@ResponseBody
 	public List<Site> queryAllSite() {
-		log.info("²éÑ¯Õ¾µã");
+		log.info("æŸ¥è¯¢ç«™ç‚¹");
 		List<Site> sites=siteService.queryAllSite();
 		for(Site site:sites){
 			if(site.getSensorIdSet()!=null&&site.getSensorIdSet()!="")
@@ -76,7 +76,7 @@ public class SiteController {
 	@RequestMapping("deleteSite")
 	@ResponseBody
 	public void deleteSite(@RequestParam("siteId") int siteId){
-		log.info("É¾³ıid="+siteId+"µÄÕ¾µã¼ÇÂ¼");
+		log.info("åˆ é™¤id="+siteId+"çš„ç«™ç‚¹è®°å½•");
 		Site delSite=siteService.querySiteById(siteId);
 		if(delSite.getSensorIdSet()!=null){
 		sensorService.setSiteIdSetNull(delSite.getSensorIdSet());}
@@ -86,7 +86,7 @@ public class SiteController {
 	@RequestMapping("fuzzyQuerySite")
 	@ResponseBody
 	public List<Site> fuzzyQuerySite(@RequestParam("queryStr") String queryStr){
-		log.info("Ä£ºı²éÑ¯="+queryStr);
+		log.info("æ¨¡ç³ŠæŸ¥è¯¢="+queryStr);
 		List<Site> sites=siteService.fuzzyQuerySite(queryStr);
 		for(Site site:sites){
 			if(site.getSensorIdSet()!=null)
@@ -98,7 +98,7 @@ public class SiteController {
 	@RequestMapping("addSite")
 	@ResponseBody
 	public Map<String, String> addSite(@RequestBody Map<String, String> siteInfo) {
-		log.info("Ôö¼ÓÕ¾µã");
+		log.info("å¢åŠ ç«™ç‚¹");
 		Map<String, String> result = new HashMap<String, String>();
 		try {
 			log.info(siteInfo.toString());
@@ -117,7 +117,7 @@ public class SiteController {
 	@RequestMapping("queryManagerTel")
 	@ResponseBody
 	public Map<String, String> queryManagerTel(@RequestParam("managerId") int managerId) {
-		log.info("²éÑ¯managerTel");
+		log.info("æŸ¥è¯¢managerTel");
 		Map<String, String> result = new HashMap<String, String>();
 		try {
 			log.info(managerId);
@@ -139,14 +139,14 @@ public class SiteController {
 	@RequestMapping("querySiteManagerById")
 	@ResponseBody
 	public Site querySiteManagerById(@RequestParam("siteId") int siteId){
-		log.info("²éÕÒsiteId="+siteId+"µÄÕ¾µã");
+		log.info("æŸ¥æ‰¾siteId="+siteId+"çš„ç«™ç‚¹");
 		return siteService.querySiteManagerById(siteId);
 	}
 	
 	@RequestMapping("editSite")
 	@ResponseBody
 	public Map<String, String> editSite(@RequestBody Map<String, String> siteInfo) {
-		log.info("±à¼­Õ¾µã");
+		log.info("ç¼–è¾‘ç«™ç‚¹");
 		Map<String, String> result = new HashMap<String, String>();
 		try {
 			log.info(siteInfo.toString());
@@ -164,7 +164,7 @@ public class SiteController {
 	@RequestMapping("querySiteSerialNumberAndName")
 	@ResponseBody
 	public Map<String, String> querySiteSerialNumberAndName(@RequestParam("serialNumber") String serialNumber,@RequestParam("siteName") String siteName) {
-		log.info("²éÑ¯ÊÇ·ñÓĞ±àºÅÎª"+serialNumber+"»òÕ¾µãÃûÎª"+siteName+"µÄÕ¾µã");
+		log.info("æŸ¥è¯¢æ˜¯å¦æœ‰ç¼–å·ä¸º"+serialNumber+"æˆ–ç«™ç‚¹åä¸º"+siteName+"çš„ç«™ç‚¹");
 		Map<String, String> result = new HashMap<String, String>();
 		int n=siteService.querySiteSerialNumberAndName(serialNumber,siteName);
 		if(n>0)
@@ -177,7 +177,7 @@ public class SiteController {
 	@RequestMapping("queryUltrasonicValueBySite")
 	@ResponseBody
 	public List<Sensor> queryUltrasonicValueBySite(@RequestParam("sensorIdSet") String sensorIdSet) {
-		log.info("²éÑ¯Õ¾µãÎÛÄàÁ¿"+sensorIdSet);
+		log.info("æŸ¥è¯¢ç«™ç‚¹æ±¡æ³¥é‡"+sensorIdSet);
 		List<Sensor> sensors = new ArrayList<Sensor>();
 		if(sensorIdSet==null||sensorIdSet=="")
 		{
@@ -199,7 +199,7 @@ public class SiteController {
 	@RequestMapping("queryRedNum")
 	@ResponseBody
 	public Map<String,Integer> queryRedStatusNum() {
-		log.info("²éÑ¯¿ÕÏĞ³µÁ¾¼°´ı´¦ÀíÕ¾µãÊıÁ¿");
+		log.info("æŸ¥è¯¢ç©ºé—²è½¦è¾†åŠå¾…å¤„ç†ç«™ç‚¹æ•°é‡");
 		Map<String,Integer> result = new HashMap<String,Integer>();
 		int carNum=siteService.queryNullCarNum();
 		int siteNum=siteService.queryRedSiteNum();
@@ -211,7 +211,7 @@ public class SiteController {
 	@RequestMapping("queryMapSite")
 	@ResponseBody
 	public List<Site> queryMapSite(@RequestParam("queryStr") String queryStr) {
-		log.info("µØÍ¼²éÑ¯Õ¾µã");
+		log.info("åœ°å›¾æŸ¥è¯¢ç«™ç‚¹");
 		List<Site> siteList=new ArrayList<Site>();
 		try{
 			siteList=siteService.queryMapSite(queryStr);
@@ -224,24 +224,24 @@ public class SiteController {
 		return siteList;
 	}
 	/**
-	 * @description:¸ù¾İÕ¾µã²éÑ¯¹¤×÷ÈËÔ±
+	 * @description:æ ¹æ®ç«™ç‚¹æŸ¥è¯¢å·¥ä½œäººå‘˜
 	 */
 	@RequestMapping("/queryAllManagerBySite")
 	@ResponseBody
 	public List<User> queryAllManagerBySite(@RequestParam("siteId") String siteId) {
-		log.info("¸ù¾İÕ¾µã²éÑ¯¹¤³§ÈËÔ±£¬siteId="+siteId);
+		log.info("æ ¹æ®ç«™ç‚¹æŸ¥è¯¢å·¥å‚äººå‘˜ï¼ŒsiteId="+siteId);
 		if(siteId==null||siteId=="")
 			return siteService.queryAllManagerSiteNull();
 		else
 			return siteService.queryAllManagerBySiteId(siteId);
 	}
 	/**
-	 * @description:²éÑ¯Õ¾µãÊÇ·ñÒÑ·ÖÅä
+	 * @description:æŸ¥è¯¢ç«™ç‚¹æ˜¯å¦å·²åˆ†é…
 	 */
 	@RequestMapping("/countRecordOfCarNullBySiteId")
 	@ResponseBody
 	public int countRecordOfCarNullBySiteId(@RequestParam("siteId") int siteId) {
-		log.info("²éÑ¯Õ¾µãÊÇ·ñÒÑ·ÖÅä£¬siteId="+siteId);
+		log.info("æŸ¥è¯¢ç«™ç‚¹æ˜¯å¦å·²åˆ†é…ï¼ŒsiteId="+siteId);
 		try{
 			return siteService.countRecordOfCarNullBySiteId(siteId);
 		}catch (Exception e) {
@@ -251,15 +251,20 @@ public class SiteController {
 		}
 	}
 	/**
-	 * @description:µØÍ¼²éÕÒÕ¾µãĞÅÏ¢
+	 * @description:åœ°å›¾æŸ¥æ‰¾ç«™ç‚¹ä¿¡æ¯
 	 */
 	@RequestMapping("querySiteMapBySiteIdAndStatus")
 	@ResponseBody
 	public List<Site> querySiteMapBySiteIdAndStatus(@RequestParam("siteId") int siteId,@RequestParam("status") int status) {
-		log.info("µØÍ¼²éÑ¯Õ¾µãĞÅÏ¢£ºsiteId"+siteId+"status"+status);
+		log.info("åœ°å›¾æŸ¥è¯¢ç«™ç‚¹ä¿¡æ¯ï¼šsiteId"+siteId+"status"+status);
 		List<Site> sites=siteService.querySiteMapBySiteIdAndStatus(siteId,status);
 		log.info(sites.toString());
 		return sites;
-
+	}
+	
+	@RequestMapping("querySiteStatus")
+	@ResponseBody
+	public List<Site> querySiteStatus(){
+		return siteService.querySiteStatus();
 	}
 }

@@ -1,7 +1,13 @@
 package factory.entity;
 
-public class SensorType {
+import java.io.Serializable;
 
+public class SensorType implements Serializable{
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -3131139130609175100L;
 	private int id;
 	private String type;
 	private String description;

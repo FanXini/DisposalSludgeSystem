@@ -1,6 +1,12 @@
 package factory.entity;
 
-public class Record {
+import java.io.Serializable;
+
+public class Record implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 8825339522290025907L;
 	private int id;
 	private String allocationTime;
 	private String disposalTime;

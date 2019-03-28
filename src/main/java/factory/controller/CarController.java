@@ -37,7 +37,7 @@ public class CarController {
 	private static Log log = LogFactory.getLog(CarController.class);
 
 	/**
-	 * @description:´Ócar±íÖĞ²éÑ¯ËùÓĞ³µÁ¾
+	 * @description:ä»carè¡¨ä¸­æŸ¥è¯¢æ‰€æœ‰è½¦è¾†
 	 */
 	@RequestMapping("carManage")
 	public String jumpToCarManage() {	
@@ -49,7 +49,7 @@ public class CarController {
 	@RequestMapping("queryAllCar")
 	@ResponseBody
 	public List<Car> queryAllCar() {
-		log.info("µ÷ÓÃqueryAllCar");
+		log.info("è°ƒç”¨queryAllCar");
 		List<Car> cars = carService.queryAllCar();
 		return cars;
 	}
@@ -57,7 +57,7 @@ public class CarController {
 	@RequestMapping("queryCarByLicense")
 	@ResponseBody
 	public Car queryCarByLicense(@RequestParam("license") String license, Model model) {
-		log.info("µ÷ÓÃqueryCarByLicense");
+		log.info("è°ƒç”¨queryCarByLicense");
 		Car car = carService.queryCarByLicense(license);
 		return car;
 	}
@@ -71,14 +71,14 @@ public class CarController {
 	@RequestMapping("queryCarByStatus")
 	@ResponseBody
 	public List<Car> queryCarByStatus(@RequestParam("status") int status, Model model) {
-		log.info("µ÷ÓÃqueryCarByStatus");
+		log.info("è°ƒç”¨queryCarByStatus");
 		return carService.queryCarByStatus(status);
 	}
 
 	@RequestMapping("deleteCar")
 	@ResponseBody
 	public Result deleteCar(@RequestParam("carId") int carId) {
-		log.info("µ÷ÓÃÉ¾³ıcar");
+		log.info("è°ƒç”¨åˆ é™¤car");
 		/*Map<String, Result> result = new HashMap<String, Result>();*/
 		try {
 			carService.deleteCar(carId);
@@ -92,7 +92,7 @@ public class CarController {
 	@RequestMapping("addCar")
 	@ResponseBody
 	public Map<String, Object> addCar(@RequestBody Car car) {
-		log.info("µ÷ÓÃaddCar");
+		log.info("è°ƒç”¨addCar");
 		log.info(car.getLicense() + "  " + car.getBrand() + "  " + car.getDriverId());
 		Map<String, Object> map = new HashMap<String, Object>();
 		try {
@@ -116,7 +116,7 @@ public class CarController {
 	@RequestMapping("editCar")
 	@ResponseBody
 	public Result editCar(@RequestBody Car car) {
-		log.info("µ÷ÓÃĞŞ¸Ä³µÁ¾ĞÅÏ¢µÄ·½·¨");
+		log.info("è°ƒç”¨ä¿®æ”¹è½¦è¾†ä¿¡æ¯çš„æ–¹æ³•");
 		log.info(car.getLicense() + " " + car.getId() + " " + car.getBrand() + " " + car.getDriverId());
 		try {
 			carService.editCar(car);
@@ -128,6 +128,7 @@ public class CarController {
 			return Result.INPUT;
 		} catch (Exception e) {
 			// TODO: handle exception
+			e.printStackTrace();
 			return Result.ERROR;
 		}
 	}
@@ -135,7 +136,7 @@ public class CarController {
 	@RequestMapping("fuzzyQueryCar")
 	@ResponseBody
 	public List<Car> fuzzyQueryCar(@RequestParam("condition") String condition) {
-		log.info("½øÈëfuzzyQueryCar");
+		log.info("è¿›å…¥fuzzyQueryCar");
 		log.info(condition);
 		List<Car> cars = new ArrayList<Car>();
 		if (condition.equals("none")) {
@@ -149,14 +150,14 @@ public class CarController {
 	@RequestMapping("queryAllCarOrderByStatus")
 	@ResponseBody
 	public List<Car> queryAllCarOrderByStatus() {
-		log.info("µ÷ÓÃqueryAllCarOrderByStatus");
+		log.info("è°ƒç”¨queryAllCarOrderByStatus");
 		return carService.queryAllCarOrderByStatus();
 	}
 	
 	@RequestMapping("queryMapCar")
 	@ResponseBody
 	public List<Car> queryMapCar(@RequestParam("queryStr") String queryStr,@RequestParam("carType") int carType) {
-		log.info("µØÍ¼²éÑ¯³µÁ¾");
+		log.info("åœ°å›¾æŸ¥è¯¢è½¦è¾†");
 		List<Car> carList=new ArrayList<Car>();
 		try{
 			carList=carService.queryMapCar(queryStr,carType);
@@ -172,7 +173,7 @@ public class CarController {
 	@RequestMapping("queryWorkerMapCar")
 	@ResponseBody
 	public List<Car> queryWorkerMapCar(@RequestParam("userId") int userId) {
-		log.info("Ë¾»úµØÍ¼²éÑ¯´ı³ö·¢³µÁ¾");
+		log.info("å¸æœºåœ°å›¾æŸ¥è¯¢å¾…å‡ºå‘è½¦è¾†");
 		List<Car> carList=new ArrayList<Car>();
 		try{
 			carList=carService.queryWorkerMapCar(userId);
@@ -188,7 +189,7 @@ public class CarController {
 	@RequestMapping("editWorkerCarStatus")
 	@ResponseBody
 	public Map<String,String> editWorkerCarStatus(@RequestParam("userId") int userId,@RequestParam("status") int status) {
-		log.info("Ë¾»ú¸ü¸Ä×´Ì¬");
+		log.info("å¸æœºæ›´æ”¹çŠ¶æ€");
 		Map<String,String> result=new HashMap<String,String>();
 		try{
 			carService.editWorkerCarStatus(userId,status);
@@ -203,9 +204,9 @@ public class CarController {
 	}
 	/**
 	 * 
-	 *@Description:²éÑ¯¿ÕÏĞµÄ·ÖÅäÁËË¾»úµÄÔËÊä³µÁ¾
+	 *@Description:æŸ¥è¯¢ç©ºé—²çš„åˆ†é…äº†å¸æœºçš„è¿è¾“è½¦è¾†
 	 *@author:fanxin 
-	 *@date:2019Äê1ÔÂ22ÈÕ ÉÏÎç11:01:29
+	 *@date:2019å¹´1æœˆ22æ—¥ ä¸Šåˆ11:01:29
 	 */
 	@RequestMapping("queryCarrierUnassign")
 	@ResponseBody
@@ -217,7 +218,7 @@ public class CarController {
 	@RequestMapping("queryDriverUnassign")
 	@ResponseBody
 	public List<User> queryDriverUnassign() {
-		log.info("²éÑ¯¿ÕÏĞË¾»ú");
+		log.info("æŸ¥è¯¢ç©ºé—²å¸æœº");
 		try{
 			return userService.queryDriverUnassign();
 		}catch (Exception e) {
@@ -228,16 +229,16 @@ public class CarController {
 	}
 	
 	/**
-	 * @description:ÎªÕ¾µã·ÖÅäÔËÊä³µÁ¾£¨¸ù¾İ×î¶ÌÖ±Ïß¾àÀë£©
+	 * @description:ä¸ºç«™ç‚¹åˆ†é…è¿è¾“è½¦è¾†ï¼ˆæ ¹æ®æœ€çŸ­ç›´çº¿è·ç¦»ï¼‰
 	 */
 	@RequestMapping("assignCarrier")
 	@ResponseBody
 	public Car assignCarrier(@RequestParam("id") int siteId,@RequestParam("longitude") String siteLongitude,@RequestParam("latitude") String siteLatitude) {
-		log.info("Îªsite"+siteId+"·ÖÅäÔËÊä³µÁ¾");
+		log.info("ä¸ºsite"+siteId+"åˆ†é…è¿è¾“è½¦è¾†");
 		double longitude = Double.valueOf(siteLongitude);
 		double latitude = Double.valueOf(siteLatitude);
 		try{
-			//1´ú±íÔËÊä³µÁ¾
+			//1ä»£è¡¨è¿è¾“è½¦è¾†
 			return carService.assignCar(siteId,longitude,latitude,1);
 		}catch (Exception e) {
 			// TODO: handle exception
@@ -247,16 +248,16 @@ public class CarController {
 	}
 	
 	/**
-	 * @description:ÎªÕ¾µã·ÖÅä´¦Àí³µÁ¾£¨¸ù¾İ×î¶ÌÖ±Ïß¾àÀë£©
+	 * @description:ä¸ºç«™ç‚¹åˆ†é…å¤„ç†è½¦è¾†ï¼ˆæ ¹æ®æœ€çŸ­ç›´çº¿è·ç¦»ï¼‰
 	 */
 	@RequestMapping("assignTreatmentCar")
 	@ResponseBody
 	public Car assignTreatmentCar(@RequestParam("id") int siteId,@RequestParam("longitude") String siteLongitude,@RequestParam("latitude") String siteLatitude) {
-		log.info("Îªsite"+siteId+"·ÖÅä´¦Àí³µÁ¾");
+		log.info("ä¸ºsite"+siteId+"åˆ†é…å¤„ç†è½¦è¾†");
 		double longitude = Double.valueOf(siteLongitude);
 		double latitude = Double.valueOf(siteLatitude);
 		try{
-			//0´ú±í´¦Àí³µÁ¾
+			//0ä»£è¡¨å¤„ç†è½¦è¾†
 			return carService.assignCar(siteId,longitude,latitude,0);
 		}catch (Exception e) {
 			// TODO: handle exception
@@ -266,17 +267,27 @@ public class CarController {
 	}
 	
 	/**
-	 * @description:µØÍ¼²éÕÒ³µÁ¾ĞÅÏ¢
+	 * @description:åœ°å›¾æŸ¥æ‰¾è½¦è¾†ä¿¡æ¯
 	 */
 	@RequestMapping("queryMapCarBySiteIdAndCarTypeAndStatus")
 	@ResponseBody
 	public List<Car> queryMapCarBySiteIdAndCarTypeAndStatus(@RequestParam("siteId") int siteId,@RequestParam("carType") int carType,@RequestParam("status") int status) {
-		log.info("²éÕÒsite"+siteId+"carType"+carType+"status"+status+"µÄ³µÁ¾ÁĞ±í");
+		log.info("æŸ¥æ‰¾site"+siteId+"carType"+carType+"status"+status+"çš„è½¦è¾†åˆ—è¡¨");
 		try{
 			return carService.queryMapCarBySiteIdAndCarTypeAndStatus(siteId,carType,status);
 		}catch (Exception e) {
 			// TODO: handle exception
 			log.info(e);
+			return null;
+		}
+	}
+	
+	@RequestMapping("queryCarInRoad")
+	@ResponseBody
+	public List<Car> queryCarInRoad(){
+		try {
+			return carService.queryCarInRoad();
+		} catch (Exception e) {
 			return null;
 		}
 	}
@@ -306,6 +317,11 @@ public class CarController {
 			e.printStackTrace();
 			return null;
 		}
+	}
+	@RequestMapping("queryCarStatusById")
+	@ResponseBody
+	public Integer queryCarStatusById(@RequestParam("id")int id) {
+		return carService.queryCarStatusById(id);
 	}
 	
 }
