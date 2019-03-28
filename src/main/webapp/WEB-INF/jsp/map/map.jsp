@@ -287,8 +287,21 @@ h5{
 					<form>
 						<div class="form-group">
 							<div class="input-group">
-								<span class="input-group-addon">处理人</span>
+								<span class="input-group-addon">处理车司机</span>
 								<select	id="driverSelect" class="form-control col-lg-4">
+								</select>
+							</div>
+						</div>
+					</form>
+				</div>
+				
+				<div class="modal-body">
+					<!-- 用来存id -->
+					<form>
+						<div class="form-group">
+							<div class="input-group">
+								<span class="input-group-addon">运输车司机</span>
+								<select	id="carrierSelect" class="form-control col-lg-4">
 								</select>
 							</div>
 						</div>
@@ -866,7 +879,11 @@ h5{
 				}
 		}
 		lid += '<li class="infoSize">Tel:'+site.telephone+'</li>';
-		lid += '<li class="infoSize" style="color:#FF4500;">状态:'+status+'</li>';
+		lid += '<li class="infoSize" style="color:#FF4500;">状态:'+status+'</li>';	
+		if(site.status!=0){
+			lid += '<li class="infoSize" style="color:#FF4500;" onclick="dealSite('+site.id+')">点击分配车辆</li>';	
+		}
+		
 		lid += '</ul>' + '</div>';
 		if(currentTreatmentCarList.length != 0){
 			lid += '<div class="infowindow"><span class="line"></span><span class="txt" style="color:#0000FF;">'+currentTreatmentCarList.length+'辆车处理中</span><span class="line"></span></div><div class="carlist">';
@@ -1097,27 +1114,45 @@ h5{
   				type : "POST",
   				url : "car/queryTreatmentCarUnassign",
   				success : function(carList) {
-  					if(jQuery.isEmptyObject(carList))
-  						alert("暂无空闲车辆");
-  					else{
+
   						$("#driverSelect").empty();
+  						$("#driverSelect").append('<option value="-1">暂不分配</option>')
   						$.each(carList,function(i, car) {
   							$("#driverSelect").append('<option id="'+car.id+'" value="'+car.id+'">'+car.driver.realname+'</option>')
   						});
-  						$('#dealSiteModal').modal('show');
-  					}
+  						//$('#dealSiteModal').modal('show');
+  					
   				}
-  			});
+  			});	
+		$.ajax({
+				type : "POST",
+				url : "car/queryCarrierUnassign",
+				success : function(carList) {
+					if(jQuery.isEmptyObject(carList))
+						alert("暂无空闲车辆");
+					else{
+						console.log(carList)
+						$("#carrierSelect").empty();
+						$("#carrierSelect").append('<option value="-1">暂不分配</option>')
+						$.each(carList,function(i, car) {
+							$("#carrierSelect").append('<option id="'+car.id+'" value="'+car.id+'">'+car.driver.realname+'</option>')
+						});
+						$('#dealSiteModal').modal('show');
+					}
+				}
+			});
 	}
 	
 	$("#saveSiteDealBtn").click(function (){
 		var dealSiteId=$("#dealSiteId").val();
 		var driverSelect=$("#driverSelect").val();
+		var transcarId=$("#carrierSelect").val();
 		$.ajax({
   			type : "POST",
   			url : "record/editRecordCarIdBySiteId",
   			data : {"siteId" : dealSiteId,
-  					"carId" : driverSelect
+  					"carId" : driverSelect,
+  					"transcarId":transcarId
   			},
   			success : function(result) {
 				if(result.result=="success"){

@@ -297,9 +297,13 @@
 	 		$.ajax({
 			type : "POST",
 			url : "sludge/querysludgebydriverIdAndStatus",
-			data : "driverId="+driverId,
-			success : function(sludge) {
-						if(sludge==""){
+			data : {
+				driverId:driverId,
+				status:"(6)"
+			},
+			success : function(sludges) {
+				        var sludge=sludges[0];
+						if(sludge.length==0){
 							alert('当前未分配污泥运输任务，无需添加记录')
 						}					
 						else{
@@ -358,7 +362,6 @@
 					sludgeFunction:sludgeFunction,
 					destinationAddress:destinationAddress
 			}
-			alert(postData)
 		}
 	   $.ajax({
 	   		type:"POST",

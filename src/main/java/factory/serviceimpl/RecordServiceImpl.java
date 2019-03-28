@@ -14,6 +14,7 @@ import factory.dao.RecordDao;
 import factory.dao.SiteDao;
 import factory.entity.Car;
 import factory.entity.Record;
+import factory.enums.CarStatus;
 import factory.enums.Result;
 import factory.exception.AllocateCarForRecordConflict;
 import factory.service.RecordService;
@@ -179,7 +180,7 @@ public class RecordServiceImpl implements RecordService{
 	public void editRecordCarIdBySiteId(int siteId, int carId) {
 		// TODO Auto-generated method stub
 		recordDao.editRecordCarIdBySiteId(siteId,carId);
-		carDao.editWorkerCarStatusAndSiteId(carId,3,siteId);
+		carDao.editWorkerCarStatusAndSiteId(carId,CarStatus.NODEPARTURE.ordinal(),siteId);
 	}
 	@Override
 	public void insertRecordByAlert(Record record) {
@@ -221,6 +222,10 @@ public class RecordServiceImpl implements RecordService{
 	public void synUpdateRecordAndSiteStatus(int recordId, int siteId, int status) {
 		recordDao.updateRecordStatusById(recordId, status);
 		siteDao.updateSiteStatusById(siteId, status);
+	}
+	@Override
+	public List<Record> queryRecordByDriverIdAndStatus(int driverId, int status,int flag) {
+		return recordDao.queryRecordByDriverIdAndStatus(driverId, status,flag);
 	}
 
 }

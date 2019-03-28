@@ -79,9 +79,9 @@ public class SludgeController {
 		
 		@RequestMapping("querysludgebydriverIdAndStatus")
 		@ResponseBody
-		public Sludge querysludgebydriverIdAndStatus(@RequestParam("driverId") int driverId){
+		public List<Sludge> querysludgebydriverIdAndStatus(@RequestParam("driverId") int driverId,@RequestParam("status") String status){
 			log.info("querysludgebydriverIdAndStatus");
-			Sludge sludge = sludgeService.querysludgebydriverIdAndStatus(driverId);
+			List<Sludge> sludge = sludgeService.querysludgebydriverIdAndStatus(driverId,status);
 			return sludge;
 		}
 		
@@ -113,6 +113,21 @@ public class SludgeController {
 		mv.setViewName("mudwarehouse/sludge");
 		return mv;
 	}
+	
+	/*@RequestMapping("queryAllSite")
+	@ResponseBody
+	public List<Site> queryAllSite(){
+		log.info("queryAllSite");
+		return siteService.queryAllSite();
+	}*/
+	
+	@RequestMapping("assignCarTransportDriver")
+	@ResponseBody
+	public List<User> queryassignCarTransportDriver(){
+		log.info("assignCarTransportDriver");
+		return userService.queryCarAssignTranSportDriver();
+	}
+	
 	@RequestMapping("queryAllFunc")
 	@ResponseBody
 	public List<SludgeFunction> queryAllFunc(){

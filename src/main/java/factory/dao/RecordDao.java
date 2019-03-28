@@ -17,6 +17,8 @@ public interface RecordDao {
 	
 	public List<Record> queryRecordByDriverId(@Param("driverId")int driverId);
 	
+	public List<Record> queryRecordByDriverIdAndStatus(@Param("driverId")int driverId,@Param("status") int status,@Param("flag") int flag);
+	
 	public List<Record> queryRecordByDate(@Param("startDate") String startDate,@Param("endDate") String endDate);
 	
 	public void updateCarId(@Param("recordId") int recordId,@Param("carId")int carId);

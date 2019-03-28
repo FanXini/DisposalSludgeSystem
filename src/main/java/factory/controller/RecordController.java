@@ -29,6 +29,7 @@ import org.springframework.web.servlet.ModelAndView;
 import factory.entity.Record;
 import factory.entity.Site;
 import factory.entity.User;
+import factory.enums.CarStatus;
 import factory.enums.RecordStatus;
 import factory.enums.Result;
 import factory.enums.SiteStatus;
@@ -82,6 +83,13 @@ public class RecordController {
 		return mv;
 	}
 	
+	@RequestMapping("queryassignCarTreatDriver")
+	@ResponseBody
+	public List<User> queryassignCarTreatDriver(){
+		log.info("调用queryassignCarTreatDriver");
+		return userService.queryCarAssignTreatDriver();
+	}
+	
 	@RequestMapping("queryAllRecord")
 	@ResponseBody
 	public List<Record> queryAllRecord(){
@@ -112,6 +120,15 @@ public class RecordController {
 		log.info("调用queryRecordByDriverId");
 		List<Record> records=new ArrayList<Record>();
 		records.addAll(recordService.queryRecordByDriverId(driverId));
+		return records;
+	}
+	
+	@RequestMapping("queryRecordByDriverIdAndStatus")
+	@ResponseBody
+	public List<Record> queryRecordByDriverIdAndStatus(@RequestParam("driverId") int driverId,@RequestParam("status") int status,@RequestParam("flag") int flag){
+		log.info("调用queryRecordByDriverIdAndStatus");
+		List<Record> records=new ArrayList<Record>();
+		records.addAll(recordService.queryRecordByDriverIdAndStatus(driverId, status, flag));
 		return records;
 	}
 	
@@ -293,14 +310,19 @@ public class RecordController {
 			return null;
 		}
 	}
-	
+	@Transactional
 	@RequestMapping("editRecordCarIdBySiteId")
 	@ResponseBody
-	public Map<String,String> editRecordCarIdBySiteId(@RequestParam("siteId") int siteId,@RequestParam("carId") int carId){
+	public Map<String,String> editRecordCarIdBySiteId(@RequestParam("siteId") int siteId,@RequestParam("carId") int carId,@RequestParam("transcarId") int transcarId){
 		log.info("调用editRecordBySiteId");
 		Map<String, String> result=new HashMap<String, String>();
 		try {
-			recordService.editRecordCarIdBySiteId(siteId,carId);
+			if(carId!=-1) {
+				recordService.editRecordCarIdBySiteId(siteId,carId);
+			}
+			if(transcarId!=-1) {
+				carService.editWorkerCarStatusAndSiteId(transcarId, CarStatus.NODEPARTURE.ordinal(), siteId);
+			}
 			result.put("result", "success");
 		}catch (Exception e) {
 			// TODO: handle exception

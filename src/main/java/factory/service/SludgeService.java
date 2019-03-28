@@ -49,7 +49,7 @@ public interface SludgeService {
 
 	public void insertSludgeByDriver(Sludge sludge);
 
-	public Sludge querysludgebydriverIdAndStatus(int driverId);
+	public List<Sludge> querysludgebydriverIdAndStatus(int driverId,String status);
 
 	public List<Sludge> fussyQuerysludgebyTransDriver(String condition, int driverId);
 }
