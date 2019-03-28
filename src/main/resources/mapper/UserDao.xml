@@ -158,14 +158,9 @@
 	<select id="queryTreatDriverServeOneFactory" resultType="factory.entity.User">
 		select
 		DISTINCT `user`.id,`user`.realname
-		FROM record,`user`,car
-		WHERE
-		record.del_status=0 AND
-		record.site_id=#{siteId} AND
-		record.car_id=car.id AND
-		car.driver_id=`user`.id AND
-		user.check_status=1 AND
-		car_type = 0
+		FROM record LEFT JOIN  record_treatmentcar ON record.id=record_treatmentcar.record_id
+		LEFT JOIN car ON record_treatmentcar.treatmentcar_id=car.id LEFT JOIN `user` ON car.driver_id=`user`.id
+		WHERE record.site_id=#{siteId} AND user.check_status=1
 	</select>
 	
 		<select id="queryTransDriverServeOneFactory" resultType="factory.entity.User">

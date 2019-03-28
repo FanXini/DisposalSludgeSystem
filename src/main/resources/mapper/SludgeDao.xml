@@ -501,4 +501,18 @@
 		arrival_time=#{arrivalTime},status=#{status}
 		where id=#{sludgeId}
 	</update>
+	
+	<select id="querySludgeByRecordId"  resultMap="SludgeCarMap">
+		SELECT
+		sludge.*,car.id,car.license,car.driver_id,user.id,user.realname,user.telephone,sludge_function.id,sludge_function.`function`
+		FROM sludge  LEFT JOIN
+		car ON sludge.transcar_id=car.id 
+		LEFT JOIN `user` ON car.driver_id=`user`.id LEFT
+		JOIN sludge_function
+		ON sludge.function_id=sludge_function.id
+		WHERE sludge.status!=6 AND
+		sludge.record_id=#{recordId}
+		ORDER BY
+		sludge.produce_time DESC
+	</select>
 </mapper>

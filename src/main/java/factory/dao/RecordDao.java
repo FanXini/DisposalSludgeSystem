@@ -23,6 +23,8 @@ public interface RecordDao {
 	
 	public void deleteRecord(@Param("recordId") int recordId);
 	
+	public Record queryRecordBySiteIdAndStatus(@Param("siteId") int siteId,@Param("status") int status,@Param("flag") int flag);
+	
 	public List<Record> queryAllRecordOfOneDriver(@Param("driverId") int driverId);
 	
 	public List<Record> queryRecordBySiteIdOfOneDriver(@Param("driverId") int driverId,@Param("siteId") int siteId);
@@ -49,9 +51,15 @@ public interface RecordDao {
 	
 	public void updateRecordStatusById(@Param("recordId") int recordId,@Param("status") int status);
 	
-	public Record queryRecordByCarIdAndStatus(@Param("carId") int carId,@Param("status") int status);
+	public Record queryNoCompleteRecordBySiteIdOfCarAndRecord(@Param("carId") int carId);
 	
 	public void UpdateRecordStatusAndTimeById(@Param("recordId") int recordId,@Param("status") int status,@Param("time") String time,@Param("timeFlag")int timeFlag);
+	
+	public void insertRecordTreatcar(@Param("recordId") int recordId,@Param("treatcarId") int treatcarId);
+	
+	public void oneTreatmentCarComplete(@Param("recordId") int recordId);
+	
+	public Record queryProcessingRecordBySiteIdOfCarAndRecord(@Param("carId") int carId);
 	
 	
 	

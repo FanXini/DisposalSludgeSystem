@@ -2,9 +2,13 @@ package factory.util;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class Util {
+	
+	
 
 	//添加传感器id
 		public static  String  addsensorIdtoSensorSet(String sensorIdSet,int sensorId){

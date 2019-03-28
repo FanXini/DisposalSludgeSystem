@@ -17,7 +17,7 @@ public interface RecordService {
 	
 	public List<Record> queryRecordByDate(String startDate,String endDate);
 	
-	public void updateCarId(int recordId,int carId);
+	public void insertRecordTreatcar(int recordId,int carId);
 	
 	public void deleteRecord(int recordId);
 	
@@ -46,6 +46,11 @@ public interface RecordService {
 	public double queryCurrentPretreatAmountBySiteId(int siteId);
 	
 	public void synUpdateRecordAndSiteStatus(int recordId,int siteId,int status);
+	
+	public void assignDriverForRecord(int siteId,int treatcarId,int transcarId);
+	
+	public void updateRecordStatusById(int recordId,int status);
+	
 	
 
 }

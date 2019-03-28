@@ -1,6 +1,7 @@
 package factory.entity;
 
 import java.io.Serializable;
+import java.util.List;
 
 public class Record implements Serializable{
 	/**
@@ -11,14 +12,22 @@ public class Record implements Serializable{
 	private String allocationTime;
 	private String disposalTime;
 	private String finishTime;
-	private int carId;
+	private int carNum;
 	private int siteId;
 	private int status;
 	private double sludgesWeight;
 	private double pretreatAmount;
 	private Car car;
+	private List<RecordTreatCar> recordTreatCars;
 	private Site site;
 	private float charge;
+	
+	public List<RecordTreatCar> getRecordTreatCars() {
+		return recordTreatCars;
+	}
+	public void setRecordTreatCars(List<RecordTreatCar> recordTreatCars) {
+		this.recordTreatCars = recordTreatCars;
+	}
 	public double getSludgesWeight() {
 		return sludgesWeight;
 	}
@@ -48,12 +57,6 @@ public class Record implements Serializable{
 	}
 	public void setFinishTime(String finishTime) {
 		this.finishTime = finishTime;
-	}
-	public int getCarId() {
-		return carId;
-	}
-	public void setCarId(int carId) {
-		this.carId = carId;
 	}
 	public int getSiteId() {
 		return siteId;
@@ -98,8 +101,14 @@ public class Record implements Serializable{
 	@Override
 	public String toString() {
 		return "Record [id=" + id + ", allocationTime=" + allocationTime + ", disposalTime=" + disposalTime
-				+ ", finishTime=" + finishTime + ", carId=" + carId + ", siteId=" + siteId + ", status=" + status
+				+ ", finishTime=" + finishTime + ", siteId=" + siteId + ", status=" + status
 				+ ", sludgesWeight=" + sludgesWeight + ", pretreatAmount=" + pretreatAmount + ", car=" + car + ", site="
 				+ site + ", charge=" + charge + "]";
+	}
+	public int getCarNum() {
+		return carNum;
+	}
+	public void setCarNum(int carNum) {
+		this.carNum = carNum;
 	}
 }

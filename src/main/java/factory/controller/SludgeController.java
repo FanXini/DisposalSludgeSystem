@@ -6,6 +6,7 @@ import java.util.Map;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -29,7 +30,7 @@ import factory.service.UserService;
 @Controller
 @RequestMapping("sludge")
 public class SludgeController {
-	private Log log=LogFactory.getLog(SludgeController.class);
+	private Logger log=Logger.getLogger(SludgeController.class);
 	
 	@Autowired
 	private SludgeService sludgeService;
@@ -264,6 +265,18 @@ public class SludgeController {
 			System.out.print(entry.getKey()+"   "+entry.getValue());
 		}
 		return sludgeService.querySludegByDateOfOneFactory(condition);
+	}
+	
+	@RequestMapping("querySludgeByRecordId")
+	@ResponseBody
+	public List<Sludge> querySludgeByRecordId(@RequestParam("recordId") int recordId){
+		log.info("querySludgeByRecordId");
+		try {
+			return sludgeService.querySludgeByRecordId(recordId);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
 
 }

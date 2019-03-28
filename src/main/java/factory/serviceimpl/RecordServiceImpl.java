@@ -12,12 +12,17 @@ import org.springframework.web.bind.annotation.RequestParam;
 import factory.dao.CarDao;
 import factory.dao.RecordDao;
 import factory.dao.SiteDao;
+import factory.dao.SludgeDao;
 import factory.entity.Car;
 import factory.entity.Record;
+import factory.entity.Sludge;
 import factory.enums.CarStatus;
+import factory.enums.RecordStatus;
 import factory.enums.Result;
+import factory.enums.SludgeStatus;
 import factory.exception.AllocateCarForRecordConflict;
 import factory.service.RecordService;
+import lombok.experimental.var;
 
 @Service
 public class RecordServiceImpl implements RecordService{
@@ -29,6 +34,9 @@ public class RecordServiceImpl implements RecordService{
 	
 	@Autowired
 	private CarDao carDao;
+	
+	@Autowired
+	private SludgeDao sludgeDao;
 	
 	/**
 	 * 查询所有的处理记录
@@ -67,9 +75,9 @@ public class RecordServiceImpl implements RecordService{
 	 * 修改处理人
 	 */
 	@Override
-	public void updateCarId(int recordId, int carId) {
+	public void insertRecordTreatcar(int recordId, int carId) {
 		// TODO Auto-generated method stub
-		recordDao.updateCarId(recordId, carId);
+		recordDao.insertRecordTreatcar(recordId, carId);
 		
 	}
 	
@@ -218,6 +226,30 @@ public class RecordServiceImpl implements RecordService{
 	@Override
 	public List<Record> queryRecordByDriverIdAndStatus(int driverId, int status,int flag) {
 		return recordDao.queryRecordByDriverIdAndStatus(driverId, status,flag);
+	}
+	@Override
+	@Transactional
+	public void assignDriverForRecord(int siteId, int treatcarId, int transcarId) {
+		Record record=recordDao.queryRecordBySiteIdAndStatus(siteId, RecordStatus.ACCOMPLISH.ordinal(), 1);
+		int recordId=record.getId();
+		if(treatcarId!=-1) {
+		   recordDao.insertRecordTreatcar(recordId, treatcarId);
+		   //修改车的状态
+		   carDao.editWorkerCarStatusAndSiteId(treatcarId,CarStatus.NODEPARTURE.ordinal(),siteId);
+		}
+		if(transcarId!=-1) {
+			carDao.editWorkerCarStatusAndSiteId(transcarId, CarStatus.NODEPARTURE.ordinal(), siteId);
+			Sludge sludge=new Sludge();
+			sludge.setRecordId(record.getId());
+			//设置sludge的状态为虚拟状态，还未产出
+			sludge.setStatus(SludgeStatus.VIRTUAL.ordinal());
+			sludge.setTranscarId(transcarId);
+			sludgeDao.addSludge(sludge);
+		}
+	}
+	@Override
+	public void updateRecordStatusById(int recordId, int status) {
+		recordDao.updateRecordStatusById(recordId, status);
 	}
 
 }

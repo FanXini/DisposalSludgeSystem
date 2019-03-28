@@ -1107,23 +1107,22 @@ h5{
 		obj.style.backgroundColor="rgba(0, 0, 0, 0)";
 	}
 	
-	/***************************** 手动任务分配（暂无此功能）************************************* */	
+	/***************************** 手动任务分配************************************* */	
 	function dealSite(siteId){
 		$("#dealSiteId").val(siteId);
+		//查询空闲处理车
 		$.ajax({
   				type : "POST",
   				url : "car/queryTreatmentCarUnassign",
   				success : function(carList) {
-
-  						$("#driverSelect").empty();
-  						$("#driverSelect").append('<option value="-1">暂不分配</option>')
-  						$.each(carList,function(i, car) {
-  							$("#driverSelect").append('<option id="'+car.id+'" value="'+car.id+'">'+car.driver.realname+'</option>')
-  						});
-  						//$('#dealSiteModal').modal('show');
-  					
+  					$("#driverSelect").empty();
+  					$("#driverSelect").append('<option value="-1">暂不分配</option>')
+  					$.each(carList,function(i, car) {
+  						$("#driverSelect").append('<option id="'+car.id+'" value="'+car.id+'">'+car.driver.realname+'</option>')
+  					});
   				}
-  			});	
+  			});
+		//查询空闲运输车
 		$.ajax({
 				type : "POST",
 				url : "car/queryCarrierUnassign",
@@ -1149,13 +1148,13 @@ h5{
 		var transcarId=$("#carrierSelect").val();
 		$.ajax({
   			type : "POST",
-  			url : "record/editRecordCarIdBySiteId",
+  			url : "record/assignDriverForRecord",
   			data : {"siteId" : dealSiteId,
-  					"carId" : driverSelect,
+  					"treatcarId" : driverSelect,
   					"transcarId":transcarId
   			},
   			success : function(result) {
-				if(result.result=="success"){
+				if(result=="SUCCESS"){
  					alert("分配成功");
  					showNum();
  				}

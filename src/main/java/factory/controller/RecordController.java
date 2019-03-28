@@ -13,6 +13,7 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -29,6 +30,7 @@ import org.springframework.web.servlet.ModelAndView;
 import factory.entity.Record;
 import factory.entity.Site;
 import factory.entity.User;
+import factory.enums.AutoAssign;
 import factory.enums.CarStatus;
 import factory.enums.RecordStatus;
 import factory.enums.Result;
@@ -66,7 +68,7 @@ public class RecordController {
 	private  SimpleDateFormat dateFormat;
 	/*private  SimpleDateFormat dateFormat=new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");*/
 	
-	private static Log log=LogFactory.getLog(RecordController.class);
+	private static Logger log=Logger.getLogger(RecordController.class);
 	/**
 	 * @description:从record表中查询所有记录
 	 */
@@ -79,7 +81,15 @@ public class RecordController {
 		mv.addObject("assignCarTreatDriver",userService.queryCarAssignTreatDriver());
 		mv.addObject("driverList",allDrivers);
 		mv.addObject("siteList",sites);
-		mv.setViewName("record/records");
+		mv.setViewName("mudwarehouse/records");
+		return mv;
+	}
+	
+	@RequestMapping("/jumpToSludgesOfOneRecord")
+	public ModelAndView sludgesOfOneRecord(@RequestParam("recordId") int recordId,ModelAndView mv){
+		log.info("jumpToSludgesOfOneRecord");
+		mv.addObject("recordId", recordId);
+		mv.setViewName("mudwarehouse/sludgeOfOneRecord");
 		return mv;
 	}
 	
@@ -96,9 +106,6 @@ public class RecordController {
 		log.info("调用queryAllRecord");
 		List<Record> records=new ArrayList<Record>();
 		records.addAll(recordService.queryAllRecord());
-		for(Record record:records){
-			System.out.println(record.getCar().getBrand());
-		}
 		return records;
 	}
 	
@@ -253,10 +260,10 @@ public class RecordController {
 		recordService.insertRecordByAlert(record);
 		//修改工厂的状态为待处理
 		siteService.updateSiteStatusById(siteId, SiteStatus.WATINGPROCESS.ordinal());
-		System.out.println(record.getId());
-		//查询出车的经纬度
-		Site site=siteService.querySiteById(siteId);
-		taskExecuter.submit(new AssignCarForReocrdThread(redisTemplate,recordService, carService, sludgeService, record.getId(), site));
+		if(AutoAssign.autoAssign) {
+			Site site=siteService.querySiteById(siteId);
+			taskExecuter.submit(new AssignCarForReocrdThread(redisTemplate,recordService, carService, sludgeService, record.getId(), site));
+		}
 		return "success";
 	}
 	
@@ -288,9 +295,6 @@ public class RecordController {
 	public List<Record> queryRecordByDateOfOneFactory(@RequestBody Map<String, Object> condition){
 		log.info("调用queryRecordByDateOfOneFactory");
 		List<Record> records=recordService.queryRecordByDateOfOneFactory(condition);
-		for(Record record:records){
-			System.out.println(record.getCar().getDriver().getRealname());
-		}
 		return records;
 	}
 
@@ -308,25 +312,20 @@ public class RecordController {
 		}
 	}
 	@Transactional
-	@RequestMapping("editRecordCarIdBySiteId")
+	@RequestMapping("assignDriverForRecord")
 	@ResponseBody
-	public Map<String,String> editRecordCarIdBySiteId(@RequestParam("siteId") int siteId,@RequestParam("carId") int carId,@RequestParam("transcarId") int transcarId){
+	public Result assignDriverForRecord(@RequestParam("siteId") int siteId,@RequestParam("treatcarId") int treatcarId,@RequestParam("transcarId") int transcarId){
 		log.info("调用editRecordBySiteId");
 		Map<String, String> result=new HashMap<String, String>();
 		try {
-			if(carId!=-1) {
-				recordService.editRecordCarIdBySiteId(siteId,carId);
-			}
-			if(transcarId!=-1) {
-				carService.editWorkerCarStatusAndSiteId(transcarId, CarStatus.NODEPARTURE.ordinal(), siteId);
-			}
-			result.put("result", "success");
+			recordService.assignDriverForRecord(siteId, treatcarId, transcarId);
+			return Result.SUCCESS;
 		}catch (Exception e) {
 			// TODO: handle exception
-			log.info(e);
-			result.put("result", "failure");
+			e.printStackTrace();
+			return Result.ERROR;
+			
 		}
-		return result;
 	}
 	
 	/**
@@ -351,5 +350,19 @@ public class RecordController {
 	public double queryCurrentPretreatAmountBySiteId(@RequestParam("siteId") int siteId){
 		log.info("调用queryCurrentPretreatAmountBySiteId,siteId:"+siteId);
 		return recordService.queryCurrentPretreatAmountBySiteId(siteId);
+	}
+	
+	@RequestMapping("updateRecordStatusById")
+	@ResponseBody
+	public Result updateRecordStatusById(@RequestParam("recordId") int recordId,@RequestParam("status") int status){
+		log.info("updateRecordStatusById");
+		try {
+			 recordService.updateRecordStatusById(recordId, status);
+			 return Result.SUCCESS;
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+			return Result.ERROR;
+		}
 	}
 }

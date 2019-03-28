@@ -81,5 +81,7 @@ public interface SludgeDao {
 	
 	public void setArrivalTimeAndStatusById(@Param("sludgeId") int sludgeId,@Param("status")int status,@Param("arrivalTime")String arrivalTime);
 	
+	public List<Sludge> querySludgeByRecordId(@Param("recordId") int recordId);
+	
 
 }

@@ -31,6 +31,52 @@
 </head>
 
 <body class="gray-bg">
+	<!-- 手动分配处理人Modal -->
+	<div class="modal fade" id="dealSiteModal" tabindex="-1" role="dialog"
+		aria-labelledby="myModalLabel">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+					<h4 class="modal-title" id="myModalLabel">分配处理人</h4>
+				</div>
+				<div class="modal-body">
+					<!-- 用来存id -->
+					<input id="dealSiteId" type="hidden"/>
+					<form>
+						<div class="form-group">
+							<div class="input-group">
+								<span class="input-group-addon">处理车司机</span>
+								<select	id="driverSelect" class="form-control col-lg-4">
+								</select>
+							</div>
+						</div>
+					</form>
+				</div>
+				
+				<div class="modal-body">
+					<!-- 用来存id -->
+					<form>
+						<div class="form-group">
+							<div class="input-group">
+								<span class="input-group-addon">运输车司机</span>
+								<select	id="carrierSelect" class="form-control col-lg-4">
+								</select>
+							</div>
+						</div>
+					</form>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-l" data-dismiss="modal">取消</button>
+					<button id="saveSiteDealBtn" type="button" class="btn btn-primary">保存</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
 	<!-- Modal -->
 	<div class="modal fade" id="myModal" tabindex="-1" role="dialog"
 		aria-labelledby="myModalLabel">
@@ -238,17 +284,16 @@
 				'<tr>' +
 				'<th data-toggle="true">状态</th>' +
 				'<th>工厂</th>' +
-				'<th>处理人</th>' +
 				/* '<th>污泥处理量</th>' + */
 				'<th>任务分配时间</th>' +
 				'<th>产生污泥块量</th>' +
+				'<th>污泥运输记录</th>' +
 				'<th>操作</th>' +
 				'<th data-hide="all">污泥处理开始时间</th>' +
 				'<th data-hide="all">污泥处理完成时间</th>' +
 				'<th data-hide="all">工厂地址</th>' +
 				'<th data-hide="all">工厂联系号码</th>' +
-				'<th data-hide="all">处理人号码</th>' +
-				'<th data-hide="all">车牌号</th>' +
+				'<th data-hide="all">处理车辆</th>' +
 				'</tr>' +
 				'</thead>' +
 				'<tbody>'
@@ -308,6 +353,7 @@
 					$("#tableDiv").empty()
 					var table = table_start
 					$.each(recordList, function(i, record) {
+						console.log(JSON.stringify(record.recordTreatCars))
 						table += '<tr>'
 						if (record.status == 0) {
 							table += '<td class="project-status"><span class="label label-inverse">已完成</td>'
@@ -315,30 +361,35 @@
 							table += '<td class="project-status"><span class="label label-danger">处理中</td>'
 						} else if (record.status == 2) {
 							table += '<td class="project-status"><span class="label label-primary">待处理</td>'
-						} else {
-							table += '<td></td>'
+						} else{
+							table+='<td class="project-status"><span class="label label-warning">待审核</td>'
 						}
 						table += '<td>' + (record.site.siteName ==null?"": record.site.siteName) + '</td>'
-						table += '<td class="project-manage">' + (record.car.driver.realname ==null?"":record.car.driver.realname) + '</td>' 
+						//table += '<td class="project-manage">' + (record.car.driver.realname ==null?"":record.car.driver.realname) + '</td>' 
 						table += '<td>' + (record.allocationTime ==null?"":  record.allocationTime) + '</td>'
 						table += '<td>' + (record.sludgesWeight ==null?"0":  record.sludgesWeight) + '吨</td>'
-						if (record.status == 0 || record.status == 1 || record.car.status == 1 || record.car.status == 2 || record.car.status == 4) {
+						table += '<td><a href='+"record/jumpToSludgesOfOneRecord?recordId="+''+record.id+'>查看详情</a></td>'
+						if(record.status==1||record.status==2){
 							table += '<td class="project-actions" style="float:left;">' +
-								'<button onclick="javascript:deleteRecord(' + i + ',' + record.id + ');" class="btn btn-white btn-sm" data-toggle="modal" data-target="#myModal1"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span>删除 </button>' +
-								'<button  class="btn btn-white btn-sm"  disabled="disabled"><i class="fa fa-pencil"></i>不可修改 </button>' +
-								'</td>'
-						} else {
-							table += '<td class="project-actions" style="float:left;">' +
-								'<button onclick="javascript:deleteRecord(' + i + ',' + record.id + ');" class="btn btn-white btn-sm" data-toggle="modal" data-target="#myModal1"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span>删除 </button>' +
-								'<button onclick="javascript:edit(' + i + ',' + record.id + ',' + record.siteId + ');" class="btn btn-white btn-sm" data-toggle="modal" data-target="#myModal"><i class="fa fa-pencil"></i> 分配处理人 </button>' +
-								'</td>'
+							'<button onclick="javascript:deleteRecord(' + i + ',' + record.id + ');" class="btn btn-white btn-sm" data-toggle="modal" data-target="#myModal1"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span>删除 </button>' +
+							'<button onclick="javascript:dealSite(' + record.siteId + ');" class="btn btn-white btn-sm"><i class="fa fa-pencil"></i> 分配处理人 </button>' +
+							'</td>'
 						}
-						table += '<td>' + (record.disposalTime ==null?"":  record.disposalTime)+ '</td>'
+						else{
+							table += '<td class="project-actions" style="float:left;">' +
+							'<button onclick="javascript:deleteRecord(' + i + ',' + record.id + ');" class="btn btn-white btn-sm" data-toggle="modal" data-target="#myModal1"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span>删除 </button>' +
+							'</td>'
+						}
+					 	table += '<td>' + (record.disposalTime ==null?"":  record.disposalTime)+ '</td>'
 						table += '<td><span class="pie">' + (record.finishTime ==null?"": record.finishTime) + '</span></td>'
 						table += '<td>' + (record.site.address ==null?"": record.site.address) + '</td>'
 						table += '<td>' + (record.site.telephone ==null?"": record.site.telephone) + '</td>'
-						table += '<td>' + (record.car.driver.telephone ==null?"":record.car.driver.telephone) + '</td>'
-						table += '<td>' + (record.car.license==null?"": record.car.license) + '</td>'
+						table += '<td>'
+						for(var i=0;i<record.recordTreatCars.length;i++){
+							var car=record.recordTreatCars[i].treatcar;
+							table+=car.license+"  处理人:"+car.driver.realname+" 联系方式:"+(car.driver.telephone==null?"无": car.driver.telephone)+"</br>";
+						}
+						table += '</td>'
 						table += '</tr>'
 	
 					})
@@ -382,6 +433,7 @@
 						$("#tableDiv").empty()
 						var table = table_start
 						$.each(recordList, function(i, record) {
+							console.log(JSON.stringify(record.recordTreatCars))
 							table += '<tr>'
 							if (record.status == 0) {
 								table += '<td class="project-status"><span class="label label-inverse">已完成</td>'
@@ -389,32 +441,37 @@
 								table += '<td class="project-status"><span class="label label-danger">处理中</td>'
 							} else if (record.status == 2) {
 								table += '<td class="project-status"><span class="label label-primary">待处理</td>'
-							} else {
-								table += '<td></td>'
+							} else{
+								table+='<td class="project-status"><span class="label label-warning">待审核</td>'
 							}
 							table += '<td>' + (record.site.siteName ==null?"": record.site.siteName) + '</td>'
-							table += '<td class="project-manage">' + (record.car.driver.realname  ==null?"":record.car.driver.realname )+ '</td>'
-							table += '<td>' + record.allocationTime + '</td>'
+							//table += '<td class="project-manage">' + (record.car.driver.realname ==null?"":record.car.driver.realname) + '</td>' 
+							table += '<td>' + (record.allocationTime ==null?"":  record.allocationTime) + '</td>'
 							table += '<td>' + (record.sludgesWeight ==null?"0":  record.sludgesWeight) + '吨</td>'
-							if (record.status == 0 || record.status == 1 || record.car.status == 1 || record.car.status == 2 || record.car.status == 4) {
+							table += '<td><a href='+"record/jumpToSludgesOfOneRecord?recordId="+''+record.id+'>查看详情</a></td>'
+							if(record.status==1||record.status==2){
 								table += '<td class="project-actions" style="float:left;">' +
-									'<button onclick="javascript:deleteRecord(' + i + ',' + record.id + ');" class="btn btn-white btn-sm" data-toggle="modal" data-target="#myModal1"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span>删除 </button>' +
-									'<button  class="btn btn-white btn-sm"  disabled="disabled"><i class="fa fa-pencil"></i>不可修改 </button>' +
-									'</td>'
-							} else {
-								table += '<td class="project-actions" style="float:left;">' +
-									'<button onclick="javascript:deleteRecord(' + i + ',' + record.id + ');" class="btn btn-white btn-sm" data-toggle="modal" data-target="#myModal1"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span>删除 </button>' +
-									'<button onclick="javascript:edit(' + i + ',' + record.id + ',' + record.siteId + ');" class="btn btn-white btn-sm" data-toggle="modal" data-target="#myModal"><i class="fa fa-pencil"></i> 分配处理人 </button>' +
-									'</td>'
+								'<button onclick="javascript:deleteRecord(' + i + ',' + record.id + ');" class="btn btn-white btn-sm" data-toggle="modal" data-target="#myModal1"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span>删除 </button>' +
+								'<button onclick="javascript:dealSite(' + record.siteId + ');" class="btn btn-white btn-sm"><i class="fa fa-pencil"></i> 分配处理人 </button>' +
+								'</td>'
 							}
-						table += '<td>' + (record.disposalTime ==null?"":  record.disposalTime)+ '</td>'
-						table += '<td><span class="pie">' + (record.finishTime ==null?"": record.finishTime) + '</span></td>'
-						table += '<td>' + (record.site.address ==null?"": record.site.address) + '</td>'
-						table += '<td>' + (record.site.telephone ==null?"": record.site.telephone) + '</td>'
-						table += '<td>' + (record.car.driver.telephone ==null?"":record.car.driver.telephone) + '</td>'
-						table += '<td>' + ( record.car.license==null?"": record.car.license)+ '</td>'
-						table += '</tr>'
-	
+							else{
+								table += '<td class="project-actions" style="float:left;">' +
+								'<button onclick="javascript:deleteRecord(' + i + ',' + record.id + ');" class="btn btn-white btn-sm" data-toggle="modal" data-target="#myModal1"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span>删除 </button>' +
+								'</td>'
+							}
+						 	table += '<td>' + (record.disposalTime ==null?"":  record.disposalTime)+ '</td>'
+							table += '<td><span class="pie">' + (record.finishTime ==null?"": record.finishTime) + '</span></td>'
+							table += '<td>' + (record.site.address ==null?"": record.site.address) + '</td>'
+							table += '<td>' + (record.site.telephone ==null?"": record.site.telephone) + '</td>'
+							table += '<td>'
+							for(var i=0;i<record.recordTreatCars.length;i++){
+								var car=record.recordTreatCars[i].treatcar;
+								table+=car.license+"  处理人:"+car.driver.realname+" 联系方式:"+(car.driver.telephone==null?"无": car.driver.telephone)+"</br>";
+							}
+							table += '</td>'
+							table += '</tr>'
+		
 						})
 						table += table_end
 						$('#tableDiv').append(table)
@@ -437,6 +494,7 @@
 						$("#tableDiv").empty()
 						var table = table_start
 						$.each(recordList, function(i, record) {
+							console.log(JSON.stringify(record.recordTreatCars))
 							table += '<tr>'
 							if (record.status == 0) {
 								table += '<td class="project-status"><span class="label label-inverse">已完成</td>'
@@ -444,32 +502,37 @@
 								table += '<td class="project-status"><span class="label label-danger">处理中</td>'
 							} else if (record.status == 2) {
 								table += '<td class="project-status"><span class="label label-primary">待处理</td>'
-							} else {
-								table += '<td></td>'
+							} else{
+								table+='<td class="project-status"><span class="label label-warning">待审核</td>'
 							}
-							table += '<td>' + (record.site.siteName ==null?"":record.site.siteName) + '</td>'
-							table += '<td class="project-manage">' + (record.car.driver.realname==null?"":record.car.driver.realname) + '</td>'
-							table += '<td>' +(record.allocationTime==null?"":record.allocationTime) + '</td>'
+							table += '<td>' + (record.site.siteName ==null?"": record.site.siteName) + '</td>'
+							//table += '<td class="project-manage">' + (record.car.driver.realname ==null?"":record.car.driver.realname) + '</td>' 
+							table += '<td>' + (record.allocationTime ==null?"":  record.allocationTime) + '</td>'
 							table += '<td>' + (record.sludgesWeight ==null?"0":  record.sludgesWeight) + '吨</td>'
-							if (record.status == 0 || record.status == 1 || record.car.status == 1 || record.car.status == 2 || record.car.status == 4) {
+							table += '<td><a href='+"record/jumpToSludgesOfOneRecord?recordId="+''+record.id+'>查看详情</a></td>'
+							if(record.status==1||record.status==2){
 								table += '<td class="project-actions" style="float:left;">' +
-									'<button onclick="javascript:deleteRecord(' + i + ',' + record.id + ');" class="btn btn-white btn-sm" data-toggle="modal" data-target="#myModal1"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span>删除 </button>' +
-									'<button  class="btn btn-white btn-sm"  disabled="disabled"><i class="fa fa-pencil"></i>不可修改 </button>' +
-									'</td>'
-							} else {
-								table += '<td class="project-actions" style="float:left;">' +
-									'<button onclick="javascript:deleteRecord(' + i + ',' + record.id + ');" class="btn btn-white btn-sm" data-toggle="modal" data-target="#myModal1"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span>删除 </button>' +
-									'<button onclick="javascript:edit(' + i + ',' + record.id + ',' + record.siteId + ');" class="btn btn-white btn-sm" data-toggle="modal" data-target="#myModal"><i class="fa fa-pencil"></i> 分配处理人 </button>' +
-									'</td>'
+								'<button onclick="javascript:deleteRecord(' + i + ',' + record.id + ');" class="btn btn-white btn-sm" data-toggle="modal" data-target="#myModal1"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span>删除 </button>' +
+								'<button onclick="javascript:dealSite(' + record.siteId + ');" class="btn btn-white btn-sm"><i class="fa fa-pencil"></i> 分配处理人 </button>' +
+								'</td>'
 							}
-						table += '<td>' + (record.disposalTime ==null?"":  record.disposalTime)+ '</td>'
-						table += '<td><span class="pie">' + (record.finishTime ==null?"": record.finishTime) + '</span></td>'
-						table += '<td>' + (record.site.address ==null?"": record.site.address) + '</td>'
-						table += '<td>' + (record.site.telephone ==null?"": record.site.telephone) + '</td>'
-						table += '<td>' + (record.car.driver.telephone ==null?"":record.car.driver.telephone) + '</td>'
-						table += '<td>' + (record.car.license==null?"": record.car.license)+ '</td>'
-						table += '</tr>'
-	
+							else{
+								table += '<td class="project-actions" style="float:left;">' +
+								'<button onclick="javascript:deleteRecord(' + i + ',' + record.id + ');" class="btn btn-white btn-sm" data-toggle="modal" data-target="#myModal1"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span>删除 </button>' +
+								'</td>'
+							}
+						 	table += '<td>' + (record.disposalTime ==null?"":  record.disposalTime)+ '</td>'
+							table += '<td><span class="pie">' + (record.finishTime ==null?"": record.finishTime) + '</span></td>'
+							table += '<td>' + (record.site.address ==null?"": record.site.address) + '</td>'
+							table += '<td>' + (record.site.telephone ==null?"": record.site.telephone) + '</td>'
+							table += '<td>'
+							for(var i=0;i<record.recordTreatCars.length;i++){
+								var car=record.recordTreatCars[i].treatcar;
+								table+=car.license+"  处理人:"+car.driver.realname+" 联系方式:"+(car.driver.telephone==null?"无": car.driver.telephone)+"</br>";
+							}
+							table += '</td>'
+							table += '</tr>'
+		
 						})
 						table += table_end
 						$('#tableDiv').append(table)
@@ -490,6 +553,7 @@
 						$("#tableDiv").empty()
 						var table = table_start
 						$.each(recordList, function(i, record) {
+							console.log(JSON.stringify(record.recordTreatCars))
 							table += '<tr>'
 							if (record.status == 0) {
 								table += '<td class="project-status"><span class="label label-inverse">已完成</td>'
@@ -497,32 +561,37 @@
 								table += '<td class="project-status"><span class="label label-danger">处理中</td>'
 							} else if (record.status == 2) {
 								table += '<td class="project-status"><span class="label label-primary">待处理</td>'
-							} else {
-								table += '<td></td>'
+							} else{
+								table+='<td class="project-status"><span class="label label-warning">待审核</td>'
 							}
-							table += '<td>' + (record.site.siteName ==null?"":record.site.siteName) + '</td>'
-							table += '<td class="project-manage">' + (record.car.driver.realname==null?"":record.car.driver.realname) + '</td>'
-							table += '<td>' +(record.allocationTime==null?"":record.allocationTime) + '</td>'
+							table += '<td>' + (record.site.siteName ==null?"": record.site.siteName) + '</td>'
+							//table += '<td class="project-manage">' + (record.car.driver.realname ==null?"":record.car.driver.realname) + '</td>' 
+							table += '<td>' + (record.allocationTime ==null?"":  record.allocationTime) + '</td>'
 							table += '<td>' + (record.sludgesWeight ==null?"0":  record.sludgesWeight) + '吨</td>'
-							if (record.status == 0 || record.status == 1 || record.car.status == 1 || record.car.status == 2 || record.car.status == 4) {
+							table += '<td><a href='+"record/jumpToSludgesOfOneRecord?recordId="+''+record.id+'>查看详情</a></td>'
+							if(record.status==1||record.status==2){
 								table += '<td class="project-actions" style="float:left;">' +
-									'<button onclick="javascript:deleteRecord(' + i + ',' + record.id + ');" class="btn btn-white btn-sm" data-toggle="modal" data-target="#myModal1"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span>删除 </button>' +
-									'<button  class="btn btn-white btn-sm"  disabled="disabled"><i class="fa fa-pencil"></i>不可修改 </button>' +
-									'</td>'
-							} else {
-								table += '<td class="project-actions" style="float:left;">' +
-									'<button onclick="javascript:deleteRecord(' + i + ',' + record.id + ');" class="btn btn-white btn-sm" data-toggle="modal" data-target="#myModal1"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span>删除 </button>' +
-									'<button onclick="javascript:edit(' + i + ',' + record.id + ',' + record.siteId + ');" class="btn btn-white btn-sm" data-toggle="modal" data-target="#myModal"><i class="fa fa-pencil"></i> 分配处理人 </button>' +
-									'</td>'
+								'<button onclick="javascript:deleteRecord(' + i + ',' + record.id + ');" class="btn btn-white btn-sm" data-toggle="modal" data-target="#myModal1"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span>删除 </button>' +
+								'<button onclick="javascript:dealSite(' + record.siteId + ');" class="btn btn-white btn-sm"><i class="fa fa-pencil"></i> 分配处理人 </button>' +
+								'</td>'
 							}
-							table += '<td>' + (record.disposalTime ==null?"":  record.disposalTime)+ '</td>'
+							else{
+								table += '<td class="project-actions" style="float:left;">' +
+								'<button onclick="javascript:deleteRecord(' + i + ',' + record.id + ');" class="btn btn-white btn-sm" data-toggle="modal" data-target="#myModal1"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span>删除 </button>' +
+								'</td>'
+							}
+						 	table += '<td>' + (record.disposalTime ==null?"":  record.disposalTime)+ '</td>'
 							table += '<td><span class="pie">' + (record.finishTime ==null?"": record.finishTime) + '</span></td>'
 							table += '<td>' + (record.site.address ==null?"": record.site.address) + '</td>'
 							table += '<td>' + (record.site.telephone ==null?"": record.site.telephone) + '</td>'
-							table += '<td>' + (record.car.driver.telephone ==null?"":record.car.driver.telephone) + '</td>'
-							table += '<td>' + (record.car.license==null?"": record.car.license)+ '</td>'
+							table += '<td>'
+							for(var i=0;i<record.recordTreatCars.length;i++){
+								var car=record.recordTreatCars[i].treatcar;
+								table+=car.license+"  处理人:"+car.driver.realname+" 联系方式:"+(car.driver.telephone==null?"无": car.driver.telephone)+"</br>";
+							}
+							table += '</td>'
 							table += '</tr>'
-	
+		
 						})
 						table += table_end
 						$('#tableDiv').append(table)
@@ -544,6 +613,7 @@
 						$("#tableDiv").empty()
 						var table = table_start
 						$.each(recordList, function(i, record) {
+							console.log(JSON.stringify(record.recordTreatCars))
 							table += '<tr>'
 							if (record.status == 0) {
 								table += '<td class="project-status"><span class="label label-inverse">已完成</td>'
@@ -551,32 +621,37 @@
 								table += '<td class="project-status"><span class="label label-danger">处理中</td>'
 							} else if (record.status == 2) {
 								table += '<td class="project-status"><span class="label label-primary">待处理</td>'
-							} else {
-								table += '<td></td>'
+							} else{
+								table+='<td class="project-status"><span class="label label-warning">待审核</td>'
 							}
-							table += '<td>' + (record.site.siteName ==null?"":record.site.siteName) + '</td>'
-							table += '<td class="project-manage">' + (record.car.driver.realname==null?"":record.car.driver.realname) + '</td>'
-							table += '<td>' +(record.allocationTime==null?"":record.allocationTime) + '</td>'
+							table += '<td>' + (record.site.siteName ==null?"": record.site.siteName) + '</td>'
+							//table += '<td class="project-manage">' + (record.car.driver.realname ==null?"":record.car.driver.realname) + '</td>' 
+							table += '<td>' + (record.allocationTime ==null?"":  record.allocationTime) + '</td>'
 							table += '<td>' + (record.sludgesWeight ==null?"0":  record.sludgesWeight) + '吨</td>'
-							if (record.status == 0 || record.status == 1 || record.car.status == 1 || record.car.status == 2 || record.car.status == 4) {
+							table += '<td><a href='+"record/jumpToSludgesOfOneRecord?recordId="+''+record.id+'>查看详情</a></td>'
+							if(record.status==1||record.status==2){
 								table += '<td class="project-actions" style="float:left;">' +
-									'<button onclick="javascript:deleteRecord(' + i + ',' + record.id + ');" class="btn btn-white btn-sm" data-toggle="modal" data-target="#myModal1"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span>删除 </button>' +
-									'<button  class="btn btn-white btn-sm"  disabled="disabled"><i class="fa fa-pencil"></i>不可修改 </button>' +
-									'</td>'
-							} else {
-								table += '<td class="project-actions" style="float:left;">' +
-									'<button onclick="javascript:deleteRecord(' + i + ',' + record.id + ');" class="btn btn-white btn-sm" data-toggle="modal" data-target="#myModal1"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span>删除 </button>' +
-									'<button onclick="javascript:edit(' + i + ',' + record.id + ',' + record.siteId + ');" class="btn btn-white btn-sm" data-toggle="modal" data-target="#myModal"><i class="fa fa-pencil"></i> 分配处理人 </button>' +
-									'</td>'
+								'<button onclick="javascript:deleteRecord(' + i + ',' + record.id + ');" class="btn btn-white btn-sm" data-toggle="modal" data-target="#myModal1"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span>删除 </button>' +
+								'<button onclick="javascript:dealSite(' + record.siteId + ');" class="btn btn-white btn-sm"><i class="fa fa-pencil"></i> 分配处理人 </button>' +
+								'</td>'
 							}
-							table += '<td>' + (record.disposalTime ==null?"":  record.disposalTime)+ '</td>'
+							else{
+								table += '<td class="project-actions" style="float:left;">' +
+								'<button onclick="javascript:deleteRecord(' + i + ',' + record.id + ');" class="btn btn-white btn-sm" data-toggle="modal" data-target="#myModal1"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span>删除 </button>' +
+								'</td>'
+							}
+						 	table += '<td>' + (record.disposalTime ==null?"":  record.disposalTime)+ '</td>'
 							table += '<td><span class="pie">' + (record.finishTime ==null?"": record.finishTime) + '</span></td>'
 							table += '<td>' + (record.site.address ==null?"": record.site.address) + '</td>'
 							table += '<td>' + (record.site.telephone ==null?"": record.site.telephone) + '</td>'
-							table += '<td>' + (record.car.driver.telephone ==null?"":record.car.driver.telephone) + '</td>'
-							table += '<td>' + (record.car.license==null?"": record.car.license)+ '</td>'
+							table += '<td>'
+							for(var i=0;i<record.recordTreatCars.length;i++){
+								var car=record.recordTreatCars[i].treatcar;
+								table+=car.license+"  处理人:"+car.driver.realname+" 联系方式:"+(car.driver.telephone==null?"无": car.driver.telephone)+"</br>";
+							}
+							table += '</td>'
 							table += '</tr>'
-	
+		
 						})
 						table += table_end
 						$('#tableDiv').append(table)
@@ -628,7 +703,7 @@
 			$("#deleteButton").click(function() {
 				var recordId = $("#recordId").val()
 				var driverName = $("#driverSelect").val()
-				var index = parseInt($("#trIndex").val())
+				var index = parseInt($("#trIndex").val());
 				$.ajax({
 					type : "POST",
 					url : "record/deleteRecord?recordId=" + recordId,
@@ -649,14 +724,65 @@
 	
 		});
 	
-		/*----------------------------------- 分配处理人 ------------------------------------------*/
-		function edit(index, recordId, siteId) {
-			var realName = document.getElementById("table").rows[index + 1].cells[2].innerText;
-			$("#recordId").val(recordId)
-			$("#trIndex").val(index)
-			$("#siteId").val(siteId)
-			$("#driverSelect").val(realName)
+		/***************************** 手动任务分配************************************* */	
+		function dealSite(siteId){
+			$("#dealSiteId").val(siteId);
+			//查询空闲处理车
+			$.ajax({
+	  				type : "POST",
+	  				url : "car/queryTreatmentCarUnassign",
+	  				success : function(carList) {
+	  					$("#driverSelect").empty();
+	  					$("#driverSelect").append('<option value="-1">暂不分配</option>')
+	  					$.each(carList,function(i, car) {
+	  						$("#driverSelect").append('<option id="'+car.id+'" value="'+car.id+'">'+car.driver.realname+'</option>')
+	  					});
+	  				}
+	  			});
+			//查询空闲运输车
+			$.ajax({
+					type : "POST",
+					url : "car/queryCarrierUnassign",
+					success : function(carList) {
+						if(jQuery.isEmptyObject(carList))
+							alert("暂无空闲车辆");
+						else{
+							console.log(carList)
+							$("#carrierSelect").empty();
+							$("#carrierSelect").append('<option value="-1">暂不分配</option>')
+							$.each(carList,function(i, car) {
+								$("#carrierSelect").append('<option id="'+car.id+'" value="'+car.id+'">'+car.driver.realname+'</option>')
+							});
+							$('#dealSiteModal').modal('show');
+						}
+					}
+				});
 		}
+		
+		$("#saveSiteDealBtn").click(function (){
+			var dealSiteId=$("#dealSiteId").val();
+			var driverSelect=$("#driverSelect").val();
+			var transcarId=$("#carrierSelect").val();
+			$.ajax({
+	  			type : "POST",
+	  			url : "record/assignDriverForRecord",
+	  			data : {"siteId" : dealSiteId,
+	  					"treatcarId" : driverSelect,
+	  					"transcarId":transcarId
+	  			},
+	  			success : function(result) {
+					if(result=="SUCCESS"){
+	 					alert("分配成功");
+	 					showNum();
+	 				}
+	  				else{
+	  					alert("分配失败");
+					}
+	  			}
+	  		});
+			$('#dealSiteModal').modal('hide');
+		});
+		
 		/*----------------------------------- 删除------------------------------------------*/
 		function deleteRecord(index, recordId) {
 			$("#recordId").val(recordId)

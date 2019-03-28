@@ -44,6 +44,8 @@ public interface SludgeService {
 	public List<Sludge> querySludgeByDates(String startDate, String endDate, int siteId);
 
 	public List<Sludge> querySludgeBySiteName(String siteName);
+	
+	public List<Sludge> querySludgeByRecordId(Integer recordId);
 
 	public List<Sludge> transportsludgeofonedriver(int driverId);
 

@@ -285,12 +285,15 @@ public class CarServiceImpl implements CarService{
 					//修改成已到达
 					carDao.editWorkerCarStatus(driverId, CarStatus.ARRIVAL.ordinal());
 					if(carType==0) {  //如果是处理车到达,要修改record和site的状态为处理中,并设置record开始时间
-						//查询现在处理的是哪个任务
-						Record treatmentRecord=recordDao.queryRecordByCarIdAndStatus(car.getId(), RecordStatus.WATINGPROCESS.ordinal());
-						//修改record的状态为处理中,并且设置任务开始时间,0表示存的是任务开始时间
-						recordDao.UpdateRecordStatusAndTimeById(treatmentRecord.getId(), RecordStatus.PROCESSING.ordinal(), dataFormat.format(new Date()), 0);
-						//修改site的状态为处理中
-						siteDao.updateSiteStatusById(treatmentRecord.getSiteId(), SiteStatus.PROCESSING.ordinal());
+						//查询现在处理的是哪个任务 
+						//判断条件：record的status=1||2,record.siteId=car.siteId
+						Record treatmentRecord=recordDao.queryNoCompleteRecordBySiteIdOfCarAndRecord(car.getId());
+						if(treatmentRecord.getStatus()==2) {
+							//修改record的状态为处理中,并且设置任务开始时间,0表示存的是任务开始时间
+							recordDao.UpdateRecordStatusAndTimeById(treatmentRecord.getId(), RecordStatus.PROCESSING.ordinal(), dataFormat.format(new Date()), 0);
+							//修改site的状态为处理中
+							siteDao.updateSiteStatusById(treatmentRecord.getSiteId(), SiteStatus.PROCESSING.ordinal());
+						}
 						
 					}
 					else if(carType==1) { //如果是污泥车，要判断是到达污泥厂，还是到达目的地
@@ -323,11 +326,14 @@ public class CarServiceImpl implements CarService{
 						// 修改为车的状态返程状态,修改site为null
 						carDao.editWorkerCarStatusAndSiteId(carId, CarStatus.GETBACK.ordinal(),0); 
 						//查询现在处理的是哪个任务
-						Record treatmentRecord=recordDao.queryRecordByCarIdAndStatus(car.getId(), RecordStatus.PROCESSING.ordinal());
-						//修改record的状态为处理完成
-						recordDao.UpdateRecordStatusAndTimeById(treatmentRecord.getId(), RecordStatus.ACCOMPLISH.ordinal(), dataFormat.format(new Date()), 1);
-						//修改site的状态为正常
-						siteDao.updateSiteStatusById(treatmentRecord.getSiteId(), SiteStatus.NORMAL.ordinal());
+						Record treatmentRecord=recordDao.queryProcessingRecordBySiteIdOfCarAndRecord(carId);
+						//如果是最好完成的一辆车，修改record的状态为处理完成，site状态为正常
+						if(treatmentRecord.getCarNum()==1) {
+							recordDao.UpdateRecordStatusAndTimeById(treatmentRecord.getId(), RecordStatus.ACCOMPLISH.ordinal(), dataFormat.format(new Date()), 1);
+							//修改site的状态为正常
+							siteDao.updateSiteStatusById(treatmentRecord.getSiteId(), SiteStatus.NORMAL.ordinal());	
+						}
+						recordDao.oneTreatmentCarComplete(treatmentRecord.getId());
 						return new Car(CarStatus.GETBACK.ordinal(),carType,0);
 					}
 					else if(carType==1) {//如果是运输车

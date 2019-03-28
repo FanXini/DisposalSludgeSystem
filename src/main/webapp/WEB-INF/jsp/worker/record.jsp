@@ -242,7 +242,7 @@
 							table += '<td class="project-status"><span class="label label-inverse">待处理</td>'
 						}
 						else{
-							table+='<td></td>'
+							table+='<td class="project-status"><span class="label label-warning">待审核</td>'
 						}
 						table += '<td>' + record.site.siteName + '</td>'
 						/* table += '<td class="project-completion">' +
@@ -254,8 +254,8 @@
 						table += '<td>' + record.allocationTime + '</td>'
 						//table += '<td><span class="label label-success">待输入</td>
 						table += '<td>' + record.sludgesWeight + '吨</td>'
-						table += '<td>' + record.disposalTime + '</td>'
-						table += '<td><span class="pie">' + record.finishTime + '</span></td>'
+						table += '<td>' + (record.disposalTime ==null?"":  record.disposalTime)+ '</td>'
+						table += '<td><span class="pie">' + (record.finishTime ==null?"": record.finishTime) + '</span></td>'
 						table += '<td>' + record.site.address + '</td>'
 						table += '<td>' + record.site.telephone + '</td>'
 						table += '</tr>'
@@ -294,7 +294,7 @@
 							table += '<td class="project-status"><span class="label label-inverse">待处理</td>'
 						}
 						else{
-							table+='<td></td>'
+							table+='<td class="project-status"><span class="label label-warning">待审核</td>'
 						}
 						table += '<td>' + record.site.siteName + '</td>'
 						/* table += '<td class="project-completion">' +
@@ -306,8 +306,8 @@
 						table += '<td>' + record.allocationTime + '</td>'
 						//table += '<td><span class="label label-success">待输入</td>
 						table += '<td>' + record.sludgesWeight + '吨</td>'
-						table += '<td>' + record.disposalTime + '</td>'
-						table += '<td><span class="pie">' + record.finishTime + '</span></td>'
+						table += '<td>' + (record.disposalTime ==null?"":  record.disposalTime)+ '</td>'
+						table += '<td><span class="pie">' + (record.finishTime ==null?"": record.finishTime) + '</span></td>'
 						table += '<td>' + record.site.address + '</td>'
 						table += '<td>' + record.site.telephone + '</td>'
 						table += '</tr>'
@@ -350,7 +350,7 @@
 								table += '<td class="project-status"><span class="label label-inverse">待处理</td>'
 							}
 							else{
-								table+='<td></td>'
+								table+='<td class="project-status"><span class="label label-warning">待审核</td>'
 							}
 							table += '<td>' + record.site.siteName + '</td>'
 							/* table += '<td class="project-completion">' +
@@ -362,8 +362,8 @@
 							table += '<td>' + record.allocationTime + '</td>'
 							//table += '<td><span class="label label-success">待输入</td>
 							table += '<td>' + record.sludgesWeight + '吨</td>'
-							table += '<td>' + record.disposalTime + '</td>'
-							table += '<td><span class="pie">' + record.finishTime + '</span></td>'
+							table += '<td>' + (record.disposalTime ==null?"":  record.disposalTime)+ '</td>'
+							table += '<td><span class="pie">' + (record.finishTime ==null?"": record.finishTime) + '</span></td>'
 							table += '<td>' + record.site.address + '</td>'
 							table += '<td>' + record.site.telephone + '</td>'
 							table += '</tr>'
@@ -408,7 +408,7 @@
 								table += '<td class="project-status"><span class="label label-inverse">待处理</td>'
 							}
 							else{
-								table+='<td></td>'
+								table+='<td class="project-status"><span class="label label-warning">待审核</td>'
 							}
 							table += '<td>' + record.site.siteName + '</td>'
 							/* table += '<td class="project-completion">' +

@@ -13,5 +13,10 @@ public enum RecordStatus {
 	/**
 	 * 等待处理,对应数据库中的2状态
 	 */
-	WATINGPROCESS
+	WATINGPROCESS,
+	
+	/**
+	 * 等待审核,对应数据库中的3状态
+	 */
+	WATINGCHECK
 }

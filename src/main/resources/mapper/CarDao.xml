@@ -102,8 +102,7 @@
 		car.id,car.driver_id,car.`status`,car.license
 		FROM record LEFT JOIN car
 		ON record.car_id=car.id
-		WHERE record.del_status=0 AND
-		record.id=#{recordId}
+		WHERE record.id=#{recordId}
 	</select>
 
 	<delete id="deleteCar">

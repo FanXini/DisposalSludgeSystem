@@ -13,84 +13,77 @@
 		<result property="status" column="status" />
 		<result property="sludgesWeight" column="sludges_weight" />
 		<result property="pretreatAmount" column="pretreat_amount" />
-		<association property="car" javaType="factory.entity.Car">
-			<id property="id" column="id"></id>
-			<result property="driverId" column="driver_id"></result>
-			<result property="license" column="license" />
-			<result property="brand" column="brand"></result>
-			<result property="status" column="carStatus" />
-			<association property="driver" javaType="factory.entity.User">
-				<id property="id" column="id" />
-				<result property="realname" column="realname" />
-				<result property="telephone" column="telephone" />
-			</association>
-		</association>
 		<association property="site" javaType="factory.entity.Site">
-			<id property="id" column="id"></id>
+			<id property="id" column="sid"></id>
 			<result property="siteName" column="site_name" />
 			<result property="serialName" column="serial_name" />
 			<result property="address" column="address"></result>
 			<result property="telephone" column="telephoneOfSite"></result>
 		</association>
+		<collection property="recordTreatCars" ofType="factory.entity.RecordTreatCar">
+			<id property="id" column="rid"></id>
+			<result property="recordId" column="record_id"></result>
+			<result property="treatmentcarId" column="treatmentcar_id"></result>
+			<association property="treatmentcar" javaType="factory.entity.Car">
+				<id property="id" column="cid"></id>
+				<result property="driverId" column="driver_id"></result>
+				<result property="license" column="license" />
+				<association property="driver" javaType="factory.entity.User">
+					<id property="id" column="uid" />
+					<result property="realname" column="realname" />
+					<result property="telephone" column="telephone" />
+				</association>
+			</association>
+		</collection>
 	</resultMap>
 
 	<select id="queryAllRecord" resultMap="RecordMap">
-		<!-- SELECT record.*,sludge.id,sludge.weight,car.id,car.driver_id,car.license,car.brand,user.id,user.realname,user.telephone,site.id,site.site_name,site.serial_number,site.address,site.telephone 
-			telephoneOfSite FROM record,car,site,user,sludge WHERE record.del_status=0 
-			AND record.car_id=car.id AND record.site_id=site.id AND car.driver_id=user.id 
-			AND record.sludge_id=sludge.id ORDER BY record.allocation_time DESC -->
 		SELECT
-		record.*,car.id,car.driver_id,car.license,car.brand,car.status
-		carStatus,user.id,user.realname,user.telephone,site.id,site.site_name,site.serial_number,site.address,site.telephone
-		telephoneOfSite,site.telephone telephoneOfSite
-		FROM record LEFT JOIN
-		site ON record.site_id=site.id LEFT JOIN car ON
-		record.car_id=car.id
-		LEFT JOIN `user` ON car.driver_id=`user`.id
-		WHERE record.del_status=0
-		ORDER BY record.allocation_time DESC
+		record.*,record_treatmentcar.id
+		rid,record_treatmentcar.record_id,record_treatmentcar.treatmentcar_id,site.id sid,site.site_name,site.serial_number,site.address,site.telephone
+		telephoneOfSite,car.id cid,car.license,car.driver_id,user.id uid,user.realname,user.telephone
+		FROM record LEFT JOIN site ON record.site_id=site.id
+		LEFT JOIN record_treatmentcar ON
+		record.id=record_treatmentcar.record_id LEFT JOIN car ON record_treatmentcar.treatmentcar_id=car.id LEFT JOIN user ON car.driver_id=user.id
+		ORDER BY record.allocation_time
+		DESC
 	</select>
 
 	<select id="queryRecordBySiteId" resultMap="RecordMap">
 		SELECT
-		record.*,sludge.id,sludge.weight,car.id,car.driver_id,car.license,car.brand,car.status
-		carStatus,user.id,user.realname,user.telephone,site.id,site.site_name,site.serial_number,site.address,site.telephone
-		telephoneOfSite,site.telephone telephoneOfSite
-		FROM record LEFT JOIN
-		site ON record.site_id=site.id LEFT JOIN car ON
-		record.car_id=car.id
-		LEFT JOIN `user` ON car.driver_id=`user`.id LEFT JOIN sludge ON
-		sludge.record_id=record.id
-		WHERE record.del_status=0 AND
-		record.site_id=#{siteId}
-		ORDER BY record.allocation_time DESC
+		record.*,record_treatmentcar.id
+		rid,record_treatmentcar.record_id,record_treatmentcar.treatmentcar_id,site.id sid,site.site_name,site.serial_number,site.address,site.telephone
+		telephoneOfSite,car.id cid,car.license,car.driver_id,user.id uid,user.realname,user.telephone
+		FROM record LEFT JOIN site ON record.site_id=site.id
+		LEFT JOIN record_treatmentcar ON
+		record.id=record_treatmentcar.record_id LEFT JOIN car ON record_treatmentcar.treatmentcar_id=car.id LEFT JOIN user ON car.driver_id=user.id
+		WHERE record.site_id=#{siteId}
+		ORDER BY record.allocation_time
+		DESC
 	</select>
 
 	<select id="queryRecordByDriverId" resultMap="RecordMap">
 		SELECT
-		record.*,sludge.id,sludge.weight,car.id,car.driver_id,car.license,car.brand,car.status
-		carStatus,user.id,user.realname,user.telephone,site.id,site.site_name,site.serial_number,site.address,site.telephone
-		telephoneOfSite
+		record.*,record_treatmentcar.id
+		rid,record_treatmentcar.record_id,record_treatmentcar.treatmentcar_id,site.id sid,site.site_name,site.serial_number,site.address,site.telephone
+		telephoneOfSite,car.id cid,car.license,car.driver_id,user.id uid,user.realname,user.telephone
 		FROM record LEFT JOIN site ON record.site_id=site.id
-		LEFT JOIN car ON
-		record.car_id=car.id LEFT JOIN `user` ON
-		car.driver_id=`user`.id LEFT JOIN sludge ON sludge.record_id=record.id
-		WHERE record.del_status=0 AND
-		car.driver_id=#{driverId}
-		ORDER BY
-		record.allocation_time DESC
+		LEFT JOIN record_treatmentcar ON
+		record.id=record_treatmentcar.record_id LEFT JOIN car ON record_treatmentcar.treatmentcar_id=car.id LEFT JOIN user ON car.driver_id=user.id
+		WHERE user.id=#{driverId}
+		ORDER BY record.allocation_time
+		DESC
 	</select>
-	
+
 	<select id="queryRecordByDriverIdAndStatus" resultMap="RecordMap">
 		SELECT
-		record.*,car.id,car.driver_id,car.license,car.brand,user.id,user.realname,user.telephone,site.id,site.site_name,site.serial_number,site.address,site.telephone
-		telephoneOfSite
+		record.*,record_treatmentcar.id
+		rid,record_treatmentcar.record_id,record_treatmentcar.treatmentcar_id,site.id sid,site.site_name,site.serial_number,site.address,site.telephone
+		telephoneOfSite,car.id cid,car.license,car.driver_id,user.id uid,user.realname,user.telephone
 		FROM record LEFT JOIN site ON record.site_id=site.id
-		LEFT JOIN car ON
-		record.car_id=car.id LEFT JOIN `user` ON
-		car.driver_id=`user`.id
-		WHERE record.del_status=0 AND
-		car.driver_id=#{driverId} AND 
+		LEFT JOIN record_treatmentcar ON
+		record.id=record_treatmentcar.record_id LEFT JOIN car ON record_treatmentcar.treatmentcar_id=car.id LEFT JOIN user ON car.driver_id=user.id
+		WHERE user.id=#{driverId} AND
 		<choose>
 			<when test="flag==0">
 				record.status=#{status}
@@ -105,112 +98,120 @@
 
 	<select id="queryRecordByDate" resultMap="RecordMap">
 		SELECT
-		record.*,sludge.id,sludge.weight,car.id,car.driver_id,car.license,car.brand,car.status
-		carStatus,user.id,user.realname,user.telephone,site.id,site.site_name,site.serial_number,site.address,site.telephone
-		telephoneOfSite,site.telephone telephoneOfSite
-		FROM record LEFT JOIN
-		site ON record.site_id=site.id LEFT JOIN car ON
-		record.car_id=car.id
-		LEFT JOIN `user` ON car.driver_id=`user`.id LEFT JOIN sludge ON
-		sludge.record_id=record.id
-		WHERE record.del_status=0 AND
-		record.allocation_time BETWEEN #{startDate} AND #{endDate}
-		ORDER BY
-		record.allocation_time DESC
+		record.*,record_treatmentcar.id
+		rid,record_treatmentcar.record_id,record_treatmentcar.treatmentcar_id,site.id sid,site.site_name,site.serial_number,site.address,site.telephone
+		telephoneOfSite,car.id cid,car.license,car.driver_id,user.id uid,user.realname,user.telephone
+		FROM record LEFT JOIN site ON record.site_id=site.id
+		LEFT JOIN record_treatmentcar ON
+		record.id=record_treatmentcar.record_id LEFT JOIN car ON record_treatmentcar.treatmentcar_id=car.id LEFT JOIN user ON car.driver_id=user.id
+		WHERE record.allocation_time BETWEEN #{startDate} AND #{endDate}
+		ORDER BY record.allocation_time
+		DESC
 	</select>
 
 	<update id="updateCarId">
 		UPDATE record
 		SET car_id=#{carId}
-		Where
-		record.del_status=0 AND id=#{recordId}
+		Where id=#{recordId}
 	</update>
 
 	<update id="deleteRecord">
-		UPDATE record
-		SET del_status=1
-		Where del_status=0 AND
-		id=#{recordId}
+		DELETE FROM record
+		WHERE id=#{recordId}
 	</update>
 
 
 
+	<select id="queryRecordBySiteIdAndStatus" resultType="factory.entity.Record">
+		SELECT *
+		from record
+		where site_id=#{siteId} AND
+		<choose>
+			<when test="flag==0">
+				status=#{status}
+			</when>
+			<otherwise>
+				status!=#{status}
+			</otherwise>
+		</choose>
+		ORDER by allocation_time DESC
+		LIMIT 1
+	</select>
+	
 	<select id="queryAllRecordOfOneDriver" resultMap="RecordMap">
 		SELECT
-		record.*,sludge.id,sludge.weight,car.id,car.driver_id,car.license,car.brand,user.id,site.id,site.site_name,site.serial_number,site.address,site.telephone
+		record.*,record_treatmentcar.id
+		rid,record_treatmentcar.record_id,record_treatmentcar.treatmentcar_id,site.id sid,site.site_name,site.serial_number,site.address,site.telephone
 		telephoneOfSite
 		FROM record LEFT JOIN site ON record.site_id=site.id
-		LEFT JOIN car ON
-		record.car_id=car.id LEFT JOIN `user` ON
-		car.driver_id=`user`.id LEFT JOIN sludge ON sludge.record_id=record.id
-		WHERE record.del_status=0 AND
+		LEFT JOIN record_treatmentcar ON
+		record.id=record_treatmentcar.record_id LEFT JOIN car ON record_treatmentcar.treatmentcar_id=car.id LEFT JOIN user ON car.driver_id=user.id
+		WHERE
 		car.driver_id=#{driverId}
-		ORDER BY
-		record.allocation_time DESC
+		ORDER BY record.allocation_time
+		DESC
 	</select>
 
 	<select id="queryRecordBySiteIdOfOneDriver" resultMap="RecordMap">
 		SELECT
-		record.*,sludge.id,sludge.weight,car.id,car.driver_id,car.license,car.brand,user.id,site.id,site.site_name,site.serial_number,site.address,site.telephone
+		record.*,record_treatmentcar.id
+		rid,record_treatmentcar.record_id,record_treatmentcar.treatmentcar_id,site.id sid,site.site_name,site.serial_number,site.address,site.telephone
 		telephoneOfSite
 		FROM record LEFT JOIN site ON record.site_id=site.id
-		LEFT JOIN car ON
-		record.car_id=car.id LEFT JOIN `user` ON
-		car.driver_id=`user`.id LEFT JOIN sludge ON sludge.record_id=record.id
-		WHERE record.del_status=0 AND
+		LEFT JOIN record_treatmentcar ON
+		record.id=record_treatmentcar.record_id LEFT JOIN car ON record_treatmentcar.treatmentcar_id=car.id LEFT JOIN user ON car.driver_id=user.id
+		WHERE
 		record.site_id=#{siteId} AND
 		car.driver_id=#{driverId}
-		ORDER BY record.allocation_time DESC
+		ORDER BY record.allocation_time
+		DESC
 	</select>
 
 	<select id="queryRecordByDateOfOneDriver" resultMap="RecordMap">
 		SELECT
-		record.*,sludge.id,sludge.weight,car.id,car.driver_id,car.license,car.brand,user.id,site.id,site.site_name,site.serial_number,site.address,site.telephone
+		record.*,record_treatmentcar.id
+		rid,record_treatmentcar.record_id,record_treatmentcar.treatmentcar_id,site.id sid,site.site_name,site.serial_number,site.address,site.telephone
 		telephoneOfSite
 		FROM record LEFT JOIN site ON record.site_id=site.id
-		LEFT JOIN car ON
-		record.car_id=car.id LEFT JOIN `user` ON
-		car.driver_id=`user`.id LEFT JOIN sludge ON sludge.record_id=record.id
-		WHERE record.del_status=0 AND
+		LEFT JOIN record_treatmentcar ON
+		record.id=record_treatmentcar.record_id LEFT JOIN car ON record_treatmentcar.treatmentcar_id=car.id LEFT JOIN user ON car.driver_id=user.id
+		WHERE
 		car.driver_id=#{driverId} AND
 		record.allocation_time BETWEEN #{startDate} AND #{endDate}
-		ORDER BY
-		record.allocation_time DESC
+		ORDER BY record.allocation_time
+
 	</select>
 
 	<select id="queryAllRecordOfOneFactory" resultMap="RecordMap">
 		SELECT
-		record.*,car.id,car.driver_id,car.license,car.brand,user.id,user.realname,user.telephone,site.id,site.site_name,site.address,site.telephone
-		FROM record LEFT JOIN site ON record.site_id=site.id LEFT JOIN car ON
-		record.car_id=car.id LEFT JOIN `user` ON car.driver_id=`user`.id
-		WHERE
-		record.del_status=0 AND
-		record.site_id=#{siteId}
-		ORDER BY
-		record.allocation_time DESC
+		record.*,record_treatmentcar.id
+		rid,record_treatmentcar.record_id,record_treatmentcar.treatmentcar_id,car.id cid,car.license,car.driver_id,user.id uid,user.realname,user.telephone
+		FROM record LEFT JOIN record_treatmentcar ON
+		record.id=record_treatmentcar.record_id LEFT JOIN car ON record_treatmentcar.treatmentcar_id=car.id LEFT JOIN user ON car.driver_id=user.id
+		WHERE record.site_id=#{siteId}
+		ORDER BY record.allocation_time
+		DESC
 	</select>
 
 	<select id="queryRecordByDriverIdOfOneFacotry" resultMap="RecordMap">
 		SELECT
-		record.*,sludge.id,sludge.weight,car.id,car.driver_id,car.license,car.brand,user.id,user.realname,user.telephone
-		FROM record LEFT JOIN car ON record.car_id=car.id LEFT JOIN `user` ON
-		car.driver_id=`user`.id LEFT
-		JOIN sludge ON sludge.record_id=record.id
-		WHERE record.del_status=0 AND
-		record.site_id=#{siteId} AND
+		record.*,record_treatmentcar.id
+		rid,record_treatmentcar.record_id,record_treatmentcar.treatmentcar_id,car.id cid,car.license,car.driver_id,user.id uid,user.realname,user.telephone
+		FROM record LEFT JOIN record_treatmentcar ON
+		record.id=record_treatmentcar.record_id LEFT JOIN car ON record_treatmentcar.treatmentcar_id=car.id LEFT JOIN user ON car.driver_id=user.id
+		WHERE record.site_id=#{siteId} AND
 		car.driver_id=#{driverId}
-		ORDER BY
-		record.allocation_time DESC
+		ORDER BY record.allocation_time
+		DESC
 	</select>
 
 	<select id="queryRecordByDateOfOneFactory" resultMap="RecordMap">
 		SELECT
-		record.*,sludge.id,sludge.weight,car.id,car.driver_id,car.license,car.brand,user.id,user.realname,user.telephone,site.id
-		FROM record LEFT JOIN site ON record.site_id=site.id LEFT JOIN car ON
-		record.car_id=car.id LEFT JOIN `user` ON car.driver_id=`user`.id LEFT
-		JOIN sludge ON sludge.record_id=record.id
-		WHERE record.del_status=0 AND
-		record.site_id=#{siteId} AND
+		record.*,record_treatmentcar.id
+		rid,record_treatmentcar.record_id,record_treatmentcar.treatmentcar_id,car.id cid,car.license,car.driver_id,user.id uid,user.realname,user.telephone
+		FROM record LEFT JOIN record_treatmentcar ON
+		record.id=record_treatmentcar.record_id LEFT JOIN car ON record_treatmentcar.treatmentcar_id=car.id LEFT JOIN user ON car.driver_id=user.id
+		WHERE record.site_id=#{siteId} AND
 		record.allocation_time BETWEEN
 		#{startDate} AND #{endDate}
 		ORDER BY record.allocation_time DESC
@@ -220,15 +221,16 @@
 		SELECT
 		record.*,site.id,site.site_name
 		FROM record LEFT JOIN site
-		ON record.site_id=site.id
-		WHERE record.del_status=0 AND record.status=2 AND record.car_id IS NULL
+		ON
+		record.site_id=site.id
+		WHERE record.status=2
+		AND record.car_id IS NULL
 	</select>
 
 	<update id="editRecordCarIdBySiteId">
 		UPDATE record
 		SET car_id=#{carId}
-		Where
-		record.del_status=0 AND record.status=2 AND record.site_id=#{siteId}
+		Where record.status=2 AND record.site_id=#{siteId}
 		AND record.car_id IS NULL
 	</update>
 
@@ -236,8 +238,7 @@
 		SELECT
 		COUNT(*)
 		FROM record
-		WHERE del_status=0
-		AND site_id=#{siteId} 
+		WHERE site_id=#{siteId}
 		AND car_id IS NULL
 	</select>
 
@@ -247,33 +248,53 @@
 		record(allocation_time,site_id,status,pretreat_amount)
 		values(#{allocationTime},#{siteId},#{status},#{pretreatAmount})
 	</insert>
-	
+
+	<insert id="insertRecordTreatcar" useGeneratedKeys="false"
+		keyProperty="id">
+		insert into record_treatmentcar
+		(record_id,treatmentcar_id)
+		value(#{recordId},#{treatcarId})
+	</insert>
+
 	<select id="queryRateOfProcessBySiteId" resultType="factory.entity.Record">
-		SELECT record.*
+		SELECT
+		record.*
 		FROM record
-		WHERE record.del_status=0 AND record.status = 1 AND record.site_id=#{siteId} 
+		WHERE record.status = 1 AND
+		record.site_id=#{siteId}
 		ORDER BY record.allocation_time DESC LIMIT 1
 	</select>
-	
+
 	<select id="queryCurrentPretreatAmountBySiteId" resultType="Double">
 		SELECT IFNULL(record.pretreat_amount,0)
 		FROM record
-		WHERE record.del_status=0 AND record.status != 0 AND record.site_id=#{siteId} 
+		WHERE record.status != 0 AND
+		record.site_id=#{siteId}
 		ORDER BY record.allocation_time DESC LIMIT 1
-	</select>	
-	
+	</select>
+
 	<update id="updateRecordStatusById">
 		UPDATE record
 		SET status=#{status}
-		WHERE id=#{recordId} AND del_status=0
-	</update>	
-	
-	<select id="queryRecordByCarIdAndStatus" resultType="factory.entity.Record">
-		SELECT id,site_id
-		FROM record
-		WHERE car_id=#{carId} AND status=#{status} AND del_status=0
+		WHERE id=#{recordId}
+	</update>
+
+	<select id="queryNoCompleteRecordBySiteIdOfCarAndRecord" resultType="factory.entity.Record">
+		SELECT
+		record.id,record.site_id,record.status,record.car_num
+		FROM record,car
+		WHERE car.id=#{carId} AND record.site_id=car.site_id AND(record.status=1 OR record.status=2)
+		LIMIT 1
 	</select>
 	
+	<select id="queryProcessingRecordBySiteIdOfCarAndRecord" resultType="factory.entity.Record">
+		SELECT
+		record.id,record.site_id,record.status,record.car_num
+		FROM record,car
+		WHERE car.id=#{carId} AND record.site_id=car.site_id AND record.status=1
+		LIMIT 1
+	</select>
+
 	<update id="UpdateRecordStatusAndTimeById">
 		UPDATE record
 		SET status=#{status},
@@ -286,5 +307,11 @@
 			</when>
 		</choose>
 		where id=#{recordId}
+	</update>
+	
+	<update id="oneTreatmentCarComplete">
+		UPDATE record
+		SET car_num=car_num-1
+		WHERE id=#{recordId}
 	</update>
 </mapper>

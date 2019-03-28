@@ -266,4 +266,9 @@ public class SludgeServiceImpl implements SludgeService {
 		return sludges;
 	}
 
+	@Override
+	public List<Sludge> querySludgeByRecordId(Integer recordId) {
+		return sludgeDao.querySludgeByRecordId(recordId);
+	}
+
 }

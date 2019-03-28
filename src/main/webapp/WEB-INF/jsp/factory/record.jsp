@@ -163,14 +163,13 @@
 				'<thead>' +
 				'<tr>' +
 				'<th data-toggle="true">状态</th>' +
-				'<th>处理人</th>' +
-				/* '<th>污泥处理量</th>' + */
 				'<th>任务分配时间</th>' +
 				'<th>产生污泥块量</th>' +
+				'<th>污泥运输记录</th>' +
+				'<th>审核</th>' +
 				'<th data-hide="all">污泥处理开始时间</th>' +
 				'<th data-hide="all">污泥处理完成时间</th>' +
-				'<th data-hide="all">处理人号码</th>' +
-				'<th data-hide="all">车牌号</th>' +
+				'<th data-hide="all">处理车辆</th>' +
 				'</tr>' +
 				'</thead>' +
 				'<tbody>'
@@ -235,9 +234,9 @@
 							table += '<td class="project-status"><span class="label label-primary">待处理</td>'
 						}
 						else{
-							table+='<td></td>'
+							table+='<td class="project-status"><span class="label label-warning">待审核</td>'
 						}
-						table += '<td class="project-manage">' + record.car.driver.realname + '</td>'
+						//table += '<td class="project-manage">' + record.car.driver.realname + '</td>'
 						/* table += '<td class="project-completion">' +
 							'<small>污泥处理量：'+per+' %</small>' +
 							'<div class="progress progress-mini">' +
@@ -246,10 +245,32 @@
 							'</td>' */
 						table += '<td>' + record.allocationTime + '</td>'
 						table += '<td>'+record.sludgesWeight+'吨</td>'
-						table += '<td>' + record.disposalTime + '</td>'
-						table += '<td><span class="pie">' + record.finishTime + '</span></td>'
-						table += '<td>' + record.car.driver.telephone + '</td>'
-						table += '<td>' + record.car.license + '</td>'
+						table += '<td><a href='+"record/jumpToSludgesOfOneRecord?recordId="+''+record.id+'>查看详情</a></td>'
+						if(record.status==3){
+							table += '<td class="project-actions" style="float:left;">' +
+							'<button onclick="javascript:check(' + record.id + ');" class="btn btn-danger btn-sm"><i class="fa fa-pencil"></i> 审核通过</button>' +
+							'</td>'	
+						}
+						else if(record.status==0){
+							table += '<td class="project-actions" style="float:left;">' +
+							'<button  class="btn btn-success btn-sm" disabled><i class="fa fa-pencil"></i> 已审核</button>' +
+							'</td>'
+						}
+						else{
+							table += '<td class="project-actions" style="float:left;">' +
+							'<button  class="btn btn-primary btn-sm" disabled><i class="fa fa-pencil"></i> 未完成</button>' +
+							'</td>'
+						}
+						
+						
+						table += '<td>' + (record.disposalTime ==null?"":  record.disposalTime)+ '</td>'
+						table += '<td><span class="pie">' + (record.finishTime ==null?"": record.finishTime) + '</span></td>'
+						table += '<td>'
+						for(var i=0;i<record.recordTreatCars.length;i++){
+							var car=record.recordTreatCars[i].treatcar;
+							table+=car.license+"  处理人:"+car.driver.realname+" 联系方式:"+(car.driver.telephone==null?"无": car.driver.telephone)+"</br>";
+						}
+						table += '</td>'
 						table += '</tr>'
 	
 					})
@@ -285,9 +306,9 @@
 							table += '<td class="project-status"><span class="label label-primary">待处理</td>'
 						}
 						else{
-							table+='<td></td>'
+							table+='<td class="project-status"><span class="label label-warning">待审核</td>'
 						}
-						table += '<td class="project-manage">' + record.car.driver.realname + '</td>'
+						//table += '<td class="project-manage">' + record.car.driver.realname + '</td>'
 						/* table += '<td class="project-completion">' +
 							'<small>污泥处理量：'+per+' %</small>' +
 							'<div class="progress progress-mini">' +
@@ -296,10 +317,27 @@
 							'</td>' */
 						table += '<td>' + record.allocationTime + '</td>'
 						table += '<td>'+record.sludgesWeight+'吨</td>'
-						table += '<td>' + record.disposalTime + '</td>'
-						table += '<td><span class="pie">' + record.finishTime + '</span></td>'
-						table += '<td>' + record.car.driver.telephone + '</td>'
-						table += '<td>' + record.car.license + '</td>'
+						table += '<td><a href='+"record/jumpToSludgesOfOneRecord?recordId="+''+record.id+'>查看详情</a></td>'
+						if(record.status==3){
+							table += '<td class="project-actions" style="float:left;">' +
+							'<button onclick="javascript:dealSite(' + record.id + ');" class="btn btn-danger btn-sm"><i class="fa fa-pencil"></i> 审核通过</button>' +
+							'</td>'	
+						}
+						else{
+							table += '<td class="project-actions" style="float:left;">' +
+							'<button onclick="javascript:dealSite(' + record.id + ');" class="btn btn-success btn-sm" disabled><i class="fa fa-pencil"></i> 已审核</button>' +
+							'</td>'
+						}
+						
+						
+						table += '<td>' + (record.disposalTime ==null?"":  record.disposalTime)+ '</td>'
+						table += '<td><span class="pie">' + (record.finishTime ==null?"": record.finishTime) + '</span></td>'
+						table += '<td>'
+						for(var i=0;i<record.recordTreatCars.length;i++){
+							var car=record.recordTreatCars[i].treatcar;
+							table+=car.license+"  处理人:"+car.driver.realname+" 联系方式:"+(car.driver.telephone==null?"无": car.driver.telephone)+"</br>";
+						}
+						table += '</td>'
 						table += '</tr>'
 	
 					})
@@ -339,9 +377,9 @@
 								table += '<td class="project-status"><span class="label label-primary">待处理</td>'
 							}
 							else{
-								table+='<td></td>'
+								table+='<td class="project-status"><span class="label label-warning">待审核</td>'
 							}
-							table += '<td class="project-manage">' + record.car.driver.realname + '</td>'
+							//table += '<td class="project-manage">' + record.car.driver.realname + '</td>'
 							/* table += '<td class="project-completion">' +
 								'<small>污泥处理量：'+per+' %</small>' +
 								'<div class="progress progress-mini">' +
@@ -350,10 +388,27 @@
 								'</td>' */
 							table += '<td>' + record.allocationTime + '</td>'
 							table += '<td>'+record.sludgesWeight+'吨</td>'
-							table += '<td>' + record.disposalTime + '</td>'
-							table += '<td><span class="pie">' + record.finishTime + '</span></td>'
-							table += '<td>' + record.car.driver.telephone + '</td>'
-							table += '<td>' + record.car.license + '</td>'
+							table += '<td><a href='+"record/jumpToSludgesOfOneRecord?recordId="+''+record.id+'>查看详情</a></td>'
+							if(record.status==3){
+								table += '<td class="project-actions" style="float:left;">' +
+								'<button onclick="javascript:dealSite(' + record.id + ');" class="btn btn-danger btn-sm"><i class="fa fa-pencil"></i> 审核通过</button>' +
+								'</td>'	
+							}
+							else{
+								table += '<td class="project-actions" style="float:left;">' +
+								'<button onclick="javascript:dealSite(' + record.id + ');" class="btn btn-success btn-sm" disabled><i class="fa fa-pencil"></i> 已审核</button>' +
+								'</td>'
+							}
+							
+							
+							table += '<td>' + (record.disposalTime ==null?"":  record.disposalTime)+ '</td>'
+							table += '<td><span class="pie">' + (record.finishTime ==null?"": record.finishTime) + '</span></td>'
+							table += '<td>'
+							for(var i=0;i<record.recordTreatCars.length;i++){
+								var car=record.recordTreatCars[i].treatcar;
+								table+=car.license+"  处理人:"+car.driver.realname+" 联系方式:"+(car.driver.telephone==null?"无": car.driver.telephone)+"</br>";
+							}
+							table += '</td>'
 							table += '</tr>'
 		
 						})
@@ -393,9 +448,9 @@
 								table += '<td class="project-status"><span class="label label-primary">待处理</td>'
 							}
 							else{
-								table+='<td></td>'
+								table+='<td class="project-status"><span class="label label-warning">待审核</td>'
 							}
-							table += '<td class="project-manage">' + record.car.driver.realname + '</td>'
+							//table += '<td class="project-manage">' + record.car.driver.realname + '</td>'
 							/* table += '<td class="project-completion">' +
 								'<small>污泥处理量：'+per+' %</small>' +
 								'<div class="progress progress-mini">' +
@@ -404,10 +459,27 @@
 								'</td>' */
 							table += '<td>' + record.allocationTime + '</td>'
 							table += '<td>'+record.sludgesWeight+'吨</td>'
-							table += '<td>' + record.disposalTime + '</td>'
-							table += '<td><span class="pie">' + record.finishTime + '</span></td>'
-							table += '<td>' + record.car.driver.telephone + '</td>'
-							table += '<td>' + record.car.license + '</td>'
+							table += '<td><a href='+"record/jumpToSludgesOfOneRecord?recordId="+''+record.id+'>查看详情</a></td>'
+							if(record.status==3){
+								table += '<td class="project-actions" style="float:left;">' +
+								'<button onclick="javascript:dealSite(' + record.siteId + ');" class="btn btn-danger btn-sm"><i class="fa fa-pencil"></i> 审核通过</button>' +
+								'</td>'	
+							}
+							else{
+								table += '<td class="project-actions" style="float:left;">' +
+								'<button onclick="javascript:dealSite(' + record.siteId + ');" class="btn btn-success btn-sm" disabled><i class="fa fa-pencil"></i> 已审核</button>' +
+								'</td>'
+							}
+							
+							
+							table += '<td>' + (record.disposalTime ==null?"":  record.disposalTime)+ '</td>'
+							table += '<td><span class="pie">' + (record.finishTime ==null?"": record.finishTime) + '</span></td>'
+							table += '<td>'
+							for(var i=0;i<record.recordTreatCars.length;i++){
+								var car=record.recordTreatCars[i].treatcar;
+								table+=car.license+"  处理人:"+car.driver.realname+" 联系方式:"+(car.driver.telephone==null?"无": car.driver.telephone)+"</br>";
+							}
+							table += '</td>'
 							table += '</tr>'
 		
 						})
@@ -421,6 +493,19 @@
 	
 			
 		});
+		
+		function check(recordId){
+			$.ajax({
+				url:"record/updateRecordStatusById",
+				data:{
+					recordId:recordId,
+					status:0
+				},
+				success:function(result){
+					window.location.reload();
+				}
+			})
+		}
 	
 		
 	</script>

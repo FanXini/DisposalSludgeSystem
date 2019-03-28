@@ -64,7 +64,7 @@ public class AssignCarForReocrdThread implements Runnable{
 				//选择最近的处理车
 				Car disPacherTreatmentCar=selectMinDistanceCar(unAssinTreatmentCar);
 				//将分配车id存到record记录中
-				recordService.updateCarId(recordId, disPacherTreatmentCar.getId());
+				recordService.insertRecordTreatcar(recordId, disPacherTreatmentCar.getId());
 				//修改车的状态为已分配还未出发,并将car的siteId设置为0
 				carService.editWorkerCarStatusAndSiteId(disPacherTreatmentCar.getId(), CarStatus.NODEPARTURE.ordinal(), site.getId());
 				deleteByPrex("car*");
