@@ -257,9 +257,9 @@
 					var table = table_start
 					$.each(sludgeList, function(i, sludge) {
 						table += '<tr id="' + sludge.id + '">'
-						if (sludge.status == 0) {
+						if (sludge.status == 0 ||sludge.status==2||sludge.status==4) {
 							table += '<td class="project-status"><span class="label label-inverse">未到达</td>'
-						} else if (sludge.status == 1) {
+						} else if (sludge.status == 1||sludge.status == 3||sludge.status == 5) {
 							table += '<td class="project-status"><span class="label label-primary">已到达</td>'
 						} else {
 							table += '<td></td>'

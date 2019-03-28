@@ -35,7 +35,7 @@
 		`user`.*,role.id,role.role_name,site.id,site.site_name,car.id,car.license
 		FROM `user` LEFT JOIN role ON `user`.role_id=role.id LEFT JOIN site ON
 		`user`.site_id=site.id LEFT JOIN car ON `user`.id=car.driver_id WHERE
-		check_status=1 AND `user`.del_status=0
+		check_status=1
 		ORDER BY user.role_id
 	</select>
 
@@ -44,9 +44,8 @@
 		`user`.*,role.id,role.role_name,site.id,site.site_name,car.id,car.license
 		FROM `user` LEFT JOIN role ON `user`.role_id=role.id LEFT JOIN site ON
 		`user`.site_id=site.id LEFT JOIN car ON `user`.id=car.driver_id WHERE
-		`user`.del_status=0
 		<if test="checkStatus!=-1">
-			AND user.check_status=#{checkStatus}
+			user.check_status=#{checkStatus}
 		</if>
 		ORDER BY user.check_status DESC
 	</select>
@@ -55,8 +54,7 @@
 		SELECT
 		`user`.*,role.id,role.role_name,site.id,site.site_name,car.id,car.license
 		FROM `user` LEFT JOIN role ON `user`.role_id=role.id LEFT JOIN site ON
-		`user`.site_id=site.id LEFT JOIN car ON `user`.id=car.driver_id WHERE
-		`user`.del_status=0 AND role_id=#{roleId}
+		`user`.site_id=site.id LEFT JOIN car ON `user`.id=car.driver_id WHERE role_id=#{roleId}
 	</select>
 
 	<select id="queryUserByUsername" parameterType="String"
@@ -64,22 +62,20 @@
 		SELECT `user`.*,role.id,role.role_name
 		from `user` LEFT JOIN
 		role ON `user`.role_id=role.id WHERE
-		`user`.del_status=0 AND
 		`user`.username=#{username}
 	</select>
 
 	<select id="queryUserByUserId" resultType="factory.entity.User">
 		select *
 		from user
-		where
-		del_status=0 AND id=#{userId}
+		where id=#{userId}
 	</select>
 
 	<select id="queryUserByRealName" parameterType="String"
 		resultType="factory.entity.User">
 		select *
 		from user
-		where del_status=0 AND
+		where
 		realname=#{realname}
 	</select>
 
@@ -96,49 +92,46 @@
 		</choose>
 	</insert>
 
-	<update id="delectUser">
-		UPDATE user
-		SET del_status=1
-		WHERE del_status=0 AND
-		id=#{userId}
-	</update>
+	<delete id="delectUser">
+		DELETE FROM user
+		WHERE id=#{userId}
+	</delete>
 
 	<select id="queryAllDriver" resultType="factory.entity.User">
 		SELECT *
 		FROM user
-		WHERE
-		del_status=0 AND role_id=3 AND check_status=1
+		WHERE role_id=3 AND check_status=1
 	</select>
 	
 	<select id="queryCarAssignTranSportDriver" resultMap="UserMap">
 		SELECT user.id,user.realname,car.id as car_id
 		FROM user LEFT JOIN car on user.id=car.driver_id
-		WHERE car.car_type=1 and car.del_status=0;
+		WHERE car.car_type=1
 	</select>
 	
 	<select id="queryCarAssignTranSportDriverInLeisureStatus" resultMap="UserMap">
 		SELECT user.id,user.realname,car.id as car_id
 		FROM user LEFT JOIN car on user.id=car.driver_id
-		WHERE car.del_status=0 and car.car_type=1 and status=0;
+		WHERE car.car_type=1 and status=0;
 	</select>
 	
 	<select id="queryCarAssignTreatDriver" resultMap="UserMap">
 		SELECT user.id,user.realname,car.id as car_id
 		FROM user LEFT JOIN car on user.id=car.driver_id
-		WHERE car.car_type=0 and car.del_status=0;
+		WHERE car.car_type=0
 	</select>
 
 	<select id="queryNoCarAssignedDriver" resultType="factory.entity.User">
 		SELECT DISTINCT
 		*
 		FROM user
-		WHERE user.del_status=0 AND 
+		WHERE 
 		user.role_id in (3,4) AND 
 		user.check_status=1 AND
 		user.id NOT IN(
 		SELECT driver_id
 		FROM car
-		WHERE car.del_status=0 AND driver_id IS not NULL OR
+		WHERE driver_id IS not NULL OR
 		TRIM(driver_id)=''
 		)
 	</select>
@@ -146,11 +139,11 @@
 	<select id="queryCarAssignedDriver" resultType="factory.entity.User">
 		SELECT user.id,user.realname,user.telephone
 		FROM user
-		WHERE user.del_status=0 AND
+		WHERE
 		user.id IN(
 		SELECT driver_id
 		FROM car
-		WHERE car.del_status=0 AND driver_id IS not NULL OR
+		WHERE  driver_id IS not NULL OR
 		TRIM(driver_id)=''
 		) AND user.role_id=3 AND user.check_status=1
 	</select>
@@ -168,7 +161,6 @@
 		DISTINCT `user`.id,`user`.realname
 		FROM sludge,record,`user`,car
 		WHERE
-		sludge.del_status=0 AND
 		sludge.record_id=record.id AND
 		record.site_id=#{siteId} AND
 		sludge.transcar_id=car.id AND
@@ -180,14 +172,14 @@
 	<update id="modifyPasswordByUsername" parameterType="factory.entity.User">
 		update user
 		set password=#{password}
-		where del_status=0 AND
+		where
 		id=#{id}
 	</update>
 
 	<update id="updateUserInfo" parameterType="factory.entity.User">
 		update user set
 		realname=#{realname},email=#{email},telephone=#{telephone},sex=#{sex},id_card=#{idCard}
-		where del_status=0 AND
+		where
 		id=#{id}
 	</update>
 
@@ -201,15 +193,14 @@
 	<select id="queryAllManager" resultType="factory.entity.User">
 		SELECT *
 		FROM user
-		WHERE
-		del_status=0 AND role_id=2 AND check_status=1
+		WHERE role_id=2 AND check_status=1
 	</select>
 
 	<select id="queryManagerByRealName" parameterType="String"
 		resultType="factory.entity.User">
 		select *
 		from user
-		where del_status=0 AND
+		where
 		realname=#{realname} AND role_id=2 AND check_status=1 limit 1
 	</select>
 
@@ -218,10 +209,8 @@
 		`user`.*,role.id,role.role_name,site.id,site.site_name,car.id,car.license
 		FROM `user` LEFT JOIN role ON `user`.role_id=role.id LEFT JOIN site ON
 		`user`.site_id=site.id LEFT JOIN car ON `user`.id=car.driver_id
-		WHERE
-		user.del_status=0
 		<if test="queryStr!=null and queryStr!='' ">
-			and (user.username like CONCAT('%',#{queryStr},'%' ) or
+			WHERE (user.username like CONCAT('%',#{queryStr},'%' ) or
 			user.realname
 			like CONCAT('%',#{queryStr},'%') or user.telephone like
 			CONCAT('%',#{queryStr},'%' ) or user.id_card like
@@ -229,12 +218,11 @@
 		</if>
 	</select>
 
-	<update id="deleteUserByUserId">
-		UPDATE user
-		SET del_status=1
-		WHERE del_status=0 AND
+	<delete id="deleteUserByUserId">
+		DELETE FROM user
+		WHERE
 		id=#{userId}
-	</update>
+	</delete>
 
 	<update id="editUserByUserId" parameterType="factory.entity.User">
 		update user
@@ -246,21 +234,21 @@
 				site_id=#{siteId}
 			</if>
 		</set>
-		where del_status=0 AND
+		where
 		id=#{id}
 	</update>
 
 	<update id="checkUserByUserId">
 		UPDATE user
 		SET check_status=1
-		WHERE del_status=0 AND
+		WHERE
 		id=#{userId}
 	</update>
 
 	<update id="checkNUserByUserId">
 		UPDATE user
 		SET check_status=0
-		WHERE del_status=0 AND
+		WHERE
 		id=#{userId}
 	</update>
 
@@ -318,25 +306,25 @@
 	<update id="resetPassWordByUserId">
 		UPDATE user
 		SET password='66668888'
-		WHERE del_status=0 AND id=#{userId}
+		WHERE  id=#{userId}
 	</update>
 	
 	<select id="queryAllManagerSiteNull" resultType="factory.entity.User">
 		SELECT * FROM user
-		WHERE del_status=0
-		AND role_id=2 AND site_id is null
+		WHERE
+		 role_id=2 AND site_id is null
 	</select>
 
 	<select id="queryAllManagerBySiteId" resultType="factory.entity.User">
 		SELECT * FROM user
-		WHERE del_status=0
-		AND role_id=2 AND site_id=#{siteId}
+		WHERE
+		 role_id=2 AND site_id=#{siteId}
 	</select>
 	
 	<select id="queryDriverUnassign" resultType="factory.entity.User">
 		SELECT user.id,user.realname,user.telephone 
 		FROM car LEFT JOIN user 
 		ON car.driver_id=user.id 
-		WHERE car.del_status=0 AND car.status=0 AND car.driver_id IS NOT NULL
+		WHERE  car.status=0 AND car.driver_id IS NOT NULL
 	</select>
 </mapper>
