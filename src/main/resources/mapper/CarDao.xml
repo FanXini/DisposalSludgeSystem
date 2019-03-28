@@ -57,30 +57,27 @@
 		SELECT
 		car.id,car.license,car.brand,car.status,user.id,user.realname,user.telephone,car.car_type
 		FROM car LEFT JOIN
-		`user` ON car.driver_id=`user`.id WHERE
-		car.del_status=0
+		`user` ON car.driver_id=`user`.id
 	</select>
 
 	<select id="queryCarByCarType" resultMap="carMap">
 		SELECT
 		car.id,car.license,car.brand,car.status,user.id,user.realname,user.telephone,car.car_type
 		FROM car LEFT JOIN
-		`user` ON car.driver_id=`user`.id WHERE
-		car.del_status=0 AND car.car_type=#{carType}
+		`user` ON car.driver_id=`user`.id WHERE car.car_type=#{carType}
 	</select>
 
 
 	<select id="queryCarByDriverId" resultType="factory.entity.Car">
 		SELECT *
 		FROM car
-		WHERE del_status=0 AND driver_id=#{driverId}
+		WHERE driver_id=#{driverId}
 	</select>
 
 	<select id="queryCarById" resultType="factory.entity.Car">
 		SELECT *
 		FROM car
-		WHERE
-		del_status=0 AND id=#{carId}
+		WHERE id=#{carId}
 	</select>
 
 	<select id="queryCarByLicense" resultType="factory.entity.Car">
@@ -107,8 +104,7 @@
 
 	<delete id="deleteCar">
 		DELETE FROM car
-		WHERE del_status=0 AND
-		id=#{carId}
+		WHERE id=#{carId}
 	</delete>
 
 	<insert id="addCar" parameterType="factory.entity.Car"
@@ -141,15 +137,14 @@
 				license=#{license},brand=#{brand},driver_id=#{driverId}
 			</otherwise>
 		</choose>
-		WHERE del_status=0 AND
-		id=#{id}
+		WHERE id=#{id}
 	</update>
 
 	<select id="queryCarWhichNotAssignDriver" resultType="factory.entity.Car">
 		SELECT
 		car.id,car.license
 		FROM car
-		WHERE del_status=0 AND driver_id IS NULL
+		WHERE  driver_id IS NULL
 	</select>
 
 	<select id="fuzzyQueryCar" resultMap="carMap">
@@ -164,7 +159,6 @@
 		FROM
 		car LEFT JOIN `user` ON car.driver_id=`user`.id
 		WHERE
-		car.del_status=0 AND
 		(`user`.realname LIKE CONCAT('%',#{condition},'%')
 		OR `user`.telephone
 		LIKE CONCAT('%',#{condition},'%') OR car.license
@@ -181,9 +175,7 @@
 	<update id="updateSenserIdSet">
 		UPDATE car
 		SET sensor_id_set=#{sensorIdSet}
-		where
-		del_status=0 AND
-		id=#{carId}
+		where id=#{carId}
 	</update>
 
 	<update id="updateDriverId">
@@ -191,21 +183,19 @@
 
 		SET driver_id=#{driverId}
 
-		WHERE del_status=0
-		AND id=#{carId}
+		WHERE id=#{carId}
 	</update>
 
 	<update id="setDriverIdToNUll">
 		UPDATE car
 		SET driver_id=NULL
-		WHERE del_status=0 AND
-		driver_id=#{driverId}
+		WHERE driver_id=#{driverId}
 	</update>
 
 	<select id="queryNullCarNum" resultType="Integer">
 		SELECT count(*)
 		FROM car
-		WHERE del_status=0 AND (status=0 OR status=4) AND car.driver_id IS NOT
+		WHERE (status=0 OR status=4) AND car.driver_id IS NOT
 		NULL
 	</select>
 
@@ -217,7 +207,7 @@
 		FROM car tmp LEFT JOIN
 		user
 		ON tmp.driver_id=user.id
-		where tmp.del_status=0 and tmp.driver_id
+		where  tmp.driver_id
 		IS NOT NULL
 		)
 		car LEFT JOIN site
@@ -229,8 +219,7 @@
 		SELECT
 		sensor_id_set
 		FROM car
-		WHERE del_status=0 AND
-		id=#{carId}
+		WHERE id=#{carId}
 	</select>
 
 	<select id="queryMapCar" resultMap="carDriverSiteMap">
@@ -242,8 +231,7 @@
 		FROM car LEFT JOIN user ON
 		car.driver_id=user.id
 		LEFT JOIN site ON car.site_id=site.id
-		WHERE
-		car.del_status=0 AND car.car_type = #{carType} AND car.driver_id IS
+		WHERE car.car_type = #{carType} AND car.driver_id IS
 		NOT NULL
 		AND (car.license like CONCAT('%',#{queryStr},'%') or
 		site.site_name like CONCAT('%',#{queryStr},'%')
@@ -262,15 +250,13 @@
 		car.driver_id=user.id
 		LEFT JOIN site ON
 		car.site_id=site.id
-		WHERE
-		car.del_status=0 AND car.driver_id=#{userId}
+		WHERE car.driver_id=#{userId}
 	</select>
 
 	<update id="editWorkerCarStatus">
 		UPDATE car
 		SET status=#{status}
-		where del_status=0 AND
-		driver_id=#{userId}
+		where driver_id=#{userId}
 	</update>
 
 	<update id="editWorkerCarStatusAndSiteId">
@@ -283,8 +269,7 @@
 				SET status=#{status},site_id=#{siteId}
 			</otherwise>
 		</choose>
-		where del_status=0 AND
-		id=#{carId}
+		where id=#{carId}
 	</update>
 
 	<select id="queryTreatmentCarUnassign" resultMap="carMap">
@@ -293,7 +278,7 @@
 		FROM car LEFT JOIN
 		user
 		ON car.driver_id=user.id
-		WHERE car.del_status=0 AND (car.status=0
+		WHERE  (car.status=0
 		OR car.status=4)  <!-- 返程和空闲状态的运输车都能被调度 -->
 		AND car.car_type=0 AND car.driver_id IS NOT NULL
 	</select>
@@ -304,7 +289,7 @@
 		FROM car LEFT JOIN user
 		ON
 		car.driver_id=user.id
-		WHERE car.del_status=0 AND (car.status=0
+		WHERE (car.status=0
 		OR car.status=4)
 		AND car.car_type=1 AND car.driver_id IS NOT NULL
 	</select>
@@ -320,7 +305,7 @@
 		car.driver_id=user.id
 		LEFT JOIN site ON car.site_id=site.id
 		<where>
-			car.del_status=0 AND car.driver_id IS NOT NULL
+			car.driver_id IS NOT NULL
 			<if test="siteId != -1">
 				AND car.site_id=#{siteId}
 			</if>
@@ -357,7 +342,7 @@
 	<select id="queryCarDeviceIdInCloud" resultType="factory.entity.Car">
 		SELECT id,cloud_device_id
 		FROM car
-		WHERE del_status=0 AND cloud_device_id is not null AND cloud_device_id!=''
+		WHERE cloud_device_id is not null AND cloud_device_id!=''
 	</select>
 	
 	<update id="updateCarLocation">

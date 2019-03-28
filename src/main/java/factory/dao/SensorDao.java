@@ -56,18 +56,16 @@ public interface SensorDao {
 	
 	public SensorValue queryRealTimeValueBySensorId(@Param("sensorId") int sensorId);
 	
-	//存氨气数据
 	public void addAmmniaGasRecord(SingleValueSensorRecord record);
-	//存硫化氢数据
+	
 	public void addShydrothionRecord(SingleValueSensorRecord record);
-	//存温湿度数据	
+	
 	public void addHumitureRecord(DoubleValueSensorRecord record);
 	
-	//存gps数据
 	public void addGPSRecord(DoubleValueSensorRecord record);
 	
 	public void addSensorRecord(SensorValue sensorValue);
-	//修改实时数据
+
 	public void updateSensorRealTimeValue(SensorValue sensorValue);
 	
 	public List<Sensor> querySensorsByDriverId(@Param("driverId") int driverId);

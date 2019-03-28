@@ -139,18 +139,10 @@
 
 
 
-	<select id="queryRecordBySiteIdAndStatus" resultType="factory.entity.Record">
+	<select id="queryNoCompleteRecordBySiteIdAndStatus" resultType="factory.entity.Record">
 		SELECT *
 		from record
-		where site_id=#{siteId} AND
-		<choose>
-			<when test="flag==0">
-				status=#{status}
-			</when>
-			<otherwise>
-				status!=#{status}
-			</otherwise>
-		</choose>
+		where site_id=#{siteId} AND (record.status=2 OR record.status=1)
 		ORDER by allocation_time DESC
 		LIMIT 1
 	</select>
@@ -299,16 +291,16 @@
 	<select id="queryNoCompleteRecordBySiteIdOfCarAndRecord" resultType="factory.entity.Record">
 		SELECT
 		record.id,record.site_id,record.status,record.car_num
-		FROM record,car
-		WHERE car.id=#{carId} AND record.site_id=car.site_id AND(record.status=1 OR record.status=2)
+		FROM record LEFT JOIN car ON record.site_id=car.site_id
+		WHERE car.id=#{carId} AND (record.status=1 OR record.status=2)
 		LIMIT 1
 	</select>
 	
 	<select id="queryProcessingRecordBySiteIdOfCarAndRecord" resultType="factory.entity.Record">
 		SELECT
 		record.id,record.site_id,record.status,record.car_num
-		FROM record,car
-		WHERE car.id=#{carId} AND record.site_id=car.site_id AND record.status=1
+		FROM record LEFT JOIN car ON record.site_id=car.site_id
+		WHERE car.id=#{carId} AND record.status=1 
 		LIMIT 1
 	</select>
 

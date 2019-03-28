@@ -28,7 +28,7 @@ public class RecordTest extends BaseTest{
 	
 	@Test
 	public void test13() {
-		Record treatmentRecord=recordDao.queryProcessingRecordBySiteIdOfCarAndRecord(2);
+		Record treatmentRecord=recordDao.queryProcessingRecordBySiteIdOfCarAndRecord(3);
 		System.out.println(treatmentRecord.getCarNum());
 	}
 	

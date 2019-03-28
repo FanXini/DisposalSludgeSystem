@@ -238,7 +238,7 @@ public class RecordServiceImpl implements RecordService{
 	@Override
 	@Transactional
 	public void assignDriverForRecord(int siteId, int treatcarId, int transcarId) {
-		Record record=recordDao.queryRecordBySiteIdAndStatus(siteId, RecordStatus.ACCOMPLISH.ordinal(), 1);
+		Record record=recordDao.queryNoCompleteRecordBySiteIdAndStatus(siteId);
 		int recordId=record.getId();
 		if(treatcarId!=-1) {
 		   recordDao.insertRecordTreatcar(recordId, treatcarId);

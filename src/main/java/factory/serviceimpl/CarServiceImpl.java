@@ -323,17 +323,18 @@ public class CarServiceImpl implements CarService{
 				//司机触发按钮表示到底处理任务完成 或者是  运输任务开始/结束了
 				else if(nowStatus==CarStatus.ARRIVAL.ordinal()) {
 					if(carType==0) {  //如果是处理车
+						//查询现在处理的是哪个任务
+						Record record=recordDao.queryProcessingRecordBySiteIdOfCarAndRecord(carId);
 						// 修改为车的状态返程状态,修改site为null
 						carDao.editWorkerCarStatusAndSiteId(carId, CarStatus.GETBACK.ordinal(),0); 
-						//查询现在处理的是哪个任务
-						Record treatmentRecord=recordDao.queryProcessingRecordBySiteIdOfCarAndRecord(carId);
+			
 						//如果是最好完成的一辆车，修改record的状态为处理完成，site状态为正常
-						if(treatmentRecord.getCarNum()==1) {
-							recordDao.UpdateRecordStatusAndTimeById(treatmentRecord.getId(), RecordStatus.ACCOMPLISH.ordinal(), dataFormat.format(new Date()), 1);
+						if(record.getCarNum()==1) {
+							recordDao.UpdateRecordStatusAndTimeById(record.getId(), RecordStatus.WATINGCHECK.ordinal(), dataFormat.format(new Date()), 1);
 							//修改site的状态为正常
-							siteDao.updateSiteStatusById(treatmentRecord.getSiteId(), SiteStatus.NORMAL.ordinal());	
+							siteDao.updateSiteStatusById(record.getSiteId(), SiteStatus.NORMAL.ordinal());	
 						}
-						recordDao.oneTreatmentCarComplete(treatmentRecord.getId());
+						recordDao.oneTreatmentCarComplete(record.getId());
 						return new Car(CarStatus.GETBACK.ordinal(),carType,0);
 					}
 					else if(carType==1) {//如果是运输车

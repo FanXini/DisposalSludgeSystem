@@ -10,7 +10,6 @@
 		<result property="serialNumber" column="serial_number"></result>
 		<result property="videoRTMPid" column="video_RTMPid"></result>
 		<result property="videoHLSid" column="video_HLSid"></result>
-		<result property="delStatus" column="del_status"></result>
 		<association property="car" javaType="factory.entity.Car">
 			<id property="id" column="id" />
 			<result property="status" column="status"/>
@@ -32,39 +31,36 @@
 	<insert id="addVideo" parameterType="factory.entity.Video"
 		useGeneratedKeys="true" keyProperty="id">
 		INSERT INTO video
-		(car_Id,serial_number,video_RTMPid,video_HLSid,del_status)
-		VALUES(#{carId},#{serialNumber},#{videoRTMPid},#{videoHLSid},#{delStatus})
+		(car_Id,serial_number,video_RTMPid,video_HLSid)
+		VALUES(#{carId},#{serialNumber},#{videoRTMPid},#{videoHLSid})
 	</insert> 
 	<update id="deleteVideo">
-		UPDATE video
-		SET del_status=1
-		WHERE del_status=0 AND
-		id=#{videoId}
+		DELETE FROM video
+		WHERE id=#{videoId}
 	</update>
 	
 	<update id="editVideo" parameterType="factory.entity.Video">
 		UPDATE video
 		SET
 		serial_number=#{serialNumber},video_RTMPid=#{videoRTMPid},video_HLSid=#{videoHLSid}
-		WHERE site_id=-1 and del_status=0 and id=#{id}
+		WHERE site_id=-1  and id=#{id}
 	</update>
 	
 	<select id="queryVideoByserial_number" resultType="factory.entity.Video">
 		SELECT *
 		FROM video
-		WHERE del_status=0 and serial_number=#{serialNumber}
+		WHERE  serial_number=#{serialNumber}
 	</select>
 	
 	<select id="queryVideoByid" resultMap="VideoDaoMap">
 		select *
 		from video
-		where del_status=0 and id=#{id}
+		where  id=#{id}
 	</select>
 	<select id="queryAllVideo" resultMap="VideoDaoMap">
 		select video.*,car.license,car.status,site.site_name
 		from video LEFT JOIN car on video.car_id=car.id LEFT JOIN site ON site.id=car.site_id
-		where video.site_id=-1
-		and video.del_status=0		
+		where video.site_id=-1	
 		order by video.car_Id
 	</select>
 	
@@ -73,13 +69,12 @@
 			where id not in(
 			select car_id
 			from video
-			where del_status=0
-			) and car_type=0 and car.del_status=0;
+			) and car_type=0
 	</select>
  	<select id="queryVideoWhichNotCar" resultType="factory.entity.Video">
 		select * 
 			from video
-			where del_status=1 and site_id =-1 
+			where  site_id =-1 
 	</select>
  	<!-- <select id="queryVideoWhichNotCar" resultType="factory.entity.Video">
 		select * 
@@ -88,25 +83,24 @@
 	</select> -->
 	<select id="fuzzyqueryVideoByCarLicense"  resultType="factory.entity.Video">
 		select * 
-		from video where video.del_status=0 and license like CONCAT('%',#{license},'%')
+		from video where   license like CONCAT('%',#{license},'%')
 	</select>
 	<select id="queryVideoByCarLicense"  resultType="factory.entity.Video">
 		select * 
 		from video,car
-		where video.site_id=-1 and video.del_status=0 and video.car_id=car.id and car.license = #{license}
+		where video.site_id=-1  and video.car_id=car.id and car.license = #{license}
 	</select>
 	
 	<select id="queryVideoByDriverId" resultMap="VideoDaoMap">
 		select *
 		from video,car,user
 		where video.car_id = car.id and car.driver_id=user.id and user.id=#{driverId}
-		and video.del_status=0 
 	</select>
 	
 	<select id="queryVideoByCarId" resultMap="VideoDaoMap">
 		select video.*,car.license,car.status,site.site_name
 		from video LEFT JOIN car on video.car_id=car.id LEFT JOIN site ON site.id=car.site_id
-		where video.car_id = #{carId} AND video.del_status=0 
+		where video.car_id = #{carId}
 	</select>
 	
 	<select id="queryAllFactoryVideo" resultMap="VideoDaoMap">
@@ -114,7 +108,6 @@
 		from video,site
 		where video.site_id = site.id
 		and car_id=-1
-		and video.del_status=0 
 	</select>
 	
 	<insert id="addFactoryVideo" parameterType="factory.entity.Video"
@@ -129,25 +122,24 @@
 			where id not in(
 			select site_id
 			from video
-			where del_status=0
-			) and site.del_status=0
+			)
 	</select>
 	
 	<select id="queryFactoryVideoBySiteId" resultMap="VideoDaoMap">
 		select *
 		from video,site
-		where video.site_id = #{siteId} AND video.del_status=0 and video.site_id=site.id 
+		where video.site_id = #{siteId}  and video.site_id=site.id 
 	</select>
 	
 	<update id="editFactoryVideo" parameterType="factory.entity.Video">
 		UPDATE video
 		SET
 		serial_number=#{serialNumber},video_RTMPid=#{videoRTMPid},video_HLSid=#{videoHLSid}
-		WHERE car_id=-1 and del_status=0 and id=#{id}
+		WHERE car_id=-1 and id=#{id}
 	</update>
 	<select id="queryFactoryVideoBySiteName"  resultType="factory.entity.Video">
 		select * 
 		from video,site
-		where video.del_status=0 and car_id=-1 and video.site_id= site.id and site.site_Name = #{license}
+		where car_id=-1 and video.site_id= site.id and site.site_Name = #{license}
 	</select>
 </mapper>
