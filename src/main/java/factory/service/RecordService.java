@@ -36,6 +36,8 @@ public interface RecordService {
 	public List<Record> queryRecordByDateOfOneFactory(Map<String, Object> condition);
 
 	public List<Record> queryRecordOfCarNull();
+	
+	public List<Record> queryRecordByRecordId(int recordId);
 
 	public void editRecordCarIdBySiteId(int siteId, int carId);
 	

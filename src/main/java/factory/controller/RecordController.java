@@ -365,4 +365,13 @@ public class RecordController {
 			return Result.ERROR;
 		}
 	}
+
+@RequestMapping("queryRecordByRecordId")
+	@ResponseBody
+	public List<Record> queryRecordByRecordId(@RequestParam("recordId") int recordId){
+		log.info("调用queryRecordByRecordId");
+		List<Record> records=new ArrayList<Record>();
+		records.addAll(recordService.queryRecordByRecordId(recordId));
+		return records;
+	}
 }

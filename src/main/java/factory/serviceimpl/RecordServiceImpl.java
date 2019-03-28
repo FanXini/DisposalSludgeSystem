@@ -55,6 +55,14 @@ public class RecordServiceImpl implements RecordService{
 		return recordDao.queryRecordBySiteId(siteId);
 	}
 	/**
+	 * 通过处理记录id名来查询处理记录
+	 */
+	@Override
+	public List<Record> queryRecordByRecordId(int recordId) {
+		// TODO Auto-generated method stub
+		return recordDao.queryRecordByRecordId(recordId);
+	}
+	/**
 	 * 通过处理人(司机)来查询处理记录
 	 */
 	@Override
