@@ -1,8 +1,15 @@
 package factory.entity;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
-public class User implements Serializable{
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
+public class User implements Serializable,UserDetails{
 	/**
 	 * 
 	 */
@@ -21,6 +28,7 @@ public class User implements Serializable{
 	private Role role;
 	private Site site;
 	private Car car;
+	private String nickname;
 	public User() {
 		
 	}
@@ -124,6 +132,34 @@ public class User implements Serializable{
 				+ ", password=" + password + ", sex=" + sex + ", email="
 				+ email + ", telephone=" + telephone + ", idCard=" + idCard
 				+ "]";
+	}
+	public String getNickname() {
+		return nickname;
+	}
+	public void setNickname(String nickname) {
+		this.nickname = nickname;
+	}
+	@Override
+	public Collection<? extends GrantedAuthority> getAuthorities() {
+		List<GrantedAuthority> authorities=new ArrayList<>();
+		authorities.add(new SimpleGrantedAuthority("ROLE_"+role.getRole_name()));
+		return authorities;
+	}
+	@Override
+	public boolean isAccountNonExpired() {
+		return true;
+	}
+	@Override
+	public boolean isAccountNonLocked() {
+		return true;
+	}
+	@Override
+	public boolean isCredentialsNonExpired() {
+		return true;
+	}
+	@Override
+	public boolean isEnabled() {
+		return true;
 	}
 	
 	

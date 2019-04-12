@@ -7,7 +7,9 @@ import java.util.Map;
 
 import javax.management.Query;
 
-public interface UserService {
+import org.springframework.security.core.userdetails.UserDetailsService;
+
+public interface UserService extends UserDetailsService{
 
 	public List<User> queryAllUser();
 
@@ -71,5 +73,9 @@ public interface UserService {
 	public List<User> queryDriverUnassign();
 	
 	public void testTransaction();
+	
+	public User queryUserByNickName(String nickname);
+	
+	public void editUserNickNameById(int userId,String nickname);
 
 }

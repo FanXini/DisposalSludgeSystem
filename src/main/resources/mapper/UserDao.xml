@@ -81,13 +81,13 @@
 
 	<insert id="registerUser" parameterType="factory.entity.User">
 		insert into
-		user(username,realname,sex,password,role_id,site_id,id_card,telephone)
+		user(username,realname,sex,password,role_id,site_id,id_card,telephone,nickname)
 		<choose>
 			<when test="siteId==0">
-			values(#{username},#{realname},#{sex},#{password},#{roleId},NULL,#{idCard},#{telephone})
+			values(#{username},#{realname},#{sex},#{password},#{roleId},NULL,#{idCard},#{telephone},#{nickname})
 			</when>
 			<otherwise>
-			values(#{username},#{realname},#{sex},#{password},#{roleId},#{siteId},#{idCard},#{telephone})
+			values(#{username},#{realname},#{sex},#{password},#{roleId},#{siteId},#{idCard},#{telephone},#{nickname})
 			</otherwise>
 		</choose>
 	</insert>
@@ -327,4 +327,20 @@
 		ON car.driver_id=user.id 
 		WHERE  car.status=0 AND car.driver_id IS NOT NULL
 	</select>
+	
+	<select id="queryUserByNickName" parameterType="String"
+		resultMap="UserMap">
+		SELECT `user`.*,role.id,role.role_name
+		from `user` LEFT JOIN
+		role ON `user`.role_id=role.id WHERE
+		`user`.nickname=#{nickname}
+	</select>
+	
+	<update id="editUserNickNameById">
+		UPDATE user
+		SET nickname=#{nickname}
+		WHERE id=#{userId}
+	</update>
+	
+	
 </mapper>

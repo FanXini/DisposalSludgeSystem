@@ -89,6 +89,7 @@
 				$("#loginButton").click(function() {
 					var username = $("#loginName").val();
 					var password = $("#loginPass").val();
+					console.log(username+" "+password);
 					if (username.length == 0) {
 						alert("username cannot be null");
 					} else if (password.length == 0) {

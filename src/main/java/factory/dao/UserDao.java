@@ -69,4 +69,7 @@ public interface UserDao{
 	
 	public List<User> queryDriverUnassign();
 	
+	public User queryUserByNickName(@Param("nickname")String nickname);
+	
+	public void editUserNickNameById(@Param("userId")int id,@Param("nickname")String nickname);
 }

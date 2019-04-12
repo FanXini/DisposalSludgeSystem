@@ -19,6 +19,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.DefaultServletHandlerConfigurer;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
@@ -50,5 +51,12 @@ public class WebConfig extends WebMvcConfigurerAdapter{
 	public void configureDefaultServletHandling(DefaultServletHandlerConfigurer configurer) {
 		configurer.enable();
 	}
+	@Override
+	public void addViewControllers(ViewControllerRegistry viewcontrollerregistry)
+    {
+		viewcontrollerregistry.addViewController("/login").setViewName("admin/login");
+		viewcontrollerregistry.addViewController("/register").setViewName("admin/register");
+		viewcontrollerregistry.addViewController("/admin").setViewName("admin/main");
+    }
 
 }

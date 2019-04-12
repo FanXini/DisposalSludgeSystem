@@ -53,50 +53,13 @@ public class UserController {
 	@Autowired
 	private CarService carService;
 
+
 	@RequestMapping("private/{formName}")
 	public String loginForm(@PathVariable String formName) {
 		return "admin/" + formName;
 	}
 
-	/*@RequestMapping(value = "/loginValidator")
-	@ResponseBody
-	public Map<String, String> checkLogin(HttpSession session, @RequestParam("loginUsername") String loginUsername,
-			@RequestParam("loginPassword") String loginPassword,Model model) {
-		Map<String, String> map = new HashMap<String, String>();
-		log.info(loginUsername + " " + loginPassword);
-		if (loginUsername == null || loginUsername.length() == 0 || loginPassword == null
-				|| loginPassword.length() == 0) {
-			map.put("result", "input");
-			return map;
-		}
-		User queryUser = service.queryUserByUsername(loginUsername);
-		if (queryUser != null) {
-			System.out.println(queryUser.getUsername());
-			if (loginPassword.equals(queryUser.getPassword())) {
-				if(queryUser.getCheckStatus()==0){
-					map.put("result", "notverify"); //���δͨ��
-					return map;
-				}else if(queryUser.getCheckStatus()==2){ //�����
-					map.put("result", "verifying");
-					return map;
-				}else {
-					model.addAttribute("user",queryUser); //���ͨ��
-					map.put("result", "success");
-					map.put("roleId", String.valueOf(queryUser.getRoleId()));
-					return map;
-				}				
-			} else {
-				map.put("result", "error");
-				log.info("�������");
-				return map;
-			}
-		} else {
-			map.put("result", "none");
-			log.info("�û���������");
-			return map;
-		}
-
-	}*/
+	
 	@RequestMapping(value = "/loginValidator")
 	@ResponseBody 
 	public Result checkLogin(@RequestBody User user,HttpSession session,Model model){
@@ -131,6 +94,7 @@ public class UserController {
 		log.info("loginValidator");
 		try {
 			User loginUser=service.loginValidation(user);
+			service.editUserNickNameById(loginUser.getId(), user.getNickname());
 			result.put("result", "SUCCESS");
 			result.put("user", loginUser);
 			List<Integer> roleAutho = role_authorityService.queryAllRole_authority(loginUser.getRoleId());
@@ -149,11 +113,36 @@ public class UserController {
 		}
 		
 	}
-		//mian.jspҳ���ȡroleAutho��ֵ
+	
+	
+	@RequestMapping(value = "/qureyUserByNickName")
+	@ResponseBody 
+	public Map<String, Object> qureyUserByNickName(@RequestParam("nickname") String nickname){
+		Map<String, Object> result=new HashMap<>();
+		log.info("loginValidator");
+		try {
+			User loginUser=service.queryUserByNickName(nickname);
+			result.put("result", "SUCCESS");
+			result.put("user", loginUser);
+			return result;
+		} catch (RefuseLoginException e) {
+			result.put("result", "FORBID");
+			return result;
+		}catch (AuditIngException e) {
+			result.put("result", "AUDING");
+			return result;
+		}catch (LoginInfoErrorException e) {
+			result.put("result", "ERROR");
+			return result;
+		}
+		
+	}
+	
 	@RequestMapping("queryAuthosAndJumpToMain")
 	public ModelAndView queryAuthosAndJumpToMain(@RequestParam("roleId") int roleId, ModelAndView mv) {
 		return mv;
 	}
+	
 	
 
 	@RequestMapping("/register")

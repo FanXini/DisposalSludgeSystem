@@ -479,7 +479,7 @@ body {
 		function queryAllCar() {
 			$
 					.ajax({
-						type : "POST",
+						type : "GET",
 						url : "car/queryAllCar",
 						success : function(carList) {
 							$("#tabelDiv").empty()
