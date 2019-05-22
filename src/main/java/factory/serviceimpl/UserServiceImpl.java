@@ -327,11 +327,5 @@ public class UserServiceImpl implements UserService {
 		return drivers;
 	}
 
-	@Override
-	@Transactional
-	public void testTransaction() {
-		userDao.delectUser(1);
-		userDao.queryUserByRealName("test");
-	}
-	
+
 }

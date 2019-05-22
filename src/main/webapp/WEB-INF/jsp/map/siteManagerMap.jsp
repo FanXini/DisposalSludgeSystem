@@ -219,7 +219,7 @@ h5{
 	map.enableScrollWheelZoom(); //启用滚轮放大缩小
 	//	map.addControl(new BMap.MapTypeControl());          //添加地图类型控件
 	map.disable3DBuilding();
-	map.centerAndZoom("深圳市", 11);
+	map.centerAndZoom("长沙市", 11);
 	map.setMapStyle({
 		style : 'light'
 	}); //设置地图样式

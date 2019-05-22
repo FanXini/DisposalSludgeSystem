@@ -70,6 +70,5 @@ public interface UserService {
 	
 	public List<User> queryDriverUnassign();
 	
-	public void testTransaction();
 
 }

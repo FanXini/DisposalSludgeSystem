@@ -375,5 +375,15 @@ public class CarServiceImpl implements CarService{
 	public Integer queryCarStatusById(int id) {
 		return carDao.queryCarStatusById(id);
 	}
+
+	@Override
+	public List<Car> queryTreatmentCarAssigned() {
+		return carDao.queryTreatmentCarAssigned();
+	}
+
+	@Override
+	public List<Car> queryCarrierAssigned() {
+		return carDao.queryCarrierAssigned();
+	}
 	
 }
