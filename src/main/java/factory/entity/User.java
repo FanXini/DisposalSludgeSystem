@@ -13,6 +13,8 @@ public class User implements Serializable{
 	private String username;
 	private String realname;
 	private String password;
+	private String nickname;
+
 	private String sex;
 	private String email;
 	private String telephone;
@@ -112,6 +114,12 @@ public class User implements Serializable{
 	}
 	public void setIdCard(String idCard) {
 		this.idCard = idCard;
+	}
+	public String getNickname() {
+		return nickname;
+	}
+	public void setNickname(String nickname) {
+		this.nickname = nickname;
 	}
 	
 	/* (non-Javadoc)

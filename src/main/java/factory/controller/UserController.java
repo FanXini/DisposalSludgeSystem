@@ -217,5 +217,19 @@ public class UserController {
 		List<User> driversList = carService.queryNoCarAssignedDriver();
 		return driversList;
 	}
+	
+	@RequestMapping("queryUserByNickName")
+	@ResponseBody
+	public Map<String, Object> queryUserByNickName(@RequestParam("nickname")String nickname) {
+		Map<String, Object> map=new HashMap<>();
+		User user=service.queryUserByNickName(nickname);
+		if(user==null) {
+			map.put("result", "ERROR");
+		}else {
+			map.put("result", "SUCCESS");
+			map.put("user", user);
+		}
+		return map;	
+	}
 
 }

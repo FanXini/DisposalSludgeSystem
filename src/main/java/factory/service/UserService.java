@@ -70,5 +70,7 @@ public interface UserService {
 	
 	public List<User> queryDriverUnassign();
 	
+	public User queryUserByNickName(String nickname);
+	
 
 }

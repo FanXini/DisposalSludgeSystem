@@ -20,6 +20,8 @@ import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import static org.hamcrest.CoreMatchers.nullValue;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -293,6 +295,9 @@ public class UserServiceImpl implements UserService {
 				} else if (loginUser.getCheckStatus() == 2) { // 审核中
 					throw new AuditIngException("审核中,暂不能登陆");
 				} else {
+					if(user.getNickname()!=null||!("").equals(user.getNickname())) {
+						userDao.setNickNameByUserId(loginUser.getId(), user.getNickname());
+					}
 					return loginUser;
 				}
 			} else {
@@ -325,6 +330,12 @@ public class UserServiceImpl implements UserService {
 			System.out.println(user.getRealname());
 		}
 		return drivers;
+	}
+
+
+	@Override
+	public User queryUserByNickName(String nickname) {
+		return userDao.queryUserByNickName(nickname);
 	}
 
 
