@@ -27,6 +27,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import factory.entity.Car;
 import factory.entity.Role;
+import factory.entity.Site;
 import factory.entity.User;
 import factory.enums.Result;
 import factory.exception.AuditIngException;
@@ -199,12 +200,26 @@ public class UserController {
 	@RequestMapping("modifyUserInfo")
 	@ResponseBody
 	public User modifyUserInfo(@RequestBody User user,Model model){
-		log.info("modifyUserIfno");		
+		log.info("modifyUserInfo");		
 		service.updateUserInfo(user);
 		model.addAttribute("user",user);
 		return user;
 	}
 
+	@RequestMapping("modifyUserInfoForWX")
+	@ResponseBody
+	public User modifyUserInfo(@RequestBody User user){
+		log.info("modifyUserInfoForWX");		
+		service.updateUserInfo(user);
+		return user;
+	}
+	
+	@RequestMapping("queryUserByUserId")
+	@ResponseBody
+	public User queryUserByUserId(@RequestParam("userId") int userId){
+		log.info("查找userId="+userId+"的用户");
+		return service.queryUserByUserId(userId);
+	}
 
 	@RequestMapping("/manager")
 	@ResponseBody

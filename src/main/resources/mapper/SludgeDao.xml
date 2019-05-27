@@ -89,8 +89,7 @@
 		LEFT JOIN `user` ON car.driver_id=`user`.id LEFT
 		JOIN sludge_function
 		ON sludge.function_id=sludge_function.id
-		WHERE
-		sludge.del_status=0 and sludge.status!=6
+		WHERE sludge.status!=6
 		<if test="minorWareHouseId!=0">
 			and sludge.minor_mud_warehouse_id=#{minorWareHouseId}
 		</if>
@@ -119,7 +118,7 @@
 		car ON record.car_id=car.id LEFT JOIN site ON record.site_id=site.id
 		LEFT JOIN `user` ON car.driver_id=`user`.id LEFT JOIN sludge_function
 		ON sludge.function_id=sludge_function.id
-		WHERE sludge.del_status=0 AND sludge.status!=6 AND
+		WHERE  sludge.status!=6 AND
 		sludge.status!=6 AND
 		site.id=#{siteId}
 		ORDER BY sludge.produce_time DESC
@@ -136,8 +135,7 @@
 		LEFT JOIN `user` ON car.driver_id=`user`.id LEFT
 		JOIN sludge_function
 		ON sludge.function_id=sludge_function.id
-		WHERE
-		sludge.del_status=0 AND sludge.status!=6 AND
+		WHERE sludge.status!=6 AND
 		site.id=#{siteId}
 		<if test="minorWareHouseId!=0">
 			and sludge.minor_mud_warehouse_id=#{minorWareHouseId}
@@ -166,7 +164,7 @@
 		car ON record.car_id=car.id LEFT JOIN site ON record.site_id=site.id
 		LEFT JOIN `user` ON car.driver_id=`user`.id LEFT JOIN sludge_function
 		ON sludge.function_id=sludge_function.id
-		WHERE sludge.del_status=0 AND sludge.status!=6 AND
+		WHERE  sludge.status!=6 AND
 		sludge.status!=6 AND
 		user.id=#{driverId}
 		ORDER BY sludge.produce_time
@@ -187,8 +185,7 @@
 		LEFT JOIN `user` ON car.driver_id=`user`.id LEFT
 		JOIN sludge_function
 		ON sludge.function_id=sludge_function.id
-		WHERE
-		sludge.del_status=0 AND sludge.status!=6 AND
+		WHERE sludge.status!=6 AND
 		user.id=#{driverId}
 		<if test="minorWareHouseId!=0">
 			and sludge.minor_mud_warehouse_id=#{minorWareHouseId}
@@ -219,8 +216,7 @@
 		LEFT JOIN `user` ON car.driver_id=`user`.id LEFT
 		JOIN sludge_function
 		ON sludge.function_id=sludge_function.id
-		WHERE
-		sludge.del_status=0 AND sludge.status!=6 AND
+		WHERE sludge.status!=6 AND
 		sludge.produce_time
 		BETWEEN #{startDate} AND #{endDate}
 		<if test="minorWareHouseId!=0">
@@ -254,7 +250,7 @@
 		car ON record.car_id=car.id LEFT JOIN site ON record.site_id=site.id
 		LEFT JOIN `user` ON car.driver_id=`user`.id LEFT JOIN sludge_function
 		ON sludge.function_id=sludge_function.id
-		WHERE sludge.del_status=0 AND sludge.status!=6 AND
+		WHERE sludge.status!=6 AND
 		sludge.status!=6 AND
 		sludge.produce_time BETWEEN #{startDate} AND
 		#{endDate}
@@ -277,15 +273,13 @@
 		SELECT
 		id,function
 		from sludge_function
-		WHERE del_status=0
 	</select>
 
 	<select id="querySludgeFunctionByFunction" resultType="factory.entity.SludgeFunction">
 		SELECT
 		id,function
 		FROM sludge_function
-		where del_status=0
-		function=#{function}
+		WHERE function=#{function}
 	</select>
 
 	<insert id="addSludgeFunction" useGeneratedKeys="true"
@@ -306,20 +300,17 @@
 		VALUES(#{recordId},#{status},#{transcarId})
 	</insert>
 
-	<update id="deleteSludge">
-		UPDATE sludge
-		SET del_status=1
-		Where del_status=0 AND
-		id=#{sludgeId}
-	</update>
+	<delete id="deleteSludge">
+		DELETE FROM sludge
+		Where id=#{sludgeId}
+	</delete>
 
 
 	<update id="editSludge" parameterType="factory.entity.Sludge">
 		UPDATE sludge
 		SET
 		RFID=#{rfidString},destination_address=#{destinationAddress},function_id=#{functionId},weight=#{weight}
-		WHERE del_status=0 AND
-		id=#{id}
+		WHERE id=#{id}
 	</update>
 
 
@@ -333,8 +324,7 @@
 		LEFT JOIN `user` ON car.driver_id=`user`.id LEFT
 		JOIN sludge_function
 		ON sludge.function_id=sludge_function.id
-		WHERE
-		sludge.del_status=0 AND sludge.status!=6 AND
+		WHERE sludge.status!=6 AND
 		record.site_id=#{siteId}
 		ORDER BY
 		sludge.produce_time DESC
@@ -350,8 +340,7 @@
 		LEFT JOIN `user` ON car.driver_id=`user`.id LEFT
 		JOIN sludge_function
 		ON sludge.function_id=sludge_function.id
-		WHERE
-		sludge.del_status=0 AND sludge.status!=6 AND
+		WHERE sludge.status!=6 AND
 		car.driver_id=#{driverId}
 		AND
 		record.site_id=#{siteId}
@@ -369,8 +358,7 @@
 		LEFT JOIN `user` ON car.driver_id=`user`.id LEFT
 		JOIN sludge_function
 		ON sludge.function_id=sludge_function.id
-		WHERE
-		sludge.del_status=0 AND sludge.status!=6 AND
+		WHERE sludge.status!=6 AND
 		record.site_id=#{siteId} AND
 		sludge.produce_time BETWEEN #{startDate} AND #{endDate}
 		ORDER BY sludge.produce_time DESC
@@ -381,8 +369,7 @@
 		SELECT
 		sludge.*,site.site_name
 		FROM site,sludge,record
-		WHERE site.del_status=0
-		AND sludge.status!=6
+		WHERE sludge.status!=6
 		AND site.id = record.site_id
 		AND record.id =
 		sludge.record_id
@@ -398,7 +385,7 @@
 	<select id="querySludgeBySiteName" resultMap="SludgeMap">
 		SELECT sludge.*
 		FROM site,sludge,record
-		WHERE site.del_status=0 AND
+		WHERE
 		site.id =
 		record.site_id AND sludge.status!=6 AND
 		record.id = sludge.record_id
@@ -420,7 +407,6 @@
 		JOIN sludge_function
 		ON sludge.function_id=sludge_function.id
 		WHERE
-		sludge.del_status=0 AND
 		user.id=#{driverId} AND sludge.status!=6
 		ORDER
 		BY sludge.produce_time DESC
@@ -454,7 +440,6 @@
 		JOIN sludge_function
 		ON sludge.function_id=sludge_function.id
 		WHERE
-		sludge.del_status=0 AND
 		user.id=#{driverId} AND 
 
 		sludge.status IN ${status}
@@ -475,8 +460,7 @@
 		LEFT JOIN `user` ON car.driver_id=`user`.id LEFT
 		JOIN sludge_function
 		ON sludge.function_id=sludge_function.id
-		WHERE
-		sludge.del_status=0 AND sludge.status!=6 AND user.id=#{driverId}
+		WHERE sludge.status!=6 AND user.id=#{driverId}
 		AND
 		(`record`.id LIKE CONCAT('%',#{condition},'%')
 		OR `site`.site_name

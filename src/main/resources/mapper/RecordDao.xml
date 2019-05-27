@@ -73,7 +73,7 @@
 		record_treatmentcar.treatmentcar_id=car.id
 		LEFT JOIN `user` ON car.driver_id=`user`.id LEFT JOIN
 		site ON record.site_id=site.id
-		WHERE record.del_status=0 AND
+		WHERE 
 		record.id=#{recordId}
 		ORDER BY record.allocation_time DESC
 	</select>

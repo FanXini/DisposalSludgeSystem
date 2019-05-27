@@ -250,6 +250,8 @@ html,body {
 				} else if (newPwd != checknewPwd) {
 					alert("密码与确认密码不一致！");
 				} else {
+				alert(typeof(${sessionScope.user.id})+" "+typeof(originPwd)+" "+
+				    typeof(newPwd)+" "+typeof(checknewPwd))
 					$.ajax({
 						type : "POST",
 						url : "user/modifyPwd",
@@ -259,6 +261,7 @@ html,body {
 							newPwd : newPwd,
 							checknewPwd : checknewPwd
 						}),
+						
 						dataType : "json",
 						contentType : "application/json",
 						success : function(data) {					

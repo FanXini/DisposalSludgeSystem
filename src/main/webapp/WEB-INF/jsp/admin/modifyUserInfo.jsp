@@ -218,6 +218,9 @@ html,body {
 				else if (!(reg.test(email))) {
 					alert("邮箱格式不正确");			
 				}else{
+				    alert(typeof(${sessionScope.user.id})+" "+typeof(username)+" "+
+				    typeof(realname)+" "+typeof(email)+" "+typeof(sex)+" "+
+				    typeof(role)+" "+typeof(telephone)+" "+typeof(idCard)+" "+typeof(roleId)+" "+typeof(role_name))
 					$.ajax({
 						type : "POST",
 						url :　"user/modifyUserInfo",

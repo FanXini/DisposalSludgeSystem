@@ -154,6 +154,7 @@ public class SludgeController {
 			sludgeService.deleteSludge(sludgeId);
 			return Result.SUCCESS;
 		} catch (Exception e) {
+			e.printStackTrace();
 			return Result.ERROR;
 		}
 	}
@@ -180,7 +181,7 @@ public class SludgeController {
 			sludgeService.editSludge(sludge);
 			return Result.SUCCESS;
 		} catch (Exception e) {
-			// TODO: handle exception
+			e.printStackTrace();
 			return Result.ERROR;
 		}
 	}
