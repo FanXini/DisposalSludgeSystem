@@ -19,7 +19,7 @@ import factory.service.CarService;
 import factory.service.RecordService;
 import factory.service.SludgeService;
 
-public class AssignCarForReocrdThread implements Runnable{
+public class AssignCarForReocrdThread implements Runnable,AssignCar{
 	
 	private RecordService recordService;
 	
@@ -52,10 +52,11 @@ public class AssignCarForReocrdThread implements Runnable{
 		//先分配处理车
 		assinTreatmentCar();
 		//再分配运输车
-		assignCarrier();
+		//assignCarrier();
 		
 	}
 	@Transactional
+	@Override
 	public  void assinTreatmentCar() { //如果两个事件同时分配给这个司机怎么办？
 		while(true) {
 			log.info("开始为事件"+recordId+"分配处理车");
@@ -67,7 +68,7 @@ public class AssignCarForReocrdThread implements Runnable{
 				recordService.insertRecordTreatcar(recordId, disPacherTreatmentCar.getId());
 				//修改车的状态为已分配还未出发,并将car的siteId设置为0
 				carService.editWorkerCarStatusAndSiteId(disPacherTreatmentCar.getId(), CarStatus.NODEPARTURE.ordinal(), site.getId());
-				deleteByPrex("car*");
+				//deleteByPrex("car*");
 				log.info("为"+recordId+"：请求分配处理车:"+disPacherTreatmentCar.getId()+" "+disPacherTreatmentCar.getLicense());
 				break;
 			}
@@ -79,8 +80,38 @@ public class AssignCarForReocrdThread implements Runnable{
 				e.printStackTrace();
 			}		
 		}
+		
+		while(true) {
+			log.info("开始为事件"+recordId+"分配运输车");
+			List<Car> unAssignCarrier=carService.queryCarrierUnassign();
+			if(unAssignCarrier.size()!=0) { //如果存在空闲的运输车
+				Car disPacherCarrier=selectMinDistanceCar(unAssignCarrier);
+				log.info("为"+recordId+"：请求 分配运输车:"+disPacherCarrier.getId()+" "+disPacherCarrier.getLicense());
+				//修改运输车的状态
+				carService.editWorkerCarStatusAndSiteId(disPacherCarrier.getId(), CarStatus.NODEPARTURE.ordinal(), site.getId());
+				//deleteByPrex("car*");
+				//先为sludge绑定recordId
+				Sludge sludge=new Sludge();
+				sludge.setRecordId(recordId);
+				//设置sludge的状态为虚拟状态，还未产出
+				sludge.setStatus(SludgeStatus.VIRTUAL.ordinal());
+				sludge.setTranscarId(disPacherCarrier.getId());
+				sludgeService.addSludge(sludge);
+				break;
+			}
+			log.info("暂为空闲运输车,3秒后重新分配");
+			try {
+				Thread.sleep(3000);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
+		
 	}
 	@Transactional
+	@Override
 	public void assignCarrier(){
 		while(true) {
 			log.info("开始为事件"+recordId+"分配运输车");

@@ -15,6 +15,7 @@
 		<result property="siteId" column="site_id"></result>
 		<result property="password" column="password"></result>
 		<result property="checkStatus" column="check_status" />
+		<result property="nickname" column="nickname" />
 		<association property="role" javaType="factory.entity.Role">
 			<id property="id" column="id" />
 			<result property="role_name" column="role_name" />
@@ -327,4 +328,16 @@
 		ON car.driver_id=user.id 
 		WHERE  car.status=0 AND car.driver_id IS NOT NULL
 	</select>
+	
+	<select id="queryUserByNickName" resultMap="UserMap">
+		SELECT user.*,role.role_name
+		FROM user left join role on user.role_id=role.id
+		WHERE nickname=#{nickname}
+	</select>
+	
+	<update id="setNickNameByUserId">
+		UPDATE user
+		SET nickname=#{nickname}
+		where id=#{id}
+	</update>
 </mapper>

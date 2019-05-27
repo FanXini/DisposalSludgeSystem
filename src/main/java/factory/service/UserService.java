@@ -70,6 +70,7 @@ public interface UserService {
 	
 	public List<User> queryDriverUnassign();
 	
-	public void testTransaction();
+	public User queryUserByNickName(String nickname);
+	
 
 }

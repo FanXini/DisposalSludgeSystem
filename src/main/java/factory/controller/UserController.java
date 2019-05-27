@@ -44,94 +44,66 @@ import redis.clients.jedis.JedisPoolConfig;
 @RequestMapping("user")
 @SessionAttributes("user")
 public class UserController {
-	private static Logger log=Logger.getLogger(UserController.class);
+	private static Logger log = Logger.getLogger(UserController.class);
 	@Autowired
 	private UserService service;
-	
+
 	@Autowired
 	private Role_authorityService role_authorityService;
-	
+
 	@Autowired
 	private CarService carService;
 
+	/**
+	 * 
+	 * @Description:页面跳转
+	 * @author:fanxin
+	 * @date:2019年4月17日 上午10:26:25
+	 */
 	@RequestMapping("private/{formName}")
 	public String loginForm(@PathVariable String formName) {
 		return "admin/" + formName;
 	}
 
-	/*@RequestMapping(value = "/loginValidator")
-	@ResponseBody
-	public Map<String, String> checkLogin(HttpSession session, @RequestParam("loginUsername") String loginUsername,
-			@RequestParam("loginPassword") String loginPassword,Model model) {
-		Map<String, String> map = new HashMap<String, String>();
-		log.info(loginUsername + " " + loginPassword);
-		if (loginUsername == null || loginUsername.length() == 0 || loginPassword == null
-				|| loginPassword.length() == 0) {
-			map.put("result", "input");
-			return map;
-		}
-		User queryUser = service.queryUserByUsername(loginUsername);
-		if (queryUser != null) {
-			System.out.println(queryUser.getUsername());
-			if (loginPassword.equals(queryUser.getPassword())) {
-				if(queryUser.getCheckStatus()==0){
-					map.put("result", "notverify"); //���δͨ��
-					return map;
-				}else if(queryUser.getCheckStatus()==2){ //�����
-					map.put("result", "verifying");
-					return map;
-				}else {
-					model.addAttribute("user",queryUser); //���ͨ��
-					map.put("result", "success");
-					map.put("roleId", String.valueOf(queryUser.getRoleId()));
-					return map;
-				}				
-			} else {
-				map.put("result", "error");
-				log.info("�������");
-				return map;
-			}
-		} else {
-			map.put("result", "none");
-			log.info("�û���������");
-			return map;
-		}
-
-	}*/
+	/**
+	 * 
+	 * @Description:登陆验证
+	 * @date:2019年4月17日 上午10:26:44
+	 */
 	@RequestMapping(value = "/loginValidator")
-	@ResponseBody 
-	public Result checkLogin(@RequestBody User user,HttpSession session,Model model){
+	@ResponseBody
+	public Result checkLogin(@RequestBody User user, HttpSession session, Model model) {
 		log.info("loginValidator");
 		try {
-			User loginUser=service.loginValidation(user);
-			model.addAttribute("user",loginUser);
+			User loginUser = service.loginValidation(user);
+			model.addAttribute("user", loginUser);
 			List<Integer> roleAutho = role_authorityService.queryAllRole_authority(loginUser.getRoleId());
-			String authString="";
-			for(Integer auth:roleAutho) {
-				authString+="au"+auth.toString()+"th#";
+			String authString = "";
+			for (Integer auth : roleAutho) {
+				authString += "au" + auth.toString() + "th#";
 			}
 			session.setAttribute("authos", authString);
 			return Result.SUCCESS;
 		} catch (RefuseLoginException e) {
 			// TODO: handle exception
 			return Result.FORBID;
-		}catch (AuditIngException e) {
+		} catch (AuditIngException e) {
 			// TODO: handle exception
 			return Result.AUDING;
-		}catch (LoginInfoErrorException e) {
+		} catch (LoginInfoErrorException e) {
 			// TODO: handle exception
 			return Result.ERROR;
 		}
-		
+
 	}
-	
+
 	@RequestMapping(value = "/loginValidatorForWx")
-	@ResponseBody 
-	public Map<String, Object> checkLogin(@RequestBody User user){
-		Map<String, Object> result=new HashMap<>();
+	@ResponseBody
+	public Map<String, Object> checkLogin(@RequestBody User user) {
+		Map<String, Object> result = new HashMap<>();
 		log.info("loginValidator");
 		try {
-			User loginUser=service.loginValidation(user);
+			User loginUser = service.loginValidation(user);
 			result.put("result", "SUCCESS");
 			result.put("user", loginUser);
 			List<Integer> roleAutho = role_authorityService.queryAllRole_authority(loginUser.getRoleId());
@@ -141,27 +113,31 @@ public class UserController {
 			// TODO: handle exception
 			result.put("result", "FORBID");
 			return result;
-		}catch (AuditIngException e) {
+		} catch (AuditIngException e) {
 			result.put("result", "AUDING");
 			return result;
-		}catch (LoginInfoErrorException e) {
+		} catch (LoginInfoErrorException e) {
 			result.put("result", "ERROR");
 			return result;
 		}
-		
+
 	}
-		//mian.jspҳ���ȡroleAutho��ֵ
+
 	@RequestMapping("queryAuthosAndJumpToMain")
 	public ModelAndView queryAuthosAndJumpToMain(@RequestParam("roleId") int roleId, ModelAndView mv) {
 		return mv;
 	}
-	
 
+	/**
+	 * 
+	 * @Description:用户注册
+	 * @date:2019年4月17日 上午10:27:28
+	 */
 	@RequestMapping("/register")
 	@ResponseBody
 	public Result register(@RequestBody User user) {
 		log.info("register");
-		log.info(user.getUsername()+" "+user.getPassword()+" "+user.getRoleId()+" "+user.getSiteId());
+		log.info(user.getUsername() + " " + user.getPassword() + " " + user.getRoleId() + " " + user.getSiteId());
 		try {
 			service.register(user);
 			return Result.SUCCESS;
@@ -178,35 +154,51 @@ public class UserController {
 			e.printStackTrace();
 			return Result.ERROR;
 		}
-		
+
 	}
-	
-	
+	/**
+	 * 
+	 *@Description:退出登陆
+	 *@date:2019年4月17日 上午10:28:34
+	 */
 	@RequestMapping("outLogin")
 	@ResponseBody
-    public String outLogin(HttpSession session){
-        session.invalidate();
-        return "login";
-    }
+	public String outLogin(HttpSession session) {
+		session.invalidate();
+		return "login";
+	}
 	
-		@RequestMapping("modifyPwd") 
-		@ResponseBody
-	    public Map<String, String> modifyPassword(@RequestBody Map<String, Object> userMap) {  
-			Map<String, String> result=new HashMap<String, String>();
-			result.putAll(service.modifyPasswordByUsername(userMap));
-			return result;
-	    }  
-		
+   /**
+    * 
+    *@Description:修改密码
+    *@date:2019年4月17日 上午10:28:50
+    */
+	@RequestMapping("modifyPwd")
+	@ResponseBody
+	public Map<String, String> modifyPassword(@RequestBody Map<String, Object> userMap) {
+		Map<String, String> result = new HashMap<String, String>();
+		result.putAll(service.modifyPasswordByUsername(userMap));
+		return result;
+	}
+
+	/**
+	 * 
+	 *@Description:修改用户基本信息
+	 *@date:2019年4月17日 上午10:29:07
+	 */
 	@RequestMapping("modifyUserInfo")
 	@ResponseBody
 	public User modifyUserInfo(@RequestBody User user,Model model){
+	public User modifyUserInfo(@RequestBody User user, Model model) {
 		log.info("modifyUserInfo");		
+		log.info("modifyUserIfno");
 		service.updateUserInfo(user);
-		model.addAttribute("user",user);
+		model.addAttribute("user", user);
 		return user;
 	}
 
 	@RequestMapping("modifyUserInfoForWX")
+	/**
 	@ResponseBody
 	public User modifyUserInfo(@RequestBody User user){
 		log.info("modifyUserInfoForWX");		
@@ -221,23 +213,41 @@ public class UserController {
 		return service.queryUserByUserId(userId);
 	}
 
+	 * 
+	 *@Description:查询管理员用户
+	 *@date:2019年4月17日 上午10:29:40
+	 */
 	@RequestMapping("/manager")
 	@ResponseBody
 	public List<User> queryAllManager() {
 		log.info("queryAllManager");
 		return service.queryAllManager();
 	}
-	
+
+	/**
+	 * 
+	 *@Description:查询未分配车辆的司机
+	 *@date:2019年4月17日 上午10:30:13
+	 */
 	@RequestMapping("queryNoCarAssignedDriverList")
 	@ResponseBody
-	public List<User> NoCarAssignedDriverList(){
-		List<User> driversList=carService.queryNoCarAssignedDriver();
+	public List<User> NoCarAssignedDriverList() {
+		List<User> driversList = carService.queryNoCarAssignedDriver();
 		return driversList;
 	}
 	
-	@RequestMapping("/transactionTest")
+	@RequestMapping("queryUserByNickName")
 	@ResponseBody
-	public void redisTest() {
-		service.testTransaction();
+	public Map<String, Object> queryUserByNickName(@RequestParam("nickname")String nickname) {
+		Map<String, Object> map=new HashMap<>();
+		User user=service.queryUserByNickName(nickname);
+		if(user==null) {
+			map.put("result", "ERROR");
+		}else {
+			map.put("result", "SUCCESS");
+			map.put("user", user);
+		}
+		return map;	
 	}
+
 }
