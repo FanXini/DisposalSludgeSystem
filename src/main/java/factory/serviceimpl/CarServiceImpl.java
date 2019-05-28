@@ -385,5 +385,10 @@ public class CarServiceImpl implements CarService{
 	public List<Car> queryCarrierAssigned() {
 		return carDao.queryCarrierAssigned();
 	}
+
+	@Override
+	public Car queryCarByCarId(int carId) {
+		return carDao.queryCarByCarId(carId);
+	}
 	
 }

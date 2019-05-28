@@ -52,4 +52,6 @@ public interface SiteService {
 	public void updateSiteStatusById(int siteId,int status);
 	
 	public List<Site> querySiteStatus();
+	
+	public Site querySiteBySiteId(int id);
 }

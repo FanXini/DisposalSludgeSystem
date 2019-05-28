@@ -153,5 +153,15 @@ public class SensorController {
 		log.info("queryRealTimeValue");
 		return sensorService.queryRealTimeValueBySensorId(sensorId);
 	}
+	
+	@RequestMapping("querySensorBySensorId")
+    @ResponseBody
+    public Sensor querySensorBySensorId(@RequestParam("sensorId") int sensorId){
+		log.info("调用querySensorBySensorId:" + sensorId);
+		Sensor sensor = sensorService.querySensorBySensorId(sensorId);
+		System.out.println(sensor);
+		return sensor;
+	}
+	
 
 }

@@ -78,6 +78,8 @@ public interface CarDao {
 	public void setCarGPSDeviceId(@Param("id") int id,@Param("cloudDeviceId") String cloudDeviceId);
 	
 	public Integer queryCarStatusById(@Param("id") int id);
+	
+	public Car queryCarByCarId(@Param("carId") int carId);
 
 }
 

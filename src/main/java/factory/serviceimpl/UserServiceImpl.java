@@ -339,4 +339,10 @@ public class UserServiceImpl implements UserService {
 	}
 
 
+	@Override
+	public User queryUserById(int userId) {
+		return userDao.queryUserById(userId);
+	}
+
+
 }

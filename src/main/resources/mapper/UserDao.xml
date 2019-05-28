@@ -340,4 +340,12 @@
 		SET nickname=#{nickname}
 		where id=#{id}
 	</update>
+	
+	<select id="queryUserById" resultMap="UserMap">
+	    SELECT
+		`user`.*,role.id,role.role_name,site.id,site.site_name,car.id,car.license
+		FROM `user` LEFT JOIN role ON `user`.role_id=role.id LEFT JOIN site ON
+		`user`.site_id=site.id LEFT JOIN car ON `user`.id=car.driver_id WHERE
+		check_status=1 AND `user`.del_status=0 AND `user`.id=#{userId}
+	</select>
 </mapper>

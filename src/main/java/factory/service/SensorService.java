@@ -39,6 +39,8 @@ public interface SensorService {
 	
 	public List<Sensor> querySensorsByCarId(int carId);
 	
+	public Sensor querySensorBySensorId(int sensorId);
+	
 	
 
 }

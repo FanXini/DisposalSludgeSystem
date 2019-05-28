@@ -267,4 +267,13 @@ public class SiteController {
 	public List<Site> querySiteStatus(){
 		return siteService.querySiteStatus();
 	}
+	
+	@RequestMapping("querySiteBySiteId")
+	@ResponseBody
+	public Site querySiteBySiteId(@RequestParam("siteId") int siteId){
+		log.info("调用querySiteBySiteId:" + siteId);
+		Site site = siteService.querySiteBySiteId(siteId);
+		System.out.println(site);
+		return site;
+	}
 }

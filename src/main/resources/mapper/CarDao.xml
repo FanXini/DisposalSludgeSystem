@@ -385,5 +385,13 @@
 		FROM car
 		WHERE id=#{id}
 	</select>
+	
+	<select id="queryCarByCarId" resultMap="carMap">
+       SELECT
+		car.id,car.license,car.brand,car.status,user.id,user.realname,user.telephone,car.car_type
+		FROM car LEFT JOIN
+		`user` ON car.driver_id=`user`.id
+       WHERE car.id =#{carId}
+    </select>
 
 </mapper>

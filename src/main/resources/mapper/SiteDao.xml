@@ -184,4 +184,13 @@
 		FROM site
 		ORDER BY status DESC;
 	</select>
+	
+	<select id="querySiteBySiteId" resultMap="SiteMap">
+	   	SELECT site.*,user.id
+		uid,user.username uusername,user.realname urealname,user.telephone
+		utel,user.email uemail
+		FROM site left join user
+		On site.manage_id=user.id
+        WHERE site.id = #{id}
+	</select>
 </mapper>

@@ -72,5 +72,7 @@ public interface UserService {
 	
 	public User queryUserByNickName(String nickname);
 	
+	public User queryUserById(int userId);
+	
 
 }

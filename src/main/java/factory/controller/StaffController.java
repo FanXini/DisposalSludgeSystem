@@ -160,4 +160,13 @@ public class StaffController {
 			return Result.ERROR;
 		}
 	}
+	
+	@RequestMapping("queryUserById")
+    @ResponseBody
+    public User queryUserById(@RequestParam("userId") int userId){
+		log.info("调用queryUserById:" + userId);
+		User user = userService.queryUserById(userId);
+		return user;
+	}
+	
 }

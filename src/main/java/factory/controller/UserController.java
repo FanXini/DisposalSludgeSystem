@@ -188,7 +188,6 @@ public class UserController {
 	 */
 	@RequestMapping("modifyUserInfo")
 	@ResponseBody
-	public User modifyUserInfo(@RequestBody User user,Model model){
 	public User modifyUserInfo(@RequestBody User user, Model model) {
 		log.info("modifyUserInfo");		
 		log.info("modifyUserIfno");
@@ -198,7 +197,6 @@ public class UserController {
 	}
 
 	@RequestMapping("modifyUserInfoForWX")
-	/**
 	@ResponseBody
 	public User modifyUserInfo(@RequestBody User user){
 		log.info("modifyUserInfoForWX");		
@@ -213,10 +211,6 @@ public class UserController {
 		return service.queryUserByUserId(userId);
 	}
 
-	 * 
-	 *@Description:查询管理员用户
-	 *@date:2019年4月17日 上午10:29:40
-	 */
 	@RequestMapping("/manager")
 	@ResponseBody
 	public List<User> queryAllManager() {

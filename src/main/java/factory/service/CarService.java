@@ -17,6 +17,8 @@ public interface CarService {
 	
 	public List<Car> queryCarByStatus(int status);
 	
+	public Car queryCarByCarId(int carId);
+	
 	public void deleteCar(int carId);
 	
 	public List<User> queryNoCarAssignedDriver();
