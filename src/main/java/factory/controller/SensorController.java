@@ -54,7 +54,13 @@ public class SensorController {
 		mv.setViewName("system/deviceManage");
 		return mv;
 	}
-
+    @RequestMapping("queryAllSensorType")
+    @ResponseBody
+    public List<SensorType> queryAllSensorType(){
+    	List<SensorType> sensorTypes = sensorService.queryAllSensorType();
+    	return sensorTypes;
+    }
+    
 	@RequestMapping("queryAllSensor")
 	@ResponseBody
 	public List<Sensor> queryAllSensor() {
