@@ -28,7 +28,7 @@ import factory.service.UserService;
 /**
  * 配置spring和junit整合，junit启动时加载springIOC容器 spring-test,junit
  */
-//@Component
+@Component
 public class Server implements InitializingBean,ServletConfigAware{
 	
 	@Autowired
