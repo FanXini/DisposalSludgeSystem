@@ -232,14 +232,14 @@ public class UserController {
 	
 	@RequestMapping("queryUserByNickName")
 	@ResponseBody
-	public Map<String, Object> queryUserByNickName(@RequestParam("nickname")String nickname) {
+	public Map<String, Object> queryUserByNickName(@RequestBody User user) {
 		Map<String, Object> map=new HashMap<>();
-		User user=service.queryUserByNickName(nickname);
-		if(user==null) {
+		User userInDb=service.queryUserByNickName(user.getNickname());
+		if(userInDb==null) {
 			map.put("result", "ERROR");
 		}else {
 			map.put("result", "SUCCESS");
-			map.put("user", user);
+			map.put("user", userInDb);
 		}
 		return map;	
 	}
