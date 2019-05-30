@@ -341,6 +341,12 @@
 		where id=#{id}
 	</update>
 	
+	<update id="setNickNameToNull">
+		UPDATE user
+		SET nickname=null
+		where nickname=#{nickname}
+	</update>
+	
 	<select id="queryUserById" resultMap="UserMap">
 	    SELECT
 		`user`.*,role.id,role.role_name,site.id,site.site_name,car.id,car.license

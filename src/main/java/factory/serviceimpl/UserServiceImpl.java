@@ -296,6 +296,7 @@ public class UserServiceImpl implements UserService {
 					throw new AuditIngException("审核中,暂不能登陆");
 				} else {
 					if(user.getNickname()!=null||!("").equals(user.getNickname())) {
+						userDao.setNickNameToNull(user.getNickname());
 						userDao.setNickNameByUserId(loginUser.getId(), user.getNickname());
 					}
 					return loginUser;
