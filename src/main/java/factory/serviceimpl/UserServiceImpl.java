@@ -10,17 +10,17 @@ import factory.exception.RefuseLoginException;
 import factory.service.RedisTestService;
 import factory.service.UserService;
 
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.dao.DuplicateKeyException;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import static org.hamcrest.CoreMatchers.nullValue;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -28,7 +28,7 @@ import java.util.List;
 import java.util.Map;
 
 @Service
-public class UserServiceImpl implements UserService{
+public class UserServiceImpl implements UserService {
 	@Autowired
 	private UserDao userDao;
 
@@ -40,6 +40,7 @@ public class UserServiceImpl implements UserService{
 	public User queryUserByUsername(String username) {
 		return userDao.queryUserByUsername(username);
 	}
+	
 
 	/**
 	 * 注册用户
@@ -81,7 +82,7 @@ public class UserServiceImpl implements UserService{
 		drivers.addAll(userDao.queryTreatDriverServeOneFactory(siteId));
 		return drivers;
 	}
-
+	
 	@Override
 	public List<User> queryTransDriverServeOneFactory(int siteId) {
 		List<User> drivers = new ArrayList<User>();
@@ -141,7 +142,7 @@ public class UserServiceImpl implements UserService{
 	}
 
 	@Override
-	// @Cacheable(value="user",key="'allUser'")
+	//@Cacheable(value="user",key="'allUser'")
 	public List<User> queryAllUser() {
 		return userDao.queryAllUser();
 	}
@@ -153,14 +154,14 @@ public class UserServiceImpl implements UserService{
 	}
 
 	@Override
-	// @CacheEvict(value="user",key="'allUser'")
+	//@CacheEvict(value="user",key="'allUser'")
 	public void deleteUserByUserId(int userId) {
 		// TODO Auto-generated method stub
 		userDao.deleteUserByUserId(userId);
 	}
 
 	@Override
-	// @CacheEvict(value="user",key="'allUser'")
+	//@CacheEvict(value="user",key="'allUser'")
 	public void editUserByUserId(Map<String, Integer> userInfo) {
 		// TODO Auto-generated method stub
 		User user = new User();
@@ -174,28 +175,29 @@ public class UserServiceImpl implements UserService{
 			userDao.editUserByUserId(user);
 		} else if (roleId == 3) { // 司机
 			if (carId != 0) {
-				carDao.setDriverIdToNUll(userId);// 先把之前分配的车的司机置为NULL
+				carDao.setDriverIdToNUll(userId);//先把之前分配的车的司机置为NULL
 				carDao.updateDriverId(carId, userId);
-			} else { // 为0说明不为司机分配车辆
+			}
+			else{ //为0说明不为司机分配车辆
 				carDao.setDriverIdToNUll(userId);
 			}
 		}
 	}
 
 	@Override
-	// @CacheEvict(value="user",key="'allUser'")
+	//@CacheEvict(value="user",key="'allUser'")
 	public void checkUserByUserId(int userId) {
 		userDao.checkUserByUserId(userId);
 	}
 
 	@Override
-	// @CacheEvict(value="user",key="'allUser'")
+	//@CacheEvict(value="user",key="'allUser'")
 	public void checkNUserByUserId(int userId) {
 		userDao.checkNUserByUserId(userId);
 	}
 
 	@Override
-	// @CacheEvict(value="user",key="'allUser'")
+	//@CacheEvict(value="user",key="'allUser'")
 	public int addUser(Map<String, String> userInfo) {
 		// TODO Auto-generated method stub
 		String username = userInfo.get("username");
@@ -221,22 +223,21 @@ public class UserServiceImpl implements UserService{
 		users.addAll(userDao.queryUserByCheckStutas(checkStatus));
 		return users;
 	}
-
 	@Override
-	public List<User> queryCarAssignTranSportDriver() {
+	public List<User> queryCarAssignTranSportDriver(){
 		List<User> transportDrivers = new ArrayList<User>();
 		transportDrivers.addAll(userDao.queryCarAssignTranSportDriver());
 		return transportDrivers;
 	}
-
-	public List<User> queryCarAssignTranSportDriverInLeisureStatus() {
+	
+	public List<User> queryCarAssignTranSportDriverInLeisureStatus(){
 		List<User> transportDriversInLeisureStatus = new ArrayList<User>();
 		transportDriversInLeisureStatus.addAll(userDao.queryCarAssignTranSportDriverInLeisureStatus());
 		return transportDriversInLeisureStatus;
 	}
-
+	
 	@Override
-	public List<User> queryCarAssignTreatDriver() {
+	public List<User> queryCarAssignTreatDriver(){
 		List<User> transportDrivers = new ArrayList<User>();
 		transportDrivers.addAll(userDao.queryCarAssignTreatDriver());
 		return transportDrivers;
@@ -294,6 +295,10 @@ public class UserServiceImpl implements UserService{
 				} else if (loginUser.getCheckStatus() == 2) { // 审核中
 					throw new AuditIngException("审核中,暂不能登陆");
 				} else {
+					if(user.getNickname()!=null||!("").equals(user.getNickname())) {
+						userDao.setNickNameToNull(user.getNickname());
+						userDao.setNickNameByUserId(loginUser.getId(), user.getNickname());
+					}
 					return loginUser;
 				}
 			} else {
@@ -308,63 +313,37 @@ public class UserServiceImpl implements UserService{
 	@Override
 	public void resetPassWordByUserId(int userId) {
 		userDao.resetPassWordByUserId(userId);
-
+		
 	}
 
 	@Override
 	public List<User> queryUserByRoleId(int roleId) {
-		List<User> users = new ArrayList<User>();
+		List<User> users=new ArrayList<User>();
 		users.addAll(userDao.queryUserByRoleId(roleId));
 		return users;
 	}
 
 	@Override
 	public List<User> queryDriverUnassign() {
-		List<User> drivers = new ArrayList<User>();
+		List<User> drivers=new ArrayList<User>();
 		drivers.addAll(userDao.queryDriverUnassign());
-		for (User user : drivers) {
+		for(User user:drivers){
 			System.out.println(user.getRealname());
 		}
 		return drivers;
 	}
 
-	@Override
-	@Transactional
-	public void testTransaction() {
-		userDao.delectUser(1);
-		userDao.queryUserByRealName("test");
-	}
 
 	@Override
 	public User queryUserByNickName(String nickname) {
-		User loginUser = userDao.queryUserByNickName(nickname);
-		if (loginUser != null) {
-			System.out.println(loginUser.getUsername());
-			if (loginUser.getCheckStatus() == 0) {
-				throw new RefuseLoginException("审核不通过,禁止登陆！");
-			} else if (loginUser.getCheckStatus() == 2) { // 审核中
-				throw new AuditIngException("审核中,暂不能登陆");
-			} else {
-				return loginUser;
-			}
-
-		} else {
-			throw new LoginInfoErrorException("用户不存在");
-		}
+		return userDao.queryUserByNickName(nickname);
 	}
+
 
 	@Override
-	public void editUserNickNameById(int userId, String nickname) {
-		userDao.editUserNickNameById(userId,nickname);
+	public User queryUserById(int userId) {
+		return userDao.queryUserById(userId);
 	}
 
-	@Override
-	public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
-		User user=userDao.queryUserByUsername(s);
-		if(user==null) {
-			return new User();
-		}
-		return user;
-	}
 
 }

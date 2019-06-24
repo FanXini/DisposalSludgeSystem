@@ -54,7 +54,13 @@ public class SensorController {
 		mv.setViewName("system/deviceManage");
 		return mv;
 	}
-
+    @RequestMapping("queryAllSensorType")
+    @ResponseBody
+    public List<SensorType> queryAllSensorType(){
+    	List<SensorType> sensorTypes = sensorService.queryAllSensorType();
+    	return sensorTypes;
+    }
+    
 	@RequestMapping("queryAllSensor")
 	@ResponseBody
 	public List<Sensor> queryAllSensor() {
@@ -153,5 +159,15 @@ public class SensorController {
 		log.info("queryRealTimeValue");
 		return sensorService.queryRealTimeValueBySensorId(sensorId);
 	}
+	
+	@RequestMapping("querySensorBySensorId")
+    @ResponseBody
+    public Sensor querySensorBySensorId(@RequestParam("sensorId") int sensorId){
+		log.info("调用querySensorBySensorId:" + sensorId);
+		Sensor sensor = sensorService.querySensorBySensorId(sensorId);
+		System.out.println(sensor);
+		return sensor;
+	}
+	
 
 }

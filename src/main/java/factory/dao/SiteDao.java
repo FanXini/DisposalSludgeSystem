@@ -46,4 +46,6 @@ public interface SiteDao {
 	public void updateSiteStatusById(@Param("siteId")int siteId,@Param("status") int status);
 	
 	public List<Site> querySiteStatus();
+	
+	public Site querySiteBySiteId(@Param("id") int id);
 }

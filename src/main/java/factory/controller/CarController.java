@@ -44,6 +44,14 @@ public class CarController {
 		return "system/carManage";
 	}
 	
+	@RequestMapping("queryCarByCarId")
+	@ResponseBody
+	public Car queryCarByCarId(@RequestParam("carId") int carId){
+		log.info("调用queryCarByCarId:" + carId);
+		Car car = carService.queryCarByCarId(carId);
+		return car;
+	}
+	
 	
 
 	@RequestMapping("queryAllCar")

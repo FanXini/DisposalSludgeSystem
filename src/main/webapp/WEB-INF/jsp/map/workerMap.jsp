@@ -204,8 +204,8 @@ h5 {
 <script type="text/javascript">
 	var map = new BMap.Map("allmap");
 	window.map = map;
-	//var point = new BMap.Point(112.971916, 28.197967);//长沙
-	var point = new BMap.Point(114.126588, 22.608209);//深圳
+	var point = new BMap.Point(112.971916, 28.197967);//长沙
+	//var point = new BMap.Point(114.126588, 22.608209);//深圳
 
 	map.addControl(new BMap.NavigationControl()); // 添加平移缩放控件
 	map.addControl(new BMap.ScaleControl()); // 添加比例尺控件

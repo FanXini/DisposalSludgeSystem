@@ -72,6 +72,8 @@ public interface SensorDao {
 	
 	public List<Sensor> querySensorsByCarId(@Param("carId") int carId);
 	
+	public Sensor querySensorBySensorId(@Param("sensorId") int sensorId);
+	
 	
 
 }

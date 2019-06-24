@@ -199,4 +199,9 @@ public class SiteServiceImpl implements SiteService{
 		sites.addAll(siteDao.querySiteStatus());
 		return sites;
 	}
+
+	@Override
+	public Site querySiteBySiteId(int id) {
+		return siteDao.querySiteBySiteId(id);
+	}
 }

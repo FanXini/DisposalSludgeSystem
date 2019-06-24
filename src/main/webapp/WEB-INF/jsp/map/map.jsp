@@ -154,7 +154,7 @@ h5{
 					<td>
 						<select id="typeSelect" class="select">
 							<option value="-1">-类型-</option>
-							<option value="2">-站点-</option>
+							<option value="2">-工厂-</option>
 							<option value="0">-处理车-</option>
 							<option value="1">-运输车-</option>
 						</select>
@@ -353,8 +353,8 @@ h5{
 <script type="text/javascript">
 	var map = new BMap.Map("allmap");
 	window.map = map;
-	//var point = new BMap.Point(112.971916, 28.197967);//长沙
-	var point = new BMap.Point(113.83040,22.77615);//深圳
+	var point = new BMap.Point(112.971916, 28.197967);//长沙
+	//var point = new BMap.Point(113.83040,22.77615);//深圳
 	//22.7761577466,113.8304040020
 
 	map.addControl(new BMap.NavigationControl()); // 添加平移缩放控件

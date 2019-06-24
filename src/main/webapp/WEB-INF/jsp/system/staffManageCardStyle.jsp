@@ -102,7 +102,7 @@ body {
 					<button type="button" class="close" data-dismiss="modal"
 						aria-hidden="true">&times;</button>
 					<h4 class="modal-title" id="myModalLabel">
-						删除<input id="resetUserId" type="hidden" />
+						重置密码<input id="resetUserId" type="hidden" />
 					</h4>
 				</div>
 				<div class="modal-body" id="resetModalContent"></div>

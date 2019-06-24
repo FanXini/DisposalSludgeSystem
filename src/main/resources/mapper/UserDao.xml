@@ -15,6 +15,7 @@
 		<result property="siteId" column="site_id"></result>
 		<result property="password" column="password"></result>
 		<result property="checkStatus" column="check_status" />
+		<result property="nickname" column="nickname" />
 		<association property="role" javaType="factory.entity.Role">
 			<id property="id" column="id" />
 			<result property="role_name" column="role_name" />
@@ -81,13 +82,13 @@
 
 	<insert id="registerUser" parameterType="factory.entity.User">
 		insert into
-		user(username,realname,sex,password,role_id,site_id,id_card,telephone,nickname)
+		user(username,realname,sex,password,role_id,site_id,id_card,telephone)
 		<choose>
 			<when test="siteId==0">
-			values(#{username},#{realname},#{sex},#{password},#{roleId},NULL,#{idCard},#{telephone},#{nickname})
+			values(#{username},#{realname},#{sex},#{password},#{roleId},NULL,#{idCard},#{telephone})
 			</when>
 			<otherwise>
-			values(#{username},#{realname},#{sex},#{password},#{roleId},#{siteId},#{idCard},#{telephone},#{nickname})
+			values(#{username},#{realname},#{sex},#{password},#{roleId},#{siteId},#{idCard},#{telephone})
 			</otherwise>
 		</choose>
 	</insert>
@@ -328,19 +329,29 @@
 		WHERE  car.status=0 AND car.driver_id IS NOT NULL
 	</select>
 	
-	<select id="queryUserByNickName" parameterType="String"
-		resultMap="UserMap">
-		SELECT `user`.*,role.id,role.role_name
-		from `user` LEFT JOIN
-		role ON `user`.role_id=role.id WHERE
-		`user`.nickname=#{nickname}
+	<select id="queryUserByNickName" resultMap="UserMap">
+		SELECT user.*,role.role_name
+		FROM user left join role on user.role_id=role.id
+		WHERE nickname=#{nickname}
 	</select>
 	
-	<update id="editUserNickNameById">
+	<update id="setNickNameByUserId">
 		UPDATE user
 		SET nickname=#{nickname}
-		WHERE id=#{userId}
+		where id=#{id}
 	</update>
 	
+	<update id="setNickNameToNull">
+		UPDATE user
+		SET nickname=null
+		where nickname=#{nickname}
+	</update>
 	
+	<select id="queryUserById" resultMap="UserMap">
+	    SELECT
+		`user`.*,role.id,role.role_name,site.id,site.site_name,car.id,car.license
+		FROM `user` LEFT JOIN role ON `user`.role_id=role.id LEFT JOIN site ON
+		`user`.site_id=site.id LEFT JOIN car ON `user`.id=car.driver_id WHERE
+		check_status=1 AND `user`.del_status=0 AND `user`.id=#{userId}
+	</select>
 </mapper>

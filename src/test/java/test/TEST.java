@@ -10,6 +10,7 @@ import java.util.concurrent.Future;
 
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.context.ContextLoaderListener;
 
 import factory.dao.CarDao;
 import factory.entity.Car;
@@ -38,6 +39,7 @@ public class TEST extends BaseTest{
 			System.out.println(future.get());
 		}*/
 			System.out.println(res.get());
+			//ContextLoaderListener
 	}
 
 }

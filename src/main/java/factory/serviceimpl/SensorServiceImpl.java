@@ -293,4 +293,9 @@ public class SensorServiceImpl implements SensorService {
 		return sensors;	
 	}
 
+	@Override
+	public Sensor querySensorBySensorId(int sensorId) {
+		return sensorDao.querySensorBySensorId(sensorId);
+	}
+
 }

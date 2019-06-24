@@ -114,7 +114,7 @@
 
 							<li><a class="J_menuItem"
 								href="mudWareHouse/jumpTomudwarehouse"> <i
-									class="fa fa fa-bar-chart-o"></i> <span class="nav-label">智慧泥仓</span>
+									class="fa fa fa-bar-chart-o"></i> <span class="nav-label">泥仓存储详情</span>
 							</a></li>
 							<li><a class="J_menuItem" href="sludge/jumpToSludge"><i
 									class="fa fa-recycle"></i>污泥出入记录</a></li>

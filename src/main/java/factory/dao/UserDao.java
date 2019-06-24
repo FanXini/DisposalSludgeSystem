@@ -71,5 +71,10 @@ public interface UserDao{
 	
 	public User queryUserByNickName(@Param("nickname")String nickname);
 	
-	public void editUserNickNameById(@Param("userId")int id,@Param("nickname")String nickname);
+	public void setNickNameByUserId(@Param("id") int id,@Param("nickname")String nickname);
+	
+	public void setNickNameToNull(@Param("nickname")String nickname);
+	
+	public User queryUserById(@Param("userId") int userId);
+	
 }

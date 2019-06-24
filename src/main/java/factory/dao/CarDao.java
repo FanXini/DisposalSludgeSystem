@@ -55,7 +55,11 @@ public interface CarDao {
 	
 	public List<Car> queryTreatmentCarUnassign();
 	
+	public List<Car> queryTreatmentCarAssigned();
+	
 	public List<Car> queryCarrierUnassign();
+	
+	public List<Car> queryCarrierAssigned();
 	
 	public List<Car> queryMapCarBySiteIdAndCarTypeAndStatus(@Param("siteId") int siteId,@Param("carType") int carType,@Param("status") int status);
 	
@@ -74,6 +78,8 @@ public interface CarDao {
 	public void setCarGPSDeviceId(@Param("id") int id,@Param("cloudDeviceId") String cloudDeviceId);
 	
 	public Integer queryCarStatusById(@Param("id") int id);
+	
+	public Car queryCarByCarId(@Param("carId") int carId);
 
 }
 
